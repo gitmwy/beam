@@ -20,9 +20,7 @@ import com.hsshy.beam.common.enumeration.RetEnum;
 import java.util.HashMap;
 
 /**
- * @description: 封装返回结果类
- * @author: hs
- * @create: 2018-09-21 22:42:04
+ * 封装返回结果类
  **/
 public class R<T> extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;

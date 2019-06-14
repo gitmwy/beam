@@ -1,15 +1,12 @@
 package com.hsshy.beam.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * 项目相关配置
- *
- * @author fengshuonan
- * @date 2017年10月23日16:44:15
  */
-@Configuration
+@Component
 @ConfigurationProperties(prefix = BeamAdminProperties.BEAM_REST_PREFIX)
 public class BeamAdminProperties {
 

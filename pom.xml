@@ -339,6 +339,7 @@
 	</build>
 
 	<profiles>
+		<!--开发-->
 		<profile>
 			<id>local</id>
 			<properties>
@@ -348,25 +349,26 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 		</profile>
+		<!--测试-->
 		<profile>
 			<id>dev</id>
 			<properties>
 				<spring.active>dev</spring.active>
 			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
 		</profile>
+		<!--生产-->
 		<profile>
-			<id>test</id>
+			<id>pro</id>
 			<properties>
-				<spring.active>test</spring.active>
+				<spring.active>pro</spring.active>
 			</properties>
-		</profile>
-		<profile>
-			<id>produce</id>
-			<properties>
-				<spring.active>produce</spring.active>
-			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
 		</profile>
 	</profiles>
-
 
 </project>

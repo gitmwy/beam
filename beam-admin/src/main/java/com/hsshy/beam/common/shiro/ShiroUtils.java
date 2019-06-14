@@ -1,6 +1,4 @@
 package com.hsshy.beam.common.shiro;
-import com.hsshy.beam.common.enumeration.RetEnum;
-import com.hsshy.beam.common.exception.BeamException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.session.Session;
@@ -91,7 +89,7 @@ public class ShiroUtils {
     public static String getKaptcha(String key) {
         Object kaptcha = getSessionAttribute(key);
         if (kaptcha == null) {
-            throw new BeamException(RetEnum.CAPTCHA_LAPSED);
+            return "";
         }
         removeSessionAttr(key);
         return kaptcha.toString();

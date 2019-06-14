@@ -2,7 +2,7 @@ package com.hsshy.beam.sys.controller;
 
 
 import com.google.code.kaptcha.Constants;
-import com.google.code.kaptcha.Producer;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,74 +17,39 @@ import java.io.IOException;
 
 /**
  * 验证码生成
- *
- * @author fengshuonan
- * @date 2017-05-05 23:10
  */
 @Controller
-@RequestMapping("/kaptcha")
+@RequestMapping("kaptcha")
 public class KaptchaController {
 
-
-
     @Autowired
-    private Producer producer;
+    private DefaultKaptcha defaultKaptcha;
 
     /**
      * 生成验证码
      */
-    @RequestMapping("")
-    public void index(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
+    @RequestMapping("defaultKaptcha")
+    public void defaultKaptcha(HttpServletRequest request, HttpServletResponse response) {
 
+        // 定义response输出类型为image/jpeg类型，使用response输出流输出图片的byte数组
         response.setDateHeader("Expires", 0);
-
-        // Set standard HTTP/1.1 no-cache headers.
         response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
-
-        // Set IE extended HTTP/1.1 no-cache headers (use addHeader).
         response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-
-        // Set standard HTTP/1.0 no-cache header.
         response.setHeader("Pragma", "no-cache");
-
-        // return a jpeg
         response.setContentType("image/jpeg");
 
-        // create the text for the image
-        String capText = producer.createText();
-
-        // store the text in the session
+        // 生产验证码字符串并保存到session中
+        String capText = defaultKaptcha.createText();
+        HttpSession session = request.getSession();
         session.setAttribute(Constants.KAPTCHA_SESSION_KEY, capText);
 
-        // create the image with the text
-        BufferedImage bi = producer.createImage(capText);
-        ServletOutputStream out = null;
-        try {
-            out = response.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // write the data out
-        try {
+        // 使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
+        BufferedImage bi = defaultKaptcha.createImage(capText);
+        try(ServletOutputStream out = response.getOutputStream()) {
             ImageIO.write(bi, "jpg", out);
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        try {
-            try {
-                out.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } finally {
-            try {
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
-
 }

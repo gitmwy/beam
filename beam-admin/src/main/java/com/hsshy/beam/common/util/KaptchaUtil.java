@@ -9,16 +9,13 @@ import com.hsshy.beam.config.properties.BeamAdminProperties;
  */
 public class KaptchaUtil {
 
-    private boolean kaptchaOnOff = false;
+    private boolean kaptchaOnOff;
+
+    public KaptchaUtil(){
+        this.kaptchaOnOff = SpringContextHolder.getBean(BeamAdminProperties.class).getKaptchaOpen();
+    }
 
     public boolean isKaptchaOnOff() {
         return kaptchaOnOff;
     }
-    /**
-     * 获取验证码开关
-     */
-    public void setKaptchaOnOff() {
-        this.kaptchaOnOff = SpringContextHolder.getBean(BeamAdminProperties.class).getKaptchaOpen();
-    }
-
 }

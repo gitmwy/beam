@@ -1,7 +1,7 @@
 beam:
   admin:
     swagger-open: true  #是否开启swagger (true/false)
-    kaptcha-open: false
+    kaptcha-open: true
     redis-open: false  # 是否开启redis缓存  true开启   false关闭
     shiro-redis: false # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
     version: 0.0.1
@@ -13,11 +13,8 @@ spring:
   profiles:
     active: @spring.active@
 
-
-log:
-  path: beam-admin-logs
 ---
-
+#开发环境
 spring:
   profiles: local
   datasource:
@@ -31,9 +28,11 @@ spring:
     port: 6379
     password: 123456
     timeout: 6000ms
+  log:
+    path: /home/beam/local
 
 ---
-
+#测试环境
 spring:
   profiles: dev
   datasource:
@@ -45,14 +44,15 @@ spring:
     database: 0
     host: 127.0.0.1
     port: 6379
-    password:      # 密码（默认为空）
-    timeout: 6000ms  # 连接超时时长（毫秒）
+    password:
+    timeout: 6000ms
+  log:
+    path: /home/beam/dev
 
 ---
-
-
+#生产环境
 spring:
-  profiles: produce
+  profiles: pro
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/beam?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=UTC
     username: root
@@ -63,4 +63,6 @@ spring:
     host: 127.0.0.1
     port: 6379
     password:
-    timeout: 6000ms  # 连接超时时长（毫秒）
+    timeout: 6000ms
+    log:
+      path: /home/beam/pro

@@ -1,6 +1,7 @@
 package com.hsshy.beam.generator.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 
 /**
@@ -10,6 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2018-07-24
  */
 @Mapper
+@Repository
 public interface MySQLGeneratorDao extends GeneratorDao {
 	
 
