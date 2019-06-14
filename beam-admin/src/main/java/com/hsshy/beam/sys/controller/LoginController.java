@@ -59,7 +59,6 @@ public class LoginController  {
         return R.ok(ShiroUtils.getUserEntity());
     }
 
-
     /**
      * 退出
      */
@@ -79,10 +78,4 @@ public class LoginController  {
         redisUtil.clearCache();
         return R.ok("清除成功");
     }
-
-
-
-
-
-
 }
