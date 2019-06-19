@@ -10,9 +10,9 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 public class HikariProperties {
 
-    private String url = "jdbc:mysql://127.0.0.1:3306/beam?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull";
+    private String url = "jdbc:mysql://127.0.0.1:3306/deam?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull";
 
-    private String username = "deam";
+    private String username = "root";
 
     private String password = "123456";
 

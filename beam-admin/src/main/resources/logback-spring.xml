@@ -2,7 +2,7 @@
 <configuration>
 
     <!--定义日志存放的位置-->
-    <springProperty scope="context" name="logPath" source="spring.log.path" defaultValue="logs"/>
+    <springProperty scope="context" name="logPath" source="log.path" defaultValue="logs"/>
     <!--输出的日志文件格式-->
     <property name="OTHERS_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger : %msg%n"/>
     <!--编码-->
@@ -116,34 +116,47 @@
         </filter>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="INFO_FILE"/>
-        <appender-ref ref="WARN_FILE"/>
-        <appender-ref ref="ERROR_FILE"/>
-    </root>
+    <!-- 时间滚动输出 level为 ERROR 日志 -->
+    <appender name="ALL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/log_total.log</file>
+        <encoder>
+            <pattern>${OTHERS_LOG_PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/total/log-total-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
 
     <!--开发环境-->
     <springProfile name="local">
-        <logger name="com.hsshy.beam" level="debug" additivity="false">
+        <Logger name="com.hsshy.beam.sys.dao" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE" />
+        </Logger>
+    </springProfile>
+    <!--其他环境-->
+    <springProfile name="!local">
+        <logger name="com.hsshy.beam.sys.dao" level="DEBUG" additivity="false">
             <appender-ref ref="DEBUG_FILE" />
             <appender-ref ref="INFO_FILE" />
             <appender-ref ref="WARN_FILE" />
             <appender-ref ref="ERROR_FILE" />
-        </logger>
-    </springProfile>
-    <!--其他环境-->
-    <springProfile name="!local">
-        <logger name="com.hsshy.beam" level="info" additivity="false">
-            <appender-ref ref="CONSOLE" />
-            <appender-ref ref="INFO_FILE" />
-            <appender-ref ref="WARN_FILE" />
-            <appender-ref ref="ERROR_FILE" />
+            <appender-ref ref="ALL_FILE" />
         </logger>
     </springProfile>
 
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+<!--        <appender-ref ref="DEBUG_FILE"/>-->
+<!--        <appender-ref ref="INFO_FILE"/>-->
+<!--        <appender-ref ref="WARN_FILE"/>-->
+<!--        <appender-ref ref="ERROR_FILE"/>-->
+<!--        <appender-ref ref="ALL_FILE"/>-->
+    </root>
 </configuration>
 
 

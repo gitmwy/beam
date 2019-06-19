@@ -1,6 +1,5 @@
 package com.hsshy.beam.common.shiro;
 
-import com.hsshy.beam.common.shiro.ShiroUser;
 import com.hsshy.beam.sys.entity.User;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 
@@ -8,9 +7,6 @@ import java.util.List;
 
 /**
  * 定义shirorealm所需数据的接口
- *
- * @author fengshuonan
- * @date 2016年12月5日 上午10:23:34
  */
 public interface IShiro {
 
@@ -35,11 +31,8 @@ public interface IShiro {
      */
     List<String> findPermissionsByUserId(Long userId);
 
-
-
     /**
      * 获取shiro的认证信息
      */
     SimpleAuthenticationInfo info(ShiroUser shiroUser, User user, String realmName);
-
 }

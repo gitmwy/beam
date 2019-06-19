@@ -13,35 +13,18 @@
                     <div class="user-info-list">真实姓名：<span>{{sysuser.name}}</span></div>
                     <div class="user-info-list">所在部门：<span>{{sysuser.deptName}}</span></div>
                 </el-card>
-                <el-card shadow="hover" class="mgb20" style="height:252px;">
-                    <div class="user-info">
-                        <img src="http://img.hsshy.cn/5f3cf4da-b38f-4b0c-be54-93e35a637056.png" class="user-avator" alt="">
-                        <div class="user-info-cont">
-                            <div class="user-info-name">微信小程序</div>
-                            <div>个人开发的微信小程序，里面有图片文字识别、动植物识别、车型识别、二维码生成解析、手写板等工具</div>
-                        </div>
-                    </div>
-                </el-card>
-                <el-card shadow="hover" class="mgb20" style="height:300px;">
-                    <el-image src="http://img.hsshy.cn/cd9cb95c-1967-40b7-ae94-38ebb699e18f.png"></el-image>
-                </el-card>
                 <el-card shadow="hover" style="height:252px;">
                     <div slot="header" class="clearfix">
                         <span>语言详情</span>
                     </div>
-                    Vue
-                    <el-progress :percentage="30.3" color="#42b983"></el-progress>
-                    JavaScript
-                    <el-progress :percentage="24.1" color="#f1e05a"></el-progress>
-                    CSS
-                    <el-progress :percentage="30.7"></el-progress>
-                    HTML
-                    <el-progress :percentage="30.9" color="#f56c6c"></el-progress>
-                    Java
-                    <el-progress :percentage="70.9" color="#f56c6c"></el-progress>
+                    Vue<el-progress :percentage="30.3" color="#42b983"></el-progress>
+                    JavaScript<el-progress :percentage="24.1" color="#f1e05a"></el-progress>
+                    CSS<el-progress :percentage="30.7"></el-progress>
+                    HTML<el-progress :percentage="30.9" color="#f56c6c"></el-progress>
+                    Java<el-progress :percentage="70.9" color="#f56c6c"></el-progress>
                 </el-card>
-
             </el-col>
+
             <el-col :span="16">
                 <el-row :gutter="20" class="mgb20">
                     <el-col :span="8">
@@ -107,8 +90,6 @@
             </el-col>
 
         </el-row>
-
-
     </div>
 </template>
 
@@ -121,31 +102,13 @@
         name: 'dashboard',
         data() {
             return {
-
                 user : null,
-                todoList: [{
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: false,
-                    }, {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要修复100个bug',
-                        status: true,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: true,
-                    }
+                todoList: [
+                    {title: '今天要修复1个bug', status: false},
+                    {title: '今天要修复10个bug', status: false},
+                    {title: '今天要修复100个bug', status: false},
+                    {title: '今天要修复1000个bug', status: false},
+                    {title: '今天要修复10000个bug', status: true}
                 ],
             }
         },
@@ -170,12 +133,11 @@
             bus.$off('collapse', this.handleBus);
         },
         methods: {
-
             getDashboardContent(){
                 DashboardApi.getDashboardContent().then((res)=>{
                     console.log(res);
                 },(err) => {
-                    console.log(err)
+                    console.log(err);
                     this.$message.error(err.msg);
                 })
             },
@@ -184,26 +146,17 @@
                 // 调用renderChart方法对图表进行重新渲染
                 window.addEventListener('resize', this.renderChart)
             },
-            handleBus(msg){
+            handleBus(){
                 setTimeout(() => {
                     this.renderChart()
                 }, 300);
-            },
-            renderChart(){
-                this.$refs.bar.renderChart();
-                this.$refs.line.renderChart();
             }
         }
     }
-
 </script>
 
 
 <style scoped>
-    .el-row {
-        margin-bottom: 20px;
-    }
-
     .grid-content {
         display: flex;
         align-items: center;
@@ -298,15 +251,4 @@
     .todo-item {
         font-size: 14px;
     }
-
-    .todo-item-del {
-        text-decoration: line-through;
-        color: #999;
-    }
-
-    .schart {
-        width: 100%;
-        height: 300px;
-    }
-
 </style>

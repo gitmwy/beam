@@ -20,10 +20,6 @@ import java.util.List;
 
 /**
  * 登陆日志
- *
- * @author hs
- * @email 457030599@qq.com
- * @date 2019-04-12 14:08:56
  */
 @Api(value = "LoginLogController", tags = {"LoginLog接口"})
 @RequestMapping("/sys/loginlog")

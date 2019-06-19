@@ -5,17 +5,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hsshy.beam.sys.entity.User;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
 /**
  * 管理员表
- * 
- * @author hs
- * @email 457030599@qq.com
- * @date 2018-10-07 18:03:20
  */
+@Repository
 public interface UserMapper extends BaseMapper<User> {
 
     IPage<Map> selectPageList(Page page, @Param("user") User user);

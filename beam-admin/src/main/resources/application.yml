@@ -2,8 +2,8 @@ beam:
   admin:
     swagger-open: true  #是否开启swagger (true/false)
     kaptcha-open: true
-    redis-open: false  # 是否开启redis缓存  true开启   false关闭
-    shiro-redis: false # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
+    redis-open: true  # 是否开启redis缓存  true开启   false关闭
+    shiro-redis: true # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
     version: 0.0.1
 server:
    port: 8080
@@ -19,7 +19,7 @@ spring:
   profiles: local
   datasource:
     url: jdbc:mysql://localhost:3306/deam?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=GMT%2B8
-    username: deam
+    username: root
     password: 123456
     filters: log4j,wall,mergeStat
   redis:
@@ -28,8 +28,8 @@ spring:
     port: 6379
     password: 123456
     timeout: 6000ms
-  log:
-    path: /home/beam/local
+log:
+  path: /home/beam/local
 
 ---
 #测试环境
@@ -46,8 +46,8 @@ spring:
     port: 6379
     password:
     timeout: 6000ms
-  log:
-    path: /home/beam/dev
+log:
+  path: /home/beam/dev
 
 ---
 #生产环境
@@ -64,5 +64,5 @@ spring:
     port: 6379
     password:
     timeout: 6000ms
-    log:
-      path: /home/beam/pro
+log:
+  path: /home/beam/pro

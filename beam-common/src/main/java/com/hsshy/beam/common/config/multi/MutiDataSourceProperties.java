@@ -3,15 +3,12 @@ import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * 默认多数据源配置
- *
- * @author hs
- * @date 2019年2月12日
  */
 public class MutiDataSourceProperties {
 
-    private String url = "jdbc:mysql://localhost:3306/biz?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull";
+    private String url = "jdbc:mysql://localhost:3306/deam?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull";
 
-    private String username = "deam";
+    private String username = "root";
 
     private String password = "123456";
 

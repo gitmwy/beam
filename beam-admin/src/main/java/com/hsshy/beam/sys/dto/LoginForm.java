@@ -3,7 +3,7 @@ package com.hsshy.beam.sys.dto;
 import lombok.Data;
 
 /**
- * @description: 登陆实体类
+ * 登陆实体类
  **/
 @Data
 public class LoginForm {

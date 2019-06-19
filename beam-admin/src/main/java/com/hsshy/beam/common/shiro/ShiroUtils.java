@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.shiro;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.session.Session;
@@ -29,7 +30,7 @@ public class ShiroUtils {
     }
 
     //从shiro获取session
-    public static Session getSession() {
+    private static Session getSession() {
         return getSubject().getSession();
     }
 
@@ -62,14 +63,14 @@ public class ShiroUtils {
     /**
      * 获取shiro指定的sessionKey
      */
-    public static Object getSessionAttribute(Object key) {
+    private static Object getSessionAttribute(Object key) {
         return getSession().getAttribute(key);
     }
 
     /**
      * 移除shiro指定的sessionKey
      */
-    public static void removeSessionAttr(String key) {
+    private static void removeSessionAttr(String key) {
         Session session = getSession();
         if (session != null)
             session.removeAttribute(key);

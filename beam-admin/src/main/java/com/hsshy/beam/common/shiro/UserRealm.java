@@ -17,14 +17,13 @@ import java.util.Set;
 
 /**
  * 认证
- *
  */
 @Component
 public class UserRealm extends AuthorizingRealm {
+
     /**
      * 授权(验证权限时调用)
      */
-
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		IShiro shiroFactory = ShiroFactroy.me();

@@ -37,7 +37,7 @@ public class LoginController  {
         if(new KaptchaUtil().isKaptchaOnOff()){
             String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
             if(StringUtils.isBlank(kaptcha)){
-                return R.fail("验证码已失效，请点击刷新");
+                return R.fail("验证码已失效，请点击图片重新刷新");
             }else if(!loginForm.getKaptcha().equalsIgnoreCase(kaptcha)){
                 return R.fail("验证码不正确");
             }

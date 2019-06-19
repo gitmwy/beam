@@ -11,7 +11,7 @@
 
                 <el-input style="width: 150px" v-model="req.name" placeholder="请输入菜单名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
-                <!--<el-button type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>-->
+                <el-button type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
                 <el-button type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
             </div>
             <el-table row-key="id" :data="treeData" v-loading="loading" border class="table" ref="multipleTable"
@@ -60,18 +60,18 @@
                 </el-table-column>
             </el-table>
 
-            <!--<div class="pagination">-->
-                <!--<el-pagination-->
-                    <!--background-->
-                    <!--:page-sizes="[10, 20, 30, 40, 50]"-->
-                    <!--:page-size="page.pageSize"-->
-                    <!--:current-page="page.pageNo"-->
-                    <!--@current-change="handleCurrentChange"-->
-                    <!--@size-change="changePageSize"-->
-                    <!--layout="prev, pager, next"-->
-                    <!--:total="page.totalRows">-->
-                <!--</el-pagination>-->
-            <!--</div>-->
+<!--            <div class="pagination">-->
+<!--                <el-pagination-->
+<!--                    background-->
+<!--                    :page-sizes="[10, 20, 30, 40, 50]"-->
+<!--                    :page-size="page.pageSize"-->
+<!--                    :current-page="page.pageNo"-->
+<!--                    @current-change="handleCurrentChange"-->
+<!--                    @size-change="changePageSize"-->
+<!--                    layout="prev, pager, next"-->
+<!--                    :total="page.totalRows">-->
+<!--                </el-pagination>-->
+<!--            </div>-->
         </div>
 
         <!-- 编辑弹出框 -->
@@ -158,40 +158,21 @@
                     {value:2,name:"按钮"}
                 ],
                 columns: [
-                    {
-                        text: '菜单名称',
-                        value: 'name',
-                        width: 200
-                    },
-                    {
-                        text: 'url',
-                        value: 'url'
-                    },
-                    {
-                        text: '权限标识',
-                        value: 'perms'
-                    },
-                    {
-                        text: '菜单类型',
-                        value: 'typeName'
-                    },
-                    {
-                        text: '图标',
-                        value: 'icon'
-                    },
-                    {
-                        text: '排序',
-                        value: 'orderNum'
-                    }
+                    {text: '菜单名称', value: 'name', width: 200},
+                    {text: 'url', value: 'url'},
+                    {text: '权限标识', value: 'perms'},
+                    {text: '菜单类型', value: 'typeName'},
+                    {text: '图标', value: 'icon'},
+                    {text: '排序', value: 'orderNum'}
                 ],
                 defaultProps: {
                     children: 'children',
                     label: 'name'
                 }
-
             }
         },
         created() {
+            this.getData();
             this.getTreeData();
         },
         computed: {},
@@ -204,12 +185,42 @@
                 this.menu.parentId=data.id;
                 this.menu.pname=data.name;
             },
-
-
-
+            handleCurrentChange(val) {
+                this.page.pageNo = val;
+                this.getData();
+            },
+            changePageSize(value) { // 修改每页条数size
+                this.page.pageNo = 1;
+                this.page.pageSize = value;
+                this.tableData = null;
+                this.getData()
+            },
             reload() {
-                this.page.pageNo = 1
+                this.page.pageNo = 1;
+                this.getData()
                 this.getTreeData()
+            },
+            // 获取 easy-mock 的模拟数据
+            getData() {
+                this.loading = true;
+                this.req.currentPage = this.page.pageNo;
+                this.req.pageSize = this.page.pageSize;
+                MenuApi.getData(this.req).then((res) => {
+                    this.loading = false;
+                    if (res.error === false) {
+                        this.tableData = res.data.records ? res.data.records : [];
+                        this.page.pageNo = parseInt(res.data.current);
+                        this.page.totalRows = parseInt(res.data.total);
+                        this.tableData.forEach(item => {
+                            item.status = Boolean(item.status)
+                        })
+                    } else {
+                        this.$message.error(res.msg);
+                    }
+                }, (err) => {
+                    this.loading = false;
+                    this.$message.error(err.msg);
+                });
             },
             getTreeData() {
                 this.loading = true;
@@ -229,7 +240,7 @@
             },
             search() {
                 this.is_search = true;
-                this.getTreeData();
+                this.getData();
             },
 
             handleAdd() {

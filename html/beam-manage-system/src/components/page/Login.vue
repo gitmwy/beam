@@ -20,8 +20,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-image :src="kaptcha" @click="refreshCode()" alt="加载失败"/>
-                    <el-link type="primary" @click="refreshCode()" class="refresh" :underline="false">点击刷新</el-link>
+                    <el-image :src="kaptcha" @click.native="refreshCode()" alt="加载失败"/>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" v-loading="loading" @click="submitForm('ruleForm')">登录</el-button>
@@ -37,7 +36,7 @@
     export default {
         data: function () {
             return {
-                kaptcha: "http://localhost:8080/beam_ht/kaptcha/defaultKaptcha?t=" + new Date().getTime(),
+                kaptcha: "/beam_ht/kaptcha/defaultKaptcha?t=" + new Date().getTime(),
                 loading: false,
                 ruleForm: {
                     username: 'admin',
@@ -59,7 +58,7 @@
         },
         methods: {
             refreshCode() {
-                this.kaptcha = "http://localhost:8080/beam_ht/kaptcha/defaultKaptcha?t=" + new Date().getTime();
+                this.kaptcha = "/beam_ht/kaptcha/defaultKaptcha?t=" + new Date().getTime();
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -131,10 +130,5 @@
         width: 100%;
         height: 36px;
         margin-bottom: 10px;
-    }
-
-    .refresh {
-        padding-left: 4%;
-        margin-top: 4%;
     }
 </style>

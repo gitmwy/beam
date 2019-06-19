@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.shiro;
+
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
+
 @Component
 public class RedisShiroSessionDAO extends EnterpriseCacheSessionDAO {
     @Autowired
@@ -57,5 +59,4 @@ public class RedisShiroSessionDAO extends EnterpriseCacheSessionDAO {
         //60分钟过期
         redisTemplate.expire(key, 60, TimeUnit.MINUTES);
     }
-
 }
