@@ -23,13 +23,7 @@
                         {{sysuser.account}} <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="https://www.jianshu.com/u/e2fcc1cdaca1" target="_blank">
-                            <el-dropdown-item>作者简书</el-dropdown-item>
-                        </a>
-                        <a href="https://gitee.com/hsshy/beam-parent" target="_blank">
-                            <el-dropdown-item>项目仓库</el-dropdown-item>
-                        </a>
-                        <el-dropdown-item divided  command="changePassword">修改密码</el-dropdown-item>
+                        <el-dropdown-item command="changePassword">修改密码</el-dropdown-item>
                         <el-dropdown-item divided  command="clearCache">清除缓存</el-dropdown-item>
                         <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>

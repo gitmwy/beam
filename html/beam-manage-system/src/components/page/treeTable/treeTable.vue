@@ -5,18 +5,11 @@
       <a href="https://github.com/PanJiaChen/vue-element-admin/tree/master/src/components/TreeTable" target="_blank">Documentation</a>
     </el-tag>
 
-      <tree-table :data="data" :columns="columns" border>
-
-      </tree-table>
-
+    <tree-table :data="data" :columns="columns" border></tree-table>
   </div>
 </template>
 
 <script>
-/**
-  Auth: Lei.j1ang
-  Created: 2018/1/19-14:54
-*/
 import treeTable from '@/components/TreeTable'
 
 export default {

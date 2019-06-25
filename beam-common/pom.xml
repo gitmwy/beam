@@ -2,7 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.hsshy</groupId>
         <artifactId>beam-parent</artifactId>
@@ -47,8 +46,6 @@
             <artifactId>commons-io</artifactId>
         </dependency>
 
-
-
         <dependency>
             <groupId>com.qiniu</groupId>
             <artifactId>qiniu-java-sdk</artifactId>
@@ -69,8 +66,6 @@
             </exclusions>
         </dependency>
 
-
-
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
@@ -88,7 +83,6 @@
             <artifactId>pinyin4j</artifactId>
             <version>2.5.1</version>
         </dependency>
-
 
         <!-- fastjson -->
         <dependency>
@@ -132,8 +126,6 @@
             <scope>provided</scope>
         </dependency>
 
-
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-email</artifactId>
@@ -146,8 +138,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
-
 
     <build>
         <resources>
@@ -163,6 +159,4 @@
             </resource>
         </resources>
     </build>
-
-
 </project>

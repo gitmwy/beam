@@ -2,89 +2,41 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-lx-people"></i> 管理</el-breadcrumb-item>
+                <el-breadcrumb-item>管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
                 <el-input style="width: 150px" v-model="req.beanName" placeholder="请输入bean名称"></el-input>
-                <el-select filterable  v-model="req.status" placeholder="请选择">
-                    <el-option
-                        key=""
-                        label="全部"
-                        value="">
-                    </el-option>
-                    <el-option
-                        v-for="item in statusName"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.code">
-                    </el-option>
+                <el-select filterable v-model="req.status" placeholder="请选择">
+                    <el-option key="" label="全部" value=""></el-option>
+                    <el-option v-for="item in statusName" :key="item.id" :label="item.name" :value="item.code"></el-option>
                 </el-select>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
                 <el-button type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
                 <el-button type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
-                <el-button type="info"  class="handle-del mr10" @click="handleRun">运行一次</el-button>
-                <el-button type="danger"  class="handle-del mr10" @click="handlePause">停止</el-button>
-                <el-button type="success"  class="handle-del mr10" @click="handleResume">恢复</el-button>
+                <el-button type="info" class="handle-del mr10" @click="handleRun">运行一次</el-button>
+                <el-button type="danger" class="handle-del mr10" @click="handlePause">停止</el-button>
+                <el-button type="success" class="handle-del mr10" @click="handleResume">恢复</el-button>
             </div>
-            <el-table :data="tableData" v-loading="loading" border class="table" ref="multipleTable"
-                      @selection-change="handleSelectionChange">
+            <el-table :data="tableData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-
-
-                <el-table-column
-                    label="bean名称"
-                    align="center"
-                    prop="beanName">
-                </el-table-column>
-                <el-table-column
-                    label="方法名"
-                    align="center"
-                    prop="methodName">
-                </el-table-column>
-                <el-table-column
-                    label="参数"
-                    align="center"
-                    prop="params">
-                </el-table-column>
-                <el-table-column
-                    label="cron表达式"
-                    align="center"
-                    prop="cronExpression">
-                </el-table-column>
-                <el-table-column
-                    width="160"
-                    label="任务状态"
-                    align="center">
+                <el-table-column label="bean名称" align="center" prop="beanName"></el-table-column>
+                <el-table-column label="方法名" align="center" prop="methodName"></el-table-column>
+                <el-table-column label="参数" align="center" prop="params"></el-table-column>
+                <el-table-column label="cron表达式" align="center" prop="cronExpression"></el-table-column>
+                <el-table-column width="160" label="任务状态" align="center">
                     <template slot-scope="scope">
                         <p>{{ scope.row.statusName }}</p>
                     </template>
                 </el-table-column>
-
-                <el-table-column
-                    label="备注"
-                    align="center"
-                    prop="remark">
-                </el-table-column>
-                <el-table-column
-                    label="创建时间"
-                    align="center"
-                    prop="createTime">
-                </el-table-column>
-                <el-table-column
-                    label="更新时间"
-                    align="center"
-                    prop="updateTime">
-                </el-table-column>
+                <el-table-column label="备注" align="center" prop="remark"></el-table-column>
+                <el-table-column label="创建时间" align="center" prop="createTime"></el-table-column>
+                <el-table-column label="更新时间" align="center" prop="updateTime"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑
-                        </el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red"
-                                   @click="handleDelete(scope.$index, scope.row)">删除
-                        </el-button>
-
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -104,7 +56,6 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="40%">
-
             <el-form ref="scheduleJob" :model="scheduleJob" label-width="100px">
                 <el-form-item label="bean名称" prop="beanName">
                     <el-input v-model.trim="scheduleJob.beanName"></el-input>
@@ -119,20 +70,13 @@
                     <el-input v-model.trim="scheduleJob.cronExpression"></el-input>
                 </el-form-item>
                 <el-form-item label="任务状态" prop="status">
-                    <el-select filterable  v-model="scheduleJob.status" placeholder="请选择">
-                        <el-option
-                            v-for="item in statusName"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.code">
-                        </el-option>
+                    <el-select filterable v-model="scheduleJob.status" placeholder="请选择">
+                        <el-option v-for="item in statusName" :key="item.id" :label="item.name" :value="item.code"></el-option>
                     </el-select>
                 </el-form-item>
-
                 <el-form-item label="备注" prop="remark">
                     <el-input v-model.trim="scheduleJob.remark"></el-input>
                 </el-form-item>
-
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -188,18 +132,18 @@
                 multipleSelection: [],
                 is_search: false,
                 editVisible: false,
-                isNew:false,
+                isNew: false,
                 delVisible: false,
-                runVisible:false,
-                pauseVisible:false,
-                resumeVisible:false,
+                runVisible: false,
+                pauseVisible: false,
+                resumeVisible: false,
                 scheduleJob: {},
                 idx: -1,
                 ids: [],
                 req: {},
                 accountInput: true,
                 loading: false,
-                statusName:[]
+                statusName: []
             }
         },
         created() {
@@ -209,33 +153,29 @@
         },
         computed: {},
         methods: {
-
-
             handleCurrentChange(val) {
                 this.page.pageNo = val;
                 this.getData();
             },
-            changePageSize(value) { // 修改每页条数size
-                this.page.pageNo = 1
-                this.page.pageSize = value
-                this.tableData = null
+            changePageSize(value) {
+                this.page.pageNo = 1;
+                this.page.pageSize = value;
+                this.tableData = null;
                 this.getData()
             },
             reload() {
                 this.page.pageNo = 1;
                 this.getData();
             },
-            // 获取 easy-mock 的模拟数据
             getData() {
-
                 this.loading = true;
-                this.req.currentPage = this.page.pageNo
-                this.req.pageSize = this.page.pageSize
+                this.req.currentPage = this.page.pageNo;
+                this.req.pageSize = this.page.pageSize;
                 ScheduleJobApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
-                        this.tableData = res.data.records ? res.data.records : []
-                        this.page.pageNo = parseInt(res.data.current)
+                        this.tableData = res.data.records ? res.data.records : [];
+                        this.page.pageNo = parseInt(res.data.current);
                         this.page.totalRows = parseInt(res.data.total)
 
                     } else {
@@ -253,7 +193,7 @@
 
             handleAdd() {
                 this.isNew = true;
-                this.scheduleJob = {status:0};
+                this.scheduleJob = {status: 0};
                 this.editVisible = true;
             },
             handleEdit(index, row) {
@@ -275,7 +215,7 @@
                     this.ids.push(this.multipleSelection[i].id);
                 }
             },
-            handleRun(){
+            handleRun() {
                 this.runVisible = true;
                 this.ids = [];
                 const length = this.multipleSelection.length;
@@ -283,7 +223,7 @@
                     this.ids.push(this.multipleSelection[i].id);
                 }
             },
-            handlePause(){
+            handlePause() {
                 this.pauseVisible = true;
                 this.ids = [];
                 const length = this.multipleSelection.length;
@@ -291,7 +231,7 @@
                     this.ids.push(this.multipleSelection[i].id);
                 }
             },
-            handleResume(){
+            handleResume() {
                 this.resumeVisible = true;
                 this.ids = [];
                 const length = this.multipleSelection.length;
@@ -305,41 +245,36 @@
             // 保存编辑
             saveEdit() {
                 this.loading = true;
-                if(this.isNew){
+                if (this.isNew) {
                     ScheduleJobApi.save(this.scheduleJob).then((res) => {
-                        this.loading = false
+                        this.loading = false;
                         if (res.error === false) {
-                            this.editVisible = false
+                            this.editVisible = false;
                             this.$message.success(res.msg);
                             this.reload()
                         } else {
                             this.$message.error(res.msg);
                         }
                     }, (err) => {
-                        this.loading = false
+                        this.loading = false;
                         this.$message.error(err.msg);
                     })
-                }
-                else {
+                } else {
                     ScheduleJobApi.update(this.scheduleJob).then((res) => {
-                        this.loading = false
+                        this.loading = false;
                         if (res.error === false) {
-                            this.editVisible = false
+                            this.editVisible = false;
                             this.$message.success(res.msg);
                             this.reload()
                         } else {
                             this.$message.error(res.msg);
                         }
                     }, (err) => {
-                        this.loading = false
+                        this.loading = false;
                         this.$message.error(err.msg);
                     })
                 }
-
-
-
             },
-
             // 确定删除
             deleteRow() {
                 ScheduleJobApi.batchDelete(this.ids).then((res) => {
@@ -349,10 +284,9 @@
                     } else {
                         this.$message.error(res.msg);
                     }
-
                 }, (err) => {
                     this.$message.error(err.msg);
-                })
+                });
                 this.delVisible = false;
             },
             // 确定运行
@@ -364,10 +298,9 @@
                     } else {
                         this.$message.error(res.msg);
                     }
-
                 }, (err) => {
                     this.$message.error(err.msg);
-                })
+                });
                 this.runVisible = false;
             },
             // 确定暂停
@@ -379,10 +312,9 @@
                     } else {
                         this.$message.error(res.msg);
                     }
-
                 }, (err) => {
                     this.$message.error(err.msg);
-                })
+                });
                 this.pauseVisible = false;
             },
             // 确定恢复
@@ -394,17 +326,16 @@
                     } else {
                         this.$message.error(res.msg);
                     }
-
                 }, (err) => {
                     this.$message.error(err.msg);
-                })
+                });
                 this.resumeVisible = false;
             },
-            getStatusList(){
+            getStatusList() {
                 http.get("/sys/schedule/status/list").then((res) => {
                     if (res.error === false) {
                         this.statusName = res.data;
-                        this.statusName.forEach(item=>{
+                        this.statusName.forEach(item => {
                             item.code = parseInt(item.code);
                         })
                     } else {
@@ -414,8 +345,6 @@
                     this.$message.error(err.msg);
                 });
             }
-
-
         }
     }
 
@@ -425,26 +354,14 @@
     .handle-box {
         margin-bottom: 20px;
     }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
-    }
-
     .del-dialog-cnt {
         font-size: 16px;
         text-align: center
     }
-
     .table {
         width: 100%;
         font-size: 14px;
     }
-
     .red {
         color: #ff0000;
     }

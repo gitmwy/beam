@@ -2,60 +2,34 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-lx-people"></i> 部门管理</el-breadcrumb-item>
+                <el-breadcrumb-item>部门管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-
-
                 <el-input style="width: 150px" v-model="req.name" placeholder="请输入部门名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
                 <el-button type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
             </div>
-
-            <el-table row-key="id" :data="treeData" v-loading = "loading" border class="table" ref="multipleTable" @selection-change="handleSelectionChange">
+            <el-table row-key="id" :data="treeData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-
-
-                <el-table-column
-                    label="部门名称"
-                    align="center"
-                    prop="name">
-                </el-table-column>
-                <el-table-column
-                    label="排序"
-                    align="center"
-                    prop="orderNum">
-                </el-table-column>
-
-                <el-table-column
-                    label="创建时间"
-                    align="center"
-                    prop="createTime">
-                </el-table-column>
-                <el-table-column
-                    label="更新时间"
-                    align="center"
-                    prop="updateTime">
-                </el-table-column>
+                <el-table-column label="部门名称" align="center" prop="name"></el-table-column>
+                <el-table-column label="排序" align="center" prop="orderNum"></el-table-column>
+                <el-table-column label="创建时间" align="center" prop="createTime"></el-table-column>
+                <el-table-column label="更新时间" align="center" prop="updateTime"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                         <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-
                     </template>
                 </el-table-column>
             </el-table>
-
         </div>
-
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="50%">
-
             <el-form ref="dept" :model="dept" label-width="100px">
                 <el-form-item label="上级部门" prop="parentId">
-                    <el-input @click.native="goToSelectDept" readonly="readonly"  v-model.trim="dept.pname"></el-input>
+                    <el-input @click.native="goToSelectDept" readonly="readonly" v-model.trim="dept.pname"></el-input>
                 </el-form-item>
                 <el-form-item label="部门名称" prop="name">
                     <el-input v-model.trim="dept.name"></el-input>
@@ -63,8 +37,6 @@
                 <el-form-item label="排序" prop="orderNum">
                     <el-input v-model.trim="dept.orderNum"></el-input>
                 </el-form-item>
-
-
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -91,10 +63,10 @@
 
     export default {
         name: 'basetable',
-        components: { treeTable },
+        components: {treeTable},
         data() {
             return {
-                selectDeptDialog:false,
+                selectDeptDialog: false,
                 tableData: [],
                 treeData: [],
                 page: {pageNo: 1, pageSize: 20},
@@ -109,29 +81,15 @@
                 accountInput: true,
                 loading: false,
                 columns: [
-                    {
-                        text: '部门名称',
-                        value: 'name',
-                        width: 200
-                    },
-                    {
-                        text: '排序',
-                        value: 'orderNum'
-                    },
-                    {
-                        text: '创建时间',
-                        value: 'createTime'
-                    },
-                    {
-                        text: '更新时间',
-                        value: 'updateTime'
-                    }
+                    {text: '部门名称', value: 'name', width: 200},
+                    {text: '排序', value: 'orderNum'},
+                    {text: '创建时间', value: 'createTime'},
+                    {text: '更新时间', value: 'updateTime'}
                 ],
                 defaultProps: {
                     children: 'children',
                     label: 'name'
                 }
-
             }
         },
         created() {
@@ -139,29 +97,28 @@
         },
         computed: {},
         methods: {
-            goToSelectDept(){
+            goToSelectDept() {
                 this.selectDeptDialog = true;
             },
-            selectDeptClick(data){
+            selectDeptClick(data) {
                 this.selectDeptDialog = false;
-                this.dept.parentId=data.id;
-                this.dept.pname=data.name;
+                this.dept.parentId = data.id;
+                this.dept.pname = data.name;
             },
             handleCurrentChange(val) {
                 this.page.pageNo = val;
                 this.getData();
             },
-            changePageSize(value) { // 修改每页条数size
-                this.page.pageNo = 1
-                this.page.pageSize = value
-                this.tableData = null
+            changePageSize(value) {
+                this.page.pageNo = 1;
+                this.page.pageSize = value;
+                this.tableData = null;
                 this.getData()
             },
             reload() {
-                this.page.pageNo = 1
+                this.page.pageNo = 1;
                 this.getTreeData()
             },
-
             getTreeData() {
                 this.loading = true;
                 DeptApi.getTreeData(this.req).then((res) => {
@@ -182,20 +139,15 @@
                 this.is_search = true;
                 this.getTreeData();
             },
-
             handleAdd() {
                 this.dept = {};
 
                 this.editVisible = true;
             },
             handleEdit(index, row) {
-
-                DeptApi.info({deptId:row.id}).then((res) => {
-
+                DeptApi.info({deptId: row.id}).then((res) => {
                     if (res.error === false) {
                         this.dept = res.data;
-
-                        console.log(this.dept);
                     } else {
                         this.$message.error(res.msg);
                     }
@@ -204,8 +156,6 @@
                     this.$message.error(err.msg);
                 });
                 this.editVisible = true;
-
-
             },
             handleDelete(index, row) {
                 this.ids = [row.id];
@@ -218,7 +168,6 @@
                 for (let i = 0; i < length; i++) {
                     this.ids.push(this.multipleSelection[i].id);
                 }
-
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
@@ -226,21 +175,20 @@
             // 保存编辑
             saveEdit() {
                 // this.$set(this.tableData, this.idx, this.dept);
-                this.loading = true
+                this.loading = true;
                 DeptApi.save(this.dept).then((res) => {
-                    this.loading = false
+                    this.loading = false;
                     if (res.error === false) {
-                        this.editVisible = false
+                        this.editVisible = false;
                         this.$message.success(res.msg);
                         this.reload()
                     } else {
                         this.$message.error(res.msg);
                     }
                 }, (err) => {
-                    this.loading = false
+                    this.loading = false;
                     this.$message.error(err.msg);
                 })
-
             },
             // 确定删除
             deleteRow() {
@@ -251,14 +199,11 @@
                     } else {
                         this.$message.error(res.msg);
                     }
-
                 }, (err) => {
                     this.$message.error(err.msg);
-                })
+                });
                 this.delVisible = false;
-            },
-
-
+            }
         }
     }
 
@@ -267,15 +212,6 @@
 <style scoped>
     .handle-box {
         margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
     }
 
     .del-dialog-cnt {

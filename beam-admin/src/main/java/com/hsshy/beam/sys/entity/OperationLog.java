@@ -1,4 +1,5 @@
 package com.hsshy.beam.sys.entity;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -9,15 +10,13 @@ import java.io.Serializable;
 
 /**
  * 操作日志
- *
- * @author hs
  */
 @Data
 @NoArgsConstructor
 @TableName("sys_operation_log")
 public class OperationLog extends RestEntity<Long> {
 
-    //
+    //主键id
     @TableId
     private Long id;
     // 日志类型
@@ -43,7 +42,6 @@ public class OperationLog extends RestEntity<Long> {
     private String message;
     @TableField(exist = false)
     private String userName;
-
 
     @Override
     public Long getId() {

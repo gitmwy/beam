@@ -50,7 +50,7 @@
             // 通过 Event Bus 进行组件间通信，来折叠侧边栏
             bus.$on('collapse', msg => {
                 this.collapse = msg;
-            })
+            });
             this.getNavList();
         },
         methods:{
@@ -58,10 +58,9 @@
                 AccountApi.getNavList().then((res)=>{
                         this.menuItems = res.data;
                         localStorage.setItem("menuItems",res.data);
-
                     },
                     (err) => {
-                    this.list = []
+                    this.list = [];
                     this.$message.error(err.msg);
                 })
             }

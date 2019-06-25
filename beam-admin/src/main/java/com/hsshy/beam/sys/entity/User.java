@@ -1,4 +1,5 @@
 package com.hsshy.beam.sys.entity;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -12,10 +13,6 @@ import java.util.List;
 
 /**
  * 管理员表
- * 
- * @author hs
- * @email 457030599@qq.com
- * @date 2018-10-07 18:03:20
  */
 @NoArgsConstructor
 @Data
@@ -91,7 +88,6 @@ public class User extends DataEntity<Long> {
 
 	@TableField(exist = false)
 	private String statusName;
-
 
 	@Override
 	protected Serializable pkVal() {

@@ -20,7 +20,6 @@ import java.util.UUID;
 @RequestMapping("/file")
 public class FileController {
 
-
     @ApiOperation(value = "文件上传")
     @PostMapping("/upload")
     public Object uploadFile(@RequestPart("file") MultipartFile file) {
@@ -29,15 +28,9 @@ public class FileController {
         try {
             String url = OSSFactory.build().upload(file.getBytes(),fileName);
             return R.ok(url);
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new BeamException(RetEnum.UPLOAD_ERROR);
         }
-
     }
-
-
-
-
 }

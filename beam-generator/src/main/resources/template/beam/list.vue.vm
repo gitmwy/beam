@@ -14,7 +14,7 @@
                 <el-button type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
                 <el-button type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
             </div>
-            <el-table :data="tableData" v-loading = "loading" border class="table" ref="multipleTable" @selection-change="handleSelectionChange">
+            <el-table :data="tableData" v-loading = "loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
 
                  #foreach ($column in $columns)

@@ -8,21 +8,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
-
 
 /**
  * 部门管理
- *
- * @author hs
  */
 @Data
 @NoArgsConstructor
 @TableName("sys_dept")
 public class Dept extends RestEntity<Long> {
 
-    //
+    //主键id
     @TableId
     private Long id;
     // 上级部门ID，一级部门为0

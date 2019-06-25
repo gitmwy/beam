@@ -7,10 +7,6 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  * 抽象实体基类
- * 
- * @author hfBeam
- *
- * 
  */
 @SuppressWarnings("serial")
 public abstract class AbstractEntity<ID> extends Model {
@@ -23,7 +19,6 @@ public abstract class AbstractEntity<ID> extends Model {
 	public abstract ID getId();
 
 	public abstract void setId(ID id);
-
 
 	@Override
 	public String toString() {

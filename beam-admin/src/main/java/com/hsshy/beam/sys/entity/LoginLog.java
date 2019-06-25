@@ -1,4 +1,5 @@
 package com.hsshy.beam.sys.entity;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -7,18 +8,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
-
 /**
  * 登陆日志
- *
- * @author hs
  */
 @Data
 @NoArgsConstructor
 @TableName("sys_login_log")
 public class LoginLog extends RestEntity<Long> {
 
-    //
+    //主键id
     @TableId
     private Long id;
     // 日志名称
@@ -39,7 +37,6 @@ public class LoginLog extends RestEntity<Long> {
 
     @TableField(exist = false)
     private String userName;
-
 
     @Override
     public Long getId() {

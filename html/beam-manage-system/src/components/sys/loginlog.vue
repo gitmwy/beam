@@ -2,7 +2,7 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-lx-people"></i> 登陆日志</el-breadcrumb-item>
+                <el-breadcrumb-item>登陆日志</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
@@ -13,41 +13,14 @@
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
                 <el-button type="danger" icon="delete" class="handle-del mr10" @click="delVisible=true">清空日志</el-button>
             </div>
-            <el-table :data="tableData" v-loading="loading" border class="table" ref="multipleTable">
+            <el-table :data="tableData" v-loading="loading" border class="table">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-
-                <el-table-column
-                    label="日志名称"
-                    align="center"
-                    prop="logName">
-                </el-table-column>
-                <el-table-column
-                    label="用户名称"
-                    align="center"
-                    prop="userName">
-                </el-table-column>
-                <el-table-column
-                    label="是否成功"
-                    align="center"
-                    prop="succeed">
-                </el-table-column>
-                <el-table-column
-                    label="消息"
-                    align="center"
-                    prop="message">
-                </el-table-column>
-                <el-table-column
-                    label="ip"
-                    align="center"
-                    prop="ipAddress">
-                </el-table-column>
-                <el-table-column
-                    label="创建时间"
-                    align="center"
-                    prop="createTime">
-                </el-table-column>
-
-
+                <el-table-column label="日志名称" align="center" prop="logName"></el-table-column>
+                <el-table-column label="用户名称" align="center" prop="userName"></el-table-column>
+                <el-table-column label="是否成功" align="center" prop="succeed"></el-table-column>
+                <el-table-column label="消息" align="center" prop="message"></el-table-column>
+                <el-table-column label="ip" align="center" prop="ipAddress"></el-table-column>
+                <el-table-column label="创建时间" align="center" prop="createTime"></el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -57,12 +30,11 @@
                     :current-page="page.pageNo"
                     @current-change="handleCurrentChange"
                     @size-change="changePageSize"
-                    layout="prev, pager, next"
+                    layout="total, sizes, prev, pager, next, jumper"
                     :total="page.totalRows">
                 </el-pagination>
             </div>
         </div>
-
 
         <!-- 删除提示框 -->
         <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
@@ -76,7 +48,6 @@
 </template>
 
 <script>
-
     import Http from '../../util/http';
 
     export default {
@@ -101,27 +72,27 @@
                 this.page.pageNo = val;
                 this.getData();
             },
-            changePageSize(value) { // 修改每页条数size
-                this.page.pageNo = 1
-                this.page.pageSize = value
-                this.tableData = null
+            changePageSize(value) {
+                this.page.pageNo = 1;
+                this.page.pageSize = value;
+                this.tableData = null;
                 this.getData()
             },
             reload() {
-                this.page.pageNo = 1
+                this.page.pageNo = 1;
                 this.getData()
             },
             // 获取 easy-mock 的模拟数据
             getData() {
                 this.loading = true;
-                this.req.currentPage = this.page.pageNo
-                this.req.pageSize = this.page.pageSize
+                this.req.currentPage = this.page.pageNo;
+                this.req.pageSize = this.page.pageSize;
                 Http.get("/sys/loginlog/page/list",this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
-                        this.tableData = res.data.records ? res.data.records : []
-                        this.page.pageNo = parseInt(res.data.current)
-                        this.page.totalRows = parseInt(res.data.total)
+                        this.tableData = res.data.records ? res.data.records : [];
+                        this.page.pageNo = parseInt(res.data.current);
+                        this.page.totalRows = parseInt(res.data.total);
                         this.tableData.forEach(item => {
                             item.status = Boolean(item.status)
                         })
@@ -138,8 +109,6 @@
                 this.getData();
             },
 
-
-
             clearAll() {
                 Http.post("/sys/loginlog/clear",this.reqs).then((res) => {
                     this.delVisible = false;
@@ -149,13 +118,7 @@
                     this.loading = false;
                     this.$message.error(err.msg);
                 });
-
             },
-
-
-
-
-
         }
     }
 
@@ -165,27 +128,12 @@
     .handle-box {
         margin-bottom: 20px;
     }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
-    }
-
     .del-dialog-cnt {
         font-size: 16px;
         text-align: center
     }
-
     .table {
         width: 100%;
         font-size: 14px;
-    }
-
-    .red {
-        color: #ff0000;
     }
 </style>

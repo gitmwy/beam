@@ -8,13 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
-
 
 /**
  * 字典表
- *
- * @author hs
  */
 @Data
 @NoArgsConstructor

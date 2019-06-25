@@ -7,10 +7,6 @@ import java.util.Date;
 
 /**
  * 数据Entity类
- * 
- * @author hs
- * @date 2018-09-27
- *
  */
 public abstract class DataEntity<ID> extends AbstractEntity<ID> {
 

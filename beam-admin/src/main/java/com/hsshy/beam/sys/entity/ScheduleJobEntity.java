@@ -14,28 +14,23 @@
  * the License.
  */
 package com.hsshy.beam.sys.entity;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.hsshy.beam.common.base.entity.RestEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 定时任务
- *
- * @author Mark sunlightcs@gmail.com
- * @since 1.2.0 2016-11-28
  */
 @Data
 @NoArgsConstructor
 @TableName("schedule_job")
 public class ScheduleJobEntity extends RestEntity<Long> {
+
 	private static final long serialVersionUID = 1L;
 	
 	/**
@@ -88,7 +83,6 @@ public class ScheduleJobEntity extends RestEntity<Long> {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 
 	@Override

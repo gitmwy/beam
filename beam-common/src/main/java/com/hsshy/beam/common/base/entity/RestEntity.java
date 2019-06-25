@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.base.entity;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 
@@ -6,9 +7,6 @@ import java.util.Date;
 
 /**
  * 数据Entity类
- * 
- * @author hs
- * @date 2018-09-27
  *
  */
 public abstract class RestEntity<ID> extends AbstractEntity<ID> {
@@ -21,9 +19,7 @@ public abstract class RestEntity<ID> extends AbstractEntity<ID> {
 
 	public RestEntity() {
 		super();
-
 	}
-
 
 	public Date getCreateTime() {
 		return createTime;

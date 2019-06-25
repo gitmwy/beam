@@ -2,64 +2,28 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-lx-people"></i> 管理</el-breadcrumb-item>
+                <el-breadcrumb-item>管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-
-
                 <el-input style="width: 120px" v-model="req.keyword" placeholder="请输入关键字"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
-                <!--<el-button type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>-->
                 <el-button type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
             </div>
-            <el-table :data="tableData" v-loading="loading" border class="table" ref="multipleTable"
-                      @selection-change="handleSelectionChange">
+            <el-table :data="tableData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-
-
-                <el-table-column
-                    label="名称"
-                    align="center"
-                    prop="name">
-                </el-table-column>
-                <el-table-column
-                    label="描述"
-                    align="center"
-                    prop="des">
-                </el-table-column>
-                <el-table-column
-                    label="编码"
-                    align="center"
-                    prop="code">
-                </el-table-column>
-                <el-table-column
-                    label="排序"
-                    align="center"
-                    prop="sort">
-                </el-table-column>
-                <el-table-column
-                    label="创建时间"
-                    align="center"
-                    prop="createTime">
-                </el-table-column>
-                <el-table-column
-                    label="更新时间"
-                    align="center"
-                    prop="updateTime">
-                </el-table-column>
+                <el-table-column label="名称" align="center" prop="name"></el-table-column>
+                <el-table-column label="描述" align="center" prop="des"></el-table-column>
+                <el-table-column label="编码" align="center" prop="code"></el-table-column>
+                <el-table-column label="排序" align="center" prop="sort"></el-table-column>
+                <el-table-column label="创建时间" align="center" prop="createTime"></el-table-column>
+                <el-table-column label="更新时间" align="center" prop="updateTime"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" class="yellow" icon="el-icon-zoom-in"
-                                   @click="handleView(scope.$index, scope.row)">查看字典值
-                        </el-button>
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑
-                        </el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red"
-                                   @click="handleDelete(scope.$index, scope.row)">删除
-                        </el-button>
-
+                        <el-button type="text" class="yellow" icon="el-icon-zoom-in" @click="handleView(scope.$index, scope.row)">查看字典值</el-button>
+                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -79,16 +43,10 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-
             <el-form ref="dict" :model="dict" :rules="rules" label-width="100px">
                 <el-form-item label="父级字典" prop="pid">
                     <el-select filterable v-model="dict.pid" placeholder="请选择">
-                        <el-option
-                            v-for="item in dictList"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
+                        <el-option v-for="item in dictList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="名称" prop="name">
@@ -103,7 +61,6 @@
                 <el-form-item label="排序" prop="sort">
                     <el-input v-model.trim="dict.sort"></el-input>
                 </el-form-item>
-
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
@@ -122,43 +79,16 @@
 
         <el-dialog title="字典值" :visible.sync="subDictVisible">
             <el-table :data="subDictList">
-                <el-table-column
-                    label="名称"
-                    align="center"
-                    prop="name">
-                </el-table-column>
-                <el-table-column
-                    label="描述"
-                    align="center"
-                    prop="des">
-                </el-table-column>
-                <el-table-column
-                    label="编码"
-                    align="center"
-                    prop="code">
-                </el-table-column>
-                <el-table-column
-                    label="排序"
-                    align="center"
-                    prop="sort">
-                </el-table-column>
-                <el-table-column
-                    label="创建时间"
-                    align="center"
-                    prop="createTime">
-                </el-table-column>
-                <el-table-column
-                    label="更新时间"
-                    align="center"
-                    prop="updateTime">
-                </el-table-column>
+                <el-table-column label="名称" align="center" prop="name"></el-table-column>
+                <el-table-column label="描述" align="center" prop="des"></el-table-column>
+                <el-table-column label="编码" align="center" prop="code"></el-table-column>
+                <el-table-column label="排序" align="center" prop="sort"></el-table-column>
+                <el-table-column label="创建时间" align="center" prop="createTime"></el-table-column>
+                <el-table-column label="更新时间" align="center" prop="updateTime"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="subHandleEdit(scope.$index, scope.row)">编辑
-                        </el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red"
-                                   @click="subHandleDelete(scope.$index, scope.row)">删除
-                        </el-button>
+                        <el-button type="text" icon="el-icon-edit" @click="subHandleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button type="text" icon="el-icon-delete" class="red" @click="subHandleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -189,13 +119,10 @@
                 rules: {
                     name: [
                         {required: true, message: '请填写字典名称', trigger: 'blur'},
-
                     ],
                     code: [
                         {required: true, message: '请填写字典编码', trigger: 'blur'},
-
                     ],
-
                 },
                 dictList: [],
                 subDictList: [],
@@ -212,14 +139,14 @@
                 this.page.pageNo = val;
                 this.getData();
             },
-            changePageSize(value) { // 修改每页条数size
-                this.page.pageNo = 1
-                this.page.pageSize = value
-                this.tableData = null
+            changePageSize(value) {
+                this.page.pageNo = 1;
+                this.page.pageSize = value;
+                this.tableData = null;
                 this.getData()
             },
             reload() {
-                this.page.pageNo = 1
+                this.page.pageNo = 1;
                 this.getData()
             },
             subReload() {
@@ -229,7 +156,6 @@
                 DictApi.getData({pid: this.pid}).then((res) => {
                     if (res.error === false) {
                         this.subDictList = res.data.records ? res.data.records : []
-
                     } else {
                         this.$message.error(res.msg);
                     }
@@ -239,14 +165,14 @@
             },
             getData() {
                 this.loading = true;
-                this.req.currentPage = this.page.pageNo
-                this.req.pageSize = this.page.pageSize
+                this.req.currentPage = this.page.pageNo;
+                this.req.pageSize = this.page.pageSize;
                 DictApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
-                        this.tableData = res.data.records ? res.data.records : []
-                        this.page.pageNo = parseInt(res.data.current)
-                        this.page.totalRows = parseInt(res.data.total)
+                        this.tableData = res.data.records ? res.data.records : [];
+                        this.page.pageNo = parseInt(res.data.current);
+                        this.page.totalRows = parseInt(res.data.total);
                         this.tableData.forEach(item => {
                             item.status = Boolean(item.status)
                         })
@@ -258,9 +184,7 @@
                     this.$message.error(err.msg);
                 });
             },
-            // 获取 easy-mock 的模拟数据
             getDictList() {
-
                 DictApi.getDictList().then((res) => {
                     if (res.error === false) {
                         this.dictList = res.data;
@@ -275,7 +199,6 @@
                 this.is_search = true;
                 this.getData();
             },
-
             handleAdd() {
                 this.dict = {sort: 100};
                 this.editVisible = true;
@@ -302,7 +225,6 @@
                 this.dict = this.tableData[index];
                 this.pid = this.dict.id;
                 this.getSubData();
-
             },
             handleDelete(index, row) {
                 this.ids = [row.id];
@@ -319,14 +241,14 @@
             // 保存编辑
             saveEdit() {
                 // this.$set(this.tableData, this.idx, this.dict);
-                this.loading = true
+                this.loading = true;
                 DictApi.save(this.dict).then((res) => {
-                    this.loading = false
+                    this.loading = false;
                     if (res.error === false) {
-                        this.editVisible = false
+                        this.editVisible = false;
                         this.$message.success(res.msg);
-                        if (this.mark == 1) {
-                            this.subReload()
+                        if (this.mark === 1) {
+                            this.subReload();
                             this.mark = 0;
                         } else {
                             this.reload()
@@ -335,34 +257,29 @@
                         this.$message.error(res.msg);
                     }
                 }, (err) => {
-                    this.loading = false
+                    this.loading = false;
                     this.$message.error(err.msg);
                 })
-
             },
             // 确定删除
             deleteRow() {
                 DictApi.batchDelete(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
-                        if(this.mark==1){
+                        if (this.mark === 1) {
                             this.subReload();
-                            this.mark=0;
-                        }
-                        else {
+                            this.mark = 0;
+                        } else {
                             this.reload();
                         }
                     } else {
                         this.$message.error(res.msg);
                     }
-
                 }, (err) => {
                     this.$message.error(err.msg);
-                })
+                });
                 this.delVisible = false;
             },
-
-
         }
     }
 
@@ -371,15 +288,6 @@
 <style scoped>
     .handle-box {
         margin-bottom: 20px;
-    }
-
-    .handle-select {
-        width: 120px;
-    }
-
-    .handle-input {
-        width: 300px;
-        display: inline-block;
     }
 
     .del-dialog-cnt {

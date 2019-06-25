@@ -1,6 +1,4 @@
-
 import http from '@/util/http'
-
 
 export default {
     // 修改密码
@@ -16,5 +14,4 @@ export default {
     clearCache:()=>{
         return http.get("/clearCache", {})
     },
-
 }

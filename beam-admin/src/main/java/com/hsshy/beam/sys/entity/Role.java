@@ -8,20 +8,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
-
 
 /**
  * 角色
- *
- * @author hs
  */
 @Data
 @NoArgsConstructor
 @TableName("sys_role")
 public class Role extends RestEntity<Long> {
 
-    //
+    //主键id
     @TableId
     private Long id;
     // 角色名称
@@ -33,8 +29,6 @@ public class Role extends RestEntity<Long> {
 
     @TableField(exist = false)
     private Long[] menuIds;
-
-
 
     @Override
     public Long getId() {

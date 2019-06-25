@@ -7,25 +7,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 菜单管理
- * 
- * @author hs
- * @email 457030599@qq.com
- * @date 2018-10-08 16:33:17
  */
 @Data
 @NoArgsConstructor
 @TableName("sys_menu")
 public class Menu extends DataEntity<Long> {
+
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
+	//主键id
 	@TableId
 	private Long id;
 	/**
@@ -59,15 +52,8 @@ public class Menu extends DataEntity<Long> {
 	@TableField(value = "order_num")
 	private Integer orderNum;
 
-
-	/**
-	 * 
-	 */
 	@TableField(value = "del_flag")
 	private Integer delFlag;
-
-
-
 
 	@TableField(exist = false)
 	private String pname;
