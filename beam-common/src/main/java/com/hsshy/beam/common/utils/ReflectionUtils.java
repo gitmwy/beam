@@ -1,14 +1,13 @@
 package com.hsshy.beam.common.utils;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 /**
  * 反射的 Utils 函数集合 提供访问私有变量, 获取泛型类型 Class, 提取集合中元素属性等 Utils 函数
- * 
- * @author hfBeam
  * 
  */
 public class ReflectionUtils {

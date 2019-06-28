@@ -5,9 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 /**
- * @description: 登陆实体类
- * @author: hs
- * @create: 2018-10-31 15:45:10
+ * 登陆实体类
  **/
 @Data
 public class ChangePassowdForm {

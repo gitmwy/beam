@@ -45,7 +45,7 @@ public class KaptchaController {
 
         // 使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
         BufferedImage bi = defaultKaptcha.createImage(capText);
-        try(ServletOutputStream out = response.getOutputStream()) {
+        try (ServletOutputStream out = response.getOutputStream()) {
             ImageIO.write(bi, "jpg", out);
             out.flush();
         } catch (IOException e) {

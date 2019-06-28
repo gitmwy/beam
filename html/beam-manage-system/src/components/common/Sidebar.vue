@@ -38,7 +38,8 @@
         data() {
             return {
                 collapse: false,
-                menuItems:[]
+                menuItems:[],
+                buttonItems:[]
             }
         },
         computed:{
@@ -52,6 +53,7 @@
                 this.collapse = msg;
             });
             this.getNavList();
+            this.getButtonList();
         },
         methods:{
             getNavList(){
@@ -60,9 +62,19 @@
                         localStorage.setItem("menuItems",res.data);
                     },
                     (err) => {
-                    this.list = [];
-                    this.$message.error(err.msg);
+                        this.list = [];
+                        this.$message.error(err.msg);
                 })
+            },
+            getButtonList(){
+                AccountApi.getButtonList().then((res)=>{
+                        this.buttonItems = res.data;
+                        localStorage.setItem("buttonItems",res.data);
+                    },
+                    (err) => {
+                        this.buttonItems = [];
+                        this.$message.error(err.msg);
+                    })
             }
         }
     }

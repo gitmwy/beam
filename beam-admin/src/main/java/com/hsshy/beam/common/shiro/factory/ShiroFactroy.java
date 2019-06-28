@@ -46,7 +46,6 @@ public class ShiroFactroy implements IShiro {
         //查询用户信息
         User user = userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getAccount,account));
 
-
         //账号不存在
         if(user == null) {
             throw new UnknownAccountException("账号或密码不正确");
@@ -71,7 +70,7 @@ public class ShiroFactroy implements IShiro {
         shiroUser.setAvatar(user.getAvatar());
 
         List<Long> roleList = ConstantFactory.me().getRoleIdsById(user.getId());
-        List<String> roleNameList = new ArrayList<String>();
+        List<String> roleNameList = new ArrayList<>();
         for (Long roleId : roleList) {
             roleNameList.add(ConstantFactory.me().getSingleRoleName(roleId));
         }
@@ -80,10 +79,10 @@ public class ShiroFactroy implements IShiro {
 
         return shiroUser;
     }
+
     @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.USER_MENU + "'+#userId")
     @Override
     public List<String> findPermissionsByUserId(Long userId) {
-
         List<String> permsList;
         //系统管理员，拥有最高权限
         if(userId == Constant.SUPER_ADMIN){
@@ -98,13 +97,10 @@ public class ShiroFactroy implements IShiro {
         return permsList;
     }
 
-
-
     @Override
     public SimpleAuthenticationInfo info(ShiroUser shiroUser, User user, String realmName) {
         String credentials = user.getPassword();
 
         return new SimpleAuthenticationInfo(shiroUser, credentials, ByteSource.Util.bytes(user.getSalt()), realmName);
     }
-
 }

@@ -1,13 +1,13 @@
 package com.hsshy.beam.common.mutidatasource.annotion;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * 
  * 多数据源标识
- *
- * @author hs
- * @date 2019年2月12日
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)

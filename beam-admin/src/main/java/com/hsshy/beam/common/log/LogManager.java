@@ -1,7 +1,9 @@
 package com.hsshy.beam.common.log;
+
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 public class LogManager {
 
     //日志记录操作延时

@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.listener;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -7,9 +8,6 @@ import java.util.Map;
 
 /**
  * ServletContext监听器
- *
- * @author stylefeng
- * @Date 2018/2/22 21:07
  */
 public class ConfigListener implements ServletContextListener {
 
@@ -34,5 +32,4 @@ public class ConfigListener implements ServletContextListener {
         //servletContextPath,默认""
         conf.put("contextPath", sc.getContextPath());
     }
-
 }

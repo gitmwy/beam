@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
-@Api(value="FileController",tags={"文件上传接口"})
+@Api(value = "FileController", tags = {"文件上传接口"})
 @RestController
 @RequestMapping("/file")
 public class FileController {
@@ -26,7 +26,7 @@ public class FileController {
 
         String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
         try {
-            String url = OSSFactory.build().upload(file.getBytes(),fileName);
+            String url = OSSFactory.build().upload(file.getBytes(), fileName);
             return R.ok(url);
         } catch (Exception e) {
             e.printStackTrace();

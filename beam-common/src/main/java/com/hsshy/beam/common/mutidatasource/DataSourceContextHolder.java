@@ -2,9 +2,6 @@ package com.hsshy.beam.common.mutidatasource;
 
 /**
  * datasource的上下文
- *
- * @author hs
- * @date 2019年2月12日
  */
 public class DataSourceContextHolder {
 

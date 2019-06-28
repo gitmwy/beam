@@ -1,11 +1,9 @@
 package com.hsshy.beam.common.xss;
 
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
-
 
 public class XssFilter implements Filter {
 

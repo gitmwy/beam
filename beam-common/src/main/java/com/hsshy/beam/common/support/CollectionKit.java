@@ -1,7 +1,5 @@
 package com.hsshy.beam.common.support;
 
-
-
 import com.hsshy.beam.common.support.exception.ToolBoxException;
 
 import java.lang.reflect.Array;
@@ -10,9 +8,6 @@ import java.util.Map.Entry;
 
 /**
  * 集合相关工具类，包括数组
- * 
- * @author xiaoleilu
- * 
  */
 public class CollectionKit {
 	

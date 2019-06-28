@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.config.multi;
+
 import com.hsshy.beam.common.mutidatasource.DynamicDataSource;
 import com.hsshy.beam.common.mutidatasource.aop.MultiSourceExAop;
 import com.zaxxer.hikari.HikariDataSource;
@@ -15,9 +16,6 @@ import java.util.HashMap;
  * 多数据源配置<br/>
  * <p>
  * 注：由于引入多数据源，所以让spring事务的aop要在多数据源切换aop的后面
- *
- * @author hs
- * @Date 2019/2/12 21:58
  */
 @Configuration
 @ConditionalOnProperty(prefix = "beam.muti-datasource", name = "open", havingValue = "true")

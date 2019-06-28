@@ -7,15 +7,11 @@ import java.text.NumberFormat;
 
 /**
  * 数字格式化的类
- *
- * @author fengshuonan
- * @date 2016年11月30日 下午5:58:40
  */
 public class NumUtil {
 
     /**
-     * @Description 保留指定位数的小数(少的位数不补零)
-     * @author fengshuonan
+     * 保留指定位数的小数(少的位数不补零)
      */
     public static String keepRandomPoint(Double value, int n) {
         if (value == null) {
@@ -27,24 +23,21 @@ public class NumUtil {
     }
 
     /**
-     * @Description 浮点保留两位小数(少的位数不补零)
-     * @author fengshuonan
+     * 浮点保留两位小数(少的位数不补零)
      */
     public static String keep2Point(double value) {
         return keepRandomPoint(value, 2);
     }
 
     /**
-     * @Description 浮点保留1位小数(少的位数不补零)
-     * @author fengshuonan
+     * 浮点保留1位小数(少的位数不补零)
      */
     public static String keep1Point(double value) {
         return keepRandomPoint(value, 1);
     }
 
     /**
-     * @Description 浮点保留任意位小数(少位补零)
-     * @author fengshuonan
+     * 浮点保留任意位小数(少位补零)
      */
     public static String keepRandomPointZero(double value, int n) {
         DecimalFormat df = new DecimalFormat("#0.00");
@@ -52,16 +45,14 @@ public class NumUtil {
     }
 
     /**
-     * @Description 浮点保留两位小数(少位补零)
-     * @author fengshuonan
+     * 浮点保留两位小数(少位补零)
      */
     public static String keep2PointZero(double value) {
         return keepRandomPointZero(value, 2);
     }
 
     /**
-     * @Description 获取任意小数点位的百分比表示
-     * @author fengshuonan
+     * 获取任意小数点位的百分比表示
      */
     public static String percentRandomPoint(double value, int n) {
         NumberFormat percent = NumberFormat.getPercentInstance();
@@ -71,19 +62,16 @@ public class NumUtil {
     }
 
     /**
-     * @Description 百分比保留两位小数
-     * @author fengshuonan
+     * 百分比保留两位小数
      */
     public static String percent2Point(double value) {
         return percentRandomPoint(value, 2);
     }
 
     /**
-     * @Description 获取格式化经纬度后的小数(保留3位)
-     * @author fengshuonan
+     * 获取格式化经纬度后的小数(保留3位)
      */
     public static String latLngPoint(double value) {
         return keepRandomPoint(value, 3);
     }
-
 }

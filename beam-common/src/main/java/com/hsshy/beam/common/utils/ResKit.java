@@ -8,15 +8,11 @@ import java.io.IOException;
 
 /**
  * 资源文件相关的操作类
- *
- * @author fengshuonan
- * @date 2016年11月17日 下午10:09:23
  */
 public class ResKit {
 
     /**
-     * @Description 批量获取ClassPath下的资源文件
-     * @author fengshuonan
+     *  批量获取ClassPath下的资源文件
      */
     public static Resource[] getClassPathResources(String pattern) {
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
@@ -28,8 +24,7 @@ public class ResKit {
     }
 
     /**
-     * @Description 批量获取ClassPath下的资源文件
-     * @author fengshuonan
+     * 批量获取ClassPath下的资源文件
      */
     public static String getClassPathFile(String file) {
 		//return ResKit.class.getClassLoader().getResource(file).getPath();

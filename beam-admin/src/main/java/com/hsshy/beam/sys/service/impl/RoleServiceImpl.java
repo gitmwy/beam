@@ -3,7 +3,6 @@ package com.hsshy.beam.sys.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hsshy.beam.common.constant.cache.Cache;
 import com.hsshy.beam.common.utils.R;
 import com.hsshy.beam.common.utils.RedisUtil;
 import com.hsshy.beam.common.utils.ToolUtil;
@@ -18,10 +17,6 @@ import java.util.List;
 
 /**
  * 角色
- *
- * @author hs
- * @email 457030599@qq.com
- * @date 2018-10-10 21:13:03
  */
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
@@ -39,7 +34,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         if(ToolUtil.isEmpty(roleIds)||roleIds.length<=0){
             return R.fail("未选择删除的角色");
         }
-
 
         for(Long roleId:roleIds){
             Integer count = baseMapper.getCountByRoleId(roleId);
@@ -68,17 +62,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         redisUtil.clearCache();
 
         if(role.getMenuIds().length<=0){
-
             return R.ok();
         }
         baseMapper.saveMenuPerms(role);
 
-        //删除缓存
-
         return R.ok();
-
-
-
-
     }
 }

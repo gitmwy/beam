@@ -95,7 +95,6 @@
 
 <script>
     import Schart from 'vue-schart';
-    import bus from '../common/bus';
     import DashboardApi from '../../api/dashboard';
 
     export default {
@@ -123,38 +122,18 @@
         },
         created(){
             this.getDashboardContent();
-            this.handleListener();
-        },
-        activated(){
-            this.handleListener();
-        },
-        deactivated(){
-            window.removeEventListener('resize', this.renderChart);
-            bus.$off('collapse', this.handleBus);
         },
         methods: {
             getDashboardContent(){
                 DashboardApi.getDashboardContent().then((res)=>{
                     console.log(res);
                 },(err) => {
-                    console.log(err);
                     this.$message.error(err.msg);
                 })
-            },
-            handleListener(){
-                bus.$on('collapse', this.handleBus);
-                // 调用renderChart方法对图表进行重新渲染
-                window.addEventListener('resize', this.renderChart)
-            },
-            handleBus(){
-                setTimeout(() => {
-                    this.renderChart()
-                }, 300);
             }
         }
     }
 </script>
-
 
 <style scoped>
     .grid-content {

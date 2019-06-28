@@ -9,7 +9,7 @@
             <div class="handle-box">
                 <el-input style="width: 120px" v-model="req.keyword" placeholder="请输入关键字"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
-                <el-button type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
+                <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
             </div>
             <el-table :data="tableData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -21,9 +21,9 @@
                 <el-table-column label="更新时间" align="center" prop="updateTime"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" class="yellow" icon="el-icon-zoom-in" @click="handleView(scope.$index, scope.row)">查看字典值</el-button>
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-button v-if="canInfo" type="text" class="yellow" icon="el-icon-zoom-in" @click="handleView(scope.$index, scope.row)">查看字典值</el-button>
+                        <el-button v-if="canEdit" type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button v-if="canDel" type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -127,11 +127,19 @@
                 dictList: [],
                 subDictList: [],
                 mark: 0,
-                pid: 0
+                pid: 0,
+                canEdit: true,
+                canAdd: true,
+                canDel: true,
+                canInfo: true
             }
         },
         created() {
             this.getData();
+            this.canEdit = this.getPerms().indexOf("sys:dict:edit")!==-1;
+            this.canAdd = this.getPerms().indexOf("sys:dict:add")!==-1;
+            this.canDel = this.getPerms().indexOf("sys:dict:del")!==-1;
+            this.canInfo = this.getPerms().indexOf("sys:dict:info")!==-1;
         },
         computed: {},
         methods: {
@@ -242,7 +250,7 @@
             saveEdit() {
                 // this.$set(this.tableData, this.idx, this.dict);
                 this.loading = true;
-                DictApi.save(this.dict).then((res) => {
+                DictApi.add(this.dict).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.editVisible = false;

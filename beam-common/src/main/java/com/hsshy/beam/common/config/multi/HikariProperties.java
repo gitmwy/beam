@@ -1,12 +1,9 @@
 package com.hsshy.beam.common.config.multi;
 
-
 import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * <p>数据库数据源配置</p>
- * @author hs
- * @date 2019年2月12日
  */
 public class HikariProperties {
 

@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.mutidatasource.aop;
+
 import com.hsshy.beam.common.config.multi.MutiDataSourceProperties;
 import com.hsshy.beam.common.mutidatasource.DataSourceContextHolder;
 import com.hsshy.beam.common.mutidatasource.annotion.DataSource;
@@ -16,9 +17,6 @@ import java.lang.reflect.Method;
 
 /**
  * 多数据源切换的aop
- *
- * @author hs
- * @date 2019年2月12日
  */
 @Aspect
 public class MultiSourceExAop implements Ordered {
@@ -63,7 +61,6 @@ public class MultiSourceExAop implements Ordered {
         }
     }
 
-
     /**
      * aop的顺序要早于spring的事务
      */
@@ -71,5 +68,4 @@ public class MultiSourceExAop implements Ordered {
     public int getOrder() {
         return 1;
     }
-
 }

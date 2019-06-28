@@ -1,34 +1,30 @@
-
 import http from '@/util/http'
-
 
 export default {
     // 登录
-    getData : params => {
+    getData: params => {
         return http.get("/sys/user/page/list", params);
     },
-    // 保存
-    save : params => {
-        return http.post("/sys/user/save", params)
+    // 新增
+    add: params => {
+        return http.post("/sys/user/add", params)
     },
-
-    // 批量删除
-    batchDelete : ids => {
-        return http.post("/sys/user/delete", ids)
+    // 删除
+    batchDelete: ids => {
+        return http.post("/sys/user/del", ids)
     },
-
     // 批量更改状态
-    changeStatus : (userId, flag) => {
-
+    changeStatus: (userId, flag) => {
         return http.post("/sys/user/change/status/" + flag, userId)
     },
     resetPassword: ids => {
         return http.post("/sys/user/reset/password", ids)
     },
-    getRoleList:params =>{
+    getRoleList: params => {
         return http.get("/sys/role/list", params);
     },
-    info:params =>{
-        return http.get("/sys/user/info", params);
+    //编辑
+    edit: params => {
+        return http.get("/sys/user/edit", params);
     }
 }

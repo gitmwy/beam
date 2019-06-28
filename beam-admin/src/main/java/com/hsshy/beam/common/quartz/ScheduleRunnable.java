@@ -1,4 +1,3 @@
-
 package com.hsshy.beam.common.quartz;
 
 import com.hsshy.beam.common.exception.BeamException;
@@ -10,9 +9,6 @@ import java.lang.reflect.Method;
 
 /**
  * 执行定时任务
- *
- * @author Mark sunlightcs@gmail.com
- * @since 1.2.0 2016-11-28
  */
 public class ScheduleRunnable implements Runnable {
 	private Object target;
@@ -43,5 +39,4 @@ public class ScheduleRunnable implements Runnable {
 			throw new BeamException("执行定时任务失败", e);
 		}
 	}
-
 }

@@ -2,9 +2,6 @@ package com.hsshy.beam.common.support;
 
 /**
  * 分页工具类
- * 
- * @author xiaoleilu
- * 
  */
 public class PageKit {
 

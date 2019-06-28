@@ -1,7 +1,7 @@
 package com.hsshy.beam.common.xss;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-
 
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
@@ -78,8 +78,5 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         value = value.replaceAll("script", "");
 
         return value;
-
     }
-
-
 }

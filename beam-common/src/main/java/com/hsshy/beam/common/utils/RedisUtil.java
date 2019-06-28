@@ -1,26 +1,14 @@
-/**
- * Copyright 2018 人人开源 http://www.renren.io
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
-
 package com.hsshy.beam.common.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.hsshy.beam.common.constant.cache.CacheKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -28,13 +16,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Redis工具类
- *
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-07-17 21:12
  */
 @Component
 public class RedisUtil {
+
     @Autowired
     private RedisTemplate redisTemplate;
     @Resource(name="redisTemplate")
@@ -47,6 +32,7 @@ public class RedisUtil {
     private SetOperations<String, Object> setOperations;
     @Resource(name="redisTemplate")
     private ZSetOperations<String, Object> zSetOperations;
+
     /**  默认过期时长，单位：秒 */
     public final static long DEFAULT_EXPIRE = 60 * 60 * 24;
     /**  不设置过期时长 */

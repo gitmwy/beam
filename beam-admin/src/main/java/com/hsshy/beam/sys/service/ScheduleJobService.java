@@ -1,8 +1,6 @@
 
 package com.hsshy.beam.sys.service;
 
-
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hsshy.beam.common.utils.PageUtils;
@@ -12,9 +10,6 @@ import java.util.Map;
 
 /**
  * 定时任务
- *
- * @author Mark sunlightcs@gmail.com
- * @since 1.2.0 2016-11-28
  */
 public interface ScheduleJobService extends IService<ScheduleJobEntity> {
 

@@ -15,8 +15,8 @@
                             <el-input style="width: 120px" v-model="req.account" placeholder="请输入账号"></el-input>
                             <el-input style="width: 120px" v-model="req.name" placeholder="请输入姓名"></el-input>
                             <el-button type="primary" icon="search" @click="search">搜索</el-button>
-                            <el-button type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                            <el-button type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增用户</el-button>
+                            <el-button v-if="canDel" type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
+                            <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增用户</el-button>
                     </el-header>
                     <el-main>
                         <el-table :data="tableData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
@@ -40,9 +40,9 @@
                             </el-table-column>
                             <el-table-column label="操作" width="180" align="center">
                                 <template slot-scope="scope">
-                                    <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                                    <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                                    <el-button type="text" icon="el-icon-refresh" class="warning" @click="handleResetPassword(scope.row.id)">重置密码</el-button>
+                                    <el-button v-if="canEdit" type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                                    <el-button v-if="canDel" type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                    <el-button v-if="canResetPassword" type="text" icon="el-icon-refresh" class="warning" @click="handleResetPassword(scope.row.id)">重置密码</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -194,12 +194,20 @@
                     children: 'children',
                     label: 'name'
                 },
-                roleList:[]
+                roleList:[],
+                canEdit:true,
+                canAdd:true,
+                canDel:true,
+                canResetPassword:true
             }
         },
         created() {
             this.getData();
             this.getDeptTreeData();
+            this.canEdit = this.getPerms().indexOf("sys:user:edit")!==-1;
+            this.canAdd = this.getPerms().indexOf("sys:user:add")!==-1;
+            this.canDel = this.getPerms().indexOf("sys:user:del")!==-1;
+            this.canResetPassword = this.getPerms().indexOf("sys:user:resetPassword")!==-1;
         },
         computed: {},
         methods: {
@@ -329,7 +337,7 @@
             handleEdit(index, row) {
                 this.idx = index;
                 // const item = this.tableData[index];
-                SysUserApi.info({userId:row.id}).then((res) => {
+                SysUserApi.edit({userId:row.id}).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.form = res.data;
@@ -364,7 +372,7 @@
             saveEdit() {
                 // this.$set(this.tableData, this.idx, this.form);
                 this.loading = true;
-                SysUserApi.save(this.form).then((res) => {
+                SysUserApi.add(this.form).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.editVisible = false;
@@ -389,7 +397,7 @@
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
-                })
+                });
                 this.delVisible = false;
             },
             handleResetPassword(id) {
@@ -411,7 +419,6 @@
                     })
                 })
             },
-            // 上下架
             changeStatus(id, flag) {
                 SysUserApi.changeStatus(id, !flag ? 0 : 1).then((res) => {
                     if (res.error === false) {

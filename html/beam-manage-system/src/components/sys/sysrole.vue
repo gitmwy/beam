@@ -9,8 +9,8 @@
             <div class="handle-box">
                 <el-input style="width: 130px" v-model="req.roleName" placeholder="请输入角色名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
-                <el-button type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                <el-button type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
+                <el-button v-if="canDel" type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
+                <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
             </div>
             <el-table :data="tableData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -19,9 +19,9 @@
                 <el-table-column label="创建时间" align="center" prop="createTime"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                        <el-button class="success" type="text" icon="el-icon-lx-lock" @click="handleConfigPerms(scope.$index, scope.row)">权限配置</el-button>
+                        <el-button v-if="canEdit" type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button v-if="canDel" type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-button v-if="canConfigPerm" class="success" type="text" icon="el-icon-lx-lock" @click="handleConfigPerms(scope.$index, scope.row)">权限配置</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -99,11 +99,19 @@
                     label: 'name'
                 },
                 checkMenuData:[],
-                roleId:null
+                roleId:null,
+                canEdit:true,
+                canAdd:true,
+                canDel:true,
+                canConfigPerm:true
             }
         },
         created() {
             this.getData();
+            this.canEdit = this.getPerms().indexOf("sys:role:edit")!==-1;
+            this.canAdd = this.getPerms().indexOf("sys:role:add")!==-1;
+            this.canDel = this.getPerms().indexOf("sys:role:del")!==-1;
+            this.canConfigPerm = this.getPerms().indexOf("sys:role:configPerm")!==-1;
         },
         computed: {},
         methods: {
@@ -228,7 +236,7 @@
             saveEdit() {
                 // this.$set(this.tableData, this.idx, this.role);
                 this.loading = true;
-                RoleApi.save(this.role).then((res) => {
+                RoleApi.add(this.role).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.editVisible = false;

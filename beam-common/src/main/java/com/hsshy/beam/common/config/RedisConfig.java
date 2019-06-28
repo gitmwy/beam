@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.config;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,20 +8,14 @@ import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-
 /**
  * Redis配置
- *
- * @author hs
- * @date 2019-12-07
- * redis配置升级
  */
 @Configuration
 public class RedisConfig  {
 
     @Autowired
     private RedisConnectionFactory factory;
-
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {

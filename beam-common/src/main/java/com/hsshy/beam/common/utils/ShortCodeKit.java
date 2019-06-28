@@ -8,9 +8,6 @@ import java.util.Stack;
  * 同时短连接可逆回自增id,
  * 相邻自增id无规律，防破解。
  * 基于Feistel的特性转为Base62。
- *
- * @author hs
- * @create 2017-11-02
  **/
 public class ShortCodeKit {
 

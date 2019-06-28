@@ -23,8 +23,6 @@ import java.util.Map;
 
 /**
  * 内嵌图片的二维码生成器
- *
- * @author lichunxi
  */
 public class ImgQrTool {
 

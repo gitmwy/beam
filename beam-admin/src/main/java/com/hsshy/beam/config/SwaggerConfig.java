@@ -1,4 +1,5 @@
 package com.hsshy.beam.config;
+
 import com.hsshy.beam.config.properties.BeamAdminProperties;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -16,9 +17,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * swagger配置类
- *
- * @author hs
- * @date 2018年9月19日19:42:59
  */
 @Configuration
 @EnableSwagger2
@@ -47,12 +45,10 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
 
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
-
 }

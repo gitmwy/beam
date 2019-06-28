@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.shiro;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,7 +30,6 @@ public class ShiroUser implements Serializable {
 	private String deptName;        // 部门名称
 
 	private List<String> roleNames; // 角色名称集
-
 
 	/**
 	 * 设置：主键id

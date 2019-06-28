@@ -1,28 +1,22 @@
-
 import http from '@/util/http'
 
-
 export default {
-
-    getData : params => {
+    getData: params => {
         return http.get("/sys/dept/page/list", params);
     },
-    getTreeData : params => {
+    getTreeData: params => {
         return http.get("/sys/dept/tree/dept", params);
     },
-    // 保存
-    save : params => {
-        return http.post("/sys/dept/save", params)
+    // 新增
+    add: params => {
+        return http.post("/sys/dept/add", params)
     },
-    // 详情
-    info : params => {
-        return http.get("/sys/dept/info", params)
+    // 编辑
+    edit: params => {
+        return http.get("/sys/dept/edit", params)
     },
-
     // 批量删除
-    batchDelete : ids => {
-        return http.post("/sys/dept/delete", ids)
+    batchDelete: ids => {
+        return http.post("/sys/dept/del", ids)
     },
-
-
 }

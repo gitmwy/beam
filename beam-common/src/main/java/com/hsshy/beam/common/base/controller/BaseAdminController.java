@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.base.controller;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hsshy.beam.common.base.entity.DataEntity;
@@ -22,8 +23,6 @@ public abstract class BaseAdminController <Entity extends DataEntity<ID>,ID exte
 
     /**
      * 设置基础service
-     *
-     * @param commonService
      */
     @Autowired
     public void setCommonService(ICommonService<Entity> commonService) {
@@ -59,8 +58,6 @@ public abstract class BaseAdminController <Entity extends DataEntity<ID>,ID exte
         return R.ok(commonService.page(new Page<Entity>(currentPage, DataBaseConstant.PAGE_SIZE), new QueryWrapper<Entity>()));
     }
 
-
-
     @ApiOperation(value = "新增")
     @PostMapping(value = "/add")
     public Object add(@RequestBody @ApiParam(name="实体对象",value="传入json格式",required=true) Entity entity) {
@@ -68,12 +65,9 @@ public abstract class BaseAdminController <Entity extends DataEntity<ID>,ID exte
 
         if(commonService.save(entity)){
             return R.ok("新增成功");
-        }
-        else {
+        } else {
             return R.ok("新增失败");
-
         }
-
     }
 
     @ApiOperation(value = "修改")
@@ -82,10 +76,8 @@ public abstract class BaseAdminController <Entity extends DataEntity<ID>,ID exte
         Assert.notNull(entity,"entity不能为空");
         if(commonService.save(entity)){
             return R.ok("修改成功");
-        }
-        else {
+        } else {
             return R.ok("修改失败");
-
         }
     }
 
@@ -96,10 +88,8 @@ public abstract class BaseAdminController <Entity extends DataEntity<ID>,ID exte
 
         if(commonService.removeById(entity)){
             return R.ok("删除成功");
-        }
-        else {
+        } else {
             return R.ok("删除失败");
-
         }
     }
 
@@ -109,12 +99,9 @@ public abstract class BaseAdminController <Entity extends DataEntity<ID>,ID exte
         Assert.notNull(id,"id不能为空");
         if(commonService.removeById(id)){
             return R.ok("删除成功");
-        }
-        else {
+        } else {
             return R.ok("删除失败");
-
         }
-
     }
 
     @ApiOperation(value = "通过id逻辑删除")
@@ -125,10 +112,8 @@ public abstract class BaseAdminController <Entity extends DataEntity<ID>,ID exte
         entity.setDelFlag(DataBaseConstant.DEL_FLAG_DELETE);
         if(commonService.updateById(entity)){
             return R.ok("删除成功");
-        }
-        else {
+        } else {
             return R.ok("删除失败");
-
         }
     }
 
@@ -139,10 +124,8 @@ public abstract class BaseAdminController <Entity extends DataEntity<ID>,ID exte
         entity.setDelFlag(DataBaseConstant.DEL_FLAG_DELETE);
         if(commonService.updateById(entity)){
             return R.ok("删除成功");
-        }
-        else {
+        } else {
             return R.ok("删除失败");
-
         }
     }
 }

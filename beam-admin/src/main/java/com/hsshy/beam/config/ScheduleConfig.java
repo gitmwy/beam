@@ -1,4 +1,5 @@
 package com.hsshy.beam.config;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -7,9 +8,6 @@ import java.util.Properties;
 
 /**
  * 定时任务配置
- *
- * @author Mark sunlightcs@gmail.com
- * @since 2.0.0 2017-04-20
  */
 @Configuration
 public class ScheduleConfig {

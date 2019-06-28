@@ -1,6 +1,5 @@
 package com.hsshy.beam.common.util;
 
-
 import com.hsshy.beam.common.utils.SpringContextHolder;
 import com.hsshy.beam.config.properties.BeamAdminProperties;
 

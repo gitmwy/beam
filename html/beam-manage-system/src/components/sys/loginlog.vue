@@ -11,7 +11,7 @@
                 <el-input style="width: 120px" v-model="req.succeed" placeholder="是否成功"></el-input>
                 <el-input style="width: 120px" v-model="req.ipAddress" placeholder="ip"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
-                <el-button type="danger" icon="delete" class="handle-del mr10" @click="delVisible=true">清空日志</el-button>
+                <el-button v-if="canClear" type="danger" icon="delete" class="handle-del mr10" @click="delVisible=true">清空日志</el-button>
             </div>
             <el-table :data="tableData" v-loading="loading" border class="table">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -60,11 +60,13 @@
                 delVisible: false,
                 loginLog: {},
                 req: {},
-                loading: false
+                loading: false,
+                canClear:true
             }
         },
         created() {
             this.getData();
+            this.canClear = this.getPerms().indexOf("sys:loginLog:clear")!==-1;
         },
         computed: {},
         methods: {

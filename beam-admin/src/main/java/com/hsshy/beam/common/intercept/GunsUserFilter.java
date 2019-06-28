@@ -17,6 +17,7 @@
  * under the License.
  */
 package com.hsshy.beam.common.intercept;
+
 import com.hsshy.beam.common.enumeration.RetEnum;
 import com.hsshy.beam.common.utils.R;
 import com.hsshy.beam.common.utils.RenderUtil;
@@ -46,21 +47,13 @@ public class GunsUserFilter extends AccessControlFilter {
      * 如果isAccessAllowed返回true则onAccessDenied方法不会继续执行
      * 这里可以用来判断一些不被通过的链接（个人备注）
      * * 表示是否允许访问 ，如果允许访问返回true，否则false；
-     * @param request
-     * @param response
      * @param mappedValue 表示写在拦截器中括号里面的字符串 mappedValue 就是 [urls] 配置中拦截器参数部分
-     * @return
-     * @throws Exception
      * */
-
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-
-
         if (isLoginRequest(request, response)) {
             return true;
         } else {
             Subject subject = getSubject(request, response);
-            // If principal is not null, then the user is known and should be allowed access.
             return subject.getPrincipal() != null;
         }
     }
@@ -72,11 +65,7 @@ public class GunsUserFilter extends AccessControlFilter {
      * */
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
-
-
         RenderUtil.renderJson(httpServletResponse, R.fail(RetEnum.LOGIN_EXPIRED.getRet(),RetEnum.LOGIN_EXPIRED.getMsg()));
-
         return false;
-
     }
 }

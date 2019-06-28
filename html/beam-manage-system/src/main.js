@@ -4,24 +4,32 @@ import router from './router';
 import axios from 'axios';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
-// import '../static/css/theme-green/index.css';       // 浅绿色主题
 import '../static/css/icon.css';
 import "babel-polyfill";
+// import '../static/css/theme-ff406d/index.css'; //粉红色主题
+// import '../static/css/theme-green/index.css'; // 浅绿色主题
 
 Vue.use(ElementUI, { size: 'small' });
 Vue.prototype.$axios = axios;
+Vue.prototype.getPerms = function (){
+    let buttonItems = localStorage.getItem("buttonItems");
+    if(buttonItems){
+        return buttonItems;
+    } else {
+        return [];
+    }
+};
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    const ms_username = localStorage.getItem('ms_username');
-    // if(!role && to.path !== '/login'&& to.path!=='/vedio'){
-    //     next('/login');
-    // }else
-    if(to.meta.permission){
-        // 鉴权
-        let menuItems = localStorage.getItem('menuItems');
-        console.log(menuItems);
-        ms_username === 'admin' ? next() : next('/403');
+    let buttonItems = localStorage.getItem("buttonItems");
+    if(to.meta.permission && buttonItems){
+        if(buttonItems.indexOf(to.meta.perms)!==-1){
+            next();
+        } else {
+            console.log(to);
+            next('/403');
+        }
     }else{
         // 简单的判断IE10及以下不进入富文本编辑器，该组件不兼容
         if(navigator.userAgent.indexOf('MSIE') > -1 && to.path === '/editor'){
@@ -32,7 +40,7 @@ router.beforeEach((to, from, next) => {
             next();
         }
     }
-})
+});
 
 new Vue({
     router,

@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.utils;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -6,9 +7,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * Spring的ApplicationContext的持有者,可以用静态方法的方式获取spring容器中的bean
- *
- * @author fengshuonan
- * @date 2016年11月27日 下午3:32:11
  */
 @Component
 public class SpringContextHolder implements ApplicationContextAware {

@@ -17,9 +17,6 @@ import java.util.List;
  * <p>例如:
  * Db.getMapper(UserLoginMapper.class).selectById("14779707158513204");<br>
  * <p>
- *
- * @author fengshuonan
- * @date 2017年2月22日 下午8:07:17
  */
 @SuppressWarnings("all")
 public class Db<T> {

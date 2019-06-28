@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.config.multi;
+
 import com.zaxxer.hikari.HikariDataSource;
 
 /**
@@ -42,10 +43,7 @@ public class MutiDataSourceProperties {
         dataSource.setMaximumPoolSize(maximumPoolSize);
         dataSource.setMinimumIdle(minimumIdle);
         dataSource.setReadOnly(false);
-
-
     }
-
 
     public String getUrl() {
         return url;

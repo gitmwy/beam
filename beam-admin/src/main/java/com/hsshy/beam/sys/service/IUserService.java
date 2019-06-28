@@ -1,6 +1,5 @@
 package com.hsshy.beam.sys.service;
 
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hsshy.beam.common.base.service.ICommonService;
 import com.hsshy.beam.common.utils.R;
@@ -12,10 +11,6 @@ import java.util.Map;
 
 /**
  * 管理员表
- *
- * @author hs
- * @email 457030599@qq.com
- * @date 2018-10-07 18:03:20
  */
 public interface IUserService extends ICommonService<User> {
 
@@ -35,5 +30,4 @@ public interface IUserService extends ICommonService<User> {
      * 查询用户的所有菜单ID
      */
     List<Long> queryAllMenuId(Long userId);
-
 }

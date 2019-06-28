@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.log;
+
 import com.hsshy.beam.common.utils.SpringContextHolder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

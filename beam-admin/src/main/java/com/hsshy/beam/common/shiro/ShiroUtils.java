@@ -20,10 +20,6 @@ public class ShiroUtils {
 
     /**
      * 加密
-     *
-     * @param password
-     * @param salt
-     * @return
      */
     public static String sha256(String password, String salt) {
         return new SimpleHash(hashAlgorithmName, password, salt, hashIterations).toString();
@@ -54,9 +50,7 @@ public class ShiroUtils {
         return getUserEntity().getId();
     }
 
-
     public static void setSessionAttribute(Object key, Object value) {
-
         getSession().setAttribute(key, value);
     }
 
@@ -77,12 +71,10 @@ public class ShiroUtils {
     }
 
     public static boolean isLogin() {
-
         return SecurityUtils.getSubject().getPrincipal() != null;
     }
 
     public static void logout() {
-
         SecurityUtils.getSubject().logout();
     }
 
@@ -106,7 +98,6 @@ public class ShiroUtils {
         return getSubject() != null && roleName != null
                 && roleName.length() > 0 && getSubject().hasRole(roleName);
     }
-
 
     /**
      * 验证当前用户是否属于以下任意一个角色。
@@ -218,6 +209,4 @@ public class ShiroUtils {
         }
         return "";
     }
-
-
 }

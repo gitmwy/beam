@@ -1,6 +1,5 @@
 package com.hsshy.beam.common.datascope;
 
-
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.hsshy.beam.common.support.CollectionKit;
 import org.apache.ibatis.executor.statement.StatementHandler;
@@ -18,9 +17,6 @@ import java.util.Properties;
 
 /**
  * 数据范围的拦截器
- *
- * @author fengshuonan
- * @date 2017-07-23 21:26
  */
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class DataScopeInterceptor implements Interceptor {

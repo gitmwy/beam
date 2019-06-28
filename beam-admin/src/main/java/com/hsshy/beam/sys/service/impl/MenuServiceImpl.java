@@ -21,10 +21,6 @@ import java.util.Map;
 
 /**
  * 菜单管理
- *
- * @author hs
- * @email 457030599@qq.com
- * @date 2018-10-08 16:33:17
  */
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
@@ -39,7 +35,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         if(menuIdList == null){
             return menuList;
         }
-
         List<Map> userMenuList = new ArrayList<>();
         for(Map menu : menuList){
             if(menuIdList.contains(menu.get("id"))){
@@ -49,13 +44,10 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         return userMenuList;
     }
 
-
-
     @Override
     public List<Map> queryListParentId(Long parentId) {
         return baseMapper.queryListParentId(parentId);
     }
-
 
     @Override
     public List<Map> treeMenuList(Long menuId,Menu menu) {
@@ -64,24 +56,19 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
             QueryWrapper qw = new QueryWrapper<Map>();
             qw.like("name",menu.getName());
             menuList = this.list(qw);
-        }
-        else {
+        } else {
             menuList =  queryListParentId(menuId);
         }
-
         return getAllMenuTreeList(menuList);
     }
-
 
     @Override
     @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.USER_ID + "'+#userId")
     public List<Map> getUserMenuList(Long userId) {
-
         //系统管理员，拥有最高权限
         if(userId == Constant.SUPER_ADMIN){
             return getAllMenuList(null);
         }
-
         //用户菜单列表
         List<Long> menuIdList = userService.queryAllMenuId(userId);
         return getAllMenuList(menuIdList);

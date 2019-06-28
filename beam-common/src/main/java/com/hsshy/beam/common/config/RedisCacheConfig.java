@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.config;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,11 +13,8 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -24,10 +22,6 @@ import java.util.Map;
 
 /**
  * Redis配置
- *
- * @author hs
- * @date 2019-12-07
- * redis配置升级
  */
 @Configuration
 @EnableCaching//开启缓存 @Cacheable @CacheEvict @CachePut 并继承CachingConfigurerSupport
@@ -36,13 +30,9 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
     @Autowired
     private RedisConnectionFactory factory;
 
-
-
     /**
      * 申明缓存管理器，会创建一个切面（aspect）并触发Spring缓存注解的切点（pointcut）
      * 根据类或者方法所使用的注解以及缓存的状态，这个切面会从缓存中获取数据，将数据添加到缓存之中或者从缓存中移除某个值
-
-     * @return
      */
     @Bean
     public RedisCacheManager cacheManager() {
@@ -77,6 +67,4 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
 
         return redisCacheConfiguration;
     }
-
-
 }

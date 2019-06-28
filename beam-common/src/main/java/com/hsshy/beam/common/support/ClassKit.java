@@ -1,7 +1,5 @@
 package com.hsshy.beam.common.support;
 
-
-
 import com.hsshy.beam.common.support.exception.ToolBoxException;
 
 import java.lang.reflect.Method;
@@ -10,9 +8,6 @@ import java.lang.reflect.Modifier;
 /**
  * 类工具类
  * 1、扫描指定包下的所有类<br>
- * 参考 http://www.oschina.net/code/snippet_234657_22722
- * @author seaside_hi, xiaoleilu, chill
- *
  */
 public class ClassKit {
 	

@@ -5,7 +5,6 @@ import com.hsshy.beam.sys.entity.Dict;
 import java.util.List;
 
 public interface IConstantFactory {
-
     //根据用户ID获取其所有角色ID
     List<Long> getRoleIdsById(Long userId);
 
@@ -16,10 +15,8 @@ public interface IConstantFactory {
     String getDeptName(Long deptId);
 
     //根据父级字典code和获取字典名称
-    String getDictsByCode(String pcode,String code);
+    String getDictsByCode(String pcode, String code);
 
     //根据父级字典code和获取字典名称
     List<Dict> getDictListByCode(String pcode);
-
-
 }

@@ -23,9 +23,9 @@
                         {{sysuser.account}} <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="changePassword">修改密码</el-dropdown-item>
-                        <el-dropdown-item divided  command="clearCache">清除缓存</el-dropdown-item>
-                        <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
+                        <el-dropdown-item v-if="canChangePassword" command="changePassword">修改密码</el-dropdown-item>
+                        <el-dropdown-item v-if="canClearCache" command="clearCache">清除缓存</el-dropdown-item>
+                        <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
@@ -48,8 +48,8 @@
             </div>
         </el-dialog>
     </div>
-
 </template>
+
 <script>
     import bus from '../common/bus';
     import AccountApi from '../common/account';
@@ -90,7 +90,9 @@
                     password_confirm:[
                         {validator: validatePass, trigger: 'blur' }
                     ]
-                }
+                },
+                canChangePassword: true,
+                canClearCache: true
             }
         },
         computed:{
@@ -99,12 +101,14 @@
             },
             sysuser(){
                 let sysuser = JSON.parse(localStorage.getItem('sysuser'));
-
                 return sysuser?sysuser:this.user;
             }
-
         },
         methods:{
+            created() {
+                this.canClearCache = this.getPerms().indexOf("sys:user:clearCache")!==-1;
+                this.canChangePassword = this.getPerms().indexOf("sys:user:changePassword")!==-1;
+            },
             // 修改密码
             modifyPwd() {
                 this.$refs.AccountForm.validate((valid) => {
@@ -139,7 +143,7 @@
             },
             handleLogout(){
                 AccountApi.handleLogout().then((res) => {
-                    localStorage.removeItem('sysuser')
+                    localStorage.removeItem('sysuser');
                     this.$router.push('/login');
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -147,7 +151,18 @@
             },
             clearCache(){
                 AccountApi.clearCache().then((res) => {
-                    this.$message.success(res.msg);
+                    bus.$emit('closeAll', "");
+                    localStorage.removeItem('menuItems');
+                    localStorage.removeItem('buttonItems');
+                    this.$message({
+                        showClose: true,
+                        type: 'success',
+                        message: res.msg,
+                        duration: 500,
+                        onClose: function(){
+                            window.location.reload();
+                        }
+                    });
                 }, (err) => {
                     this.$message.error(err.msg);
                 })

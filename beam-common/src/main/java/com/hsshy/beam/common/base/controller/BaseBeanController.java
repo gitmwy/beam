@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.base.controller;
+
 import com.hsshy.beam.common.support.HttpKit;
 import com.hsshy.beam.common.utils.ReflectionUtils;
 import org.slf4j.Logger;
@@ -48,8 +49,4 @@ public abstract class BaseBeanController<Entity extends Serializable>  {
 		String uid = (String) getAttr("uid");
 		return Long.parseLong(uid);
 	}
-
-
-
-
 }

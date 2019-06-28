@@ -1,19 +1,14 @@
 package com.hsshy.beam.sys.service;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hsshy.beam.common.base.service.ICommonService;
 import com.hsshy.beam.common.utils.R;
 import com.hsshy.beam.sys.entity.Role;
-import com.hsshy.beam.sys.entity.User;
 
 import java.util.List;
 
 /**
  * 角色
- *
- * @author hs
- * @email 457030599@qq.com
- * @date 2018-10-10 21:13:03
  */
 public interface IRoleService extends IService<Role> {
 
@@ -24,6 +19,4 @@ public interface IRoleService extends IService<Role> {
     List<Long> getCheckMenuIds(Long roleId);
 
     R saveMuenPerms(Role role);
-
-
 }

@@ -2,8 +2,6 @@ package com.hsshy.beam.common.enumeration;
 
 /**
  * 返回信息枚举
- * created by ZWen
- * at 2017/12/6 17:49
  */
 public enum RetEnum {
     /**

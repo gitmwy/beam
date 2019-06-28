@@ -2,9 +2,6 @@ package com.hsshy.beam.common.constant.cache;
 
 /**
  * 缓存标识前缀集合,常用在ConstantFactory类中
- *
- * @author fengshuonan
- * @date 2017-04-25 9:37
  */
 public interface CacheKey {
 
@@ -25,5 +22,4 @@ public interface CacheKey {
     String USER_ID = "USER_ID_";
 
     String USER_MENU = "USER_MENU_";
-
 }

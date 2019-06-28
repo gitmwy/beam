@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.log.factory;
+
 import com.hsshy.beam.common.log.state.LogSucceed;
 import com.hsshy.beam.common.log.state.LogType;
 import com.hsshy.beam.sys.entity.LoginLog;

@@ -1,6 +1,4 @@
-
 import http from '@/util/http'
-
 
 export default {
     // 登录

@@ -9,8 +9,8 @@
             <div class="handle-box">
                 <el-input style="width: 150px" v-model="req.name" placeholder="请输入菜单名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
-                <el-button type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                <el-button type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
+                <el-button v-if="canDel" type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
+                <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
             </div>
             <el-table row-key="id" :data="treeData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -22,8 +22,8 @@
                 <el-table-column label="排序" align="center" prop="orderNum"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-button v-if="canEdit" type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button v-if="canDel" type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -58,8 +58,7 @@
                 </el-form-item>
                 <el-form-item label="类型" prop="type">
                     <el-select v-model="menu.type" placeholder="请选择">
-                        <el-option v-for="item in menuType" :key="item.value" :label="item.name"
-                                   :value="item.value"></el-option>
+                        <el-option v-for="item in menuType" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="菜单图标" prop="icon">
@@ -131,12 +130,18 @@
                 defaultProps: {
                     children: 'children',
                     label: 'name'
-                }
+                },
+                canEdit:true,
+                canAdd:true,
+                canDel:true
             }
         },
         created() {
             this.getData();
             this.getTreeData();
+            this.canEdit = this.getPerms().indexOf("sys:menu:edit")!==-1;
+            this.canAdd = this.getPerms().indexOf("sys:menu:add")!==-1;
+            this.canDel = this.getPerms().indexOf("sys:menu:del")!==-1;
         },
         computed: {},
         methods: {
@@ -210,7 +215,7 @@
             },
             handleEdit(index, row) {
                 this.menu.delFlag = 0;
-                MenuApi.info({menuId: row.id}).then((res) => {
+                MenuApi.edit({menuId: row.id}).then((res) => {
                     if (res.error === false) {
                         this.menu = res.data;
                         console.log(this.menu);
@@ -242,9 +247,11 @@
             saveEdit() {
                 // this.$set(this.tableData, this.idx, this.menu);
                 this.loading = true;
-                MenuApi.save(this.menu).then((res) => {
+                MenuApi.add(this.menu).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
+                        localStorage.removeItem('menuItems');
+                        localStorage.removeItem('buttonItems');
                         this.editVisible = false;
                         this.$message.success(res.msg);
                         this.reload()
@@ -255,7 +262,6 @@
                     this.loading = false;
                     this.$message.error(err.msg);
                 })
-
             },
             // 确定删除
             deleteRow() {

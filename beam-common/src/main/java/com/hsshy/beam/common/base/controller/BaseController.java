@@ -35,10 +35,4 @@ public class BaseController {
     protected Integer getSystemInvokCount() {
         return (Integer) this.getHttpServletRequest().getServletContext().getAttribute("systemCount");
     }
-
-
-
-
-
-
 }

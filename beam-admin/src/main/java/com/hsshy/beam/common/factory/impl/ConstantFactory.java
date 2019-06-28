@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.factory.impl;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hsshy.beam.common.constant.cache.Cache;
 import com.hsshy.beam.common.constant.cache.CacheKey;
@@ -10,13 +11,11 @@ import com.hsshy.beam.sys.entity.*;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
  * 常量的生产工厂
- *
- * @author fengshuonan
- * @date 2017年2月13日 下午10:55:21
  */
 @Component
 @DependsOn("springContextHolder")
@@ -31,12 +30,10 @@ public class ConstantFactory implements IConstantFactory {
         return SpringContextHolder.getBean("constantFactory");
     }
 
-
     @Override
     public List<Long> getRoleIdsById(Long userId) {
         return userMapper.getRoleIdsById(userId);
     }
-
 
     /**
      * 通过角色id获取角色名称
@@ -67,12 +64,9 @@ public class ConstantFactory implements IConstantFactory {
         return "";
     }
 
-
-
     @Override
     public String getDictsByCode(String pcode, String code) {
-
-        QueryWrapper<Dict> queryWrapper = new QueryWrapper<Dict>().eq("code",pcode);
+        QueryWrapper<Dict> queryWrapper = new QueryWrapper<Dict>().eq("code", pcode);
         Dict dict = dictMapper.selectOne(queryWrapper);
         if (dict == null) {
             return "";
@@ -91,7 +85,7 @@ public class ConstantFactory implements IConstantFactory {
 
     @Override
     public List<Dict> getDictListByCode(String pcode) {
-        QueryWrapper<Dict> queryWrapper = new QueryWrapper<Dict>().eq("code",pcode);
+        QueryWrapper<Dict> queryWrapper = new QueryWrapper<Dict>().eq("code", pcode);
         Dict dict = dictMapper.selectOne(queryWrapper);
         if (dict == null) {
             return null;
@@ -99,10 +93,7 @@ public class ConstantFactory implements IConstantFactory {
             QueryWrapper<Dict> wrapper = new QueryWrapper<>();
             wrapper = wrapper.eq("pid", dict.getId());
             List<Dict> dicts = dictMapper.selectList(wrapper);
-
             return dicts;
         }
     }
-
-
 }

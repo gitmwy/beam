@@ -89,6 +89,9 @@
         },
         created(){
             this.setTags(this.$route);
+            bus.$on('closeAll', msg => {
+                this.closeAll();
+            })
         }
     }
 

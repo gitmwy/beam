@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.support;
+
 import com.hsshy.beam.common.support.exception.ToolBoxException;
 
 import java.text.SimpleDateFormat;
@@ -9,7 +10,6 @@ import java.util.Locale;
 
 /**
  * 时间工具类
- * @author xiaoleilu
  */
 public class DateTimeKit {
 	/** 毫秒 */

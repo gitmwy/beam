@@ -13,11 +13,11 @@
                     <el-option v-for="item in statusName" :key="item.id" :label="item.name" :value="item.code"></el-option>
                 </el-select>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
-                <el-button type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                <el-button type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
-                <el-button type="info" class="handle-del mr10" @click="handleRun">运行一次</el-button>
-                <el-button type="danger" class="handle-del mr10" @click="handlePause">停止</el-button>
-                <el-button type="success" class="handle-del mr10" @click="handleResume">恢复</el-button>
+                <el-button v-if="canDel" type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
+                <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
+                <el-button v-if="canRun" type="info" class="handle-del mr10" @click="handleRun">运行一次</el-button>
+                <el-button v-if="canPause" type="danger" class="handle-del mr10" @click="handlePause">停止</el-button>
+                <el-button v-if="canResume" type="success"  class="handle-del mr10" @click="handleResume">恢复</el-button>
             </div>
             <el-table :data="tableData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -35,8 +35,8 @@
                 <el-table-column label="更新时间" align="center" prop="updateTime"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-button v-if="canEdit" type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button v-if="canDel" type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -143,13 +143,24 @@
                 req: {},
                 accountInput: true,
                 loading: false,
-                statusName: []
+                statusName: [],
+                canEdit:true,
+                canAdd:true,
+                canDel:true,
+                canResume:true,
+                canPause:true,
+                canRun:true
             }
         },
         created() {
             this.getData();
             this.getStatusList();
-
+            this.canEdit = this.getPerms().indexOf("sys:schedule:edit")!==-1;
+            this.canAdd = this.getPerms().indexOf("sys:schedule:add")!==-1;
+            this.canDel = this.getPerms().indexOf("sys:schedule:del")!==-1;
+            this.canResume = this.getPerms().indexOf("sys:schedule:resume")!==-1;
+            this.canPause = this.getPerms().indexOf("sys:schedule:pause")!==-1;
+            this.canRun = this.getPerms().indexOf("sys:schedule:run")!==-1;
         },
         computed: {},
         methods: {
@@ -246,7 +257,7 @@
             saveEdit() {
                 this.loading = true;
                 if (this.isNew) {
-                    ScheduleJobApi.save(this.scheduleJob).then((res) => {
+                    ScheduleJobApi.add(this.scheduleJob).then((res) => {
                         this.loading = false;
                         if (res.error === false) {
                             this.editVisible = false;
@@ -260,7 +271,7 @@
                         this.$message.error(err.msg);
                     })
                 } else {
-                    ScheduleJobApi.update(this.scheduleJob).then((res) => {
+                    ScheduleJobApi.edit(this.scheduleJob).then((res) => {
                         this.loading = false;
                         if (res.error === false) {
                             this.editVisible = false;

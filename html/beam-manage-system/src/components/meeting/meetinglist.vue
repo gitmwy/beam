@@ -1,11 +1,13 @@
 <template>
-    <div class="table">
+    <div class="table" v-loading="exportLoading">
         <div class="crumbs">
             <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>会议</el-breadcrumb-item>
                 <el-breadcrumb-item>会议列表</el-breadcrumb-item>
+                <el-breadcrumb-item v-for="(item, index) in items" :key="index">{{item.title}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="container">
+        <div class="container" v-show="showMeeting">
             <div class="handle-box">
                 <el-input style="width: 120px" v-model="req.code" placeholder="会议编号"/>
                 <el-input style="width: 120px" v-model="req.hospitalName" placeholder="医院名称"/>
@@ -13,7 +15,7 @@
                 <el-date-picker v-model="req.endTime" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择结束时间"/>
                 <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
                 <el-button type="primary" icon="el-icon-refresh" @click="refresh">重置</el-button>
-                <el-button  type="success" icon="el-icon-download" @click="exportData">导出数据</el-button>
+                <el-button  v-if="canExport" type="success" icon="el-icon-download" @click="exportData">导出数据</el-button>
             </div>
             <el-tabs v-model="initTab" @tab-click="handleClick">
                 <el-tab-pane label="全部" name="0" flag=""/>
@@ -34,7 +36,7 @@
                 <el-table-column label="来源" align="center" prop="source" width="120"/>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-info" @click="handleInfo(scope.$index, scope.row)">查看</el-button>
+                        <el-button v-if="canInfo" type="text" icon="el-icon-info" @click="handleInfo(scope.$index, scope.row, $event)">查看</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -52,14 +54,15 @@
                 </el-pagination>
             </div>
         </div>
+        <v-info v-show="showInfo" :code="code" @back="back" @remove="remove"></v-info>
     </div>
 </template>
 
 <script>
     import Http from '../../util/http';
+    import vInfo from './meetinginfo.vue';
 
     export default {
-        name: 'meetingList',
         data() {
             return {
                 tableData: [],
@@ -69,15 +72,34 @@
                 delVisible: false,
                 req: {},
                 loading: false,
-                initTab: "0"
+                initTab: "0",
+                exportLoading: false,
+                showInfo: false,
+                showMeeting: true,
+                items: [],
+                code: {},
+                canExport: true,
+                canInfo: true
             }
         },
-        //初始化表格
+        components: {
+            "v-info":vInfo,
+        },
+        //初始化
         created() {
             this.getData();
+            this.canExport = this.getPerms().indexOf("meeting:list:export")!==-1;
+            this.canInfo = this.getPerms().indexOf("meeting:list:info")!==-1;
         },
         computed: {},
         methods: {
+            remove(index){
+                this.items.splice(index,1)
+            },
+            back(){
+                this.showMeeting = true;
+                this.showInfo = false;
+            },
             handleCurrentChange(val) {
                 this.page.pageNo = val;
                 this.getData();
@@ -121,8 +143,11 @@
                 this.initTab = "0";
             },
             // 查看
-            handleInfo(){
-
+            handleInfo(index,row,event){
+                this.code = row.code;
+                this.showMeeting = false;
+                this.showInfo = true;
+                this.items.push({title:event.target.innerText});
             },
             // 切换标签页
             handleClick(tab){
@@ -131,7 +156,10 @@
             },
             //导出数据
             exportData(){
-                Http.export("/meeting/export", this.req,"会议数据" + new Date().getTime() + ".xls");
+                this.exportLoading = true;
+                Http.export("/meeting/export", this.req,"会议数据" + new Date().getTime() + ".xls").then(()=>{
+                    this.exportLoading = false;
+                });
             }
         }
     }

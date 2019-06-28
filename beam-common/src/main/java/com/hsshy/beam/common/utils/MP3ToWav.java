@@ -1,17 +1,12 @@
 package com.hsshy.beam.common.utils;
+
 import javax.sound.sampled.*;
 import java.io.*;
 
 /**
  * MP3转wav工具类
- *
- * @author hs
- * @date 2018年9月2日 下午4:14:22
  */
 public class MP3ToWav {
-
-
-
     /**
      * mp3的字节数组生成wav文件
      * @param sourceBytes

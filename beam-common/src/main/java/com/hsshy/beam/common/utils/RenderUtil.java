@@ -10,9 +10,6 @@ import java.io.PrintWriter;
 
 /**
  * 渲染工具类
- *
- * @author stylefeng
- * @date 2017-08-25 14:13
  */
 public class RenderUtil {
 

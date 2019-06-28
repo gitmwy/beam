@@ -1,6 +1,5 @@
 package com.hsshy.beam.sys.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hsshy.beam.common.annotion.SysLog;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 /**
  * 登陆日志
  */
@@ -30,21 +27,15 @@ public class LoginLogController extends BaseController {
     @Autowired
     private ILoginLogService loginLogService;
 
-    //分页
+    /**
+     * 分页列表
+     */
     @ApiOperation("分页列表")
     @GetMapping(value = "/page/list")
     @RequiresPermissions("sys:loginLog:list")
     public R pageList(LoginLog loginLog) {
         IPage page = loginLogService.selectPageList(new Page(loginLog.getCurrentPage(), loginLog.getPageSize()), loginLog);
         return R.ok(page);
-    }
-
-    @ApiOperation("列表")
-    @GetMapping(value = "/list")
-    public R list() {
-        QueryWrapper qw = new QueryWrapper<LoginLog>();
-        List<LoginLog> loginLogList = loginLogService.list(qw);
-        return R.ok(loginLogList);
     }
 
     @SysLog(value = "清空日志")

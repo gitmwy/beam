@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.config;
+
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
@@ -17,9 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  * fastjson配置类
- *
- * @author fengshuonan
- * @date 2017-05-23 22:56
  */
 @Configuration("defaultFastjsonConfig")
 @ConditionalOnClass(com.alibaba.fastjson.JSON.class)

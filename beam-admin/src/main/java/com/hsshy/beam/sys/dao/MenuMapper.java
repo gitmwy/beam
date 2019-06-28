@@ -18,10 +18,4 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param parentId 父菜单ID
      */
     List<Map> queryListParentId(Long parentId);
-
-    /**
-     * 获取不包含按钮的菜单列表
-     */
-    List<Map> queryNotButtonList();
-	
 }

@@ -46,6 +46,7 @@ public class MeetingController {
     }
 
     @ApiOperation(value = "文件导出")
+    @RequiresPermissions("meeting:list:export")
     @GetMapping("/export")
     public void exportExcel(Meeting meeting, HttpServletResponse response) {
         try {

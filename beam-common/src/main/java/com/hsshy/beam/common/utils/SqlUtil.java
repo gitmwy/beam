@@ -5,9 +5,6 @@ import java.util.List;
 
 /**
  * sql语句工具类
- *
- * @author fengshuonan
- * @date 2016年12月6日 下午1:01:54
  */
 public class SqlUtil {
 

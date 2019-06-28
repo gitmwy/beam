@@ -1,6 +1,5 @@
 package com.hsshy.beam.common.utils;
 
-
 import com.hsshy.beam.common.support.*;
 import com.hsshy.beam.common.support.exception.ToolBoxException;
 import com.hsshy.beam.common.support.*;
@@ -13,15 +12,10 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Set;
 
-
 /**
  * 类型转换器
- * 
- * @author xiaoleilu
- * 
  */
 public class Convert {
-	
 
 	private Convert() {
 		// 静态类不可实例化

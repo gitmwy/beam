@@ -8,13 +8,8 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-
 /**
  * 角色
- * 
- * @author hs
- * @email 457030599@qq.com
- * @date 2018-10-10 21:13:03
  */
 public interface RoleMapper extends BaseMapper<Role> {
 
@@ -27,5 +22,4 @@ public interface RoleMapper extends BaseMapper<Role> {
     void saveMenuPerms(@Param("role") Role role);
 
     void delMenuPermByRoleId(Long roleId);
-
 }

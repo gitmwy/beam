@@ -4,9 +4,6 @@ import javax.servlet.http.HttpSession;
 
 /**
  * 非Controller中获取当前session的工具类
- *
- * @author fengshuonan
- * @date 2016年11月28日 上午10:24:31
  */
 public class HttpSessionHolder {
 

@@ -1,4 +1,5 @@
 package com.hsshy.beam.config;
+
 import com.hsshy.beam.common.intercept.GunsUserFilter;
 import com.hsshy.beam.common.shiro.RedisShiroSessionDAO;
 import com.hsshy.beam.common.shiro.UserRealm;

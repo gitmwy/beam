@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.shiro;
+
 import com.hsshy.beam.common.utils.ToolUtil;
 import com.hsshy.beam.common.shiro.factory.ShiroFactroy;
 import com.hsshy.beam.sys.entity.User;

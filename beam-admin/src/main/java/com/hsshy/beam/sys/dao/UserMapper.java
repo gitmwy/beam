@@ -35,5 +35,4 @@ public interface UserMapper extends BaseMapper<User> {
     void saveUserRole(@Param("user") User user);
 
     void delURByUserId(Long userId);
-	
 }

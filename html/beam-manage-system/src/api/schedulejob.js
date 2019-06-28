@@ -1,36 +1,25 @@
-
 import http from '@/util/http'
+
 export default {
-    // 登录
-    getData : params => {
+    getData: params => {
         return http.get("/sys/schedule/page/list", params);
     },
-    // 保存
-    save : params => {
-        return http.post("/sys/schedule/save", params)
+    add: params => {
+        return http.post("/sys/schedule/add", params)
     },
-    // 保存
-    update : params => {
-        return http.post("/sys/schedule/update", params)
+    edit: params => {
+        return http.post("/sys/schedule/edit", params)
     },
-
-    // 批量删除
-    batchDelete : ids => {
-        return http.post("/sys/schedule/delete", ids)
+    batchDelete: ids => {
+        return http.post("/sys/schedule/del", ids)
     },
-
-    // 批量删除
-    runJob : ids => {
+    runJob: ids => {
         return http.post("/sys/schedule/run", ids)
     },
-    // 批量删除
-    pauseJob : ids => {
+    pauseJob: ids => {
         return http.post("/sys/schedule/pause", ids)
     },
-    // 批量删除
-    resumeJob : ids => {
+    resumeJob: ids => {
         return http.post("/sys/schedule/resume", ids)
     },
-
-
 }

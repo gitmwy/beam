@@ -1,18 +1,3 @@
-/**
- * Copyright 2018 人人开源 http://www.renren.io
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.hsshy.beam.common.utils;
 
 import com.hsshy.beam.common.enumeration.RetEnum;
@@ -63,14 +48,10 @@ public class R<T> extends HashMap<String, Object> {
 		return r;
 	}
 
-
-
 	public static R ok() {
 
 		return new R(RetEnum.SUCCESS.getRet(),RetEnum.SUCCESS.getMsg());
 	}
-
-
 
 	public static R ok(String msg) {
 		R r = new R(RetEnum.SUCCESS.getRet(),msg);
@@ -90,14 +71,12 @@ public class R<T> extends HashMap<String, Object> {
 		return r;
 	}
 
-
 	public static <T> R<T> ok(T data) {
 		R r = new R(RetEnum.SUCCESS.getRet(),RetEnum.SUCCESS.getMsg());
 		r.put("data",data);
 		r.put("error",false);
 		return r;
 	}
-
 
 	public static <T> R<T> ok(int code,String msg,T data) {
 		R r = new R(code,msg);
@@ -106,12 +85,9 @@ public class R<T> extends HashMap<String, Object> {
 		return r;
 	}
 
-
 	@Override
 	public R put(String key, Object value) {
 		super.put(key, value);
 		return this;
 	}
-
-
 }
