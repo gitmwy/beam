@@ -1,5 +1,5 @@
 {
-    "name": "beam-manage-system",
+    "name": "beam",
     "version": "1.0.0",
     "description": "基于vue2.0+springboot2.0的后台管理",
     "author": "chao",
