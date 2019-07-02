@@ -93,7 +93,7 @@
 
 <script>
     import treeTable from '@/components/TreeTable'
-    import MenuApi from '../../api/sysmenu';
+    import MenuApi from '../../api/sys/sysmenu';
 
     export default {
         name: 'basetable',

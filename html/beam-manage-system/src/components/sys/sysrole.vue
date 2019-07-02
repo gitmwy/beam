@@ -74,7 +74,7 @@
 </template>
 
 <script>
-    import RoleApi from '../../api/sysrole';
+    import RoleApi from '../../api/sys/sysrole';
 
     export default {
         name: 'basetable',

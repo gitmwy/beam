@@ -97,7 +97,7 @@
 </template>
 
 <script>
-    import DictApi from '../../api/sysdict';
+    import DictApi from '../../api/sys/sysdict';
 
     export default {
         name: 'basetable',

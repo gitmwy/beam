@@ -120,7 +120,7 @@
 </template>
 
 <script>
-    import ScheduleJobApi from '../../api/scheduleJob';
+    import ScheduleJobApi from '../../api/sys/schedulejob';
     import http from '../../util/http';
 
     export default {

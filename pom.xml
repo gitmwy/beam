@@ -12,9 +12,7 @@
 		<module>beam-admin</module><!--后台管理系统-->
 		<module>beam-rest</module><!--api服务-->
 		<module>beam-common</module><!--通用工具类-->
-		<module>beam-generator</module><!--代码生成器-->
 		<module>beam-web</module><!--通用实体、dao、service-->
-
 	</modules>
 
 	<parent>

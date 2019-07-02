@@ -161,8 +161,8 @@
 </style>
 
 <script>
-    import SysUserApi from '../../api/sysuser';
-    import DeptApi from '../../api/sysdept';
+    import SysUserApi from '../../api/sys/sysuser';
+    import DeptApi from '../../api/sys/sysdept';
 
     export default {
         name: 'basetable',

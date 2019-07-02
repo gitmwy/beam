@@ -1,32 +1,69 @@
 <template>
     <div class="container">
         <div class="handle-box">
-            <el-tag>S201906250001</el-tag>
-            <el-tag type="info">内部系统</el-tag>
-            <el-tag type="warning">待审核</el-tag>
+            <el-tag size="medium" effect="dark">S201906250001</el-tag>
+            <el-tag size="medium" effect="dark" type="info" >内部系统</el-tag>
+            <el-tag size="medium" effect="dark" type="warning">待审核</el-tag>
             <el-button class="el-icon-lx-forward" type="text" style="float: right" @click="onBack">返回</el-button>
         </div>
         <el-tabs v-model="initTab">
-            <el-tab-pane label="会议信息" name="0"/>
-            <el-tab-pane label="会议现场" name="1"/>
-            <el-tab-pane label="会议总结" name="2"/>
+            <el-tab-pane label="会议信息" name="0" class="collapse">
+                <el-collapse v-model="info">
+                    <el-collapse-item title="医院信息" name="0">
+                        <div>医院名称：大连市第一人民医院</div>
+                        <div>所在省市：辽宁省大连市</div>
+                    </el-collapse-item>
+                    <el-collapse-item title="会议信息" name="1">
+                        <div>会议日期：2019-01-01</div>
+                        <div>会议课件：药品临床使用说明</div>
+                    </el-collapse-item>
+                    <el-collapse-item title="申请信息" name="2">
+                        <div>申请人：李玉刚</div>
+                        <div>手机号：18866668888</div>
+                    </el-collapse-item>
+                </el-collapse>
+                <div v-show="passBtn">
+                    <el-button type="danger" style="width: 10%" @click="noPass">审核不通过</el-button>
+                    <el-button type="success" style="width: 10%" @click="pass">审核通过</el-button>
+                </div>
+                <el-dialog title="填写原因" :visible.sync="noPassVisible" width="400px" center >
+                    <el-input v-model="reasons" type="textarea" :rows="6" placeholder="请输入内容"/>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button type="primary" @click="commit">提交</el-button>
+                    </span>
+                </el-dialog>
+            </el-tab-pane>
+
+            <el-tab-pane label="会议现场" name="1" class="collapse">
+                <el-collapse v-model="scene">
+                    <el-collapse-item title="会议现场" name="0">
+                        <div>实际人数：6人</div>
+                        <div>实际定位：辽宁省大连市中心街道</div>
+                        <div>现场视频</div>
+                        <div>现场照片</div>
+                    </el-collapse-item>
+                </el-collapse>
+            </el-tab-pane>
+
+            <el-tab-pane label="会议总结" name="2" class="collapse">
+                <el-collapse v-model="conclusion">
+                    <el-collapse-item title="会议现场" name="0">
+                        <div>劳务报销单</div>
+                        <div>活动费用：270元</div>
+                        <div>费用发票</div>
+                    </el-collapse-item>
+                </el-collapse>
+            </el-tab-pane>
+
+            <el-tab-pane label="审核记录" name="3">
+                <el-table :data="tableData" v-loading="loading" border class="table">
+                    <el-table-column prop="account" align="center" label="审核人员"></el-table-column>
+                    <el-table-column prop="name" align="center" label="审核时间"></el-table-column>
+                    <el-table-column prop="sexName" align="center" label="审核状态"></el-table-column>
+                    <el-table-column prop="deptName" align="center" label="原因"></el-table-column>
+                </el-table>
+            </el-tab-pane>
         </el-tabs>
-        <div class="collapse">
-            <el-collapse v-model="meetingInfo">
-                <el-collapse-item title="医院信息" name="0">
-                    <div>医院名称：大连市第一人民医院</div>
-                    <div>所在省市：辽宁省大连市</div>
-                </el-collapse-item>
-                <el-collapse-item title="会议信息" name="1">
-                    <div>会议日期：2019-01-01</div>
-                    <div>会议课件：药品临床使用说明</div>
-                </el-collapse-item>
-                <el-collapse-item title="申请信息" name="2">
-                    <div>申请人：李玉刚</div>
-                    <div>手机号：18866668888</div>
-                </el-collapse-item>
-            </el-collapse>
-        </div>
     </div>
 </template>
 
@@ -39,17 +76,32 @@
         },
         data() {
             return {
+                tableData: [],
+                loading: false,
                 initTab: "0",
-                meetingInfo: ["0","1","2"]
+                info: ["0","1","2"],
+                scene: ["0"],
+                conclusion: ["0"],
+                noPassVisible: false,
+                reasons: "",
+                passBtn: true
             }
         },
         components: {
             vMeeting
         },
         methods: {
+            noPass(){
+                this.noPassVisible = true;
+            },
+            pass(){
+                this.passBtn = false;
+            },
+            commit(){
+                this.noPassVisible = false;
+            },
             onBack(){
                 this.$emit('back');
-                this.$emit('remove');
             }
         }
     }
@@ -62,5 +114,9 @@
     .collapse >>> .el-collapse-item__header{
         font-size: 15px;
         font-weight: bold;
+    }
+    .table {
+        width: 100%;
+        font-size: 14px;
     }
 </style>

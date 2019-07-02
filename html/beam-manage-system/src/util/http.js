@@ -1,11 +1,10 @@
 import axios from 'axios'
-import { commonParams } from '../api/config'
-import { Message } from 'element-ui'
+import {commonParams} from '../api/config'
+import {Message} from 'element-ui'
 
 const Http = {
-
     //导出
-    export(url, params,fileName) {
+    export(url, params, fileName) {
         url = "/beam_ht" + url;
         return axios({
             method: "get",
@@ -13,7 +12,7 @@ const Http = {
             params: params,
             responseType: "blob"
         }).then((res) => {
-            let blob = new Blob([res.data], { type: "application/vnd.ms-excel;charset=utf-8"});
+            let blob = new Blob([res.data], {type: "application/vnd.ms-excel;charset=utf-8"});
             if (window.navigator.msSaveOrOpenBlob) {
                 navigator.msSaveBlob(blob, fileName);
             } else {
@@ -33,21 +32,18 @@ const Http = {
         return axios.get(url, {
             params: data,
         }).then((res) => {
-            if(res.data.error===false){
+            if (res.data.error === false) {
                 return Promise.resolve(res.data); //成功
-            }
-            else{
+            } else {
                 if (res.data.code === -1) {
                     Message.error(res.data.msg);
                     window.location = "/#/login";
                     return Promise.resolve(res) //拒绝
-                }
-                else if(res.data.code === 403){
+                } else if (res.data.code === 403) {
                     Message.error(res.data.msg);
                     window.location = "/#/403";
                     return Promise.resolve(res) //拒绝
-                }
-                else{
+                } else {
                     Message.error(res.data.msg);
                     return Promise.resolve(res) //拒绝
                 }
@@ -61,7 +57,7 @@ const Http = {
                 };
                 return Promise.reject(res)
             } else if (err.request) {
-                if(err.request.readyState === 4 && err.request.status === 0){
+                if (err.request.readyState === 4 && err.request.status === 0) {
                     //我在这里重新请求
                     var res = {
                         code: 403,
@@ -71,7 +67,7 @@ const Http = {
                     return Promise.reject(res)
                 }
             } else {
-                Message.error( err.message);
+                Message.error(err.message);
                 return Promise.reject(res)
             }
             return Promise.reject(err)
@@ -83,21 +79,18 @@ const Http = {
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
         url = "/beam_ht" + url;
         return axios.post(url, data).then((res) => {
-            if(res.data.error===false){
+            if (res.data.error === false) {
                 return Promise.resolve(res.data); //成功
-            }
-            else{
+            } else {
                 if (res.data.code === -1) {
                     Message.error(res.data.msg);
                     window.location = "/#/login";
                     return Promise.resolve(res) //拒绝
-                }
-                else if(res.data.code === 403){
+                } else if (res.data.code === 403) {
                     Message.error(res.data.msg);
                     window.location = "/#/403";
                     return Promise.resolve(res) //拒绝
-                }
-                else{
+                } else {
                     Message.error(res.data.msg);
                     return Promise.resolve(res) //拒绝
                 }
@@ -111,7 +104,7 @@ const Http = {
                 };
                 return Promise.reject(res)
             } else if (err.request) {
-                if(err.request.readyState === 4 && err.request.status === 0){
+                if (err.request.readyState === 4 && err.request.status === 0) {
                     //我在这里重新请求
                     var res = {
                         code: 403,
@@ -121,7 +114,7 @@ const Http = {
                     return Promise.reject(res)
                 }
             } else {
-                Message.error( err.message);
+                Message.error(err.message);
                 return Promise.reject(res)
             }
             return Promise.reject(err)

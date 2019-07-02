@@ -54,12 +54,12 @@
                 </el-pagination>
             </div>
         </div>
-        <v-info v-show="showInfo" :code="code" @back="back" @remove="remove"></v-info>
+        <v-info v-show="showInfo" :code="code" @back="back"></v-info>
     </div>
 </template>
 
 <script>
-    import Http from '../../util/http';
+    import MeetingApi from '../../api/meeting/meetinglist';
     import vInfo from './meetinginfo.vue';
 
     export default {
@@ -93,12 +93,10 @@
         },
         computed: {},
         methods: {
-            remove(index){
-                this.items.splice(index,1)
-            },
-            back(){
+            back(index){
                 this.showMeeting = true;
                 this.showInfo = false;
+                this.items.splice(index,1)
             },
             handleCurrentChange(val) {
                 this.page.pageNo = val;
@@ -116,7 +114,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                Http.get("/meeting/page/list", this.req).then((res) => {
+                MeetingApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -157,7 +155,7 @@
             //导出数据
             exportData(){
                 this.exportLoading = true;
-                Http.export("/meeting/export", this.req,"会议数据" + new Date().getTime() + ".xls").then(()=>{
+                MeetingApi.export(this.req,"会议数据" + new Date().getTime() + ".xls").then(()=>{
                     this.exportLoading = false;
                 });
             }
