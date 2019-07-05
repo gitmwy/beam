@@ -13,21 +13,19 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-               id,
-               paramKey,
-               remark,
-               paramValue,
-               status
-    	</sql>
+        id,
+        paramKey,
+        remark,
+        paramValue,
+        status
+    </sql>
 
     <update id="updateValueByKey" parameterType="map">
-      update sys_config set `param_value` = #{value} where `param_key` = #{key}
+        update sys_config set `param_value` = #{value} where `param_key` = #{key}
     </update>
 
     <!-- 根据key，查询value -->
     <select id="getByKey" parameterType="string" resultType="string">
-      select param_value from sys_config where `param_key` = #{key}
+        select param_value from sys_config where `param_key` = #{key}
     </select>
-
-
 </mapper>

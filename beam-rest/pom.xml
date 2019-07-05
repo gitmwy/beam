@@ -17,8 +17,6 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-
-
     <dependencies>
 
         <!-- beam通用工具模块 -->

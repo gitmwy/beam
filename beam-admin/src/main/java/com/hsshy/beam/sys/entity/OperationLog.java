@@ -40,6 +40,9 @@ public class OperationLog extends RestEntity<Long> {
     // 备注
     @TableField(value = "message")
     private String message;
+    // 执行时间
+    @TableField(value = "execute_time")
+    private String executeTime;
     @TableField(exist = false)
     private String userName;
 

@@ -2,8 +2,7 @@ package com.hsshy.beam.common.cloud;
 
 import com.aliyun.oss.OSSClient;
 import com.hsshy.beam.common.exception.BeamException;
-import org.apache.commons.lang3.StringUtils;
-import sun.misc.BASE64Decoder;
+import com.qcloud.cos.exception.CosClientException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -12,60 +11,38 @@ import java.io.InputStream;
  * 阿里云存储
  */
 public class AliyunCloudStorageService extends CloudStorageService {
-    private OSSClient client;
+
+    private OSSClient ossClient;
 
     public AliyunCloudStorageService(CloudStorageConfig config){
         this.config = config;
-
-        //初始化
         init();
     }
 
     private void init(){
-        client = new OSSClient(config.getAliyunEndPoint(), config.getAliyunAccessKeyId(),
-                config.getAliyunAccessKeySecret());
-    }
-
-    @Override
-    public String upload(String pic) throws Exception {
-        if(!StringUtils.isBlank(pic) && !pic.contains("http:") && !pic.contains("https:") && !pic.contains("upload")){
-            if (pic.indexOf("data:image/jpeg;base64") > -1 || pic.indexOf("data:image/png;base64") > -1){
-                pic = pic.substring(pic.indexOf(",") * 1 + 1, pic.length());
-            }
-            BASE64Decoder decoder = new BASE64Decoder();
-            byte[] data = decoder.decodeBuffer(pic);
-            for(int i=0;i<data.length;++i){
-                if(data[i]<0){ data[i]+=256; }
-            }
-//            InputStream input = new ByteArrayInputStream(data);
-//            OutputStream output = new ByteArrayOutputStream();
-//            //图片尺寸不变，压缩图片文件大小outputQuality实现,参数1为最高质量
-//            Thumbnails.of(input).scale(1f).outputQuality(0.25f).toOutputStream(output);
-            return upload(data);
-        }else{
-            return pic;
-        }
-    }
-
-    @Override
-    public String upload(byte[] data) {
-        return upload(data, getPath(config.getQiniuPrefix(),""));
-    }
-
-    @Override
-    public String upload(byte[] data, String path) {
-        return upload(new ByteArrayInputStream(data), path);
+        ossClient = new OSSClient(config.getAliyunEndPoint(), config.getAliyunAccessKeyId(), config.getAliyunAccessKeySecret());
     }
 
     @Override
     public String upload(InputStream inputStream, String path) {
         try {
-            client.putObject(config.getAliyunBucketName(), path, inputStream);
+            ossClient.putObject(config.getAliyunBucketName(), path, inputStream);
         } catch (Exception e){
             throw new BeamException("上传文件失败，请检查配置信息", e);
+        }finally {
+            ossClient.shutdown();
         }
-
         return config.getAliyunDomain() + "/" + path;
+    }
+
+    @Override
+    public String upload(byte[] data) {
+        return upload(data, getPath(config.getAliyunPrefix(),""));
+    }
+
+    @Override
+    public String upload(byte[] data, String path) {
+        return upload(new ByteArrayInputStream(data), path);
     }
 
     @Override
@@ -80,6 +57,12 @@ public class AliyunCloudStorageService extends CloudStorageService {
 
     @Override
     public void delete(String path) {
-
+        try {
+            ossClient.deleteObject(config.getAliyunBucketName(), path);
+        } catch (CosClientException e) {
+            e.printStackTrace();
+        } finally {
+            ossClient.shutdown();
+        }
     }
 }

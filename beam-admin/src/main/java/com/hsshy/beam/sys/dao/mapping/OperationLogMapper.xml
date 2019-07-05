@@ -15,6 +15,7 @@
         <result property="message" column="message"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="executeTime" column="execute_time"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -28,6 +29,7 @@
                 a.`message` AS "message", 
                 a.`create_time` AS "createTime", 
                 a.`update_time` AS "updateTime"
+                a.`execute_time` AS "executeTime"
         </sql>
     <delete id="deleteAll">
         delete from sys_operation_log

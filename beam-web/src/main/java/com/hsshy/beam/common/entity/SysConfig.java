@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.entity;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hsshy.beam.common.base.entity.AbstractEntity;
@@ -9,8 +10,6 @@ import java.io.Serializable;
 
 /**
  * 系统配置信息
- * 
- * @author rachel.li
  */
 @Data
 @NoArgsConstructor

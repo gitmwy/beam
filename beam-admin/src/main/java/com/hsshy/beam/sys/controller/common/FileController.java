@@ -1,5 +1,6 @@
 package com.hsshy.beam.sys.controller.common;
 
+import com.hsshy.beam.common.annotion.SysLog;
 import com.hsshy.beam.common.enumeration.RetEnum;
 import com.hsshy.beam.common.exception.BeamException;
 import com.hsshy.beam.common.util.OSSFactory;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RequestMapping("/file")
 public class FileController {
 
+    @SysLog(value = "文件上传")
     @ApiOperation(value = "文件上传")
     @PostMapping("/upload")
     public Object uploadFile(@RequestPart("file") MultipartFile file) {

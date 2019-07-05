@@ -48,10 +48,9 @@
 </template>
 
 <script>
-    import Http from '../../util/http';
+    import LoginLogApi from '../../api/sys/loginlog';
 
     export default {
-        name: 'basetable',
         data() {
             return {
                 tableData: [],
@@ -89,7 +88,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                Http.get("/sys/loginlog/page/list",this.req).then((res) => {
+                LoginLogApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -112,7 +111,7 @@
             },
 
             clearAll() {
-                Http.post("/sys/loginlog/clear",this.reqs).then((res) => {
+                LoginLogApi.clear(this.reqs).then((res) => {
                     this.delVisible = false;
                     this.$message.success(res.msg);
                     this.reload();

@@ -23,7 +23,6 @@
   - **集成了异步插入日志**
   - **实现了用户角色菜单权限动态配置，精确到按钮级别**
   - **日志分类等**
-  - **使用七牛云存储图片（注册地址：https://portal.qiniu.com/signup?code=1h8cpibemhb9u）**
   - **调度：quartz, 可以查询、修改周期、暂停、删除、新增、立即执行等。**
   - **工具类：excel导入导出，汉字转拼音，字符串工具类，数字工具类，发送邮件，redis工具类，MD5加密，HTTP工具类，防注入工具类,i18n 国际化多语言工具等等。**
 
@@ -62,7 +61,6 @@ beam
 - 页面交互：Vue2.x
 - 前后端分离
 - 缓存：Redis
-- 图片上传：七牛云（七牛云注册便有10G免费空间，注册地址：https://portal.qiniu.com/signup?code=1h8cpibemhb9u）。
 
 ### 代码生成器
 https://gitee.com/hsshy/beam-generator

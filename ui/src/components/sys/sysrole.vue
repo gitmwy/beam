@@ -77,7 +77,6 @@
     import RoleApi from '../../api/sys/sysrole';
 
     export default {
-        name: 'basetable',
         data() {
             return {
                 configMenuDialog:false,

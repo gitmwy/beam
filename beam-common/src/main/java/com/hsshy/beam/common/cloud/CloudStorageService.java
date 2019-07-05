@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * 云存储(支持七牛、阿里云、腾讯云、又拍云)
+ * 云存储(阿里云、腾讯云)
  */
 public abstract class CloudStorageService {
     /** 云存储配置信息 */
@@ -20,7 +20,7 @@ public abstract class CloudStorageService {
      * @param suffix 后缀
      * @return 返回上传路径
      */
-    public String getPath(String prefix, String suffix) {
+    String getPath(String prefix, String suffix) {
         //生成uuid
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         //文件路径
@@ -32,12 +32,6 @@ public abstract class CloudStorageService {
 
         return path + suffix;
     }
-    /**
-     * 文件上传
-     * @param pic 图片
-     * @return 返回http地址
-     */
-    public abstract String upload(String pic) throws Exception;
 
     /**
      * 文件上传
@@ -78,7 +72,5 @@ public abstract class CloudStorageService {
      */
     public abstract String uploadSuffix(InputStream inputStream, String suffix);
 
-
     public abstract void delete(String path);
-
 }

@@ -50,10 +50,9 @@
 </template>
 
 <script>
-    import Http from '../../util/http';
+    import OperationLogApi from '../../api/sys/operationlog';
 
     export default {
-        name: 'basetable',
         data() {
             return {
                 tableData: [],
@@ -87,12 +86,11 @@
                 this.page.pageNo = 1;
                 this.getData()
             },
-            // 获取 easy-mock 的模拟数据
             getData() {
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                Http.get("/sys/operationlog/page/list",this.req).then((res) => {
+                OperationLogApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -125,7 +123,7 @@
                 this.multipleSelection = val;
             },
             clearAll() {
-                Http.post("/sys/operationlog/clear",this.reqs).then((res) => {
+                OperationLogApi.clear(this.reqs).then((res) => {
                     this.delVisible = false;
                     this.$message.success(res.msg);
                     this.reload();

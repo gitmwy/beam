@@ -38,7 +38,6 @@ public class LoginLogController extends BaseController {
         return R.ok(page);
     }
 
-    @SysLog(value = "清空日志")
     @ApiOperation("清空")
     @PostMapping(value = "/clear")
     @RequiresPermissions("sys:loginLog:clear")

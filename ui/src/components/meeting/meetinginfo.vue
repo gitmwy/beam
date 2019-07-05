@@ -39,10 +39,22 @@
                     <el-collapse-item title="会议现场" name="0">
                         <div>实际人数：6人</div>
                         <div>实际定位：辽宁省大连市中心街道</div>
-                        <div>现场视频</div>
-                        <div>现场照片</div>
+                        <div>现场视频：<br>
+                            <el-row :gutter="20">
+                                <el-col :span="7"><video :src="videoUrl" width="320" height="240" @click="videoShow"></video></el-col>
+                            </el-row>
+                        </div>
+                        <div>现场照片：<br>
+                            <el-row :gutter="20">
+                                <el-col :span="6" v-for="url in urls" :key="url"><el-image :src="url" lazy style="width:300px;height:200px"></el-image></el-col>
+                            </el-row>
+                        </div>
                     </el-collapse-item>
                 </el-collapse>
+
+                <el-dialog title="会议视频 " :visible.sync="videoVisible" center>
+                    <player :video-url="videoUrl" :video-type="videoType"/>
+                </el-dialog>
             </el-tab-pane>
 
             <el-tab-pane label="会议总结" name="2" class="collapse">
@@ -69,6 +81,7 @@
 
 <script>
     import vMeeting from './meetinglist.vue';
+    import myVideoPlayer from '../common/VideoPlayer'
 
     export default {
         props:{
@@ -84,13 +97,24 @@
                 conclusion: ["0"],
                 noPassVisible: false,
                 reasons: "",
-                passBtn: true
+                passBtn: true,
+                videoUrl: "",
+                videoType: "video/mp4",
+                videoVisible: false,
+                urls: [
+                    "",
+                    ""
+                ]
             }
         },
         components: {
-            vMeeting
+            vMeeting,
+            "player": myVideoPlayer
         },
         methods: {
+            videoShow(){
+                this.videoVisible = true;
+            },
             noPass(){
                 this.noPassVisible = true;
             },

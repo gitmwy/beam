@@ -1,18 +1,3 @@
-/**
- * Copyright 2018 人人开源 http://www.renren.io
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.hsshy.beam.common.cloud;
 
 import org.hibernate.validator.constraints.Range;
@@ -28,25 +13,9 @@ import java.io.Serializable;
 public class CloudStorageConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    //类型 1：七牛  2：阿里云  3：腾讯云
-    @Range(min=1, max=3, message = "类型错误")
+    //类型 1：阿里云  2：腾讯云
+    @Range(min=1, max=2, message = "类型错误")
     private Integer type;
-
-    //七牛绑定的域名
-    @NotBlank(message="七牛绑定的域名不能为空")
-    private String qiniuDomain;
-    //七牛路径前缀
-    private String qiniuPrefix;
-    //七牛ACCESS_KEY
-    @NotBlank(message="七牛AccessKey不能为空")
-    private String qiniuAccessKey;
-    //七牛SECRET_KEY
-    @NotBlank(message="七牛SecretKey不能为空")
-    private String qiniuSecretKey;
-    //七牛存储空间名
-    @NotBlank(message="七牛空间名不能为空")
-    private String qiniuBucketName;
-
     //阿里云绑定的域名
     @NotBlank(message="阿里云绑定的域名不能为空")
     @URL(message = "阿里云绑定的域名格式不正确")
@@ -94,46 +63,6 @@ public class CloudStorageConfig implements Serializable {
 
     public void setType(Integer type) {
         this.type = type;
-    }
-
-    public String getQiniuDomain() {
-        return qiniuDomain;
-    }
-
-    public void setQiniuDomain(String qiniuDomain) {
-        this.qiniuDomain = qiniuDomain;
-    }
-
-    public String getQiniuAccessKey() {
-        return qiniuAccessKey;
-    }
-
-    public void setQiniuAccessKey(String qiniuAccessKey) {
-        this.qiniuAccessKey = qiniuAccessKey;
-    }
-
-    public String getQiniuSecretKey() {
-        return qiniuSecretKey;
-    }
-
-    public void setQiniuSecretKey(String qiniuSecretKey) {
-        this.qiniuSecretKey = qiniuSecretKey;
-    }
-
-    public String getQiniuBucketName() {
-        return qiniuBucketName;
-    }
-
-    public void setQiniuBucketName(String qiniuBucketName) {
-        this.qiniuBucketName = qiniuBucketName;
-    }
-
-    public String getQiniuPrefix() {
-        return qiniuPrefix;
-    }
-
-    public void setQiniuPrefix(String qiniuPrefix) {
-        this.qiniuPrefix = qiniuPrefix;
     }
 
     public String getAliyunDomain() {
@@ -232,11 +161,11 @@ public class CloudStorageConfig implements Serializable {
         this.qcloudBucketName = qcloudBucketName;
     }
 
-	public String getQcloudRegion() {
-		return qcloudRegion;
-	}
+    public String getQcloudRegion() {
+        return qcloudRegion;
+    }
 
-	public void setQcloudRegion(String qcloudRegion) {
-		this.qcloudRegion = qcloudRegion;
-	}
+    public void setQcloudRegion(String qcloudRegion) {
+        this.qcloudRegion = qcloudRegion;
+    }
 }

@@ -95,7 +95,7 @@
 
 <script>
     import Schart from 'vue-schart';
-    import DashboardApi from '../../api/dashboard';
+    import DashboardApi from '../../api/page/dashboard';
 
     export default {
         name: 'dashboard',

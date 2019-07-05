@@ -76,7 +76,7 @@ public class User extends DataEntity<Long> {
 
 	@TableField(exist = false)
 	private String deptName;
-	//查询
+
 	@TableField(exist = false)
 	private String deptIds;
 

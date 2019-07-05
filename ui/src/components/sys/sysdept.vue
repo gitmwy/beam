@@ -58,12 +58,9 @@
 </template>
 
 <script>
-    import treeTable from '@/components/TreeTable'
     import DeptApi from '../../api/sys/sysdept';
 
     export default {
-        name: 'basetable',
-        components: {treeTable},
         data() {
             return {
                 selectDeptDialog: false,

@@ -19,12 +19,13 @@ public class LogTaskFactory {
     private static LoginLogMapper loginLogMapper = SpringContextHolder.getBean(LoginLogMapper.class);
     private static OperationLogMapper operationLogMapper = SpringContextHolder.getBean(OperationLogMapper.class);
 
-    public static TimerTask loginLog(final Long userId, final String ip) {
+    public static TimerTask loginSuccessLog(final Long userId, final String ip) {
         return new TimerTask() {
             @Override
             public void run() {
                 try {
-                    LoginLog loginLog = LogFactory.createLoginLog(LogType.LOGIN, userId, null, ip);
+                    LoginLog loginLog = LogFactory.createLoginLog(
+                            LogType.LOGIN, userId, null, ip, LogSucceed.SUCCESS);
                     loginLogMapper.insert(loginLog);
                 } catch (Exception e) {
                     logger.error("创建登录日志异常!", e);
@@ -33,12 +34,12 @@ public class LogTaskFactory {
         };
     }
 
-    public static TimerTask loginLog(final String username, final String msg, final String ip) {
+    public static TimerTask loginFailLog(final String username, final String msg, final String ip) {
         return new TimerTask() {
             @Override
             public void run() {
                 LoginLog loginLog = LogFactory.createLoginLog(
-                        LogType.LOGIN_FAIL, null, "账号:" + username + "," + msg, ip);
+                        LogType.LOGIN_FAIL, null, "账号:" + username + "," + msg, ip, LogSucceed.FAIL);
                 try {
                     loginLogMapper.insert(loginLog);
                 } catch (Exception e) {
@@ -52,7 +53,8 @@ public class LogTaskFactory {
         return new TimerTask() {
             @Override
             public void run() {
-                LoginLog loginLog = LogFactory.createLoginLog(LogType.EXIT, userId, null, ip);
+                LoginLog loginLog = LogFactory.createLoginLog(
+                        LogType.EXIT, userId, null, ip, LogSucceed.SUCCESS);
                 try {
                     loginLogMapper.insert(loginLog);
                 } catch (Exception e) {
@@ -62,12 +64,12 @@ public class LogTaskFactory {
         };
     }
 
-    public static TimerTask bussinessLog(final Long userId, final String bussinessName, final String clazzName, final String methodName, final String msg) {
+    public static TimerTask businessLog(final Long userId, final String businessName, final String clazzName, final String methodName, final String msg, final Long time) {
         return new TimerTask() {
             @Override
             public void run() {
                 OperationLog operationLog = LogFactory.createOperationLog(
-                        LogType.BUSSINESS, userId, bussinessName, clazzName, methodName, msg, LogSucceed.SUCCESS);
+                        LogType.BUSSINESS, userId, businessName, clazzName, methodName, msg, LogSucceed.SUCCESS, time);
                 try {
                     operationLogMapper.insert(operationLog);
                 } catch (Exception e) {
@@ -83,7 +85,7 @@ public class LogTaskFactory {
             public void run() {
                 String msg = ToolUtil.getExceptionMsg(exception);
                 OperationLog operationLog = LogFactory.createOperationLog(
-                        LogType.EXCEPTION, userId, "", null, null, msg, LogSucceed.FAIL);
+                        LogType.EXCEPTION, userId, "", null, null, msg, LogSucceed.FAIL, null);
                 try {
                     operationLogMapper.insert(operationLog);
                 } catch (Exception e) {

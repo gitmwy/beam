@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import loginApi from '../../api/login';
+    import loginApi from '../../api/page/login';
 
     export default {
         data: function () {
@@ -39,8 +39,8 @@
                 kaptcha: "/beam_ht/kaptcha/defaultKaptcha?t=" + new Date().getTime(),
                 loading: false,
                 ruleForm: {
-                    username: '',
-                    password: '',
+                    username: 'admin',
+                    password: '123456',
                     kaptcha: ''
                 },
                 rules: {
@@ -94,7 +94,7 @@
         position: relative;
         width: 100%;
         height: 100%;
-        background-image: url(../../assets/login-xk.jpg);
+        background-image: url(../../../static/img/login-xk.jpg);
         background-size: cover;
     }
 

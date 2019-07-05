@@ -100,7 +100,6 @@
     import DictApi from '../../api/sys/sysdict';
 
     export default {
-        name: 'basetable',
         data() {
             return {
                 tableData: [],

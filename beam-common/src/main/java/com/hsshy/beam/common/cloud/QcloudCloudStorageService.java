@@ -3,13 +3,14 @@ package com.hsshy.beam.common.cloud;
 import com.hsshy.beam.common.exception.BeamException;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
-import com.qcloud.cos.request.UploadFileRequest;
-import com.qcloud.cos.sign.Credentials;
-import net.sf.json.JSONObject;
+import com.qcloud.cos.auth.BasicCOSCredentials;
+import com.qcloud.cos.auth.COSCredentials;
+import com.qcloud.cos.exception.CosClientException;
+import com.qcloud.cos.model.ObjectMetadata;
+import com.qcloud.cos.region.Region;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import sun.misc.BASE64Decoder;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -17,51 +18,21 @@ import java.io.InputStream;
  * 腾讯云存储
  */
 public class QcloudCloudStorageService extends CloudStorageService {
-    private COSClient client;
+
+    private static COSClient cosClient = null;
 
     public QcloudCloudStorageService(CloudStorageConfig config){
         this.config = config;
-
-        //初始化
         init();
     }
 
     private void init(){
-    	Credentials credentials = new Credentials(config.getQcloudAppId(), config.getQcloudSecretId(),
-                config.getQcloudSecretKey());
-    	
-    	//初始化客户端配置
-        ClientConfig clientConfig = new ClientConfig();
-        //设置bucket所在的区域，华南：gz 华北：tj 华东：sh
-        clientConfig.setRegion(config.getQcloudRegion());
-        
-    	client = new COSClient(clientConfig, credentials);
-    }
-
-    @Override
-    public String upload(String pic) throws Exception {
-        if(!StringUtils.isBlank(pic) && !pic.contains("http:") && !pic.contains("https:") && !pic.contains("upload")){
-            if (pic.indexOf("data:image/jpeg;base64") > -1 || pic.indexOf("data:image/png;base64") > -1){
-                pic = pic.substring(pic.indexOf(",") * 1 + 1, pic.length());
-            }
-            BASE64Decoder decoder = new BASE64Decoder();
-            byte[] data = decoder.decodeBuffer(pic);
-            for(int i=0;i<data.length;++i){
-                if(data[i]<0){ data[i]+=256; }
-            }
-//            InputStream input = new ByteArrayInputStream(data);
-//            OutputStream output = new ByteArrayOutputStream();
-//            //图片尺寸不变，压缩图片文件大小outputQuality实现,参数1为最高质量
-//            Thumbnails.of(input).scale(1f).outputQuality(0.25f).toOutputStream(output);
-            return upload(data);
-        }else{
-            return pic;
-        }
-    }
-
-    @Override
-    public String upload(byte[] data) {
-        return upload(data, getPath(config.getQiniuPrefix(),""));
+        //初始化用户身份信息
+        COSCredentials credentials = new BasicCOSCredentials(config.getQcloudSecretId(), config.getQcloudSecretKey());
+        //设置bucket所在的区域
+        ClientConfig clientConfig = new ClientConfig(new Region(config.getQcloudRegion()));
+        //生成cos客户端
+        cosClient = new COSClient(credentials, clientConfig);
     }
 
     @Override
@@ -70,17 +41,22 @@ public class QcloudCloudStorageService extends CloudStorageService {
         if(!path.startsWith("/")) {
             path = "/" + path;
         }
-        
         //上传到腾讯云
-        UploadFileRequest request = new UploadFileRequest(config.getQcloudBucketName(), path, data);
-        String response = client.uploadFile(request);
-
-        JSONObject jsonObject = JSONObject.fromObject(response);
-        if(jsonObject.getInt("code") != 0) {
-            throw new BeamException("文件上传失败，" + jsonObject.getString("message"));
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(data.length);
+        try {
+            cosClient.putObject(config.getQcloudBucketName(), path, new ByteArrayInputStream(data), metadata);
+        } catch (CosClientException e) {
+            throw new BeamException("上传文件失败", e);
+        }finally {
+            cosClient.shutdown();
         }
-
         return config.getQcloudDomain() + path;
+    }
+
+    @Override
+    public String upload(byte[] data) {
+        return upload(data, getPath(config.getQcloudPrefix(),""));
     }
 
     @Override
@@ -105,6 +81,12 @@ public class QcloudCloudStorageService extends CloudStorageService {
 
     @Override
     public void delete(String path) {
-
+        try {
+            cosClient.deleteObject(config.getQcloudBucketName(), path);
+        } catch (CosClientException e) {
+            e.printStackTrace();
+        } finally {
+            cosClient.shutdown();
+        }
     }
 }

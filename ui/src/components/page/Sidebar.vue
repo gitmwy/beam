@@ -32,8 +32,8 @@
 </template>
 
 <script>
-    import bus from '../common/bus';
-    import AccountApi from '../common/account';
+    import bus from '../../api/page/bus';
+    import AccountApi from '../../api/page/account';
     export default {
         data() {
             return {

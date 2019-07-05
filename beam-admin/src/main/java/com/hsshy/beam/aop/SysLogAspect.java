@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 public class SysLogAspect {
 
     @Pointcut("@annotation(com.hsshy.beam.common.annotion.SysLog)")
+//    @Pointcut(value = "execution(public * com.hsshy.beam.sys.controller..*.*(..))")
     public void logPointCut() {
     }
 
@@ -42,9 +43,10 @@ public class SysLogAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         String bussinessName = "";
+
+        //注解上的描述
         SysLog syslog = method.getAnnotation(SysLog.class);
         if (syslog != null) {
-            //注解上的描述
             bussinessName = syslog.value();
         }
         //请求的方法名
@@ -63,6 +65,6 @@ public class SysLogAspect {
         if (null == user) {
             return;
         }
-        LogManager.me().executeLog(LogTaskFactory.bussinessLog(user.getId(), bussinessName, className, methodName, params));
+        LogManager.me().executeLog(LogTaskFactory.businessLog(user.getId(), bussinessName, className, methodName, params, time));
     }
 }

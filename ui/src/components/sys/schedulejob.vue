@@ -124,7 +124,6 @@
     import http from '../../util/http';
 
     export default {
-        name: 'basetable',
         data() {
             return {
                 tableData: [],

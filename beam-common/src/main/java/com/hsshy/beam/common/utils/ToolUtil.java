@@ -1,4 +1,5 @@
 package com.hsshy.beam.common.utils;
+
 import com.hsshy.beam.common.support.StrKit;
 
 import java.io.IOException;
@@ -17,9 +18,6 @@ public class ToolUtil {
 
     /**
      * 获取随机位数的字符串
-     *
-     * @author fengshuonan
-     * @Date 2017/8/24 14:09
      */
     public static String getRandomString(int length) {
         String base = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -34,9 +32,6 @@ public class ToolUtil {
 
     /**
      * 判断一个对象是否是时间类型
-     *
-     * @author stylefeng
-     * @Date 2017/4/18 12:55
      */
     public static String dateType(Object o) {
         if (o instanceof Date) {
@@ -48,10 +43,6 @@ public class ToolUtil {
 
     /**
      * 获取异常的具体信息
-     *
-     * @author fengshuonan
-     * @Date 2017/3/30 9:21
-     * @version 2.0
      */
     public static String getExceptionMsg(Exception e) {
         StringWriter sw = new StringWriter();
@@ -183,9 +174,6 @@ public class ToolUtil {
 
     /**
      * 对象是否不为空(新增)
-     *
-     * @param obj String,List,Map,Object[],int[],long[]
-     * @return
      */
     public static boolean isNotEmpty(Object o) {
         return !isEmpty(o);
@@ -193,9 +181,6 @@ public class ToolUtil {
 
     /**
      * 对象是否为空
-     *
-     * @param obj String,List,Map,Object[],int[],long[]
-     * @return
      */
     @SuppressWarnings("rawtypes")
     public static boolean isEmpty(Object o) {
@@ -236,9 +221,6 @@ public class ToolUtil {
 
     /**
      * 对象组中是否存在 Empty Object
-     *
-     * @param os 对象组
-     * @return
      */
     public static boolean isOneEmpty(Object... os) {
         for (Object o : os) {
@@ -251,9 +233,6 @@ public class ToolUtil {
 
     /**
      * 对象组中是否全是 Empty Object
-     *
-     * @param os
-     * @return
      */
     public static boolean isAllEmpty(Object... os) {
         for (Object o : os) {
@@ -266,9 +245,6 @@ public class ToolUtil {
 
     /**
      * 是否为数字
-     *
-     * @param obj
-     * @return
      */
     public static boolean isNum(Object obj) {
         try {
@@ -281,9 +257,6 @@ public class ToolUtil {
 
     /**
      * 如果为空, 则调用默认值
-     *
-     * @param str
-     * @return
      */
     public static Object getValue(Object str, Object defaultValue) {
         if (isEmpty(str)) {
@@ -316,20 +289,6 @@ public class ToolUtil {
 
     /**
      * 强转->string,并去掉多余空格
-     *
-     * @param str
-     * @return
-     */
-    public static String toStr(Object str) {
-        return toStr(str, "");
-    }
-
-    /**
-     * 强转->string,并去掉多余空格
-     *
-     * @param str
-     * @param defaultValue
-     * @return
      */
     public static String toStr(Object str, String defaultValue) {
         if (null == str) {
@@ -337,56 +296,6 @@ public class ToolUtil {
         }
         return str.toString().trim();
     }
-
-    /**
-     * 强转->int
-     *
-     * @param obj
-     * @return
-     */
-//	public static int toInt(Object value) {
-//		return toInt(value, -1);
-//	}
-
-    /**
-     * 强转->int
-     *
-     * @param obj
-     * @param defaultValue
-     * @return
-     */
-//	public static int toInt(Object value, int defaultValue) {
-//		return Convert.toInt(value, defaultValue);
-//	}
-
-    /**
-     * 强转->long
-     *
-     * @param obj
-     * @return
-     */
-//	public static long toLong(Object value) {
-//		return toLong(value, -1);
-//	}
-
-    /**
-     * 强转->long
-     *
-     * @param obj
-     * @param defaultValue
-     * @return
-     */
-//	public static long toLong(Object value, long defaultValue) {
-//		return Convert.toLong(value, defaultValue);
-//	}
-//
-//	public static String encodeUrl(String url) {
-//		return URLKit.encode(url, CharsetKit.UTF_8);
-//	}
-//
-//	public static String decodeUrl(String url) {
-//		return URLKit.decode(url, CharsetKit.UTF_8);
-//	}
 
     /**
      * map的key转为小写
@@ -465,9 +374,6 @@ public class ToolUtil {
 
     /**
      * 当前时间
-     *
-     * @author stylefeng
-     * @Date 2017/5/7 21:56
      */
     public static String currentTime() {
         return DateUtil.getTime();
@@ -475,9 +381,6 @@ public class ToolUtil {
 
     /**
      * 首字母大写
-     *
-     * @author stylefeng
-     * @Date 2017/5/7 22:01
      */
     public static String firstLetterToUpper(String val) {
         return StrKit.firstCharToUpperCase(val);
@@ -485,9 +388,6 @@ public class ToolUtil {
 
     /**
      * 首字母小写
-     *
-     * @author stylefeng
-     * @Date 2017/5/7 22:02
      */
     public static String firstLetterToLower(String val) {
         return StrKit.firstCharToLowerCase(val);
@@ -495,9 +395,6 @@ public class ToolUtil {
 
     /**
      * 判断是否是windows操作系统
-     *
-     * @author stylefeng
-     * @Date 2017/5/24 22:34
      */
     public static Boolean isWinOs() {
         String os = System.getProperty("os.name");
@@ -510,9 +407,6 @@ public class ToolUtil {
 
     /**
      * 获取临时目录
-     *
-     * @author stylefeng
-     * @Date 2017/5/24 22:35
      */
     public static String getTempPath() {
         return System.getProperty("java.io.tmpdir");
@@ -520,9 +414,6 @@ public class ToolUtil {
 
     /**
      * 把一个数转化为int
-     *
-     * @author fengshuonan
-     * @Date 2017/11/15 下午11:10
      */
     public static Integer toInt(Object val) {
         if (val instanceof Double) {
@@ -531,7 +422,6 @@ public class ToolUtil {
         } else {
             return Integer.valueOf(val.toString());
         }
-
     }
 
     /**

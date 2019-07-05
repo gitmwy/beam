@@ -36,7 +36,6 @@ public class RoleController {
         return R.ok(roleService.list(qw));
     }
 
-    @SysLog(value = "新增角色")
     @RequiresPermissions("sys:role:add")
     @ApiOperation("新增角色")
     @PostMapping(value = "/add")

@@ -41,19 +41,28 @@ public class LoginController {
                 return R.fail("验证码不正确");
             }
         }
+        String msg = "";
         try {
             Subject subject = ShiroUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(loginForm.getUsername(), loginForm.getPassword());
             subject.login(token);
-            LogManager.me().executeLog(LogTaskFactory.loginLog(ShiroUtils.getUserId(), getIp()));
+            LogManager.me().executeLog(LogTaskFactory.loginSuccessLog(ShiroUtils.getUserId(), getIp()));
         } catch (UnknownAccountException e) {
-            return R.fail(e.getMessage());
+            msg = e.getMessage();
+            return R.fail(msg);
         } catch (IncorrectCredentialsException e) {
-            return R.fail("账号或者密码不正确");
+            msg = "账号或者密码不正确";
+            return R.fail(msg);
         } catch (LockedAccountException e) {
-            return R.fail("账号已被锁定,请联系管理员");
+            msg = "账号已被锁定，请联系管理员";
+            return R.fail(msg);
         } catch (AuthenticationException e) {
-            return R.fail("账户验证失败");
+            msg = "账户验证失败";
+            return R.fail(msg);
+        }finally {
+            if(StringUtils.isNotBlank(msg)){
+                LogManager.me().executeLog(LogTaskFactory.loginFailLog(loginForm.getUsername(), msg, getIp()));
+            }
         }
         return R.ok(ShiroUtils.getUserEntity());
     }
@@ -64,6 +73,7 @@ public class LoginController {
     @GetMapping(value = "/logout")
     @ResponseBody
     public Object logout() {
+        LogManager.me().executeLog(LogTaskFactory.exitLog(ShiroUtils.getUserId(), getIp()));
         ShiroUtils.logout();
         return R.ok("退出成功");
     }

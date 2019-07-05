@@ -39,5 +39,4 @@ public class SpringContextHolder implements ApplicationContextAware {
             throw new RuntimeException("applicaitonContext属性为null,请检查是否注入了SpringContextHolder!");
         }
     }
-
 }

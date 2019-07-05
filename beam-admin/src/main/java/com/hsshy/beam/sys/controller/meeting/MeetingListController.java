@@ -2,9 +2,10 @@ package com.hsshy.beam.sys.controller.meeting;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hsshy.beam.common.annotion.SysLog;
+import com.hsshy.beam.common.base.entity.ExcelEntity;
 import com.hsshy.beam.common.utils.FileUtil;
 import com.hsshy.beam.common.utils.R;
-import com.hsshy.beam.common.base.entity.ExcelEntity;
 import com.hsshy.beam.sys.entity.MeetingList;
 import com.hsshy.beam.sys.service.MeetingListService;
 import io.swagger.annotations.Api;
@@ -37,6 +38,7 @@ public class MeetingListController {
     private MeetingListService meetingService;
 
     //分页
+    @SysLog(value = "会议分页列表")
     @ApiOperation("分页列表")
     @GetMapping(value = "/page/list")
     @RequiresPermissions("meeting:list")
@@ -45,7 +47,8 @@ public class MeetingListController {
         return R.ok(page);
     }
 
-    @ApiOperation(value = "文件导出")
+    @SysLog(value = "导出会议")
+    @ApiOperation(value = "导出")
     @RequiresPermissions("meeting:list:export")
     @GetMapping("/export")
     public void exportExcel(MeetingList meeting, HttpServletResponse response) {

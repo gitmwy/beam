@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {commonParams} from '../api/config'
+import {commonParams} from './config'
 import {Message} from 'element-ui'
 
 const Http = {

@@ -11,7 +11,7 @@ export default new Router({
         },
         {
             path: '/',
-            component: resolve => require(['../components/common/Home.vue'], resolve),
+            component: resolve => require(['../components/page/Home.vue'], resolve),
             meta: {title: '系统管理', permission: true},
             children: [
                 {
@@ -21,17 +21,17 @@ export default new Router({
                 },
                 {
                     path: '/permission',
-                    component: resolve => require(['../components/page/Permission.vue'], resolve),
+                    component: resolve => require(['../components/common/Permission.vue'], resolve),
                     meta: {title: '权限测试', permission: true}
                 },
                 {
                     path: '/404',
-                    component: resolve => require(['../components/page/404.vue'], resolve),
+                    component: resolve => require(['../components/common/404.vue'], resolve),
                     meta: {title: '404'}
                 },
                 {
                     path: '/403',
-                    component: resolve => require(['../components/page/403.vue'], resolve),
+                    component: resolve => require(['../components/common/403.vue'], resolve),
                     meta: {title: '403'}
                 },
                 {

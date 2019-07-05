@@ -165,7 +165,6 @@
     import DeptApi from '../../api/sys/sysdept';
 
     export default {
-        name: 'basetable',
         data() {
             return {
                 selectDeptDialog:false,
@@ -254,9 +253,7 @@
                 console.log(res);
                 console.log(file);
                 if (res.error === false) {
-                    // this.form.avatar = res.data;
                     this.$set(this.form, "avatar", res.data);
-                    console.log(this.form);
                 } else {
                     this.$message.error(res.msg);
                 }
@@ -336,7 +333,6 @@
             },
             handleEdit(index, row) {
                 this.idx = index;
-                // const item = this.tableData[index];
                 SysUserApi.edit({userId:row.id}).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
@@ -370,7 +366,6 @@
             },
             // 保存编辑
             saveEdit() {
-                // this.$set(this.tableData, this.idx, this.form);
                 this.loading = true;
                 SysUserApi.add(this.form).then((res) => {
                     this.loading = false;
@@ -425,7 +420,7 @@
                         this.$message.success('操作成功');
                         this.reload()
                     } else {
-                        this.$message.error(err.msg);
+                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
