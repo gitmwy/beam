@@ -30,6 +30,14 @@ spring:
     timeout: 6000ms
 log:
   path: /home/beam/local
+ftp:
+  host: 152.136.219.223
+  port: 21
+  username: uftp
+  password: 123456
+  img-path: img/
+  video-path:  video/
+  course-path: course/
 
 ---
 #测试环境

@@ -14,7 +14,7 @@
 - 项目特点：
   - **持久层：mybatis持久化，使用MyBatis-Plus优化，减少sql开发量；Transtraction注解事务。**
   - **使用SpringBoot自动装配，MyBatis-Plus配置文件提为默认配置放在了common包的default-config.properties中，
-  子项目的xml只需固定放在com/hsshy/beam/modular/\*/mapping/\*.xml，实体类固定放在com.hsshy.beam.modular.\**.entity中。
+  子项目的xml只需固定放在com/ksh/beam/modular/\*/mapping/\*.xml，实体类固定放在com.ksh.beam.modular.\**.entity中。
   即可使用MyBatis-Plus。若不使用默认配置，可在子工程配置文件直接写入自己的配置即可覆盖。**
   - **提出公共的模块，service、dao、entity接口和后台管理系统可共用（将相应的模块放在beam-web中），当然也可不共用，只需将相应的模块放在子工程中**
   - **接口模块已添加拦截和post请求签名，可直接使用**
@@ -62,28 +62,9 @@ beam
 - 前后端分离
 - 缓存：Redis
 
-### 代码生成器
-https://gitee.com/hsshy/beam-generator
-
-#### Spring Boot其他案例：https://gitee.com/hsshy/beam-example
-- 秒杀案例模块（加锁、aop加锁、redis锁、消息队列）
-- 动态数据源案例模块
-- Spring Boot 整合RabbitMQ案例
-- Spring Boot 整合dubbo消费者
-- Spring Boot 整合dubbo服务提供者
-- Spring Boot 整合email发送邮件（异步发送、消息队列发送）
-- Spring Boot 整合Kafka案例
-
 #### 软件需求
 - JDK1.8
-- MySQL5.5+
+- MySQL8.0+
 - Maven3.0+
 - Redis
 - lombok插件
-
-#### 前端地址：
-beam/ui
-
-#### 演示地址
-http://www.hsshy.com
-演示账户：test 123456

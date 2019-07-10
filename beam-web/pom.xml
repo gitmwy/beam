@@ -11,7 +11,7 @@
     <description>通用模块</description>
 
     <parent>
-        <groupId>com.hsshy</groupId>
+        <groupId>com.ksh</groupId>
         <artifactId>beam-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -20,7 +20,7 @@
 
         <!-- beam通用工具模块 -->
         <dependency>
-            <groupId>com.hsshy</groupId>
+            <groupId>com.ksh</groupId>
             <artifactId>beam-common</artifactId>
             <scope>provided</scope>
         </dependency>

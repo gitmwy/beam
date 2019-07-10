@@ -10,7 +10,7 @@
     <description>Demo project for Spring Boot</description>
 
     <parent>
-        <groupId>com.hsshy</groupId>
+        <groupId>com.ksh</groupId>
         <artifactId>beam-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -18,12 +18,12 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.hsshy</groupId>
+            <groupId>com.ksh</groupId>
             <artifactId>beam-common</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.hsshy</groupId>
+            <groupId>com.ksh</groupId>
             <artifactId>beam-web</artifactId>
         </dependency>
         <!--以上两个模块所引用的包需在此模块重新引入，因为以上包的依赖只在编译时使用-->
@@ -122,6 +122,11 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
         </dependency>
     </dependencies>
 

@@ -33,7 +33,7 @@
             <appender-ref ref="STDOUT"/>
         </root>
 
-        <logger name="com.hsshy.beam" level="debug" additivity="false">
+        <logger name="com.ksh.beam" level="debug" additivity="false">
             <appender-ref ref="STDOUT"/>
         </logger>
 
