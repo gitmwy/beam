@@ -43,7 +43,7 @@ beam
 ├─beam-web  公用实体类、dao、service
 │   
 │ 
-├─ui 前端代码
+├─html 前端代码
 │ 
 ├─doc  数据库sql文件
 │ 
