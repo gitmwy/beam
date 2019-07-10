@@ -9,7 +9,7 @@
         <div class="container">
             <div class="handle-box">
                 <el-upload style="float: left"
-                           action="/beam_ht/file/ftpUpload"
+                           action="/beam_ht/course/ftpUpload"
                            :data="data"
                            :on-preview="handlePreview"
                            :on-remove="handleRemove"
@@ -18,10 +18,10 @@
                 </el-upload>
             </div>
             <el-table :data="tableData" v-loading="loading" class="table">
-                <el-table-column label="#" align="center" prop="code" width="100"/>
-                <el-table-column label="课件" align="left" prop="course" width="700"/>
-                <el-table-column label="大小" align="center" prop="size" width="100"/>
-                <el-table-column label="次数" align="center" prop="times" width="100"/>
+                <el-table-column label="#" align="center" prop="id" width="100"/>
+                <el-table-column label="课件" align="left" prop="courseName" width="700"/>
+                <el-table-column label="大小" align="center" prop="courseSize" width="100"/>
+                <el-table-column label="次数" align="center" prop="courseTimes" width="100"/>
                 <el-table-column label="操作" align="center" prop="operation">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-download"/>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-    import MeetingCourseApi from '../../api/meeting/meetinglist';
+    import MeetingCourseApi from '../../api/meeting/meetingcourse';
 
     export default {
         data() {
@@ -56,9 +56,7 @@
                 loading: false,
                 tableData: [],
                 page: {pageNo: 1, pageSize: 10},
-                data: {
-                    fileType: "img"
-                }
+                data: {fileType: "img"}
             }
         },
         methods: {
@@ -105,7 +103,6 @@
                 return this.$confirm(`确定移除 ${ file.name }？`);
             }
         }
-
     }
 </script>
 

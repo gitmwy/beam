@@ -1,6 +1,6 @@
 package com.ksh.beam.common.factory;
 
-import com.ksh.beam.sys.entity.sys.Dict;
+import com.ksh.beam.system.entity.sys.Dict;
 
 import java.util.List;
 

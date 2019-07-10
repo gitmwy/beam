@@ -2,7 +2,7 @@ package com.ksh.beam.common.shiro;
 
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.common.shiro.factory.ShiroFactroy;
-import com.ksh.beam.sys.entity.sys.User;
+import com.ksh.beam.system.entity.sys.User;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;

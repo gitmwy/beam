@@ -2,8 +2,8 @@ package com.ksh.beam.common.log.factory;
 
 import com.ksh.beam.common.log.state.LogSucceed;
 import com.ksh.beam.common.log.state.LogType;
-import com.ksh.beam.sys.entity.sys.LoginLog;
-import com.ksh.beam.sys.entity.sys.OperationLog;
+import com.ksh.beam.system.entity.sys.LoginLog;
+import com.ksh.beam.system.entity.sys.OperationLog;
 
 import java.util.Date;
 

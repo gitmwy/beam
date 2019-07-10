@@ -1,5 +1,6 @@
 package com.ksh.beam.common.util;
 
+import com.ksh.beam.common.utils.FileUtil;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
@@ -14,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 文件上传下载工具类
@@ -22,9 +25,9 @@ import java.nio.charset.StandardCharsets;
 public class FtpUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(FtpUtil.class);
-    private static  final  String IMG = "img";
-    private static  final  String VIDEO = "video";
-    private static  final  String COURSE = "course";
+    private static final String IMG = "img";
+    private static final String VIDEO = "video";
+    private static final String COURSE = "course";
 
     @Value("${ftp.username}")
     private String userName;
@@ -52,17 +55,17 @@ public class FtpUtil {
     /**
      * 功能：上传文件附件到文件服务器
      */
-    public String uploadToFtp(MultipartFile file, String fileName, String fileType) throws Exception {
-        try (InputStream is = file.getInputStream()){
+    public Map<String, String> uploadToFtp(MultipartFile file, String fileName, String fileType) throws Exception {
+        try (InputStream is = file.getInputStream()) {
             // 建立连接
             connectToServer();
             //改变文件路径
             String path = "";
-            if(IMG.equals(fileType)){
+            if (IMG.equals(fileType)) {
                 path = imgPath;
-            }else if(VIDEO.equals(fileType)){
+            } else if (VIDEO.equals(fileType)) {
                 path = videoPath;
-            }else if(COURSE.equals(fileType)){
+            } else if (COURSE.equals(fileType)) {
                 path = coursePath;
             }
             ftpClient.changeWorkingDirectory(path);
@@ -84,7 +87,11 @@ public class FtpUtil {
             }
             // 关闭连接
             closeConnect();
-            return path + fileName;
+            //获取文件属性
+            Map<String, String> maps = new HashMap<>();
+            maps.put("fileUrl", path + fileName);
+            maps.put("fileSize", FileUtil.getFileSize(file.getSize()));
+            return maps;
         } catch (FTPConnectionClosedException e) {
             logger.error("ftp连接被关闭", e);
             throw e;

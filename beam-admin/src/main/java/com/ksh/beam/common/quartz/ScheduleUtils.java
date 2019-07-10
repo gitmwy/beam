@@ -2,7 +2,7 @@ package com.ksh.beam.common.quartz;
 
 import com.ksh.beam.common.exception.BeamException;
 import com.ksh.beam.common.quartz.state.QuartzConstant;
-import com.ksh.beam.sys.entity.sys.ScheduleJob;
+import com.ksh.beam.system.entity.sys.ScheduleJob;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;

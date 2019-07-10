@@ -1,6 +1,6 @@
 package com.ksh.beam.common.shiro;
 
-import com.ksh.beam.sys.entity.sys.User;
+import com.ksh.beam.system.entity.sys.User;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 
 import java.util.List;

@@ -1,4 +1,5 @@
 package com.ksh.beam.config;
+
 import com.ksh.beam.config.properties.BeamRestProperties;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,12 +15,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-
 /**
  * swagger配置类
- *
- * @author hs
- * @date 2018年9月19日19:42:59
  */
 @Configuration
 @EnableSwagger2

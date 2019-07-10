@@ -134,13 +134,13 @@
 
     <!--开发环境-->
     <springProfile name="local">
-        <Logger name="com.ksh.beam.sys.dao" level="DEBUG" additivity="false">
+        <Logger name="com.ksh.beam.system.dao" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE" />
         </Logger>
     </springProfile>
     <!--其他环境-->
     <springProfile name="!local">
-        <logger name="com.ksh.beam.sys.dao" level="DEBUG" additivity="false">
+        <logger name="com.ksh.beam.system.dao" level="DEBUG" additivity="false">
             <appender-ref ref="DEBUG_FILE" />
             <appender-ref ref="INFO_FILE" />
             <appender-ref ref="WARN_FILE" />

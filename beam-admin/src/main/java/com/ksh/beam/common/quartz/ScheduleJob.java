@@ -18,7 +18,7 @@ public class ScheduleJob extends QuartzJobBean {
 	
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        com.ksh.beam.sys.entity.sys.ScheduleJob scheduleJob = (com.ksh.beam.sys.entity.sys.ScheduleJob) context.getMergedJobDataMap().get(com.ksh.beam.sys.entity.sys.ScheduleJob.JOB_PARAM_KEY);
+        com.ksh.beam.system.entity.sys.ScheduleJob scheduleJob = (com.ksh.beam.system.entity.sys.ScheduleJob) context.getMergedJobDataMap().get(com.ksh.beam.system.entity.sys.ScheduleJob.JOB_PARAM_KEY);
         
         //任务开始时间
         long startTime = System.currentTimeMillis();

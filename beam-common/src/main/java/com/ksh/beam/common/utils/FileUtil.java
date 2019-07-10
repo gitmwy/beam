@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -187,5 +188,26 @@ public class FileUtil {
                 os.write(buffer, 0, len);
             }
         }
+    }
+
+    /**
+     *获取文件大小
+     */
+    public static String getFileSize(long size){
+        double cache = size / 1024f;
+        String unit = "KB";
+        if (cache >= 1024f) {
+            cache /= 1024f;
+            unit = "MB";
+        }
+        if (cache >= 1024f) {
+            cache /= 1024f;
+            unit = "GB";
+        }
+        if (cache >= 1024f) {
+            cache /= 1024f;
+            unit = "TB";
+        }
+        return new DecimalFormat("0.00").format(cache) + unit;
     }
 }

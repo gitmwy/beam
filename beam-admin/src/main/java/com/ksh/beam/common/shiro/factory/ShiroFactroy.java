@@ -1,10 +1,10 @@
 package com.ksh.beam.common.shiro.factory;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ksh.beam.sys.dao.MenuMapper;
-import com.ksh.beam.sys.dao.UserMapper;
-import com.ksh.beam.sys.entity.sys.Menu;
-import com.ksh.beam.sys.entity.sys.User;
+import com.ksh.beam.system.dao.MenuMapper;
+import com.ksh.beam.system.dao.UserMapper;
+import com.ksh.beam.system.entity.sys.Menu;
+import com.ksh.beam.system.entity.sys.User;
 import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.constant.cache.Cache;
 import com.ksh.beam.common.constant.cache.CacheKey;

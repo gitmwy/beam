@@ -10,6 +10,10 @@ server:
    servlet:
      context-path: /beam_ht
 spring:
+  servlet:
+    multipart:
+      max-file-size: 512MB
+      max-request-size: 1024MB
   profiles:
     active: @spring.active@
 
