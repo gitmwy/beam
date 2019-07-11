@@ -55,7 +55,7 @@ public class UserController extends BaseController {
     @ApiOperation("批量删除用户")
     @PostMapping(value = "/del")
     @RequiresPermissions("sys:user:del")
-    public R del(@RequestBody Long userIds[]) {
+    public R del(@RequestBody Long[] userIds) {
         return userService.deleteUser(userIds);
     }
 
@@ -78,7 +78,7 @@ public class UserController extends BaseController {
     @ApiOperation("重置用户密码")
     @PostMapping(value = "/reset/password")
     @RequiresPermissions("sys:user:resetPassword")
-    public R resetPassword(@RequestBody Long userIds[]) {
+    public R resetPassword(@RequestBody Long[] userIds) {
         return userService.resetPassword(userIds);
     }
 

@@ -46,7 +46,7 @@ public class RoleController {
     @RequiresPermissions("sys:role:del")
     @ApiOperation("批量删除用户")
     @PostMapping(value = "/del")
-    public Object del(@RequestBody Long roleIds[]) {
+    public Object del(@RequestBody Long[] roleIds) {
         return roleService.deleteRole(roleIds);
     }
 

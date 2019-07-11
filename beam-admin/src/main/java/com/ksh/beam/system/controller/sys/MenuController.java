@@ -120,12 +120,12 @@ public class MenuController extends BaseController {
     @RequiresPermissions("sys:menu:del")
     @ApiOperation("删除")
     @PostMapping(value = "/del")
-    public R del(@RequestBody Long menuIds[]) {
+    public R del(@RequestBody Long[] menuIds) {
         if (ToolUtil.isEmpty(menuIds) || menuIds.length <= 0) {
             return R.fail("未提交要删除的记录");
         }
         for (Long menuId : menuIds) {
-            Integer count = menuService.count(new QueryWrapper<Menu>().lambda().eq(Menu::getParentId, menuId));
+            int count = menuService.count(new QueryWrapper<Menu>().lambda().eq(Menu::getParentId, menuId));
             if (count > 0) {
                 return R.fail("删除失败，请先删除菜单关联的子菜单");
             }

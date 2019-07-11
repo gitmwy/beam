@@ -55,15 +55,6 @@
 
     export default {
         data() {
-            var validatePass = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请再次输入密码'));
-                } else if (value !== this.pwdForm.newPwd) {
-                    callback(new Error('两次输入密码不一致!'));
-                } else {
-                    callback();
-                }
-            };
             return {
                 // avatar: avatar,
                 collapse: false,
@@ -86,7 +77,16 @@
                         { required: true, message: '请输入新密码', trigger: 'blur' },
                     ],
                     password_confirm:[
-                        {validator: validatePass, trigger: 'blur' }
+                        {validator: (rule, value, callback) => {
+                                if (value === '') {
+                                    callback(new Error('请再次输入密码'));
+                                } else if (value !== this.pwdForm.newPwd) {
+                                    callback(new Error('两次输入密码不一致!'));
+                                } else {
+                                    callback();
+                                }
+                            },
+                        trigger: 'blur'}
                     ]
                 },
                 canChangePassword: true,

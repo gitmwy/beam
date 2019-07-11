@@ -41,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Assert.notNull(user.getAccount(), "登陆账号不能为空");
         Assert.notNull(user.getName(), "真实姓名不能为空");
         if (ToolUtil.isNotEmpty(user.getId())) {
-            if (user.getId() == Constant.SUPER_ADMIN && ShiroUtils.getUserId().longValue() != Constant.SUPER_ADMIN) {
+            if (user.getId() == Constant.SUPER_ADMIN && ShiroUtils.getUserId() != Constant.SUPER_ADMIN) {
                 return R.fail("不能修改超级管理员信息");
             }
             User oldUser = this.getById(user.getId());

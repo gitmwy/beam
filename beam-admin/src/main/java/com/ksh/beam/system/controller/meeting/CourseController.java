@@ -15,6 +15,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -29,7 +30,7 @@ import java.util.UUID;
  */
 @Api(value = "CourseController", tags = {"会议课件接口"})
 @RestController
-@RequestMapping("/course")
+@RequestMapping("/meeting/course")
 public class CourseController {
 
     @Autowired
@@ -61,5 +62,14 @@ public class CourseController {
             e.printStackTrace();
             throw new BeamException(RetEnum.FTPUPLOAD_ERROR);
         }
+    }
+
+    @ApiOperation("删除")
+    @PostMapping(value = "/del")
+    @RequiresPermissions("meeting:course:del")
+    public R del(@RequestBody Course courses) {
+
+
+        return R.ok();
     }
 }

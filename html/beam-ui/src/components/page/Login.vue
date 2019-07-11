@@ -20,7 +20,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-image :src="kaptcha" @click.native="refreshCode()" alt="加载失败"/>
+                    <el-image :src="kaptcha" @click="refreshCode" alt="加载失败" style="float: right"/>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" v-loading="loading" @click="submitForm('ruleForm')">登录</el-button>
@@ -56,7 +56,7 @@
             }
         },
         created(){
-            this.kaptcha = "/beam_ht/kaptcha/defaultKaptcha?t=" + new Date().getTime();
+            this.refreshCode();
         },
         methods: {
             refreshCode() {

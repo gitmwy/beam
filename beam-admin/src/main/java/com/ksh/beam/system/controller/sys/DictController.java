@@ -82,13 +82,13 @@ public class DictController extends BaseController {
     @ApiOperation("删除")
     @RequiresPermissions("sys:dict:del")
     @PostMapping(value = "/del")
-    public R del(@RequestBody Long dictIds[]) {
+    public R del(@RequestBody Long[] dictIds) {
         if (ToolUtil.isEmpty(dictIds) || dictIds.length <= 0) {
             return R.fail("未提交要删除的记录");
         }
         List<Dict> dictList = (List<Dict>) dictService.listByIds(Arrays.asList(dictIds));
         for (Dict dict : dictList) {
-            Integer count = dictService.count(new QueryWrapper<Dict>().eq("pid", dict.getId()));
+            int count = dictService.count(new QueryWrapper<Dict>().eq("pid", dict.getId()));
             if (count > 0) {
                 return R.fail("该字典存在子字典，请先删除其子字典！");
             }

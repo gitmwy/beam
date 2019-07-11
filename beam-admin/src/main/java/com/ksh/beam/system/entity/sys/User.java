@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,7 +51,7 @@ public class User extends DataEntity<Long> {
 	/**
 	 * 生日
 	 */
-	private Date birthday;
+	private String birthday;
 	/**
 	 * 性别（1：男 2：女）
 	 */

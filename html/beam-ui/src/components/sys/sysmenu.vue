@@ -76,8 +76,7 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog title="选择父级菜单" :modal="false" :visible.sync="selectMenuDialog" width="30%">
-            <el-tree :data="treeData" :props="defaultProps" default-expand-all :expand-on-click-node="false"
-                     @node-click="selectMenuClick"></el-tree>
+            <el-tree :data="treeData" :props="defaultProps" :expand-on-click-node="false" @node-click="selectMenuClick"></el-tree>
         </el-dialog>
 
         <!-- 删除提示框 -->

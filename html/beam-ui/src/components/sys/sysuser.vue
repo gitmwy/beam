@@ -30,9 +30,9 @@
                             <el-table-column prop="name" align="center" label="姓名"></el-table-column>
                             <el-table-column prop="sexName" align="center" label="性别"></el-table-column>
                             <el-table-column prop="deptName" align="center" label="部门名称"></el-table-column>
-                            <el-table-column prop="email" align="center" label="邮箱"></el-table-column>
-                            <el-table-column prop="phone" align="center" label="手机号"></el-table-column>
-                            <el-table-column prop="birthday" align="center" label="出生日期" sortable></el-table-column>
+                            <el-table-column prop="email" align="center" label="邮箱" width="200"></el-table-column>
+                            <el-table-column prop="phone" align="center" label="手机号" width="150"></el-table-column>
+                            <el-table-column prop="birthday" align="center" label="出生日期" width="150" sortable></el-table-column>
                             <el-table-column width="160" label="是否可用" align="center">
                                 <template slot-scope="scope">
                                     <el-switch v-model="scope.row.status" :active-text="scope.row.status ? '可用' : '不可用'" @change="changeStatus(scope.row.id, scope.row.status)"></el-switch>
@@ -65,7 +65,7 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑" :visible.sync="editVisible" width="50%">
-            <el-form ref="form" :model="form" label-width="100px">
+            <el-form ref="form" :model="form" :rules="rules" label-width="100px">
                 <el-upload
                     label=" 头像"
                     class="avatar-uploader el-dialog--center"
@@ -90,14 +90,14 @@
                 <el-form-item  label="部门名称">
                     <el-input @click.native="goToSelectDept" readonly="readonly" v-model="form.deptName"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱">
+                <el-form-item label="邮箱" prop="email">
                     <el-input v-model="form.email"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号">
-                    <el-input v-model="form.phone"></el-input>
+                <el-form-item label="手机号" prop="phone">
+                    <el-input maxlength="11" v-model="form.phone"></el-input>
                 </el-form-item>
                 <el-form-item label="出生日期">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="form.birthday" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
+                    <el-date-picker type="date" placeholder="选择日期" v-model="form.birthday" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="是否可用" prop="status">
                     <el-switch v-model="form.status" :active-text="form.status ? '可用' : '不可用'"></el-switch>
@@ -163,6 +163,7 @@
 <script>
     import SysUserApi from '../../api/sys/sysuser';
     import DeptApi from '../../api/sys/sysdept';
+    import Common from '../../util/common';
 
     export default {
         data() {
@@ -182,6 +183,14 @@
                     phone: '',
                     deptId:'',
                     roleIds:[]
+                },
+                rules: {
+                    phone: [
+                        {validator: Common.validatePhone, trigger: 'blur'}
+                    ],
+                    email: [
+                        {validator: Common.validateEMail, trigger: 'blur'}
+                    ]
                 },
                 idx: -1,
                 ids: [],
@@ -367,19 +376,23 @@
             },
             // 保存编辑
             saveEdit() {
-                this.loading = true;
-                SysUserApi.add(this.form).then((res) => {
-                    this.loading = false;
-                    if (res.error === false) {
-                        this.editVisible = false;
-                        this.$message.success(res.msg);
-                        this.reload()
-                    } else {
-                        this.$message.error(res.msg);
+                this.$refs.form.validate((valid) => {
+                    if(valid){
+                        this.loading = true;
+                        SysUserApi.add(this.form).then((res) => {
+                            this.loading = false;
+                            if (res.error === false) {
+                                this.editVisible = false;
+                                this.$message.success(res.msg);
+                                this.reload()
+                            } else {
+                                this.$message.error(res.msg);
+                            }
+                        }, (err) => {
+                            this.loading = false;
+                            this.$message.error(err.msg);
+                        })
                     }
-                }, (err) => {
-                    this.loading = false;
-                    this.$message.error(err.msg);
                 })
             },
             // 确定删除

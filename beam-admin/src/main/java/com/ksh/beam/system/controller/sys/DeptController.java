@@ -54,7 +54,7 @@ public class DeptController extends BaseController {
     @ApiOperation("删除")
     @PostMapping(value = "/del")
     @RequiresPermissions("sys:dept:del")
-    public R del(@RequestBody Long deptIds[]) {
+    public R del(@RequestBody Long[] deptIds) {
         if (ToolUtil.isEmpty(deptIds) || deptIds.length <= 0) {
             return R.fail("未提交要删除的记录");
         }
