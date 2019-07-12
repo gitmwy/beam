@@ -53,8 +53,11 @@ public enum RetEnum {
      */
     FILE_NOT_FOUND(404, "未找到文件"),
     FILE_READING_ERROR(500, "文件读取错误"),
-    UPLOAD_ERROR(500,"上传图片出错"),
-    FTPUPLOAD_ERROR(500,"FTP上传文件出错"),
+    UPLOAD_ERROR(500,"上传文件出错"),
+    /**
+     * 导出
+     */
+    EXPORT_ERROR(500, "导出文件失败"),
     /**
     *  服务器异常
     */

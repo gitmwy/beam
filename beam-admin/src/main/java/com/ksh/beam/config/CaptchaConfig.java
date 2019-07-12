@@ -12,10 +12,10 @@ import java.util.Properties;
  * 生成验证码配置
  */
 @Configuration
-public class KaptchaConfig {
+public class CaptchaConfig {
 
     @Bean
-    public DefaultKaptcha kaptcha() {
+    public DefaultKaptcha captcha() {
         Properties properties = new Properties();
         // 图片边框
         properties.put(Constants.KAPTCHA_BORDER, "no");
@@ -26,9 +26,9 @@ public class KaptchaConfig {
         // 图片宽
         properties.put(Constants.KAPTCHA_IMAGE_WIDTH, "150");
         // 图片高
-        properties.put(Constants.KAPTCHA_IMAGE_HEIGHT, "50");
+        properties.put(Constants.KAPTCHA_IMAGE_HEIGHT, "45");
         // 字体大小
-        properties.put(Constants.KAPTCHA_TEXTPRODUCER_FONT_SIZE, "45");
+        properties.put(Constants.KAPTCHA_TEXTPRODUCER_FONT_SIZE, "40");
         // session key
         properties.put(Constants.KAPTCHA_SESSION_KEY, "code");
         // 验证码长度

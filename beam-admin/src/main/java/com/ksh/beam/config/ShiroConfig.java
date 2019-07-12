@@ -72,7 +72,7 @@ public class ShiroConfig {
         filterMap.put("/swagger-resources/**", "anon");
 
         filterMap.put("/login/**", "anon"); //登陆
-        filterMap.put("/kaptcha/**", "anon");  //验证码
+        filterMap.put("/captcha/**", "anon");  //验证码
         filterMap.put("/global/*", "anon");  //全局路径（错误或者超时）
 
         filterMap.put("/favicon.ico", "anon");

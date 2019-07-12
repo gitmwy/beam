@@ -14,11 +14,10 @@ public class R<T> extends HashMap<String, Object> {
 		put("code", code);
 		put("msg", msg);
 		put("data", null);
-		put("error",false);
+		put("error", true);
 	}
 
 	public static R fail() {
-
 		return new R(RetEnum.ERROR.getRet(),RetEnum.ERROR.getMsg());
 	}
 	
@@ -27,16 +26,12 @@ public class R<T> extends HashMap<String, Object> {
 	}
 	
 	public static R fail(int code, String msg) {
-		R r = new R(code,msg);
-		r.put("error",true);
-		r.put("data",null);
-		return r;
+		return new R(code,msg);
 	}
 
 	public static <T> R<T> fail(T data) {
 		R r = new R(RetEnum.ERROR.getRet(),RetEnum.ERROR.getMsg());
 		r.put("data",data);
-		r.put("error",true);
 		return r;
 	}
 
@@ -44,30 +39,25 @@ public class R<T> extends HashMap<String, Object> {
 	public static <T> R<T> fail(int code,String msg,T data) {
 		R r = new R(code,msg);
 		r.put("data",data);
-		r.put("error",true);
 		return r;
 	}
 
 	public static R ok() {
-
-		return new R(RetEnum.SUCCESS.getRet(),RetEnum.SUCCESS.getMsg());
+		R r = new R(RetEnum.SUCCESS.getRet(),RetEnum.SUCCESS.getMsg());
+		r.put("error",false);
+		return r;
 	}
 
 	public static R ok(String msg) {
 		R r = new R(RetEnum.SUCCESS.getRet(),msg);
 		r.put("data",msg);
 		r.put("error",false);
-
 		return r;
 	}
 
 	public static R ok(int code, String msg) {
 		R r = new R(code,msg);
-		r.put("code", code);
-		r.put("msg", msg);
-		r.put("data", null);
 		r.put("error",false);
-
 		return r;
 	}
 

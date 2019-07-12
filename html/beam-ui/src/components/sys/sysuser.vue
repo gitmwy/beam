@@ -258,13 +258,11 @@
                 });
                 return deptId;
             },
-            handleAvatarSuccess(res, file) {
-                console.log(res);
-                console.log(file);
-                if (res.error === false) {
-                    this.$set(this.form, "avatar", res.data);
-                } else {
+            handleAvatarSuccess(res) {
+                if (res.error) {
                     this.$message.error(res.msg);
+                } else {
+                    this.$set(this.form, "avatar", res.data);
                 }
             },
             beforeAvatarUpload(file) {

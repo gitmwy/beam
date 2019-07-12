@@ -98,12 +98,12 @@
                 noPassVisible: false,
                 reasons: "",
                 passBtn: true,
-                videoUrl: "",
+                videoUrl: "https://mwy-1259572200.cos.ap-beijing.myqcloud.com/2019-07-04%2009-25-04.mkv",
                 videoType: "video/mp4",
                 videoVisible: false,
                 urls: [
-                    "",
-                    ""
+                    "https://mwy-1259572200.cos.ap-beijing.myqcloud.com/50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg",
+                    "https://mwy-1259572200.cos.ap-beijing.myqcloud.com/bc8b8163-aeba-4360-b826-0c2bc41e86ce.jpg"
                 ]
             }
         },

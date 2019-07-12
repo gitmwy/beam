@@ -106,7 +106,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * 获取所有菜单 递归
      */
     private List<Map> getAllMenuTreeList(List<Map> menuList){
-        List<Map> subMenuList = new ArrayList<Map>();
+        List<Map> subMenuList = new ArrayList<>();
 
         for(Map entity : menuList){
             //目录

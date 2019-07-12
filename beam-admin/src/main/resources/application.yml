@@ -1,7 +1,7 @@
 beam:
   admin:
     swagger-open: true  #是否开启swagger (true/false)
-    kaptcha-open: true
+    captcha-open: true
     redis-open: true  # 是否开启redis缓存  true开启   false关闭
     shiro-redis: true # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
     version: 0.0.1

@@ -4,13 +4,13 @@ import com.ksh.beam.common.log.LogManager;
 import com.ksh.beam.common.log.state.LogSucceed;
 import com.ksh.beam.common.log.state.LogType;
 import com.ksh.beam.common.utils.SpringContextHolder;
-import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.LoginLogMapper;
 import com.ksh.beam.system.dao.OperationLogMapper;
 import com.ksh.beam.system.entity.sys.LoginLog;
 import com.ksh.beam.system.entity.sys.OperationLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.TimerTask;
 
 public class LogTaskFactory {
@@ -79,13 +79,12 @@ public class LogTaskFactory {
         };
     }
 
-    public static TimerTask exceptionLog(final Long userId, final Exception exception) {
+    public static TimerTask exceptionLog(final Long userId, final String exception) {
         return new TimerTask() {
             @Override
             public void run() {
-                String msg = ToolUtil.getExceptionMsg(exception);
                 OperationLog operationLog = LogFactory.createOperationLog(
-                        LogType.EXCEPTION, userId, "", null, null, msg, LogSucceed.FAIL, null);
+                        LogType.EXCEPTION, userId, "", null, null, exception, LogSucceed.FAIL, null);
                 try {
                     operationLogMapper.insert(operationLog);
                 } catch (Exception e) {

@@ -13,7 +13,6 @@
                         <i class="el-icon-rank"></i>
                     </el-tooltip>
                 </div>
-
                 <!-- 用户头像 -->
                 <div class="user-avator"><img :src="sysuser.avatar" ></div>
                 <!-- 用户名下拉菜单 -->

@@ -19,8 +19,7 @@ import java.io.IOException;
  * 验证码生成
  */
 @Controller
-@RequestMapping("kaptcha")
-public class KaptchaController {
+public class CaptchaController {
 
     @Autowired
     private DefaultKaptcha defaultKaptcha;
@@ -28,8 +27,8 @@ public class KaptchaController {
     /**
      * 生成验证码
      */
-    @RequestMapping("defaultKaptcha")
-    public void defaultKaptcha(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping("captcha")
+    public void captcha(HttpServletRequest request, HttpServletResponse response) {
 
         // 定义response输出类型为image/jpeg类型，使用response输出流输出图片的byte数组
         response.setDateHeader("Expires", 0);

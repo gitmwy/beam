@@ -1,8 +1,5 @@
 package com.ksh.beam.system.controller.common;
 
-import com.ksh.beam.common.annotion.SysLog;
-import com.ksh.beam.common.enumeration.RetEnum;
-import com.ksh.beam.common.exception.BeamException;
 import com.ksh.beam.common.util.OSSFactory;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
@@ -21,18 +18,16 @@ import java.util.UUID;
 @RequestMapping("/file")
 public class FileController {
 
-    @SysLog(value = "对象存储文件上传")
     @ApiOperation(value = "对象存储文件上传")
     @PostMapping("/upload")
     public Object uploadFile(@RequestPart("file") MultipartFile file) {
-
         String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
         try {
             String url = OSSFactory.build().upload(file.getBytes(), fileName);
             return R.ok(url);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BeamException(RetEnum.UPLOAD_ERROR);
+            return R.fail("上传图片失败");
         }
     }
 }

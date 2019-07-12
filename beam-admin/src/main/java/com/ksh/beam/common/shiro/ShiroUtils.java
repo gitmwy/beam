@@ -79,13 +79,13 @@ public class ShiroUtils {
     }
 
     //获取验证码
-    public static String getKaptcha(String key) {
-        Object kaptcha = getSessionAttribute(key);
-        if (kaptcha == null) {
+    public static String getCaptcha(String key) {
+        Object captcha = getSessionAttribute(key);
+        if (captcha == null) {
             return "";
         }
         removeSessionAttr(key);
-        return kaptcha.toString();
+        return captcha.toString();
     }
 
     /**

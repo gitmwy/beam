@@ -126,8 +126,12 @@
             beforeUpload(){
                 this.uploadLoading = true;
             },
-            handleSuccess(){
-                this.getData();
+            handleSuccess(res){
+                if (res.error) {
+                    this.$message.error(res.msg);
+                } else {
+                    this.getData();
+                }
                 this.uploadLoading = false;
             },
             handleDelete(index, row) {

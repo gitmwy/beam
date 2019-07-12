@@ -4,7 +4,7 @@ import com.google.code.kaptcha.Constants;
 import com.ksh.beam.common.log.LogManager;
 import com.ksh.beam.common.log.factory.LogTaskFactory;
 import com.ksh.beam.common.shiro.ShiroUtils;
-import com.ksh.beam.common.util.KaptchaUtil;
+import com.ksh.beam.common.util.CaptchaUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.system.dto.LoginForm;
@@ -33,11 +33,11 @@ public class LoginController {
     @PostMapping(value = "/login")
     @ResponseBody
     public Object login(@RequestBody LoginForm loginForm) {
-        if (new KaptchaUtil().isKaptchaOnOff()) {
-            String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-            if (StringUtils.isBlank(kaptcha)) {
+        if (new CaptchaUtil().isCaptchaOnOff()) {
+            String captcha = ShiroUtils.getCaptcha(Constants.KAPTCHA_SESSION_KEY);
+            if (StringUtils.isBlank(captcha)) {
                 return R.fail("验证码已失效，请点击图片重新刷新");
-            } else if (!loginForm.getKaptcha().equalsIgnoreCase(kaptcha)) {
+            } else if (!loginForm.getCaptcha().equalsIgnoreCase(captcha)) {
                 return R.fail("验证码不正确");
             }
         }

@@ -156,7 +156,7 @@
             //导出数据
             exportData(){
                 this.exportLoading = true;
-                MeetingListApi.export(this.req,"会议数据" + new Date().getTime() + ".xls").then(()=>{
+                MeetingListApi.export(this.req, "会议数据" + new Date().getTime() + ".xls").then(()=>{
                     this.exportLoading = false;
                 });
             }
