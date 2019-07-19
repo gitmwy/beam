@@ -5,13 +5,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.constant.Constant;
+import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.UserMapper;
 import com.ksh.beam.system.dto.ChangePassowdForm;
+import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.User;
+import com.ksh.beam.system.service.DeptService;
 import com.ksh.beam.system.service.UserService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +34,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private RedisUtil redisUtil;
 
+    @Autowired
+    private DeptService deptService;
+
     @Override
     public IPage<Map> selectPageList(User user) {
+        Long userId = ShiroUtils.getUserId();
+        if(Constant.SUPER_ADMIN != userId){
+            //非超级管理员
+            user.setCompanyId(baseMapper.selectById(userId).getCompanyId());
+        }
         return baseMapper.selectPageList(new Page(user.getCurrentPage(), user.getPageSize()), user);
     }
 
@@ -40,6 +51,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public R saveUser(User user) {
         Assert.notNull(user.getAccount(), "登陆账号不能为空");
         Assert.notNull(user.getName(), "真实姓名不能为空");
+        //获取公司ID
+        List<Dept> depts = deptService.queryDeptNameById(user.getDeptId());
+        for(Dept dept : depts){
+            if(0 == dept.getParentId()){
+                user.setCompanyId(dept.getId());
+                break;
+            }
+        }
         if (ToolUtil.isNotEmpty(user.getId())) {
             if (user.getId() == Constant.SUPER_ADMIN && ShiroUtils.getUserId() != Constant.SUPER_ADMIN) {
                 return R.fail("不能修改超级管理员信息");
@@ -47,7 +66,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             User oldUser = this.getById(user.getId());
             Assert.notNull(oldUser, "找不到该用户");
             if (this.updateById(user)) {
-
                 //删除用户关联角色
                 baseMapper.delURByUserId(user.getId());
                 // 插入用户角色关系
@@ -142,5 +160,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public List<Long> queryAllMenuId(Long userId) {
         return baseMapper.queryAllMenuId(userId);
+    }
+
+    /**
+     * 编辑用户
+     */
+    @Override
+    public R editUser(Long userId) {
+        User user = baseMapper.selectById(userId);
+        if (ToolUtil.isEmpty(user)) {
+            return R.fail("找不到该用户");
+        }
+        List<Long> roleIds = ConstantFactory.me().getRoleIdsById(userId);
+        user.setRoleIds(roleIds);
+
+        //获取所在部门
+        List<Dept> depts = deptService.queryDeptNameById(user.getDeptId());
+        if (depts.size() > 0) {
+            StringBuilder deptName = new StringBuilder();
+            for(Dept dept : depts){
+                deptName.append(dept.getName()).append(">");
+            }
+            user.setDeptName(deptName.substring(0, deptName.lastIndexOf(">")));
+        }
+        return R.ok(user);
     }
 }

@@ -31,5 +31,5 @@ public interface MenuService extends IService<Menu> {
     /**
      * 获取树形菜单列表
      */
-    List<Map> treeMenuList(Long menuId, Menu menu);
+    List<Map> treeMenuList(Long userId, Menu menu);
 }

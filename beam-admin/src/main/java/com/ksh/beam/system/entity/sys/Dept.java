@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 部门管理
+ * 企业管理
  */
 @Data
 @NoArgsConstructor
@@ -21,7 +21,7 @@ public class Dept extends RestEntity<Long> {
     //主键id
     @TableId
     private Long id;
-    // 上级部门ID，一级部门为0
+    // 上级部门ID，一级为0
     @TableField(value = "parent_id")
     private Long parentId;
     // 部门名称
@@ -42,7 +42,6 @@ public class Dept extends RestEntity<Long> {
 
     @TableField(exist = false)
     private String pname;
-
 
     @Override
     public Long getId() {

@@ -3,6 +3,8 @@ package com.ksh.beam.system.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ksh.beam.common.constant.Constant;
+import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.common.utils.ToolUtil;
@@ -26,6 +28,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public IPage<Role> selectPageList(Role role) {
+        if(Constant.SUPER_ADMIN != ShiroUtils.getUserId()){
+            //非超级管理员
+            role.setAdminRole("1");
+        }
         return baseMapper.selectPageList(new Page(role.getCurrentPage(),role.getPageSize()),role);
     }
 
@@ -34,14 +40,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         if(ToolUtil.isEmpty(roleIds)||roleIds.length<=0){
             return R.fail("未选择删除的角色");
         }
-
         for(Long roleId:roleIds){
             Integer count = baseMapper.getCountByRoleId(roleId);
             if(count>0){
                 return R.fail("当前删除的角色，还有用户关联，请先取消其关联");
             }
         }
-
         this.removeByIds(Arrays.asList(roleIds));
         return R.ok();
     }

@@ -73,7 +73,7 @@ public class LogTaskFactory {
                 try {
                     operationLogMapper.insert(operationLog);
                 } catch (Exception e) {
-                    logger.error("创建业务日志异常!", e);
+                    logger.error("创建操作日志异常!", e);
                 }
             }
         };

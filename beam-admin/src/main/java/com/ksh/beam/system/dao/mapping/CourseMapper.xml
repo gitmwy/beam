@@ -7,9 +7,10 @@
     <resultMap type="com.ksh.beam.system.entity.meeting.Course" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="courseName" column="course_name"/>
-        <result property="courseUrl" column="course_url"/>
-        <result property="courseSize" column="course_size"/>
-        <result property="courseTimes" column="course_times"/>
+        <result property="fileName" column="file_name"/>
+        <result property="filePath" column="file_path"/>
+        <result property="fileSize" column="file_size"/>
+        <result property="downloadTimes" column="download_times"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
@@ -18,14 +19,4 @@
     <select id="selectPageList" resultType="com.ksh.beam.system.entity.meeting.Course">
         select m.* from meeting_course m order by m.create_time desc
     </select>
-
-    <insert id="saveCoursePerms" useGeneratedKeys="true" keyProperty="id">
-        insert into meeting_course (course_name,course_url,course_size,course_times,create_time,update_time)
-        values(#{courseName}, #{courseUrl}, #{courseSize}, #{courseTimes}, #{createTime}, #{updateTime})
-    </insert>
-
-    <!--    <delete id="delCoursePermById">-->
-    <!--        delete from meeting_course where id = #{courseId}-->
-    <!--    </delete>-->
-
 </mapper>

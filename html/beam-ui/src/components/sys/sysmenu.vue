@@ -9,6 +9,7 @@
             <div class="handle-box">
                 <el-input style="width: 150px" v-model="req.name" placeholder="请输入菜单名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
+                <el-button type="primary" icon="el-icon-refresh" @click="refresh">重置</el-button>
                 <el-button v-if="canDel" type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
                 <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
             </div>
@@ -27,22 +28,10 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="pagination">
-                <el-pagination
-                    background
-                    :page-sizes="[10, 20, 30, 40, 50]"
-                    :page-size="page.pageSize"
-                    :current-page="page.pageNo"
-                    @current-change="handleCurrentChange"
-                    @size-change="changePageSize"
-                    layout="prev, pager, next"
-                    :total="page.totalRows">
-                </el-pagination>
-            </div>
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="50%">
+        <el-dialog title="编辑(父菜单空，菜单名称即为顶级菜单)" :visible.sync="editVisible" width="50%">
             <el-form ref="menu" :model="menu" label-width="100px">
                 <el-form-item label="父菜单" prop="parentId">
                     <el-input @click.native="goToSelectMenu" readonly="readonly" v-model.trim="menu.pname"></el-input>
@@ -50,7 +39,7 @@
                 <el-form-item label="菜单名称" prop="name">
                     <el-input v-model.trim="menu.name"></el-input>
                 </el-form-item>
-                <el-form-item label="菜单URL" prop="url">
+                <el-form-item label="URL" prop="url">
                     <el-input v-model.trim="menu.url"></el-input>
                 </el-form-item>
                 <el-form-item label="授权标识" prop="perms">
@@ -61,7 +50,7 @@
                         <el-option v-for="item in menuType" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="菜单图标" prop="icon">
+                <el-form-item label="图标" prop="icon">
                     <el-input v-model.trim="menu.icon"></el-input>
                 </el-form-item>
                 <el-form-item label="排序" prop="orderNum">
@@ -76,7 +65,7 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog title="选择父级菜单" :modal="false" :visible.sync="selectMenuDialog" width="30%">
-            <el-tree :data="treeData" :props="defaultProps" :expand-on-click-node="false" @node-click="selectMenuClick"></el-tree>
+            <el-tree :data="dialogTreeData" :props="defaultProps" :expand-on-click-node="false" @node-click="selectMenuClick"></el-tree>
         </el-dialog>
 
         <!-- 删除提示框 -->
@@ -97,31 +86,20 @@
         data() {
             return {
                 selectMenuDialog: false,
-                tableData: [],
                 treeData: [],
-                page: {pageNo: 1, pageSize: 20},
+                dialogTreeData: [],
                 multipleSelection: [],
                 is_search: false,
                 editVisible: false,
                 delVisible: false,
                 menu: {},
-                idx: -1,
                 ids: [],
                 req: {},
-                accountInput: true,
                 loading: false,
                 menuType: [
                     {value: 0, name: "目录"},
                     {value: 1, name: "菜单"},
                     {value: 2, name: "按钮"}
-                ],
-                columns: [
-                    {text: '菜单名称', value: 'name', width: 200},
-                    {text: 'url', value: 'url'},
-                    {text: '权限标识', value: 'perms'},
-                    {text: '菜单类型', value: 'typeName'},
-                    {text: '图标', value: 'icon'},
-                    {text: '排序', value: 'orderNum'}
                 ],
                 defaultProps: {
                     children: 'children',
@@ -133,14 +111,18 @@
             }
         },
         created() {
-            this.getData();
             this.getTreeData();
+            this.getDialogTreeData();
             this.canEdit = this.getPerms().indexOf("sys:menu:edit")!==-1;
             this.canAdd = this.getPerms().indexOf("sys:menu:add")!==-1;
             this.canDel = this.getPerms().indexOf("sys:menu:del")!==-1;
         },
-        computed: {},
         methods: {
+            refresh() {
+                this.treeData = [];
+                this.req = [];
+                this.getTreeData();
+            },
             goToSelectMenu() {
                 this.selectMenuDialog = true;
             },
@@ -149,52 +131,28 @@
                 this.menu.parentId = data.id;
                 this.menu.pname = data.name;
             },
-            handleCurrentChange(val) {
-                this.page.pageNo = val;
-                this.getData();
-            },
-            changePageSize(value) {
-                this.page.pageNo = 1;
-                this.page.pageSize = value;
-                this.tableData = null;
-                this.getData()
-            },
             reload() {
-                this.page.pageNo = 1;
-                this.getData();
-                this.getTreeData()
+                this.getTreeData();
+                this.getDialogTreeData();
             },
-            getData() {
-                this.loading = true;
-                this.req.currentPage = this.page.pageNo;
-                this.req.pageSize = this.page.pageSize;
-                MenuApi.getData(this.req).then((res) => {
-                    this.loading = false;
+            getDialogTreeData() {
+                MenuApi.getTreeData().then((res) => {
                     if (res.error === false) {
-                        this.tableData = res.data.records ? res.data.records : [];
-                        this.page.pageNo = parseInt(res.data.current);
-                        this.page.totalRows = parseInt(res.data.total);
-                        this.tableData.forEach(item => {
-                            item.status = Boolean(item.status)
-                        })
-                    } else {
-                        this.$message.error(res.msg);
+                        this.dialogTreeData = res.data;
+                        this.wrapMenuType(this.dialogTreeData);
                     }
-                }, (err) => {
-                    this.loading = false;
-                    this.$message.error(err.msg);
                 });
             },
             getTreeData() {
                 this.loading = true;
                 MenuApi.getTreeData(this.req).then((res) => {
-                    this.loading = false;
                     if (res.error === false) {
                         this.treeData = res.data;
                         this.wrapMenuType(this.treeData);
                     } else {
                         this.$message.error(res.msg);
                     }
+                    this.loading = false;
                 }, (err) => {
                     this.loading = false;
                     this.$message.error(err.msg);
@@ -202,7 +160,8 @@
             },
             search() {
                 this.is_search = true;
-                this.getData();
+                this.treeData = [];
+                this.getTreeData();
             },
             handleAdd() {
                 this.menu = {};
@@ -241,7 +200,6 @@
             },
             // 保存编辑
             saveEdit() {
-                // this.$set(this.tableData, this.idx, this.menu);
                 this.loading = true;
                 MenuApi.add(this.menu).then((res) => {
                     this.loading = false;

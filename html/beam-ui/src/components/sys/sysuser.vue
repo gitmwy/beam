@@ -8,13 +8,14 @@
         <div class="container">
             <el-container>
                 <el-aside width="150px">
-                    <el-tree :data="deptTreeData" :props="defaultProps" default-expand-all :expand-on-click-node="false" @node-click="leftDeptClick"></el-tree>
+                    <el-tree :data="deptTreeData" :props="defaultProps" :expand-on-click-node="false" @node-click="leftDeptClick"></el-tree>
                 </el-aside>
                 <el-container>
                     <el-header>
                             <el-input style="width: 120px" v-model="req.account" placeholder="请输入账号"></el-input>
                             <el-input style="width: 120px" v-model="req.name" placeholder="请输入姓名"></el-input>
                             <el-button type="primary" icon="search" @click="search">搜索</el-button>
+                            <el-button type="primary" icon="el-icon-refresh" @click="refresh">重置</el-button>
                             <el-button v-if="canDel" type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
                             <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增用户</el-button>
                     </el-header>
@@ -30,9 +31,11 @@
                             <el-table-column prop="name" align="center" label="姓名"></el-table-column>
                             <el-table-column prop="sexName" align="center" label="性别"></el-table-column>
                             <el-table-column prop="deptName" align="center" label="部门名称"></el-table-column>
+                            <el-table-column prop="companyName" align="center" label="公司名称" :show-overflow-tooltip="true"></el-table-column>
                             <el-table-column prop="email" align="center" label="邮箱" width="200"></el-table-column>
                             <el-table-column prop="phone" align="center" label="手机号" width="150"></el-table-column>
-                            <el-table-column prop="birthday" align="center" label="出生日期" width="150" sortable></el-table-column>
+                            <el-table-column prop="sex" align="center" label="性别"></el-table-column>
+                            <el-table-column prop="birthday" align="center" label="出生日期" width="150"></el-table-column>
                             <el-table-column width="160" label="是否可用" align="center">
                                 <template slot-scope="scope">
                                     <el-switch v-model="scope.row.status" :active-text="scope.row.status ? '可用' : '不可用'" @change="changeStatus(scope.row.id, scope.row.status)"></el-switch>
@@ -64,7 +67,7 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="50%">
+        <el-dialog title="编辑" :visible.sync="editVisible" width="50%" :close-on-press-escape="false"  @close="close">
             <el-form ref="form" :model="form" :rules="rules" label-width="100px">
                 <el-upload
                     label=" 头像"
@@ -87,7 +90,7 @@
                         <el-option v-for="item in roleList" :key="item.id" :label="item.roleName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item  label="部门名称">
+                <el-form-item  label="部门名称" v-if="deptFlag">
                     <el-input @click.native="goToSelectDept" readonly="readonly" v-model="form.deptName"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email">
@@ -95,6 +98,9 @@
                 </el-form-item>
                 <el-form-item label="手机号" prop="phone">
                     <el-input maxlength="11" v-model="form.phone"></el-input>
+                </el-form-item>
+                <el-form-item label="性别" prop="sex">
+                    <el-switch v-model="form.sex" :active-text="form.sex === 1 ? '男' : '女'" :active-value="1" :inactive-value="2" inactive-color="#ff4949"></el-switch>
                 </el-form-item>
                 <el-form-item label="出生日期">
                     <el-date-picker type="date" placeholder="选择日期" v-model="form.birthday" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
@@ -112,7 +118,7 @@
 
         <!-- 编辑弹出框 -->
         <el-dialog title="选择部门" :modal="false" :visible.sync="selectDeptDialog" width="30%">
-            <el-tree :data="deptTreeData" :props="defaultProps" default-expand-all :expand-on-click-node="false" @node-click="selectDeptClick"></el-tree>
+            <el-tree :data="deptTreeData" :props="defaultProps" :expand-on-click-node="false" @node-click="selectDeptClick"></el-tree>
         </el-dialog>
 
         <!-- 删除提示框 -->
@@ -175,6 +181,7 @@
                 is_search: false,
                 editVisible: false,
                 delVisible: false,
+                deptFlag: true,
                 form: {
                     name: '',
                     account: '',
@@ -182,6 +189,7 @@
                     email: '',
                     phone: '',
                     deptId:'',
+                    sex:'',
                     roleIds:[]
                 },
                 rules: {
@@ -219,6 +227,15 @@
         },
         computed: {},
         methods: {
+            close(){
+                this.deptFlag = true;
+            },
+            // 重置查询条件
+            refresh() {
+                this.req = [];
+                this.getData();
+                this.getDeptTreeData();
+            },
             getRoleList() {
                 SysUserApi.getRoleList().then((res) => {
                     if (res.error === false) {
@@ -237,7 +254,6 @@
             selectDeptClick(data){
                 this.selectDeptDialog = false;
                 this.form.deptId=data.id;
-                console.log(data);
                 this.form.deptName=data.name;
             },
             leftDeptClick(data){
@@ -344,8 +360,11 @@
                 SysUserApi.edit({userId:row.id}).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
+                        if("1" === res.data.id){
+                                this.deptFlag = false;
+                        }
                         this.form = res.data;
-                        this.form.status = Boolean(this.form.status)
+                        this.form.status = Boolean(this.form.status);
                     } else {
                         this.$message.error(res.msg);
                     }
@@ -440,7 +459,6 @@
             }
         }
     }
-
 </script>
 
 <style scoped>

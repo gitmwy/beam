@@ -10,5 +10,6 @@ public class LoginForm {
 
     private String username;
     private String password;
-    private String captcha;
+    private String captcha; //图形验证
+    private boolean confirmSuccess; //滑动验证
 }

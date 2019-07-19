@@ -18,9 +18,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -44,10 +44,10 @@ public class FileUtil {
      */
     public static void exportFile(List<Map<String, Object>> list,
                                   LinkedHashMap<String, String> fieldMap,
-                                  String filName,
+                                  String fileName,
                                   HSSFWorkbook workbook,
                                   ExcelEntity excelEntity,
-                                  HttpServletResponse response) throws IOException {
+                                  HttpServletResponse response) throws Exception {
 
         //Excel文档信息
         workbook.createInformationProperties();
@@ -83,7 +83,7 @@ public class FileUtil {
 
         //设置新工作表1
         int rowIndex = 0;
-        HSSFSheet sheet = workbook.createSheet(filName + "1");
+        HSSFSheet sheet = workbook.createSheet(fileName + "1");
         HSSFRow row = sheet.createRow(0);
         row.setHeight((short) (16.5 * 20));//设置行高
         //设置表头
@@ -97,7 +97,7 @@ public class FileUtil {
         for (int i = 0; i < list.size(); i++) {
             if (rowIndex > 99999) {
                 //设置新工作表2
-                sheet = workbook.createSheet(filName + "2");
+                sheet = workbook.createSheet(fileName + "2");
                 row = sheet.createRow(0);
                 row.setHeight((short) (16.5 * 20));//设置行高
                 //设置表头
@@ -150,9 +150,12 @@ public class FileUtil {
             // 解决自动设置列宽中文失效的问题
             sheet.setColumnWidth(i, sheet.getColumnWidth(i) * 17 / 10);
         }
-        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        //设置响应
+        response.reset();
+        response.setContentType("application/x-download;charset=utf-8");
+        response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName + ".xls", "UTF-8"));
+        response.setHeader("Pragma","No-cache");
         OutputStream os = response.getOutputStream();
-        response.setHeader("Content-disposition", "attachment;filename=" + filName);
         workbook.write(os);
         os.flush();
         os.close();

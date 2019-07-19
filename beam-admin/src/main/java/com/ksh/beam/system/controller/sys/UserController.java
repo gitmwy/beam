@@ -1,22 +1,22 @@
 package com.ksh.beam.system.controller.sys;
 
 import com.ksh.beam.common.base.controller.BaseController;
-import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dto.ChangePassowdForm;
-import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.User;
-import com.ksh.beam.system.service.DeptService;
 import com.ksh.beam.system.service.UserService;
 import com.ksh.beam.system.wrapper.UserWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 管理员表
@@ -28,9 +28,6 @@ public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private DeptService deptService;
 
     @ApiOperation(value = "分页列表")
     @GetMapping(value = "/page/list")
@@ -62,17 +59,7 @@ public class UserController extends BaseController {
     @ApiOperation("编辑")
     @GetMapping(value = "/edit")
     public R edit(@RequestParam Long userId) {
-        User user = userService.getById(userId);
-        if (ToolUtil.isEmpty(user)) {
-            return R.fail("找不到该用户");
-        }
-        List<Long> roleIds = ConstantFactory.me().getRoleIdsById(userId);
-        user.setRoleIds(roleIds);
-        Dept dept = deptService.getById(user.getDeptId());
-        if (ToolUtil.isNotEmpty(dept)) {
-            user.setDeptName(dept.getName());
-        }
-        return R.ok(user);
+        return userService.editUser(userId);
     }
 
     @ApiOperation("重置用户密码")

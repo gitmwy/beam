@@ -52,7 +52,7 @@ export default new Router({
                 {
                     path: '/sysdept',
                     component: resolve => require(['../components/sys/sysdept.vue'], resolve),
-                    meta: {title: '部门管理', permission: true, perms: "sys:dept:list"}
+                    meta: {title: '企业管理', permission: true, perms: "sys:dept:list"}
                 },
                 {
                     path: '/schedulejob',
@@ -72,7 +72,7 @@ export default new Router({
                 {
                     path: '/operationlog',
                     component: resolve => require(['../components/sys/operationlog.vue'], resolve),
-                    meta: {title: '业务日志', permission: true, perms: "sys:operationLog:list"}
+                    meta: {title: '操作日志', permission: true, perms: "sys:operationLog:list"}
                 },
                 {
                     path: '/meetinglist',

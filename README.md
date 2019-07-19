@@ -1,16 +1,7 @@
 #### 项目介绍
 
 - Beam基于SpringBoot 2，致力于做更简洁的后台管理系统，一款快速开发的脚手架。springmvc + shiro + MyBatis-Plus + vue。
-- 基础模块：
-  -  **用户管理**
-  -  **角色管理** 
-  -  **部门管理**
-  -  **菜单模块**
-  -  **定时任务**
-  -  **字典管理**
-  -  **登陆日志**
-  -  **业务日志**
-  
+
 - 项目特点：
   - **持久层：mybatis持久化，使用MyBatis-Plus优化，减少sql开发量；Transtraction注解事务。**
   - **使用SpringBoot自动装配，MyBatis-Plus配置文件提为默认配置放在了common包的default-config.properties中，

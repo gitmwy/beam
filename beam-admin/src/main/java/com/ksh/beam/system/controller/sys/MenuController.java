@@ -1,8 +1,6 @@
 package com.ksh.beam.system.controller.sys;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ksh.beam.common.base.controller.BaseController;
 import com.ksh.beam.common.shiro.IShiro;
 import com.ksh.beam.common.shiro.ShiroUtils;
@@ -12,7 +10,6 @@ import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.entity.sys.Menu;
 import com.ksh.beam.system.service.MenuService;
-import com.ksh.beam.system.wrapper.MenuWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -25,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 菜单管理
@@ -51,7 +46,7 @@ public class MenuController extends BaseController {
     @GetMapping("/tree/menu")
     @RequiresPermissions("sys:menu:list")
     public R treeMenu(Menu menu) {
-        return R.ok(menuService.treeMenuList(0L, menu));
+        return R.ok(menuService.treeMenuList(ShiroUtils.getUserId(), menu));
     }
 
     /**
@@ -60,8 +55,7 @@ public class MenuController extends BaseController {
     @ApiOperation(value = "导航菜单")
     @GetMapping("/nav")
     public R nav() {
-        List<Map> menuList = menuService.getUserMenuList(ShiroUtils.getUserId());
-        return R.ok(menuList);
+        return R.ok(menuService.getUserMenuList(ShiroUtils.getUserId()));
     }
 
     /**
@@ -71,17 +65,6 @@ public class MenuController extends BaseController {
     @GetMapping("/button")
     public R button() {
         return R.ok(shiroFactory.findPermissionsByUserId(ShiroUtils.getUserId()));
-    }
-
-    /**
-     * 分页列表
-     */
-    @ApiOperation("分页列表")
-    @GetMapping(value = "/page/list")
-    public R pageList(Menu menu) {
-        QueryWrapper qw = new QueryWrapper<Menu>();
-        IPage<Map> page = menuService.page(new Page(menu.getCurrentPage(), menu.getPageSize()), qw);
-        return R.ok(new MenuWrapper(page).wrap());
     }
 
     @ApiOperation("新增")

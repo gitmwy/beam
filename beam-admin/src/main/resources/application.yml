@@ -38,7 +38,7 @@ ftp:
   host: 152.136.219.223
   port: 21
   username: uftp
-  password: 123456
+  password: qweasdzxc
   img-path: img/
   video-path:  video/
   course-path: course/

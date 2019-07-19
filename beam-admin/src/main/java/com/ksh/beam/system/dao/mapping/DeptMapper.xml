@@ -13,40 +13,57 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-		            a.`id` AS "id", 
-                    a.`parent_id` AS "parentId", 
-                    a.`name` AS "name", 
-                    a.`order_num` AS "orderNum", 
-                    a.`del_flag` AS "delFlag",
-                    a.`create_time` AS "createTime",
-                    a.`update_time` AS "updateTime"
-            </sql>
+            a.`id` AS "id",
+            a.`parent_id` AS "parentId",
+            a.`name` AS "name",
+            a.`order_num` AS "orderNum",
+            a.`del_flag` AS "delFlag",
+            a.`create_time` AS "createTime",
+            a.`update_time` AS "updateTime"
+    </sql>
 
+    <!--    查询条件-->
+    <sql id="Where_List">
+        <if test="dept.id != null">
+            and a.id = #{dept.id}
+        </if>
+        <if test="dept.parentId != null">
+            and a.parent_id = #{dept.parentId}
+        </if>
+        <if test="dept.name != null and dept.name != ''">
+            and a.name like concat("%",#{dept.name},"%")
+        </if>
+    </sql>
 
-    <select id="selectPageList" resultType="com.ksh.beam.system.entity.sys.Dept">
-        select
-        <include refid="Base_Column_List"/>
-        from sys_dept a
-        <where>
-            <if test="dept.parentId != null and dept.parentId != ''">
-                a.parent_id = #{dept.parentId}
-            </if>
-            <if test="dept.name != null and dept.name != ''">
-                and a.name = #{dept.name}
-            </if>
-            <if test="dept.orderNum != null and dept.orderNum != ''">
-                and a.order_num = #{dept.orderNum}
-            </if>
-            <if test="dept.delFlag != null and dept.delFlag != ''">
-                and a.del_flag = #{dept.delFlag}
-            </if>
-
-        </where>
-    </select>
     <select id="queryListParentId" resultType="com.ksh.beam.system.entity.sys.Dept">
         select <include refid="Base_Column_List" />
-        from sys_dept a where a.parent_id = #{parentId} and a.del_flag = 0  order by a.order_num asc
+        from sys_dept a where a.parent_id = #{parentId} and a.del_flag = 0 order by a.order_num asc
     </select>
 
+    <select id="queryListByDept" resultType="com.ksh.beam.system.entity.sys.Dept">
+        select <include refid="Base_Column_List" />
+        from sys_dept a
+        <where>
+            a.del_flag = 0
+            <include refid="Where_List"/>
+        </where>
+          order by a.order_num asc
+    </select>
+
+    <select id="queryDeptNameById" resultType="com.ksh.beam.system.entity.sys.Dept">
+    <![CDATA[
+        SELECT T2.id, T2.parent_id, T2.name FROM (
+            SELECT
+                @r AS _id,
+                (SELECT @r := parent_id FROM sys_dept WHERE id = _id) AS parent_id,
+                @l := @l + 1 AS lvl
+                FROM (SELECT @r := #{id}, @l := 0) vars,sys_dept h
+                WHERE @r <> 0
+        ) T1
+        JOIN sys_dept T2 ON T1._id = T2.id
+        WHERE T2.del_flag = 0
+        ORDER BY T1.lvl DESC
+        ]]>
+    </select>
 
 </mapper>

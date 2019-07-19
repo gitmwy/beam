@@ -9,6 +9,7 @@
             <div class="handle-box">
                 <el-input style="width: 130px" v-model="req.roleName" placeholder="请输入角色名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
+                <el-button type="primary" icon="el-icon-refresh" @click="refresh">重置</el-button>
                 <el-button v-if="canDel" type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
                 <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
             </div>
@@ -112,8 +113,11 @@
             this.canDel = this.getPerms().indexOf("sys:role:del")!==-1;
             this.canConfigPerm = this.getPerms().indexOf("sys:role:configPerm")!==-1;
         },
-        computed: {},
         methods: {
+            refresh() {
+                this.req = [];
+                this.getData();
+            },
             saveMuenPerms(){
                 this.checkMenuData = [];
                 this.checkMenuData = this.checkMenuData.concat(this.$refs.treeMenu.getCheckedKeys());

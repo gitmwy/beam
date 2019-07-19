@@ -71,6 +71,7 @@ public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public R notFount(RuntimeException e) {
+        e.printStackTrace();
         LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroUtils.getUserId(), e.getMessage()));
         return R.fail(RetEnum.SERVER_EXCEPTION.getRet(), RetEnum.SERVER_EXCEPTION.getMsg());
     }

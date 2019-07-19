@@ -1,6 +1,8 @@
 package com.ksh.beam.system.controller.sys;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ksh.beam.common.constant.Constant;
+import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.Role;
 import com.ksh.beam.system.service.RoleService;
@@ -8,7 +10,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 角色
@@ -30,8 +37,12 @@ public class RoleController {
 
     @ApiOperation(value = "列表")
     @GetMapping(value = "/list")
-    public Object list(Role role) {
+    public Object list() {
         QueryWrapper qw = new QueryWrapper<Role>();
+        if(1 != ShiroUtils.getUserId()){
+            //非超级管理员
+            qw.ne("id", Constant.SUPER_ADMIN);
+        }
         return R.ok(roleService.list(qw));
     }
 

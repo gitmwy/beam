@@ -23,14 +23,17 @@ public class Course extends RestEntity<Long> {
     @TableField(value = "course_name")
     private String courseName;
 
-    @TableField(value = "course_url")
-    private String courseUrl;
+    @TableField(value = "file_name")
+    private String fileName;
 
-    @TableField(value = "course_size")
-    private String courseSize;
+    @TableField(value = "file_path")
+    private String filePath;
 
-    @TableField(value = "course_times")
-    private Integer courseTimes;
+    @TableField(value = "file_size")
+    private String fileSize;
+
+    @TableField(value = "download_times")
+    private Integer downloadTimes;
 
     @Override
     protected Serializable pkVal() {

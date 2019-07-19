@@ -2,9 +2,6 @@ package com.ksh.beam.sign.converter;
 
 /**
  * 基础的传输bean
- *
- * @author fengshuonan
- * @date 2017-08-25 15:52
  */
 public class BaseTransferEntity {
 

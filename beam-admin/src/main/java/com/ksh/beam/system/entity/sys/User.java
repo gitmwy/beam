@@ -65,13 +65,20 @@ public class User extends DataEntity<Long> {
 	 */
 	private String phone;
 	/**
-	 * 状态(1：启用  2：冻结  3：删除）
+	 * 状态(1：可用  0：不可用 ）
 	 */
 	private Integer status;
 	/**
 	 * 保留字段
 	 */
 	private Integer version;
+	/**
+	 * 公司ID
+	 */
+	private Long companyId;
+
+	@TableField(exist = false)
+	private String companyName;
 
 	@TableField(exist = false)
 	private String deptName;

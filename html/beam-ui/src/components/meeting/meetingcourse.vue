@@ -1,5 +1,5 @@
 <template>
-    <div class="table" v-loading="uploadLoading">
+    <div class="table" v-loading="canLoading">
         <div class="crumbs">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item>会议</el-breadcrumb-item>
@@ -15,20 +15,20 @@
                         :data="data"
                         :show-file-list="false"
                         :before-upload="beforeUpload"
-                        :on-success="handleSuccess">
+                        :on-success="handleSuccess"
+                        :on-error="handleError">
                     <el-button icon="el-icon-upload2" type="primary" style="float: left">上传课件</el-button>
                 </el-upload>
             </div>
             <el-table :data="tableData" v-loading="loading" class="table">
                 <el-table-column label="#" align="center" prop="id" width="100"/>
                 <el-table-column label="课件" align="left" prop="courseName" width="700"/>
-                <el-table-column label="大小" align="center" prop="courseSize" width="100"/>
-                <el-table-column label="次数" align="center" prop="courseTimes" width="100"/>
-                <el-table-column label="路径" align="center" prop="courseUrl" v-if="urlHidden"/>
+                <el-table-column label="大小" align="center" prop="fileSize" width="100"/>
+                <el-table-column label="次数" align="center" prop="downloadTimes" width="100"/>
                 <el-table-column label="操作" align="center" prop="operation">
                     <template slot-scope="scope">
                         <el-tooltip effect="dark" content="下载" placement="top-start">
-                            <el-button v-if="canDownload" type="text" size="medium" class="my-icon-download"/>
+                            <el-button v-if="canDownload" type="text" size="medium" class="my-icon-download" @click="handleDownload(scope.$index, scope.row)"/>
                         </el-tooltip>
                         <el-tooltip effect="dark" content="删除" placement="top-start">
                             <el-button v-if="canDel" type="text" size="medium" icon="el-icon-delete" @click="handleDelete(scope.$index, scope.row)" />
@@ -54,9 +54,9 @@
             <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
                 <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteRow">确 定</el-button>
-            </span>
+                    <el-button @click="delVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="deleteRow">确 定</el-button>
+                </span>
             </el-dialog>
         </div>
     </div>
@@ -75,8 +75,7 @@
                 page: {pageNo: 1, pageSize: 5},
                 data: {fileType: "img"},
                 ids: [],
-                urlHidden: false,
-                uploadLoading: false,
+                canLoading: false,
                 delVisible: false,
                 canUpload: true,
                 canDownload: true,
@@ -124,31 +123,46 @@
                 });
             },
             beforeUpload(){
-                this.uploadLoading = true;
+                this.canLoading = true;
             },
             handleSuccess(res){
-                if (res.error) {
-                    this.$message.error(res.msg);
+                if (res.error === false) {
+                    this.$message.success(res.msg);
+                    this.reload();
                 } else {
-                    this.getData();
+                    this.$message.error(res.msg);
                 }
-                this.uploadLoading = false;
+                this.canLoading = false;
+            },
+            handleError(){
+                this.$message.error("上传课件失败，请稍后再试");
+                this.canLoading = false;
             },
             handleDelete(index, row) {
-                // this.ids.push(row);
-                // this.ids = JSON.stringify(this.ids);// 后台list接收
-                this.ids = row;
+                this.ids = [row.id];
                 this.delVisible = true;
             },
+            handleDownload(index, row){
+                this.canLoading = true;
+                MeetingCourseApi.download({id:row.id}).then(() => {
+                    this.canLoading = false;
+                });
+            },
+            reload(){
+                this.getData();
+            },
             deleteRow() {
+                this.canLoading = true;
                 MeetingCourseApi.del(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
-                        this.reload()
+                        this.reload();
                     } else {
                         this.$message.error(res.msg);
                     }
+                    this.canLoading = false
                 }, (err) => {
+                    this.canLoading = false;
                     this.$message.error(err.msg);
                 });
                 this.delVisible = false;

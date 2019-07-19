@@ -7,14 +7,13 @@ import com.ksh.beam.system.dto.ChangePassowdForm;
 import com.ksh.beam.system.entity.sys.User;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 管理员表
  */
 public interface UserService extends ICommonService<User> {
 
-    IPage<Map> selectPageList(User user);
+    IPage selectPageList(User user);
 
     R saveUser(User user);
 
@@ -30,4 +29,6 @@ public interface UserService extends ICommonService<User> {
      * 查询用户的所有菜单ID
      */
     List<Long> queryAllMenuId(Long userId);
+
+    R editUser(Long userId);
 }

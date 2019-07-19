@@ -30,6 +30,10 @@ public class Role extends RestEntity<Long> {
     @TableField(exist = false)
     private Long[] menuIds;
 
+    //1：超级管理员，否则为空
+    @TableField(exist = false)
+    private String adminRole;
+
     @Override
     public Long getId() {
         return id;

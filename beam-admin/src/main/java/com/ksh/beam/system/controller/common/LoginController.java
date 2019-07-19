@@ -1,14 +1,13 @@
 package com.ksh.beam.system.controller.common;
 
-import com.google.code.kaptcha.Constants;
 import com.ksh.beam.common.log.LogManager;
 import com.ksh.beam.common.log.factory.LogTaskFactory;
+import com.ksh.beam.common.log.state.LogSucceed;
 import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.util.CaptchaUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.system.dto.LoginForm;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -34,35 +33,34 @@ public class LoginController {
     @ResponseBody
     public Object login(@RequestBody LoginForm loginForm) {
         if (new CaptchaUtil().isCaptchaOnOff()) {
-            String captcha = ShiroUtils.getCaptcha(Constants.KAPTCHA_SESSION_KEY);
-            if (StringUtils.isBlank(captcha)) {
-                return R.fail("验证码已失效，请点击图片重新刷新");
-            } else if (!loginForm.getCaptcha().equalsIgnoreCase(captcha)) {
-                return R.fail("验证码不正确");
+//            String captcha = ShiroUtils.getCaptcha(Constants.KAPTCHA_SESSION_KEY);
+//            if (StringUtils.isBlank(captcha)) {
+//                return R.fail("验证码已失效，请点击图片重新刷新");
+//            } else if (!loginForm.getCaptcha().equalsIgnoreCase(captcha)) {
+//                return R.fail("验证码不正确");
+//            }
+            if (!loginForm.isConfirmSuccess()) {
+                return R.fail("请拖动滑块完成验证");
             }
         }
-        String msg = "";
         try {
             Subject subject = ShiroUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(loginForm.getUsername(), loginForm.getPassword());
             subject.login(token);
             LogManager.me().executeLog(LogTaskFactory.loginSuccessLog(ShiroUtils.getUserId(), getIp()));
         } catch (UnknownAccountException e) {
-            msg = e.getMessage();
-            return R.fail(msg);
+            e.getStackTrace();
+            LogManager.me().executeLog(LogTaskFactory.loginFailLog(loginForm.getUsername(), e.getMessage(), getIp()));
+            return R.fail(LogSucceed.FAIL.getMessage());
         } catch (IncorrectCredentialsException e) {
-            msg = "账号或者密码不正确";
-            return R.fail(msg);
+            LogManager.me().executeLog(LogTaskFactory.loginFailLog(loginForm.getUsername(), "账号或者密码不正确", getIp()));
+            return R.fail("账号或者密码不正确");
         } catch (LockedAccountException e) {
-            msg = "账号已被锁定，请联系管理员";
-            return R.fail(msg);
+            LogManager.me().executeLog(LogTaskFactory.loginFailLog(loginForm.getUsername(), "账号已被锁定，请联系管理员", getIp()));
+            return R.fail("账号已被锁定，请联系管理员");
         } catch (AuthenticationException e) {
-            msg = "账户验证失败";
-            return R.fail(msg);
-        }finally {
-            if(StringUtils.isNotBlank(msg)){
-                LogManager.me().executeLog(LogTaskFactory.loginFailLog(loginForm.getUsername(), msg, getIp()));
-            }
+            LogManager.me().executeLog(LogTaskFactory.loginFailLog(loginForm.getUsername(), "账户验证失败", getIp()));
+            return R.fail("账户验证失败");
         }
         return R.ok(ShiroUtils.getUserEntity());
     }

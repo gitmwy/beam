@@ -6,5 +6,8 @@ export default {
     },
     del: params =>{
         return http.post("/meeting/course/del", params)
+    },
+    download: (params) => {
+        return http.downloadFile("/meeting/course/download", params)
     }
 }

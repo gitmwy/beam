@@ -2,7 +2,7 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>业务日志</el-breadcrumb-item>
+                <el-breadcrumb-item>操作日志</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
@@ -70,7 +70,6 @@
             this.getData();
             this.canClear = this.getPerms().indexOf("sys:operationLog:clear")!==-1;
         },
-        computed: {},
         methods: {
             handleCurrentChange(val) {
                 this.page.pageNo = val;
@@ -110,14 +109,6 @@
             search() {
                 this.is_search = true;
                 this.getData();
-            },
-            delAll() {
-                this.delVisible = true;
-                this.ids = [];
-                const length = this.multipleSelection.length;
-                for (let i = 0; i < length; i++) {
-                    this.ids.push(this.multipleSelection[i].id);
-                }
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;

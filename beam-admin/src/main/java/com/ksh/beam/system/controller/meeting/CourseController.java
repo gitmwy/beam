@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 会议课件
  */
@@ -50,7 +52,15 @@ public class CourseController {
     @ApiOperation("删除")
     @PostMapping(value = "/del")
     @RequiresPermissions("meeting:course:del")
-    public R del(@RequestBody Course courses) {
-        return courseService.deleteCourse(courses);
+    public R del(@RequestBody Long[] userIds) {
+        return courseService.deleteCourse(userIds);
+    }
+
+    @SysLog(value = "会议课件下载")
+    @ApiOperation(value = "下载")
+    @RequiresPermissions("meeting:course:download")
+    @GetMapping("/download")
+    public void download(@RequestParam Long id, HttpServletResponse response) {
+        courseService.downloadFile(id, response);
     }
 }

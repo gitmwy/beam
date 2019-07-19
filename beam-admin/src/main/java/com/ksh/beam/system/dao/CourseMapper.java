@@ -15,9 +15,4 @@ public interface CourseMapper extends BaseMapper<Course> {
      *分页
      */
     IPage<Course> selectPageList(Page page, @Param("course") Course course);
-
-    /**
-     * 保存上传课件数据
-     */
-    void saveCoursePerms(@Param("course") Course course);
 }

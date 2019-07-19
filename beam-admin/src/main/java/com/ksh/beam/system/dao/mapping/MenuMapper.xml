@@ -20,18 +20,16 @@
         <result property="delFlag" column="del_flag"/>
     </resultMap>
 
-
-
     <sql id="Nav_Column_List">
-               id,
-               parent_id as parentId,
-               name,
-               url,
-               type,
-               icon,
-               order_num as orderNum,
-               perms
-    	</sql>
+       id,
+       parent_id as parentId,
+       name,
+       url,
+       type,
+       icon,
+       order_num as orderNum,
+       perms
+    </sql>
 
     <select id="queryListParentId" resultType="java.util.Map">
 		select <include refid="Nav_Column_List" />

@@ -1,4 +1,5 @@
 package com.ksh.beam.common.base.warpper;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
@@ -10,13 +11,10 @@ import java.util.Map;
 
 /**
  * 控制器查询结果的包装类基类
- *
- * @author fengshuonan
- * @date 2017年2月13日 下午10:49:36
  */
 public abstract class BaseControllerWrapper {
 
-    public Object obj = null;
+    public Object obj;
 
     public BaseControllerWrapper(Object obj) {
         this.obj = obj;
@@ -63,7 +61,7 @@ public abstract class BaseControllerWrapper {
     }
 
     public static Map<String, Object> beanToMap(Object obj) {
-        Map<String, Object> params = new HashMap<String, Object>(0);
+        Map<String, Object> params = new HashMap<>(0);
         try {
             PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
             PropertyDescriptor[] descriptors = propertyUtilsBean.getPropertyDescriptors(obj);

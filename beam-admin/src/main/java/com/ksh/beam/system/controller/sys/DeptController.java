@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ksh.beam.common.base.controller.BaseController;
+import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.entity.sys.Dept;
+import com.ksh.beam.system.entity.sys.User;
 import com.ksh.beam.system.service.DeptService;
+import com.ksh.beam.system.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -22,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 
 /**
- * 部门管理
+ * 企业管理
  */
 @Api(value = "DeptController", tags = {"Dept接口"})
 @RequestMapping("/sys/dept")
@@ -31,6 +34,9 @@ public class DeptController extends BaseController {
 
     @Autowired
     private DeptService deptService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 分页列表
@@ -47,6 +53,9 @@ public class DeptController extends BaseController {
     @PostMapping(value = "/add")
     @RequiresPermissions("sys:dept:add")
     public R add(@RequestBody Dept dept) {
+        if (ToolUtil.isEmpty(dept.getParentId())) {
+            dept.setParentId(0L);
+        }
         deptService.saveOrUpdate(dept);
         return R.ok();
     }
@@ -65,11 +74,12 @@ public class DeptController extends BaseController {
     /**
      * 树形
      */
-    @ApiOperation(value = "树形部门")
+    @ApiOperation(value = "树形企业部门")
     @RequiresPermissions("sys:dept:list")
     @GetMapping("/tree/dept")
     public R treeDept(Dept dept) {
-        return R.ok(deptService.treeDeptList(0L, dept));
+        User user = userService.getById(ShiroUtils.getUserId());
+        return R.ok(deptService.treeDeptList(user, dept));
     }
 
     @ApiOperation("编辑")
@@ -78,7 +88,7 @@ public class DeptController extends BaseController {
     public R edit(@RequestParam Long deptId) {
         Dept dept = deptService.getById(deptId);
         if (ToolUtil.isEmpty(dept)) {
-            return R.fail("找不到该部门");
+            return R.fail("找不到该企业部门");
         }
         if (dept.getParentId() != 0) {
             Dept pdept = deptService.getById(dept.getParentId());
