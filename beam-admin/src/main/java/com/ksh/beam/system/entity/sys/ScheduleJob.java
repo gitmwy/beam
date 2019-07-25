@@ -6,6 +6,8 @@ import com.ksh.beam.common.base.entity.RestEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -32,11 +34,13 @@ public class ScheduleJob extends RestEntity<Long> {
 	/**
 	 * spring bean名称
 	 */
+	@NotBlank(message = "bean名称不能为空")
 	private String beanName;
 	
 	/**
 	 * 方法名
 	 */
+	@NotBlank(message = "方法名不能为空")
 	private String methodName;
 	
 	/**
@@ -47,11 +51,13 @@ public class ScheduleJob extends RestEntity<Long> {
 	/**
 	 * cron表达式
 	 */
+	@NotBlank(message = "cron表达式不能为空")
 	private String cronExpression;
 
 	/**
 	 * 任务状态
 	 */
+	@NotNull(message = "任务状态不能为空")
 	private Integer status;
 
 	/**

@@ -60,8 +60,7 @@ public class UserRealm extends AuthorizingRealm {
 
 		ShiroUser shiroUser = shiroFactory.shiroUser(user);
 
-		SimpleAuthenticationInfo info = shiroFactory.info(shiroUser,user,getName());
-		return info;
+		return shiroFactory.info(shiroUser,user,getName());
 	}
 
 	@Override

@@ -27,10 +27,10 @@
                 <el-table-column label="次数" align="center" prop="downloadTimes" width="100"/>
                 <el-table-column label="操作" align="center" prop="operation">
                     <template slot-scope="scope">
-                        <el-tooltip effect="dark" content="下载" placement="top-start">
+                        <el-tooltip effect="dark" content="下载" placement="left">
                             <el-button v-if="canDownload" type="text" size="medium" class="my-icon-download" @click="handleDownload(scope.$index, scope.row)"/>
                         </el-tooltip>
-                        <el-tooltip effect="dark" content="删除" placement="top-start">
+                        <el-tooltip effect="dark" content="删除" placement="right">
                             <el-button v-if="canDel" type="text" size="medium" icon="el-icon-delete" @click="handleDelete(scope.$index, scope.row)" />
                         </el-tooltip>
                     </template>
@@ -73,7 +73,7 @@
                 tableData: [],
                 req: {},
                 page: {pageNo: 1, pageSize: 5},
-                data: {fileType: "img"},
+                data: {fileType: "course"},
                 ids: [],
                 canLoading: false,
                 delVisible: false,
@@ -114,8 +114,6 @@
                         this.tableData.forEach(item => {
                             item.status = Boolean(item.status)
                         })
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -129,8 +127,6 @@
                 if (res.error === false) {
                     this.$message.success(res.msg);
                     this.reload();
-                } else {
-                    this.$message.error(res.msg);
                 }
                 this.canLoading = false;
             },
@@ -157,8 +153,6 @@
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload();
-                    } else {
-                        this.$message.error(res.msg);
                     }
                     this.canLoading = false
                 }, (err) => {

@@ -16,6 +16,7 @@ public class CloudStorageConfig implements Serializable {
     //类型 1：阿里云  2：腾讯云
     @Range(min=1, max=2, message = "类型错误")
     private Integer type;
+
     //阿里云绑定的域名
     @NotBlank(message="阿里云绑定的域名不能为空")
     @URL(message = "阿里云绑定的域名格式不正确")

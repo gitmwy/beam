@@ -187,9 +187,6 @@
                         this.tableData = res.data.records ? res.data.records : [];
                         this.page.pageNo = parseInt(res.data.current);
                         this.page.totalRows = parseInt(res.data.total)
-
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -262,8 +259,6 @@
                             this.editVisible = false;
                             this.$message.success(res.msg);
                             this.reload()
-                        } else {
-                            this.$message.error(res.msg);
                         }
                     }, (err) => {
                         this.loading = false;
@@ -276,8 +271,6 @@
                             this.editVisible = false;
                             this.$message.success(res.msg);
                             this.reload()
-                        } else {
-                            this.$message.error(res.msg);
                         }
                     }, (err) => {
                         this.loading = false;
@@ -291,8 +284,6 @@
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -305,8 +296,6 @@
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -319,8 +308,6 @@
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -333,8 +320,6 @@
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -348,8 +333,6 @@
                         this.statusName.forEach(item => {
                             item.code = parseInt(item.code);
                         })
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);

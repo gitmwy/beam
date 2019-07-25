@@ -1,6 +1,6 @@
 package com.ksh.beam.config;
 
-import com.ksh.beam.common.intercept.GunsUserFilter;
+import com.ksh.beam.common.intercept.KickoutSessionFilter;
 import com.ksh.beam.common.shiro.RedisShiroSessionDAO;
 import com.ksh.beam.common.shiro.UserRealm;
 import org.apache.shiro.mgt.SecurityManager;
@@ -14,6 +14,7 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -56,15 +57,16 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
         shiroFilter.setLoginUrl("/login");
+        //未授权界面
         shiroFilter.setUnauthorizedUrl("/");
 
         //session过期拦截
         HashMap<String, Filter> myFilters = new HashMap<>();
-        myFilters.put("user", new GunsUserFilter());
+        myFilters.put("user", new KickoutSessionFilter());
         shiroFilter.setFilters(myFilters);
 
         Map<String, String> filterMap = new LinkedHashMap<>();
-        /*swagger 资源过滤*/
+        //authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问
         filterMap.put("/swagger/**", "anon");
         filterMap.put("/v2/api-docs", "anon");
         filterMap.put("/swagger-ui.html", "anon");
@@ -76,6 +78,7 @@ public class ShiroConfig {
         filterMap.put("/global/*", "anon");  //全局路径（错误或者超时）
 
         filterMap.put("/favicon.ico", "anon");
+        //加入自定义过滤器
         filterMap.put("/**", "user");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 

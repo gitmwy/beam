@@ -4,15 +4,16 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 export default new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'
+            redirect: '/dashboard',
         },
         {
             path: '/',
             component: resolve => require(['../components/page/Home.vue'], resolve),
-            meta: {title: '系统管理', permission: true},
+            meta: {title: '系统管理', requireAuth: true},
             children: [
                 {
                     path: '/dashboard',

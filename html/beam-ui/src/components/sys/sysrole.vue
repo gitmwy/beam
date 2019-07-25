@@ -60,7 +60,7 @@
             <el-tree check-strictly="true" v-loading="loading" show-checkbox node-key="id" :data="menuTreeData" :default-checked-keys="checkMenuData" :props="defaultProps"  ref="treeMenu" default-expand-all :expand-on-click-node="false" ></el-tree>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="configMenuDialog = false">取 消</el-button>
-                <el-button type="primary" @click="saveMuenPerms">确 定</el-button>
+                <el-button type="primary" @click="saveRoleMenu">确 定</el-button>
             </span>
         </el-dialog>
         <!-- 删除提示框 -->
@@ -118,18 +118,16 @@
                 this.req = [];
                 this.getData();
             },
-            saveMuenPerms(){
+            saveRoleMenu(){
                 this.checkMenuData = [];
                 this.checkMenuData = this.checkMenuData.concat(this.$refs.treeMenu.getCheckedKeys());
                 this.checkMenuData = this.checkMenuData.concat(this.$refs.treeMenu.getHalfCheckedKeys());
-                RoleApi.saveMuenPerms({id:this.roleId,menuIds:this.checkMenuData}).then((res) => {
+                RoleApi.saveRoleMenu({id:this.roleId,menuIds:this.checkMenuData}).then((res) => {
                     this.configMenuDialog = false;
                     this.checkMenuData = [];
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload();
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.checkMenuData = [];
@@ -164,8 +162,6 @@
                         this.tableData.forEach(item => {
                             item.status = Boolean(item.status)
                         })
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -176,8 +172,6 @@
                 RoleApi.getMenuTreeData().then((res) => {
                     if (res.error === false) {
                         this.menuTreeData = res.data;
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -189,8 +183,6 @@
                     if (res.error === false) {
                         this.checkMenuData = res.data;
                         this.loading = false;
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -207,8 +199,7 @@
             },
             handleEdit(index, row) {
                 this.idx = index;
-                const item = this.tableData[index];
-                this.role = item;
+                this.role = this.tableData[index];
                 this.editVisible=true;
             },
             handleConfigPerms(index, row) {
@@ -245,8 +236,6 @@
                         this.editVisible = false;
                         this.$message.success(res.msg);
                         this.reload()
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -259,8 +248,6 @@
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);

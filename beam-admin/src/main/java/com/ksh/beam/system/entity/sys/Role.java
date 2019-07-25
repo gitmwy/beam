@@ -7,6 +7,7 @@ import com.ksh.beam.common.base.entity.RestEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -17,12 +18,14 @@ import java.io.Serializable;
 @TableName("sys_role")
 public class Role extends RestEntity<Long> {
 
-    //主键id
     @TableId
     private Long id;
+
     // 角色名称
+    @NotBlank(message = "角色名称不能为空")
     @TableField(value = "role_name")
     private String roleName;
+
     // 备注
     @TableField(value = "remark")
     private String remark;

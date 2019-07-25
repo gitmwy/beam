@@ -8,12 +8,15 @@ import com.ksh.beam.common.util.CaptchaUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.system.dto.LoginForm;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,17 +24,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 import static com.ksh.beam.common.support.HttpKit.getIp;
 
+@Api(value = "LoginController", tags = {"Login接口"})
 @RestController
 public class LoginController {
 
     @Autowired
     private RedisUtil redisUtil;
 
+    @ApiOperation("登陆")
     @PostMapping(value = "/login")
     @ResponseBody
-    public Object login(@RequestBody LoginForm loginForm) {
+    public Object login(@RequestBody @Valid LoginForm loginForm) {
         if (new CaptchaUtil().isCaptchaOnOff()) {
 //            String captcha = ShiroUtils.getCaptcha(Constants.KAPTCHA_SESSION_KEY);
 //            if (StringUtils.isBlank(captcha)) {
@@ -39,9 +46,7 @@ public class LoginController {
 //            } else if (!loginForm.getCaptcha().equalsIgnoreCase(captcha)) {
 //                return R.fail("验证码不正确");
 //            }
-            if (!loginForm.isConfirmSuccess()) {
-                return R.fail("请拖动滑块完成验证");
-            }
+            Assert.isTrue(loginForm.isConfirmSuccess(), "请拖动滑块完成验证");
         }
         try {
             Subject subject = ShiroUtils.getSubject();
@@ -50,16 +55,12 @@ public class LoginController {
             LogManager.me().executeLog(LogTaskFactory.loginSuccessLog(ShiroUtils.getUserId(), getIp()));
         } catch (UnknownAccountException e) {
             e.getStackTrace();
-            LogManager.me().executeLog(LogTaskFactory.loginFailLog(loginForm.getUsername(), e.getMessage(), getIp()));
             return R.fail(LogSucceed.FAIL.getMessage());
         } catch (IncorrectCredentialsException e) {
-            LogManager.me().executeLog(LogTaskFactory.loginFailLog(loginForm.getUsername(), "账号或者密码不正确", getIp()));
             return R.fail("账号或者密码不正确");
         } catch (LockedAccountException e) {
-            LogManager.me().executeLog(LogTaskFactory.loginFailLog(loginForm.getUsername(), "账号已被锁定，请联系管理员", getIp()));
             return R.fail("账号已被锁定，请联系管理员");
         } catch (AuthenticationException e) {
-            LogManager.me().executeLog(LogTaskFactory.loginFailLog(loginForm.getUsername(), "账户验证失败", getIp()));
             return R.fail("账户验证失败");
         }
         return R.ok(ShiroUtils.getUserEntity());
@@ -68,6 +69,7 @@ public class LoginController {
     /**
      * 退出
      */
+    @ApiOperation("退出")
     @GetMapping(value = "/logout")
     @ResponseBody
     public Object logout() {
@@ -79,6 +81,7 @@ public class LoginController {
     /**
      * 清除缓存
      */
+    @ApiOperation("清除缓存")
     @GetMapping(value = "/clearCache")
     @ResponseBody
     public R clearCache() {

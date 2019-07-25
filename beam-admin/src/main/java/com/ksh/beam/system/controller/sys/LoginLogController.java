@@ -1,7 +1,5 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ksh.beam.common.base.controller.BaseController;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.LoginLog;
@@ -33,15 +31,13 @@ public class LoginLogController extends BaseController {
     @GetMapping(value = "/page/list")
     @RequiresPermissions("sys:loginLog:list")
     public R pageList(LoginLog loginLog) {
-        IPage page = loginLogService.selectPageList(new Page(loginLog.getCurrentPage(), loginLog.getPageSize()), loginLog);
-        return R.ok(page);
+        return loginLogService.selectPageList(loginLog);
     }
 
     @ApiOperation("清空")
     @PostMapping(value = "/clear")
     @RequiresPermissions("sys:loginLog:clear")
     public R clear() {
-        loginLogService.deleteAll();
-        return R.ok();
+       return loginLogService.deleteAll();
     }
 }

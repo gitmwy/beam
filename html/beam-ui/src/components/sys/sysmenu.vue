@@ -149,8 +149,6 @@
                     if (res.error === false) {
                         this.treeData = res.data;
                         this.wrapMenuType(this.treeData);
-                    } else {
-                        this.$message.error(res.msg);
                     }
                     this.loading = false;
                 }, (err) => {
@@ -174,8 +172,6 @@
                     if (res.error === false) {
                         this.menu = res.data;
                         console.log(this.menu);
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -209,8 +205,6 @@
                         this.editVisible = false;
                         this.$message.success(res.msg);
                         this.reload()
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -223,8 +217,6 @@
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);

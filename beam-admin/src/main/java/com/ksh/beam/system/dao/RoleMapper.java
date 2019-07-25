@@ -19,7 +19,7 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     List<Long> getCheckMenuIds(Long roleId);
 
-    void saveMenuPerms(@Param("role") Role role);
+    void saveRoleMenu(@Param("role") Role role);
 
     void delMenuPermByRoleId(Long roleId);
 }

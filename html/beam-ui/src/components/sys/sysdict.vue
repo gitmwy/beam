@@ -163,8 +163,6 @@
                 DictApi.getData({pid: this.pid}).then((res) => {
                     if (res.error === false) {
                         this.subDictList = res.data.records ? res.data.records : []
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -183,8 +181,6 @@
                         this.tableData.forEach(item => {
                             item.status = Boolean(item.status)
                         })
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -195,8 +191,6 @@
                 DictApi.getDictList().then((res) => {
                     if (res.error === false) {
                         this.dictList = res.data;
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -207,7 +201,6 @@
                 this.getData();
             },
             handleAdd() {
-                this.dict = {sort: 100};
                 this.editVisible = true;
                 this.getDictList();
             },
@@ -215,15 +208,13 @@
                 this.getDictList();
                 this.editVisible = true;
                 this.idx = index;
-                const item = this.tableData[index];
-                this.dict = item;
+                this.dict = this.tableData[index];
             },
             subHandleEdit(index, row) {
                 this.getDictList();
                 this.editVisible = true;
                 this.idx = index;
-                const item = this.subDictList[index];
-                this.dict = item;
+                this.dict = this.subDictList[index];
                 this.mark = 1;
             },
             handleView(index, row) {
@@ -247,7 +238,6 @@
             },
             // 保存编辑
             saveEdit() {
-                // this.$set(this.tableData, this.idx, this.dict);
                 this.loading = true;
                 DictApi.add(this.dict).then((res) => {
                     this.loading = false;
@@ -260,8 +250,6 @@
                         } else {
                             this.reload()
                         }
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -279,8 +267,6 @@
                         } else {
                             this.reload();
                         }
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);

@@ -1,5 +1,6 @@
 package com.ksh.beam.common.factory;
 
+import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.Dict;
 
 import java.util.List;
@@ -19,4 +20,7 @@ public interface IConstantFactory {
 
     //根据父级字典code和获取字典名称
     List<Dict> getDictListByCode(String pcode);
+
+    //根据子ID查询所有父级
+    List<Dept> queryDeptNameById(Long deptId);
 }

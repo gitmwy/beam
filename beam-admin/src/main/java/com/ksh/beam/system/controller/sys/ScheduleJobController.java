@@ -1,23 +1,19 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.entity.sys.ScheduleJob;
 import com.ksh.beam.system.service.ScheduleJobService;
-import com.ksh.beam.system.wrapper.ScheduleWrapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import javax.validation.Valid;
 
 /**
  * 定时任务
@@ -34,16 +30,8 @@ public class ScheduleJobController {
      */
     @RequestMapping("/page/list")
     @RequiresPermissions("sys:schedule:list")
-    public R list(ScheduleJob scheduleJobEntity) {
-        QueryWrapper qw = new QueryWrapper<Map>();
-        if (ToolUtil.isNotEmpty(scheduleJobEntity.getStatus())) {
-            qw.eq("status", scheduleJobEntity.getStatus());
-        }
-        if (ToolUtil.isNotEmpty(scheduleJobEntity.getBeanName())) {
-            qw.like("bean_name", scheduleJobEntity.getBeanName());
-        }
-        IPage<com.ksh.beam.common.quartz.ScheduleJob> page = scheduleJobService.page(new Page(scheduleJobEntity.getCurrentPage(), scheduleJobEntity.getPageSize()), qw);
-        return R.ok(new ScheduleWrapper(page).wrap());
+    public R pageList(ScheduleJob scheduleJobEntity) {
+        return  scheduleJobService.selectPageList(scheduleJobEntity);
     }
 
     /**
@@ -51,13 +39,11 @@ public class ScheduleJobController {
      */
     @RequestMapping("/add")
     @RequiresPermissions("sys:schedule:add")
-    public R add(@RequestBody ScheduleJob scheduleJob) {
-        if (CronExpression.isValidExpression(scheduleJob.getCronExpression())) {
-            scheduleJobService.saveScheduleJob(scheduleJob);
-            return R.ok();
-        } else {
+    public R add(@RequestBody @Valid ScheduleJob scheduleJob) {
+        if (!CronExpression.isValidExpression(scheduleJob.getCronExpression())) {
             return R.fail("cron表达式有误");
         }
+        return scheduleJobService.saveScheduleJob(scheduleJob);
     }
 
     /**
@@ -65,13 +51,11 @@ public class ScheduleJobController {
      */
     @RequestMapping("/edit")
     @RequiresPermissions("sys:schedule:edit")
-    public R edit(@RequestBody ScheduleJob scheduleJob) {
-        if (CronExpression.isValidExpression(scheduleJob.getCronExpression())) {
-            scheduleJobService.update(scheduleJob);
-            return R.ok();
-        } else {
+    public R edit(@RequestBody @Valid ScheduleJob scheduleJob) {
+        if (!CronExpression.isValidExpression(scheduleJob.getCronExpression())) {
             return R.fail("cron表达式有误");
         }
+        return scheduleJobService.update(scheduleJob);
     }
 
     /**
@@ -80,8 +64,8 @@ public class ScheduleJobController {
     @RequestMapping("/del")
     @RequiresPermissions("sys:schedule:del")
     public R del(@RequestBody Long[] jobIds) {
-        scheduleJobService.deleteBatch(jobIds);
-        return R.ok();
+        Assert.notEmpty(jobIds, "请选择要删除的定时任务");
+        return scheduleJobService.deleteBatch(jobIds);
     }
 
     /**
@@ -90,8 +74,8 @@ public class ScheduleJobController {
     @RequestMapping("/run")
     @RequiresPermissions("sys:schedule:run")
     public R run(@RequestBody Long[] jobIds) {
-        scheduleJobService.run(jobIds);
-        return R.ok();
+        Assert.notEmpty(jobIds, "请选择要立即执行的定时任务");
+        return scheduleJobService.run(jobIds);
     }
 
     /**
@@ -100,8 +84,8 @@ public class ScheduleJobController {
     @RequestMapping("/pause")
     @RequiresPermissions("sys:schedule:pause")
     public R pause(@RequestBody Long[] jobIds) {
-        scheduleJobService.pause(jobIds);
-        return R.ok();
+        Assert.notEmpty(jobIds, "请选择要暂停的定时任务");
+        return scheduleJobService.pause(jobIds);
     }
 
     /**
@@ -110,15 +94,15 @@ public class ScheduleJobController {
     @RequestMapping("/resume")
     @RequiresPermissions("sys:schedule:resume")
     public R resume(@RequestBody Long[] jobIds) {
-        scheduleJobService.resume(jobIds);
-        return R.ok();
+        Assert.notEmpty(jobIds, "请选择要恢复的定时任务");
+        return scheduleJobService.resume(jobIds);
     }
 
     /**
      * 获取定时任务状态下拉框
      */
     @GetMapping("/status/list")
-    public R getStatusList() {
+    public R statusList() {
         return R.ok(ConstantFactory.me().getDictListByCode("schedule_status"));
     }
 }

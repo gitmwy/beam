@@ -1,33 +1,31 @@
 
 package com.ksh.beam.system.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.ScheduleJob;
-
-import java.util.Map;
 
 /**
  * 定时任务
  */
 public interface ScheduleJobService extends IService<ScheduleJob> {
 
-	IPage<ScheduleJob> queryPage(Map<String, Object> params);
+	R selectPageList(ScheduleJob scheduleJob);
 
 	/**
 	 * 保存定时任务
 	 */
-	void saveScheduleJob(ScheduleJob scheduleJob);
+	R saveScheduleJob(ScheduleJob scheduleJob);
 	
 	/**
 	 * 更新定时任务
 	 */
-	void update(ScheduleJob scheduleJob);
+	R update(ScheduleJob scheduleJob);
 	
 	/**
 	 * 批量删除定时任务
 	 */
-	void deleteBatch(Long[] jobIds);
+	R deleteBatch(Long[] jobIds);
 	
 	/**
 	 * 批量更新定时任务状态
@@ -37,15 +35,15 @@ public interface ScheduleJobService extends IService<ScheduleJob> {
 	/**
 	 * 立即执行
 	 */
-	void run(Long[] jobIds);
+	R run(Long[] jobIds);
 	
 	/**
 	 * 暂停运行
 	 */
-	void pause(Long[] jobIds);
+	R pause(Long[] jobIds);
 	
 	/**
 	 * 恢复运行
 	 */
-	void resume(Long[] jobIds);
+	R resume(Long[] jobIds);
 }

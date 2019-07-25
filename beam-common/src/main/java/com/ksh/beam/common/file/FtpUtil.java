@@ -1,6 +1,5 @@
-package com.ksh.beam.common.util;
+package com.ksh.beam.common.file;
 
-import com.ksh.beam.common.utils.FileUtil;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
@@ -8,122 +7,77 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 文件上传下载工具类
+ * ftp工具
  */
-@Configuration
-public class FtpUtil {
+public class FtpUtil extends FtpService{
 
     private static final Logger logger = LoggerFactory.getLogger(FtpUtil.class);
-    private static final String IMG = "img";
-    private static final String VIDEO = "video";
-    private static final String COURSE = "course";
-
-    @Value("${ftp.username}")
-    private String userName;
-
-    @Value("${ftp.password}")
-    private String passWord;
-
-    @Value("${ftp.host}")
-    private String ip;
-
-    @Value("${ftp.port}")
-    private int port;
-
-    @Value("${ftp.img-path}")
-    private String imgPath;
-
-    @Value("${ftp.video-path}")
-    private String videoPath;
-
-    @Value("${ftp.course-path}")
-    private String coursePath;
 
     private FTPClient ftpClient = new FTPClient();
+
+    public  FtpUtil(FtpConfig config){
+        this.config = config;
+    }
 
     /**
      * 上传文件附件到ftp服务器
      */
-    public Map<String, String> uploadToFtp(MultipartFile file, String fileName, String fileType) throws Exception {
-        // 建立连接
-        connectToServer();
-        ftpClient.enterLocalPassiveMode();
-        // 设置传输二进制文件
-        setFileType();
-        //改变文件路径
-        String path = "";
-        if (IMG.equals(fileType)) {
-            path = imgPath;
-        } else if (VIDEO.equals(fileType)) {
-            path = videoPath;
-        } else if (COURSE.equals(fileType)) {
-            path = coursePath;
+    public Map<String, String> ftpUpload(MultipartFile file, String fileName, String fileType) {
+        Map<String, String> maps = null;
+        try(InputStream is = file.getInputStream()) {
+            // 建立连接
+            connectToServer();
+            ftpClient.enterLocalPassiveMode();
+            setFileType();
+            //改变文件路径
+            String path = fileTypeMaps().get(fileType);
+            if (!existDirectory(path)) {
+                createDirectory(path);
+            }
+            ftpClient.changeWorkingDirectory(path);
+            // 设置文件名字的编码格式为iso-8859-1，因为FTP上传的时候默认编码为iso-8859-1，解决文件名字乱码的问题
+            fileName = new String(fileName.getBytes("GBK"), StandardCharsets.ISO_8859_1);
+            // 输出操作结果信息
+            if (ftpClient.storeFile(fileName, is)) {
+                //获取文件属性
+                maps = new HashMap<>();
+                maps.put("fileName", fileName);
+                maps.put("filePath", path);
+                maps.put("fileSize", FileUtil.getFileSize(file.getSize()));
+            }
+        } catch (Exception e) {
+            logger.error("上传文件失败", e);
+        }finally {
+            if (ftpClient.isConnected()) {
+                closeConnect();
+            }
         }
-        if (!existDirectory(path)) {
-            createDirectory(path);
-        }
-        ftpClient.changeWorkingDirectory(path);
-        // 设置文件名字的编码格式为iso-8859-1，因为FTP上传的时候默认编码为iso-8859-1，解决文件名字乱码的问题
-        fileName = new String(fileName.getBytes("GBK"), StandardCharsets.ISO_8859_1);
-        // 输出操作结果信息
-        InputStream is = file.getInputStream();
-        if (!ftpClient.storeFile(fileName, is)) {
-            throw new Exception("ftp上传失败");
-        }
-        // 关闭连接
-        is.close();
-        if (ftpClient.isConnected()) {
-            closeConnect();
-        }
-        //获取文件属性
-        Map<String, String> maps = new HashMap<>();
-        maps.put("fileName", fileName);
-        maps.put("filePath", path);
-        maps.put("fileSize", FileUtil.getFileSize(file.getSize()));
         return maps;
     }
 
     /**
      * 功能：根据文件名称，下载文件流
      */
-    public void downloadFile(String path, String ftpFileName, String fileName, HttpServletResponse response) {
-        try (
-                InputStream is = ftpClient.retrieveFileStream(ftpFileName);
-                BufferedInputStream bis =  new BufferedInputStream(is);
-                OutputStream os = response.getOutputStream()
-        ) {
+    public void ftpDownload(String path, String ftpFileName, String fileName, HttpServletResponse response) {
+        try {
             // 建立连接
             connectToServer();
             ftpClient.enterLocalPassiveMode();
-            // 设置传输二进制文件
             setFileType();
             ftpClient.changeWorkingDirectory(path);
-            //设置响应
-            response.reset();
-            response.setContentType("application/x-download;charset=utf-8");
-            response.setHeader("Content-disposition", URLEncoder.encode(fileName, "UTF-8"));
-            response.setHeader("Pragma","No-cache");
-            byte[] b=new byte[bis.available()+1000];
-            int i = bis.read(b);
-            while (i != -1) {
-                os.write(b, 0, i);
-            }
-            os.flush();
+            ftpFileName = new String(ftpFileName.getBytes("GBK"), StandardCharsets.ISO_8859_1);
+            InputStream is = ftpClient.retrieveFileStream(ftpFileName);
+            FileUtil.downloadFile(is, null, fileName, response);
         } catch (Exception e) {
             logger.error("下载文件失败", e);
         } finally {
@@ -138,7 +92,7 @@ public class FtpUtil {
      * @param path     FTP服务器保存目录
      * @param fileName 要删除的文件名称
      */
-    public boolean deleteFile(String path, String fileName) {
+    public boolean ftpDelete(String path, String fileName) {
         boolean flag = false;
         try {
             connectToServer();
@@ -186,10 +140,11 @@ public class FtpUtil {
      */
     private void connectToServer() throws Exception {
         if (!ftpClient.isConnected()) {
+            String ip = config.getFtpIp();
             try {
                 ftpClient = new FTPClient();
-                ftpClient.connect(ip, port);
-                ftpClient.login(userName, passWord);
+                ftpClient.connect(ip, config.getFtpPort());
+                ftpClient.login(config.getFtpUsername(), config.getFtpPassword());
                 //判断是否连接成功
                 if (!FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
                     ftpClient.disconnect();

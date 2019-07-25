@@ -6,16 +6,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.quartz.ScheduleUtils;
 import com.ksh.beam.common.quartz.state.QuartzConstant;
+import com.ksh.beam.common.utils.R;
+import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.ScheduleJobMapper;
 import com.ksh.beam.system.entity.sys.ScheduleJob;
 import com.ksh.beam.system.service.ScheduleJobService;
-import org.apache.commons.lang.StringUtils;
+import com.ksh.beam.system.wrapper.ScheduleWrapper;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
@@ -49,41 +50,42 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
     }
 
     @Override
-    public IPage<ScheduleJob> queryPage(Map<String, Object> params) {
-        String beanName = (String) params.get("beanName");
-
-        IPage<ScheduleJob> page = this.page(
-                new Page<ScheduleJob>(),
-                new QueryWrapper<ScheduleJob>().like(StringUtils.isNotBlank(beanName), "bean_name", beanName)
-        );
-
-        return page;
+    public R selectPageList(ScheduleJob scheduleJob) {
+        QueryWrapper<ScheduleJob> qw = new QueryWrapper<>();
+        if (ToolUtil.isNotEmpty(scheduleJob.getStatus())) {
+            qw.eq("status", scheduleJob.getStatus());
+        }
+        if (ToolUtil.isNotEmpty(scheduleJob.getBeanName())) {
+            qw.like("bean_name", scheduleJob.getBeanName());
+        }
+        IPage<com.ksh.beam.common.quartz.ScheduleJob> page = this.page(new Page(scheduleJob.getCurrentPage(), scheduleJob.getPageSize()), qw);
+        return R.ok(new ScheduleWrapper(page).wrap());
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void saveScheduleJob(ScheduleJob scheduleJob) {
+    public R saveScheduleJob(ScheduleJob scheduleJob) {
         scheduleJob.setCreateTime(new Date());
         scheduleJob.setStatus(QuartzConstant.ScheduleStatus.NORMAL.getValue());
         this.saveOrUpdate(scheduleJob);
         ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+        return R.ok();
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void update(ScheduleJob scheduleJob) {
+    public R update(ScheduleJob scheduleJob) {
         ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
         this.updateById(scheduleJob);
+        return R.ok();
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteBatch(Long[] jobIds) {
+    public R deleteBatch(Long[] jobIds) {
         for (Long jobId : jobIds) {
             ScheduleUtils.deleteScheduleJob(scheduler, jobId);
         }
         //删除数据
         this.removeByIds(Arrays.asList(jobIds));
+        return R.ok();
     }
 
     @Override
@@ -95,28 +97,28 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobMapper, Sched
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void run(Long[] jobIds) {
+    public R run(Long[] jobIds) {
         for (Long jobId : jobIds) {
             ScheduleUtils.run(scheduler, this.getById(jobId));
         }
+        return R.ok();
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void pause(Long[] jobIds) {
+    public R pause(Long[] jobIds) {
         for (Long jobId : jobIds) {
             ScheduleUtils.pauseJob(scheduler, jobId);
         }
         updateBatch(jobIds, QuartzConstant.ScheduleStatus.PAUSE.getValue());
+        return R.ok();
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void resume(Long[] jobIds) {
+    public R resume(Long[] jobIds) {
         for (Long jobId : jobIds) {
             ScheduleUtils.resumeJob(scheduler, jobId);
         }
         updateBatch(jobIds, QuartzConstant.ScheduleStatus.NORMAL.getValue());
+        return R.ok();
     }
 }

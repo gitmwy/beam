@@ -2,13 +2,19 @@ package com.ksh.beam.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.constant.Constant;
+import com.ksh.beam.common.shiro.ShiroUtils;
+import com.ksh.beam.common.utils.R;
+import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.DeptMapper;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.User;
 import com.ksh.beam.system.service.DeptService;
+import com.ksh.beam.system.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,8 +23,15 @@ import java.util.List;
 @Service
 public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements DeptService {
 
+    @Autowired
+    private UserService userService;
+
+    /**
+     * 获取树形列表
+     */
     @Override
-    public List<Dept> treeDeptList(User user, Dept dept) {
+    public R treeDeptList(Dept dept) {
+        User user = userService.getById(ShiroUtils.getUserId());
         if(Constant.SUPER_ADMIN != user.getId()){
             //非超级管理员
             dept.setId(user.getCompanyId());
@@ -29,7 +42,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
             }
         }
         List<Dept> deptList = baseMapper.queryListByDept(dept);
-        return getAllDeptTreeList(deptList);
+        return R.ok(getAllDeptTreeList(deptList));
     }
 
     /**
@@ -44,11 +57,33 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
         return subDeptList;
     }
 
-    /**
-     *根据子ID查询所有父级
-     */
     @Override
-    public List<Dept> queryDeptNameById(Long id) {
-        return baseMapper.queryDeptNameById(id);
+    public R saveDept(Dept dept) {
+        if (ToolUtil.isEmpty(dept.getParentId())) {
+            dept.setParentId(0L);
+        }
+        this.saveOrUpdate(dept);
+        return R.ok();
+    }
+
+    @Override
+    public R deleteBatch(Long[] deptIds) {
+        this.removeByIds(Arrays.asList(deptIds));
+        return R.ok();
+    }
+
+    @Override
+    public R getEditInfo(Long deptId) {
+        Dept dept = this.getById(deptId);
+        if (ToolUtil.isEmpty(dept)) {
+            return R.fail("找不到该企业部门");
+        }
+        if (dept.getParentId() != 0) {
+            Dept pdept = this.getById(dept.getParentId());
+            dept.setPname(pdept.getName());
+        } else {
+            dept.setPname("顶级");
+        }
+        return R.ok(dept);
     }
 }

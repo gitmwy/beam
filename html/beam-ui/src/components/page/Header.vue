@@ -116,8 +116,6 @@
                             if (res.error === false) {
                                 this.dialogFormVisible = false;
                                 this.$message.success(res.msg);
-                            } else {
-                                this.$message.error(res.msg);
                             }
                         }, (err) => {
                             this.loading = false;
@@ -128,13 +126,13 @@
             },
             // 用户名下拉菜单选择事件
             handleCommand(command) {
-                if(command == 'loginout'){
+                if(command === 'loginout'){
                    this.handleLogout();
                 }
-                if(command == 'clearCache'){
+                if(command === 'clearCache'){
                     this.clearCache();
                 }
-                if(command == 'changePassword'){
+                if(command === 'changePassword'){
                     this.dialogFormVisible=true;
                 }
             },

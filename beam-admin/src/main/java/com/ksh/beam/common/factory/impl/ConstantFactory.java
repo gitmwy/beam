@@ -69,6 +69,14 @@ public class ConstantFactory implements IConstantFactory {
         return "";
     }
 
+    /**
+     * 根据子ID查询所有父级
+     */
+    @Override
+    public List<Dept> queryDeptNameById(Long deptId) {
+        return deptMapper.queryDeptNameById(deptId);
+    }
+
     @Override
     public String getDictsByCode(String pcode, String code) {
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<Dict>().eq("code", pcode);

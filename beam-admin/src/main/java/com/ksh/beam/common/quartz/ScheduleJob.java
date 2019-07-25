@@ -1,10 +1,10 @@
 package com.ksh.beam.common.quartz;
 
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -17,7 +17,7 @@ public class ScheduleJob extends QuartzJobBean {
 	private ExecutorService service = Executors.newSingleThreadExecutor(); 
 	
     @Override
-    protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
+    protected void executeInternal(JobExecutionContext context) {
         com.ksh.beam.system.entity.sys.ScheduleJob scheduleJob = (com.ksh.beam.system.entity.sys.ScheduleJob) context.getMergedJobDataMap().get(com.ksh.beam.system.entity.sys.ScheduleJob.JOB_PARAM_KEY);
         
         //任务开始时间

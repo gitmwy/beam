@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class RedisShiroSessionDAO extends EnterpriseCacheSessionDAO {
+
     @Autowired
     private RedisTemplate redisTemplate;
 

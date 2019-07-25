@@ -18,7 +18,7 @@
         a.`create_time` AS "createTime"
     </sql>
 
-    <insert id="saveMenuPerms">
+    <insert id="saveRoleMenu">
         insert into sys_role_menu (role_id,menu_id)
         values
         <foreach collection ="role.menuIds" item="menuId" index= "index" separator =",">

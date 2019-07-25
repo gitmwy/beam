@@ -124,8 +124,6 @@
                         this.tableData.forEach(item => {
                             item.status = Boolean(item.status)
                         })
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;

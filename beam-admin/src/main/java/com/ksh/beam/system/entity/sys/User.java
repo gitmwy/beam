@@ -7,6 +7,9 @@ import com.ksh.beam.common.base.entity.DataEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.List;
 
@@ -31,6 +34,7 @@ public class User extends DataEntity<Long> {
 	/**
 	 * 账号
 	 */
+	@NotBlank(message = "登陆账号不能为空")
 	private String account;
 	/**
 	 * 密码
@@ -43,10 +47,12 @@ public class User extends DataEntity<Long> {
 	/**
 	 * 名字
 	 */
+	@NotBlank(message = "真实姓名不能为空")
 	private String name;
 	/**
 	 * 部门ID
 	 */
+	@NotBlank(message = "部门不能为空")
 	private Long deptId;
 	/**
 	 * 生日
@@ -59,10 +65,14 @@ public class User extends DataEntity<Long> {
 	/**
 	 * 电子邮件
 	 */
+	@Pattern(regexp = "^([a-zA-Z0-9]+[-_.]?)+@[a-zA-Z0-9]+\\.[a-z]+$", message = "请输入正确的邮箱")
 	private String email;
 	/**
 	 * 电话
 	 */
+	@NotBlank(message = "手机号不能为空")
+	@Max(value = 11)
+	@Pattern(regexp = "^[1][3456789][0-9]{9}$", message = "请输入正确的手机号")
 	private String phone;
 	/**
 	 * 状态(1：可用  0：不可用 ）

@@ -1,7 +1,5 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ksh.beam.common.base.controller.BaseController;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.OperationLog;
@@ -33,15 +31,13 @@ public class OperationLogController extends BaseController {
     @GetMapping(value = "/page/list")
     @RequiresPermissions("sys:operationLog:list")
     public R pageList(OperationLog operationLog) {
-        IPage page = operationLogService.selectPageList(new Page(operationLog.getCurrentPage(), operationLog.getPageSize()), operationLog);
-        return R.ok(page);
+        return operationLogService.selectPageList(operationLog);
     }
 
     @ApiOperation("清空")
     @PostMapping(value = "/clear")
     @RequiresPermissions("sys:operationLog:clear")
     public R clear() {
-        operationLogService.deleteAll();
-        return R.ok();
+        return operationLogService.deleteAll();
     }
 }

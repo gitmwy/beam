@@ -19,8 +19,7 @@ export default {
     getCheckMenuData: params => {
         return http.get("/sys/role/menu/list", params);
     },
-    saveMuenPerms: params => {
-        console.log(params);
+    saveRoleMenu: params => {
         return http.post("/sys/role/configPerm", params);
     }
 }

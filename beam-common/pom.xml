@@ -137,6 +137,12 @@
             <artifactId>poi</artifactId>
             <scope>compile</scope>
         </dependency>
+
+        <!-- ftp工具-->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

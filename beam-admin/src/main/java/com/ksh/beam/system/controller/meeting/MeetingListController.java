@@ -1,7 +1,5 @@
 package com.ksh.beam.system.controller.meeting;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ksh.beam.common.annotion.SysLog;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.meeting.MeetingList;
@@ -22,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 @Api(value = "MeetingListController", tags = {"MeetingList接口"})
 @RequestMapping("/meeting/list")
 @RestController
-public class ListController {
+public class MeetingListController {
 
     @Autowired
     private MeetingListService meetingService;
@@ -32,15 +30,14 @@ public class ListController {
     @GetMapping(value = "/page/list")
     @RequiresPermissions("meeting:list")
     public R pageList(MeetingList meeting) {
-        IPage page = meetingService.selectPageList(new Page(meeting.getCurrentPage(), meeting.getPageSize()), meeting);
-        return R.ok(page);
+        return meetingService.selectPageList(meeting);
     }
 
     @SysLog(value = "会议列表导出")
     @ApiOperation(value = "导出")
     @RequiresPermissions("meeting:list:export")
     @GetMapping("/export")
-    public void exportExcel(MeetingList meeting, HttpServletResponse response) {
+    public void export(MeetingList meeting, HttpServletResponse response) {
         meetingService.exportData(meeting, response);
     }
 }

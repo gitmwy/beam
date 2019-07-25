@@ -17,5 +17,5 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * 根据父菜单，查询子菜单
      * @param parentId 父菜单ID
      */
-    List<Map> queryListParentId(Long parentId);
+    List<Map<String, Object>> queryListParentId(Long parentId);
 }

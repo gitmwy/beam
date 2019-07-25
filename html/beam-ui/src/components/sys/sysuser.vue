@@ -72,7 +72,7 @@
                 <el-upload
                     label=" 头像"
                     class="avatar-uploader el-dialog--center"
-                    action="/beam_ht/file/upload"
+                    action="/beam_ht/sys/user/upload"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
@@ -240,8 +240,6 @@
                 SysUserApi.getRoleList().then((res) => {
                     if (res.error === false) {
                         this.roleList = res.data;
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -275,14 +273,11 @@
                 return deptId;
             },
             handleAvatarSuccess(res) {
-                if (res.error) {
-                    this.$message.error(res.msg);
-                } else {
+                if (res.error === false) {
                     this.$set(this.form, "avatar", res.data);
                 }
             },
             beforeAvatarUpload(file) {
-                console.log(file.type);
                 const isJPG = file.type === 'image/jpeg';
                 const isPNG = file.type === 'image/png';
                 const isLt2M = file.size / 1024 / 1024 < 2;
@@ -323,8 +318,6 @@
                         this.tableData.forEach(item => {
                             item.status = Boolean(item.status)
                         })
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -336,8 +329,6 @@
                     this.loading = false;
                     if (res.error === false) {
                         this.deptTreeData = res.data;
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -352,6 +343,7 @@
                 this.form = {};
                 this.editVisible = true;
                 this.accountInput = false;
+                this.form.sex = 1;
                 this.form.status = true;
                 this.getRoleList();
             },
@@ -365,8 +357,6 @@
                         }
                         this.form = res.data;
                         this.form.status = Boolean(this.form.status);
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.loading = false;
@@ -402,8 +392,6 @@
                                 this.editVisible = false;
                                 this.$message.success(res.msg);
                                 this.reload()
-                            } else {
-                                this.$message.error(res.msg);
                             }
                         }, (err) => {
                             this.loading = false;
@@ -418,8 +406,6 @@
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -437,8 +423,6 @@
                         if (res.error === false) {
                             this.$message.success(res.msg);
                             this.reload()
-                        } else {
-                            this.$message.error(res.msg);
                         }
                     }, (err) => {
                         this.$message.error(err.msg);
@@ -450,8 +434,6 @@
                     if (res.error === false) {
                         this.$message.success('操作成功');
                         this.reload()
-                    } else {
-                        this.$message.error(res.msg);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);

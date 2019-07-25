@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.shiro.ShiroUtils;
+import com.ksh.beam.common.util.OSSFactory;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.common.utils.ToolUtil;
@@ -14,16 +15,17 @@ import com.ksh.beam.system.dao.UserMapper;
 import com.ksh.beam.system.dto.ChangePassowdForm;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.User;
-import com.ksh.beam.system.service.DeptService;
 import com.ksh.beam.system.service.UserService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * 管理员表
@@ -34,25 +36,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private RedisUtil redisUtil;
 
-    @Autowired
-    private DeptService deptService;
-
     @Override
-    public IPage<Map> selectPageList(User user) {
+    public R selectPageList(User user) {
         Long userId = ShiroUtils.getUserId();
         if(Constant.SUPER_ADMIN != userId){
             //非超级管理员
             user.setCompanyId(baseMapper.selectById(userId).getCompanyId());
         }
-        return baseMapper.selectPageList(new Page(user.getCurrentPage(), user.getPageSize()), user);
+        IPage page = baseMapper.selectPageList(new Page(user.getCurrentPage(), user.getPageSize()), user);
+        return R.ok(page);
     }
 
     @Override
     public R saveUser(User user) {
-        Assert.notNull(user.getAccount(), "登陆账号不能为空");
-        Assert.notNull(user.getName(), "真实姓名不能为空");
         //获取公司ID
-        List<Dept> depts = deptService.queryDeptNameById(user.getDeptId());
+        List<Dept> depts = ConstantFactory.me().queryDeptNameById(user.getDeptId());
         for(Dept dept : depts){
             if(0 == dept.getParentId()){
                 user.setCompanyId(dept.getId());
@@ -105,9 +103,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public R deleteUser(Long[] userIds) {
-        if (ToolUtil.isEmpty(userIds) || userIds.length <= 0) {
-            return R.fail("未选择删除的用户");
-        }
         for (Long userId : userIds) {
             if (userId == Constant.SUPER_ADMIN) {
                 return R.fail("管理员不能删除");
@@ -119,9 +114,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public R resetPassword(Long[] userIds) {
-        if (ToolUtil.isEmpty(userIds) || userIds.length <= 0) {
-            return R.fail("未选择要重置密码的用户");
-        }
         for (Long userId : userIds) {
             if (userId == Constant.SUPER_ADMIN) {
                 return R.fail("管理员密码不能重置");
@@ -175,7 +167,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setRoleIds(roleIds);
 
         //获取所在部门
-        List<Dept> depts = deptService.queryDeptNameById(user.getDeptId());
+        List<Dept> depts = ConstantFactory.me().queryDeptNameById(user.getDeptId());
         if (depts.size() > 0) {
             StringBuilder deptName = new StringBuilder();
             for(Dept dept : depts){
@@ -184,5 +176,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setDeptName(deptName.substring(0, deptName.lastIndexOf(">")));
         }
         return R.ok(user);
+    }
+
+    @Override
+    public R uploadAvatar(MultipartFile file) {
+        String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
+        try {
+            String url = Objects.requireNonNull(OSSFactory.buildCloud()).upload(file.getBytes(), fileName);
+            return R.ok(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.fail("上传图片失败");
+        }
     }
 }

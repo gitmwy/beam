@@ -1,4 +1,4 @@
-package com.ksh.beam.common.utils;
+package com.ksh.beam.common.file;
 
 import com.ksh.beam.common.base.entity.ExcelEntity;
 import org.apache.poi.hpsf.DocumentSummaryInformation;
@@ -13,54 +13,39 @@ import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.util.CellUtil;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 文件工具
- */
-public class FileUtil {
+public class ExcelUtil {
 
     /**
      * 导出Excel文件
      *
-     * @param list     要导出数据
-     * @param fieldMap 表头字英文字段名和中文名对应
-     * @param filName  文件名
-     * @param response 响应
-     * @param workbook 创建模板
+     * @param list        要导出数据
+     * @param fieldMap    表头字英文字段名和中文名对应
+     * @param fileName    文件名
+     * @param response    响应
+     * @param workbook    创建模板
      * @param excelEntity excel文档属性
      */
-    public static void exportFile(List<Map<String, Object>> list,
-                                  LinkedHashMap<String, String> fieldMap,
-                                  String fileName,
-                                  HSSFWorkbook workbook,
-                                  ExcelEntity excelEntity,
-                                  HttpServletResponse response) throws Exception {
-
-        //Excel文档信息
-        workbook.createInformationProperties();
-        DocumentSummaryInformation info = workbook.getDocumentSummaryInformation();
-        info.setCompany(excelEntity.getCompany());
-        info.setManager(excelEntity.getManager());
-        info.setCategory(excelEntity.getCategory());
-        //Excel摘要信息
-        SummaryInformation si = workbook.getSummaryInformation();
-        si.setSubject(excelEntity.getSubject());
-        si.setTitle(excelEntity.getTitle());
-        si.setAuthor(excelEntity.getAuthor());
-        si.setComments(excelEntity.getComments());
+    public static void exportExcel(List<Map<String, Object>> list, LinkedHashMap<String, String> fieldMap, String fileName,
+                                  HSSFWorkbook workbook, ExcelEntity excelEntity, HttpServletResponse response) {
+        if (null != excelEntity) {
+            //Excel文档信息
+            workbook.createInformationProperties();
+            DocumentSummaryInformation info = workbook.getDocumentSummaryInformation();
+            info.setCompany(excelEntity.getCompany());
+            info.setManager(excelEntity.getManager());
+            info.setCategory(excelEntity.getCategory());
+            //Excel摘要信息
+            SummaryInformation si = workbook.getSummaryInformation();
+            si.setSubject(excelEntity.getSubject());
+            si.setTitle(excelEntity.getTitle());
+            si.setAuthor(excelEntity.getAuthor());
+            si.setComments(excelEntity.getComments());
+        }
 
         // 定义存放英文字段名和中文字段名的数组
         String[] enFields = new String[fieldMap.size()];
@@ -150,67 +135,6 @@ public class FileUtil {
             // 解决自动设置列宽中文失效的问题
             sheet.setColumnWidth(i, sheet.getColumnWidth(i) * 17 / 10);
         }
-        //设置响应
-        response.reset();
-        response.setContentType("application/x-download;charset=utf-8");
-        response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName + ".xls", "UTF-8"));
-        response.setHeader("Pragma","No-cache");
-        OutputStream os = response.getOutputStream();
-        workbook.write(os);
-        os.flush();
-        os.close();
-    }
-
-    /**
-     * 删除目录
-     */
-    public static boolean deleteDir(File dir) {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String child : children) {
-                boolean success = deleteDir(new File(dir, child));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-        return dir.delete();
-    }
-
-    /**
-     * 复制文件
-     */
-    public static void copy(File src, File dst) throws Exception {
-        int BUFFER_SIZE = 4096;
-        try (InputStream is = new BufferedInputStream(new FileInputStream(src), BUFFER_SIZE);
-             OutputStream os = new BufferedOutputStream(new FileOutputStream(dst), BUFFER_SIZE)
-        ) {
-            byte[] buffer = new byte[BUFFER_SIZE];
-            int len;
-            while ((len = is.read(buffer)) > 0) {
-                os.write(buffer, 0, len);
-            }
-        }
-    }
-
-    /**
-     *获取文件大小
-     */
-    public static String getFileSize(long size){
-        double cache = size / 1024f;
-        String unit = "KB";
-        if (cache >= 1024f) {
-            cache /= 1024f;
-            unit = "MB";
-        }
-        if (cache >= 1024f) {
-            cache /= 1024f;
-            unit = "GB";
-        }
-        if (cache >= 1024f) {
-            cache /= 1024f;
-            unit = "TB";
-        }
-        return new DecimalFormat("0.00").format(cache) + unit;
+        FileUtil.downloadFile(null, workbook, fileName + ".xls", response);
     }
 }

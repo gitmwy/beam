@@ -1,8 +1,7 @@
 package com.ksh.beam.system.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.OperationLog;
 
 /**
@@ -10,7 +9,7 @@ import com.ksh.beam.system.entity.sys.OperationLog;
  */
 public interface OperationLogService extends IService<OperationLog> {
 
-    IPage<OperationLog> selectPageList(Page page, OperationLog operationLog);
+    R selectPageList(OperationLog operationLog);
 
-    void  deleteAll();
+    R deleteAll();
 }

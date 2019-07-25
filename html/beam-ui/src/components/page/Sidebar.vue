@@ -60,8 +60,7 @@
                 AccountApi.getNavList().then((res)=>{
                         this.menuItems = res.data;
                         localStorage.setItem("menuItems",res.data);
-                    },
-                    (err) => {
+                    }, (err) => {
                         this.list = [];
                         this.$message.error(err.msg);
                 })
@@ -70,8 +69,7 @@
                 AccountApi.getButtonList().then((res)=>{
                         this.buttonItems = res.data;
                         localStorage.setItem("buttonItems",res.data);
-                    },
-                    (err) => {
+                    }, (err) => {
                         this.buttonItems = [];
                         this.$message.error(err.msg);
                     })

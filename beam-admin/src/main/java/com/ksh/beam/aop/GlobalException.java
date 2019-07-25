@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * 全局的的异常拦截器（拦截所有的控制器）（带有@RequestMapping注解的方法上都会拦截）
  */
 @ControllerAdvice
-public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
+public class GlobalException extends BaseControllerExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.OK)
