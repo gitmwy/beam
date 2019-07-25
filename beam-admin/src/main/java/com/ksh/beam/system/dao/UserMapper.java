@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 管理员表
@@ -16,7 +15,7 @@ import java.util.Map;
 @Repository
 public interface UserMapper extends BaseMapper<User> {
 
-    IPage<Map> selectPageList(Page page, @Param("user") User user);
+    IPage<User> selectPageList(Page page, @Param("user") User user);
 
     /**
      * 查询用户的所有权限

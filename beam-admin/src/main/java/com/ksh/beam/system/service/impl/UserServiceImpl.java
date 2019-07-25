@@ -16,6 +16,7 @@ import com.ksh.beam.system.dto.ChangePassowdForm;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.User;
 import com.ksh.beam.system.service.UserService;
+import com.ksh.beam.system.wrapper.UserWrapper;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             //非超级管理员
             user.setCompanyId(baseMapper.selectById(userId).getCompanyId());
         }
-        IPage page = baseMapper.selectPageList(new Page(user.getCurrentPage(), user.getPageSize()), user);
-        return R.ok(page);
+        IPage<User> page = baseMapper.selectPageList(new Page(user.getCurrentPage(), user.getPageSize()), user);
+
+        return R.ok(new UserWrapper(page).wrap());
     }
 
     @Override

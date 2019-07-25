@@ -89,7 +89,7 @@
         select role_id from sys_user_role where user_id = #{userId}
     </select>
 
-    <select id="selectPageList" resultType="java.util.Map">
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.sys.User">
         select <include refid="Base_Column_List"/>,
         b.name as deptName, d.name as companyName
         from sys_user a
