@@ -1,16 +1,19 @@
 package com.ksh.beam.common.shiro;
 
-import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.common.shiro.factory.ShiroFactroy;
+import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.entity.sys.User;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.stereotype.Component;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -52,8 +55,7 @@ public class UserRealm extends AuthorizingRealm {
 	 * 认证(登录时调用)
 	 */
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(
-			AuthenticationToken authcToken) throws AuthenticationException {
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 		IShiro shiroFactory = ShiroFactroy.me();
 		UsernamePasswordToken token = (UsernamePasswordToken)authcToken;
 		User user = shiroFactory.user(token.getUsername());
@@ -65,9 +67,6 @@ public class UserRealm extends AuthorizingRealm {
 
 	@Override
 	public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
-		HashedCredentialsMatcher shaCredentialsMatcher = new HashedCredentialsMatcher();
-		shaCredentialsMatcher.setHashAlgorithmName(ShiroUtils.hashAlgorithmName);
-		shaCredentialsMatcher.setHashIterations(ShiroUtils.hashIterations);
-		super.setCredentialsMatcher(shaCredentialsMatcher);
+		super.setCredentialsMatcher(credentialsMatcher);
 	}
 }

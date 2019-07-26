@@ -13,13 +13,20 @@ public interface CacheKey {
      * 角色名称(单个)
      */
     String SINGLE_ROLE_NAME = "single_role_name_";
-
     /**
      * 部门名称
      */
     String DEPT_NAME = "dept_name_";
-
-    String USER_ID = "USER_ID_";
-
-    String USER_MENU = "USER_MENU_";
+    /**
+     * 用户ID
+     */
+    String USER_ID = "user_id_";
+    /**
+     * 用户菜单
+     */
+    String USER_MENU = "user_menu_";
+    /**
+     * shiro登陆次数限制
+     */
+    String CACHE_KEY_PREFIX = "shiro:cache:retrylimit:";
 }

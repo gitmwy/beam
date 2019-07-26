@@ -2,6 +2,8 @@ package com.ksh.beam.config;
 
 import com.ksh.beam.common.intercept.KickoutSessionFilter;
 import com.ksh.beam.common.shiro.RedisShiroSessionDAO;
+import com.ksh.beam.common.shiro.RetryLimitHashedCredentialsMatcher;
+import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.shiro.UserRealm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -21,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Shiro的配置文件
+ * Shiro配置
  */
 @Configuration
 public class ShiroConfig {
@@ -29,7 +31,7 @@ public class ShiroConfig {
     @Bean("sessionManager")
     public SessionManager sessionManager(RedisShiroSessionDAO redisShiroSessionDAO,
                                          @Value("${beam.admin.redis-open}") boolean redisOpen,
-                                         @Value("${beam.admin.shiro-redis}") boolean shiroRedis){
+                                         @Value("${beam.admin.shiro-redis}") boolean shiroRedis) {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         //设置session过期时间为1小时(单位：毫秒)，默认为30分钟
         sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
@@ -37,15 +39,27 @@ public class ShiroConfig {
         sessionManager.setSessionIdUrlRewritingEnabled(false);
 
         //如果开启redis缓存且beam.admin.shiro-redis=true，则shiro session存到redis里
-        if(redisOpen && shiroRedis){
+        if (redisOpen && shiroRedis) {
             sessionManager.setSessionDAO(redisShiroSessionDAO);
         }
         return sessionManager;
     }
 
+    /**
+     * 配置密码比较器
+     */
+    @Bean("credentialsMatcher")
+    public RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher(){
+        RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher = new RetryLimitHashedCredentialsMatcher();
+        retryLimitHashedCredentialsMatcher.setHashAlgorithmName(ShiroUtils.hashAlgorithmName);
+        retryLimitHashedCredentialsMatcher.setHashIterations(ShiroUtils.hashIterations);
+        return retryLimitHashedCredentialsMatcher;
+    }
+
     @Bean("securityManager")
     public SecurityManager securityManager(UserRealm userRealm, SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        userRealm.setCredentialsMatcher(retryLimitHashedCredentialsMatcher());
         securityManager.setRealm(userRealm);
         securityManager.setSessionManager(sessionManager);
 

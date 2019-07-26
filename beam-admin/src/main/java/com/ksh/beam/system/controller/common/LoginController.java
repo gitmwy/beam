@@ -2,11 +2,10 @@ package com.ksh.beam.system.controller.common;
 
 import com.ksh.beam.common.log.LogManager;
 import com.ksh.beam.common.log.factory.LogTaskFactory;
-import com.ksh.beam.common.log.state.LogSucceed;
 import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.util.CaptchaUtil;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.RedisUtil;
+import com.ksh.beam.common.utils.RedisManager;
 import com.ksh.beam.system.dto.LoginForm;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +32,7 @@ import static com.ksh.beam.common.support.HttpKit.getIp;
 public class LoginController {
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisManager redisManager;
 
     @ApiOperation("登陆")
     @PostMapping(value = "/login")
@@ -51,13 +50,13 @@ public class LoginController {
         try {
             Subject subject = ShiroUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(loginForm.getUsername(), loginForm.getPassword());
+            subject.isAuthenticated();
             subject.login(token);
             LogManager.me().executeLog(LogTaskFactory.loginSuccessLog(ShiroUtils.getUserId(), getIp()));
         } catch (UnknownAccountException e) {
-            e.getStackTrace();
-            return R.fail(LogSucceed.FAIL.getMessage());
+            return R.fail("该账号名不存在");
         } catch (IncorrectCredentialsException e) {
-            return R.fail("账号或者密码不正确");
+            return R.fail("账号或密码不正确");
         } catch (LockedAccountException e) {
             return R.fail("账号已被锁定，请联系管理员");
         } catch (AuthenticationException e) {
@@ -85,7 +84,7 @@ public class LoginController {
     @GetMapping(value = "/clearCache")
     @ResponseBody
     public R clearCache() {
-        redisUtil.clearCache();
+        redisManager.clearCache();
         return R.ok("清除成功");
     }
 }

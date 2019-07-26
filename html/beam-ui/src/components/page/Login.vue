@@ -22,7 +22,7 @@
 <!--                    <el-col :span="12">-->
 <!--                        <img :src="ruleForm.src" @click="refreshCaptcha" alt="加载失败" style="float: right"/>-->
 <!--                    </el-col>-->
-                    <Slider :confirm-words="confirmWords" ref="slider"/>
+                    <Slider :slider_word="slider_word" ref="slider"/>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" v-loading="loading" @click="submitForm('ruleForm')">登录</el-button>
@@ -57,7 +57,7 @@
                     //     {required: true, message: '请输入验证码', trigger: 'blur'}
                     // ]
                 },
-                confirmWords: "拖动滑块验证"
+                slider_word: "拖动滑块验证"
             }
         },
         // created () {
@@ -78,8 +78,11 @@
                                 this.$message.success(res.msg);
                                 localStorage.setItem('sysuser', JSON.stringify(res.data));
                                 this.$router.push({path: '/'});
+                            } else {
+                                this.$refs.slider.reloadSlider();
                             }
                         }, (err) => {
+                            this.$refs.slider.reloadSlider();
                             this.loading = false;
                             this.$message.error(err.msg);
                         })

@@ -105,8 +105,7 @@ public class ConstantFactory implements IConstantFactory {
         } else {
             QueryWrapper<Dict> wrapper = new QueryWrapper<>();
             wrapper = wrapper.eq("pid", dict.getId());
-            List<Dict> dicts = dictMapper.selectList(wrapper);
-            return dicts;
+            return dictMapper.selectList(wrapper);
         }
     }
 }

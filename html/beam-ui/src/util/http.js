@@ -77,7 +77,7 @@ const Http = {
         if (err.response) {
             const res = {
                 code: err.response.data.code,
-                msg: err.response.data.message,
+                msg: err.response.data.msg,
             };
             return Promise.reject(res)
         } else if (err.request) {

@@ -1,7 +1,7 @@
 <template>
     <div class="drag" ref="dragDiv">
         <div class="drag_bg"></div>
-        <div class="drag_text">{{word}}</div>
+        <div class="drag_text">{{confirmWords}}</div>
         <div ref="moveDiv" @mousedown="mousedownFn($event)" :class="{'handler_ok_bg': confirmSuccess}" class="handler handler_bg" style="position: absolute;top: 0;left: 0;"></div>
     </div>
 </template>
@@ -9,15 +9,15 @@
 <script>
     export default {
         props: {
-            confirmWords: String
+            slider_word: String
         },
         data() {
             return {
                 beginClientX: 0,           /*距离屏幕左端距离*/
                 mouseMoveStatus: false,     /*触发拖动状态  判断*/
                 maxWidth: '',               /*拖动最大宽度，依据滑块宽度算出来的*/
-                word: this.confirmWords,   /*滑块文字*/
-                confirmSuccess: false           /*验证成功判断*/
+                confirmWords: this.slider_word,   /*滑块文字*/
+                confirmSuccess: false,           /*验证成功判断*/
             }
         },
         mounted(){
@@ -35,7 +35,7 @@
             },
             successFunction() {
                 this.confirmSuccess = true;
-                this.word = '验证通过';
+                this.confirmWords = '验证通过';
                 if (window.addEventListener) {
                     document.getElementsByTagName('html')[0].removeEventListener('mousemove', this.mouseMoveFn);
                     document.getElementsByTagName('html')[0].removeEventListener('mouseup', this.moseUpFn);
@@ -65,6 +65,17 @@
                     document.getElementsByClassName('handler')[0].style.left = 0 + 'px';
                     document.getElementsByClassName('drag_bg')[0].style.width = 0 + 'px';
                 }
+            },
+            reloadSlider(){
+                this.mouseMoveStatus = false;
+                this.confirmSuccess = false;
+                this.confirmWords = "拖动滑块验证";
+                this.maxWidth = '';
+                this.beginClientX = 0;
+                document.getElementsByClassName('drag_text')[0].style.color = '#606266';
+                document.getElementsByClassName('handler')[0].style.left = 0 + 'px';
+                document.getElementsByClassName('drag_bg')[0].style.width = 0 + 'px';
+                this.maxWidth = this.$refs.dragDiv.clientWidth - this.$refs.moveDiv.clientWidth;
             }
         }
     }

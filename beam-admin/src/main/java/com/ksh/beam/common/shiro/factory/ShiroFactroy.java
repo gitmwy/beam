@@ -1,10 +1,6 @@
 package com.ksh.beam.common.shiro.factory;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ksh.beam.system.dao.MenuMapper;
-import com.ksh.beam.system.dao.UserMapper;
-import com.ksh.beam.system.entity.sys.Menu;
-import com.ksh.beam.system.entity.sys.User;
 import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.constant.cache.Cache;
 import com.ksh.beam.common.constant.cache.CacheKey;
@@ -12,6 +8,10 @@ import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.shiro.IShiro;
 import com.ksh.beam.common.shiro.ShiroUser;
 import com.ksh.beam.common.utils.SpringContextHolder;
+import com.ksh.beam.system.dao.MenuMapper;
+import com.ksh.beam.system.dao.UserMapper;
+import com.ksh.beam.system.entity.sys.Menu;
+import com.ksh.beam.system.entity.sys.User;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -48,12 +48,12 @@ public class ShiroFactroy implements IShiro {
 
         //账号不存在
         if(user == null) {
-            throw new UnknownAccountException("账号或密码不正确");
+            throw new UnknownAccountException("该账号名不存在");
         }
 
         //账号锁定
         if(user.getStatus() == 0){
-            throw new LockedAccountException("账号已被锁定,请联系管理员");
+            throw new LockedAccountException("账号已被锁定，请联系管理员");
         }
         return user;
     }

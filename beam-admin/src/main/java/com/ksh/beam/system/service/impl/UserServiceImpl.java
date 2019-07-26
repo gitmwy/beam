@@ -9,7 +9,7 @@ import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.util.OSSFactory;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.RedisUtil;
+import com.ksh.beam.common.utils.RedisManager;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.UserMapper;
 import com.ksh.beam.system.dto.ChangePassowdForm;
@@ -35,7 +35,7 @@ import java.util.UUID;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisManager redisManager;
 
     @Override
     public R selectPageList(User user) {
@@ -69,7 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 //删除用户关联角色
                 baseMapper.delURByUserId(user.getId());
                 // 插入用户角色关系
-                redisUtil.clearCache();
+                redisManager.clearCache();
                 if (user.getRoleIds().size() <= 0) {
                     return R.ok();
                 } else {
@@ -80,6 +80,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 return R.fail("未知原因，保存失败");
             }
         } else {
+            User tempUser = this.getOne(new QueryWrapper<User>().eq("account", user.getAccount()));
+            if(null != tempUser){
+                return R.fail("该账号名已存在");
+            }
             String salt = RandomStringUtils.randomAlphanumeric(20);
             user.setSalt(salt);
             user.setPassword(ShiroUtils.sha256("123456", salt));

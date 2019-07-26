@@ -21,16 +21,16 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
 
     @Autowired
-    private RedisTemplate redisTemplate;
-    @Resource(name="redisTemplate")
+    private RedisTemplate<String, Object> redisTemplate;
+    @Resource(name="valueOperations")
     private ValueOperations<String, String> valueOperations;
-    @Resource(name="redisTemplate")
+    @Resource(name="hashOperations")
     private HashOperations<String, String, Object> hashOperations;
-    @Resource(name="redisTemplate")
+    @Resource(name="listOperations")
     private ListOperations<String, Object> listOperations;
-    @Resource(name="redisTemplate")
+    @Resource(name="setOperations")
     private SetOperations<String, Object> setOperations;
-    @Resource(name="redisTemplate")
+    @Resource(name="zSetOperations")
     private ZSetOperations<String, Object> zSetOperations;
 
     /**  默认过期时长，单位：秒 */

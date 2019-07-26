@@ -6,7 +6,7 @@ import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.constant.cache.Cache;
 import com.ksh.beam.common.constant.cache.CacheKey;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.RedisUtil;
+import com.ksh.beam.common.utils.RedisManager;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.MenuMapper;
 import com.ksh.beam.system.entity.sys.Menu;
@@ -29,7 +29,7 @@ import java.util.Map;
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisManager redisManager;
 
     @Autowired
     private UserService userService;
@@ -145,7 +145,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         }
         if (this.saveOrUpdate(menu)) {
             //清除缓存
-            redisUtil.clearCache();
+            redisManager.clearCache();
             return R.ok();
         } else {
             return R.fail();
@@ -176,7 +176,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             }
         }
         //清除缓存
-        redisUtil.clearCache();
+        redisManager.clearCache();
         this.removeByIds(Arrays.asList(menuIds));
         return R.ok();
     }

@@ -7,9 +7,11 @@ import com.ksh.beam.common.base.entity.DataEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class User extends DataEntity<Long> {
 	/**
 	 * 部门ID
 	 */
-	@NotBlank(message = "部门不能为空")
+	@NotNull(message = "部门不能为空")
 	private Long deptId;
 	/**
 	 * 生日
@@ -71,7 +73,7 @@ public class User extends DataEntity<Long> {
 	 * 电话
 	 */
 	@NotBlank(message = "手机号不能为空")
-	@Max(value = 11)
+	@Size(max = 11)
 	@Pattern(regexp = "^[1][3456789][0-9]{9}$", message = "请输入正确的手机号")
 	private String phone;
 	/**
@@ -96,6 +98,7 @@ public class User extends DataEntity<Long> {
 	@TableField(exist = false)
 	private String deptIds;
 
+	@NotEmpty(message = "请选择角色")
 	@TableField(exist = false)
 	private List<Long> roleIds;
 
