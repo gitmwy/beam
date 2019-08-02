@@ -3,8 +3,8 @@ package com.ksh.beam.config;
 import com.ksh.beam.common.intercept.KickoutSessionFilter;
 import com.ksh.beam.common.shiro.RedisShiroSessionDAO;
 import com.ksh.beam.common.shiro.RetryLimitHashedCredentialsMatcher;
+import com.ksh.beam.common.shiro.ShiroRealm;
 import com.ksh.beam.common.shiro.ShiroUtils;
-import com.ksh.beam.common.shiro.UserRealm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -28,14 +28,21 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-    @Bean("sessionManager")
-    public SessionManager sessionManager(RedisShiroSessionDAO redisShiroSessionDAO,
-                                         @Value("${beam.admin.redis-open}") boolean redisOpen,
-                                         @Value("${beam.admin.shiro-redis}") boolean shiroRedis) {
+    //配置会话管理器，设定会话超时及保存
+    @Bean
+    public SessionManager sessionManager(
+            RedisShiroSessionDAO redisShiroSessionDAO,
+            @Value("${beam.admin.redis-open}") boolean redisOpen,
+            @Value("${beam.admin.shiro-redis}") boolean shiroRedis
+    ) {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         //设置session过期时间为1小时(单位：毫秒)，默认为30分钟
         sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
+        // 删除无效session
+        sessionManager.setDeleteInvalidSessions(true);
+        //是否开启定时调度器进行检测过期session 默认为true
         sessionManager.setSessionValidationSchedulerEnabled(true);
+        //取消url 后面的 JSESSIONID
         sessionManager.setSessionIdUrlRewritingEnabled(false);
 
         //如果开启redis缓存且beam.admin.shiro-redis=true，则shiro session存到redis里
@@ -45,9 +52,7 @@ public class ShiroConfig {
         return sessionManager;
     }
 
-    /**
-     * 配置密码比较器
-     */
+     //配置密码比较器
     @Bean("credentialsMatcher")
     public RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher(){
         RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher = new RetryLimitHashedCredentialsMatcher();
@@ -56,17 +61,25 @@ public class ShiroConfig {
         return retryLimitHashedCredentialsMatcher;
     }
 
-    @Bean("securityManager")
-    public SecurityManager securityManager(UserRealm userRealm, SessionManager sessionManager) {
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        userRealm.setCredentialsMatcher(retryLimitHashedCredentialsMatcher());
-        securityManager.setRealm(userRealm);
-        securityManager.setSessionManager(sessionManager);
+    //配置自定义的权限登录器
+    @Bean
+    public ShiroRealm shiroRealm(){
+        ShiroRealm shiroRealm = new ShiroRealm();
+        shiroRealm.setCredentialsMatcher(retryLimitHashedCredentialsMatcher());
+        return shiroRealm;
+    }
 
+    //配置核心安全事务管理器
+    @Bean
+    public SecurityManager securityManager(ShiroRealm shiroRealm, SessionManager sessionManager) {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(shiroRealm);
+        securityManager.setSessionManager(sessionManager);
         return securityManager;
     }
 
-    @Bean("shiroFilter")
+    //ShiroFilterFactoryBean 处理拦截资源
+    @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
@@ -76,7 +89,8 @@ public class ShiroConfig {
 
         //session过期拦截
         HashMap<String, Filter> myFilters = new HashMap<>();
-        myFilters.put("user", new KickoutSessionFilter());
+        //自定义限制器
+        myFilters.put("kickout", kickoutSessionFilter());
         shiroFilter.setFilters(myFilters);
 
         Map<String, String> filterMap = new LinkedHashMap<>();
@@ -93,14 +107,26 @@ public class ShiroConfig {
 
         filterMap.put("/favicon.ico", "anon");
         //加入自定义过滤器
-        filterMap.put("/**", "user");
+        filterMap.put("/**", "kickout,user");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;
     }
 
-    @Bean("lifecycleBeanPostProcessor")
-    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+    //并发登录控制
+    @Bean
+    public KickoutSessionFilter kickoutSessionFilter(){
+        KickoutSessionFilter kickoutSessionFilter = new KickoutSessionFilter();
+        //是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；
+        kickoutSessionFilter.setKickoutAfter(false);
+        //同一个用户最大的会话数，默认1；比如2的意思是同一个用户允许最多同时两个人登录；
+        kickoutSessionFilter.setMaxSession(1);
+        return kickoutSessionFilter;
+    }
+
+    //配置Shiro生命周期处理器
+    @Bean
+    public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
 
@@ -111,6 +137,7 @@ public class ShiroConfig {
         return proxyCreator;
     }
 
+    //开启shiro 注解模式，可以在controller中的方法前加上注解，如 @RequiresPermissions("userInfo:add")
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();

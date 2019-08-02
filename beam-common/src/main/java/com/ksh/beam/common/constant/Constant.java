@@ -31,7 +31,7 @@ public class Constant {
     }
 
     /**
-     * 云服务商
+     * 云服务
      */
     public enum CloudService {
         //阿里云

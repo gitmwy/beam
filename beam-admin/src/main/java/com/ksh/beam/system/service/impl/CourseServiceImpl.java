@@ -78,5 +78,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     public void downloadFile(Long id, HttpServletResponse response) {
         Course course = baseMapper.selectById(id);
         OSSFactory.buildFtp().ftpDownload(course.getFilePath(), course.getFileName(), course.getCourseName(), response);
+        course.setDownloadTimes(course.getDownloadTimes() + 1);
+        this.updateById(course);
     }
 }

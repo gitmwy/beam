@@ -45,6 +45,7 @@ public class GlobalTransaction {
         source.addTransactionalMethod("remove*", txAttr_REQUIRED);
         source.addTransactionalMethod("batch*", txAttr_REQUIRED);
         source.addTransactionalMethod("set*", txAttr_REQUIRED);
+        source.addTransactionalMethod("download*", txAttr_REQUIRED);
         source.addTransactionalMethod("get*", txAttr_REQUIRED_READONLY);
         source.addTransactionalMethod("select*", txAttr_REQUIRED_READONLY);
         source.addTransactionalMethod("query*", txAttr_REQUIRED_READONLY);

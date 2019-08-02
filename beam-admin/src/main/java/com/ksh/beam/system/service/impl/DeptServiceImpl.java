@@ -6,10 +6,10 @@ import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.DeptMapper;
+import com.ksh.beam.system.dao.UserMapper;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.User;
 import com.ksh.beam.system.service.DeptService;
-import com.ksh.beam.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +24,14 @@ import java.util.List;
 public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements DeptService {
 
     @Autowired
-    private UserService userService;
+    private UserMapper userMapper;
 
     /**
      * 获取树形列表
      */
     @Override
     public R treeDeptList(Dept dept) {
-        User user = userService.getById(ShiroUtils.getUserId());
+        User user = userMapper.selectById(ShiroUtils.getUserId());
         if(Constant.SUPER_ADMIN != user.getId()){
             //非超级管理员
             dept.setId(user.getCompanyId());

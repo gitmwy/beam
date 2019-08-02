@@ -70,12 +70,12 @@
                 this.mouseMoveStatus = false;
                 this.confirmSuccess = false;
                 this.confirmWords = "拖动滑块验证";
-                this.maxWidth = '';
                 this.beginClientX = 0;
                 document.getElementsByClassName('drag_text')[0].style.color = '#606266';
                 document.getElementsByClassName('handler')[0].style.left = 0 + 'px';
                 document.getElementsByClassName('drag_bg')[0].style.width = 0 + 'px';
-                this.maxWidth = this.$refs.dragDiv.clientWidth - this.$refs.moveDiv.clientWidth;
+                document.getElementsByTagName('html')[0].addEventListener('mousemove',this.mouseMoveFn);
+                document.getElementsByTagName('html')[0].addEventListener('mouseup',this.moseUpFn)
             }
         }
     }

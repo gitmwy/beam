@@ -11,6 +11,7 @@ import com.ksh.beam.common.util.OSSFactory;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisManager;
 import com.ksh.beam.common.utils.ToolUtil;
+import com.ksh.beam.system.dao.DeptMapper;
 import com.ksh.beam.system.dao.UserMapper;
 import com.ksh.beam.system.dto.ChangePassowdForm;
 import com.ksh.beam.system.entity.sys.Dept;
@@ -37,6 +38,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private RedisManager redisManager;
 
+    @Autowired
+    private DeptMapper deptMapper;
+
     @Override
     public R selectPageList(User user) {
         Long userId = ShiroUtils.getUserId();
@@ -52,7 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public R saveUser(User user) {
         //获取公司ID
-        List<Dept> depts = ConstantFactory.me().queryDeptNameById(user.getDeptId());
+        List<Dept> depts = deptMapper.queryDeptNameById(user.getDeptId());
         for(Dept dept : depts){
             if(0 == dept.getParentId()){
                 user.setCompanyId(dept.getId());
@@ -173,7 +177,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setRoleIds(roleIds);
 
         //获取所在部门
-        List<Dept> depts = ConstantFactory.me().queryDeptNameById(user.getDeptId());
+        List<Dept> depts = deptMapper.queryDeptNameById(user.getDeptId());
         if (depts.size() > 0) {
             StringBuilder deptName = new StringBuilder();
             for(Dept dept : depts){

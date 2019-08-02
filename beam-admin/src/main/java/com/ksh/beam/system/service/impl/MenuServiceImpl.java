@@ -2,16 +2,15 @@ package com.ksh.beam.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ksh.beam.common.constant.CacheConstant;
 import com.ksh.beam.common.constant.Constant;
-import com.ksh.beam.common.constant.cache.Cache;
-import com.ksh.beam.common.constant.cache.CacheKey;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisManager;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.MenuMapper;
+import com.ksh.beam.system.dao.UserMapper;
 import com.ksh.beam.system.entity.sys.Menu;
 import com.ksh.beam.system.service.MenuService;
-import com.ksh.beam.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     private RedisManager redisManager;
 
     @Autowired
-    private UserService userService;
+    private UserMapper userMapper;
 
     @Override
     public List<Map<String, Object>> queryListParentId(Long parentId, List<Long> menuIdList) {
@@ -78,19 +77,19 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             menuList = queryListParentId(0L);
         }
         //用户菜单列表
-        List<Long> menuIdList = userService.queryAllMenuId(userId);
+        List<Long> menuIdList = userMapper.queryAllMenuId(userId);
         return getAllMenuTreeList(userId, menuList, menuIdList);
     }
 
     @Override
-    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.USER_ID + "'+#userId")
+    @Cacheable(value = CacheConstant.SHIRO_CACHE_KEY_PREFIX, key = "'" + CacheConstant.USER_MENU + "'+#userId")
     public List<Map<String, Object>> getUserMenuList(Long userId) {
         //系统管理员，拥有最高权限
         if (userId == Constant.SUPER_ADMIN) {
             return getAllMenuList(null);
         }
         //用户菜单列表
-        List<Long> menuIdList = userService.queryAllMenuId(userId);
+        List<Long> menuIdList = userMapper.queryAllMenuId(userId);
         return getAllMenuList(menuIdList);
     }
 

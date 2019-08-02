@@ -1,14 +1,18 @@
 package com.ksh.beam.common.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.ksh.beam.common.constant.CacheConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,11 +26,11 @@ public class RedisManager {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Resource(name="valueOperations")
+    private ValueOperations<String, String> valueOperations;
 
     /**  默认过期时长，单位：秒 */
-    private final static long DEFAULT_EXPIRE = 60 * 60 * 24;
-    /**  不设置过期时长 */
-    private final static long NOT_EXPIRE = -1;
+    public final static long DEFAULT_EXPIRE = 60 * 60;
 
     /**
      * 指定缓存失效时间
@@ -77,15 +81,19 @@ public class RedisManager {
         return redisTemplate.opsForValue().get(key);
     }
 
+    public <T> T get(String key, Class<T> clazz) {
+        String value = valueOperations.get(key);
+        return value == null ? null : fromJson(value, clazz);
+    }
+
     /**
      * 普通缓存放入
      * @param key 键
      * @param value 值
      */
     public void set(String key,Object value) {
-        set(key, value, DEFAULT_EXPIRE);
+        redisTemplate.opsForValue().set(key, value);
     }
-
 
     /**
      * 普通缓存放入并设置时间
@@ -95,7 +103,7 @@ public class RedisManager {
      */
     public void set(String key,Object value,long expire){
         if(expire>0){
-            redisTemplate.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(key,value, expire, TimeUnit.SECONDS);
         }else{
             set(key, value);
         }
@@ -131,7 +139,25 @@ public class RedisManager {
         });
     }
 
-    @CacheEvict(value = {"CONSTANT"},allEntries = true)
+    /**
+     * Object转成JSON数据
+     */
+    private String toJson(Object object){
+        if(object instanceof Integer || object instanceof Long || object instanceof Float ||
+                object instanceof Double || object instanceof Boolean || object instanceof String){
+            return String.valueOf(object);
+        }
+        return JSON.toJSONString(object);
+    }
+
+    /**
+     * JSON数据，转成Object
+     */
+    private <T> T fromJson(String json, Class<T> clazz){
+        return JSON.parseObject(json, clazz);
+    }
+
+    @CacheEvict(value = CacheConstant.SHIRO_CACHE_KEY_PREFIX, allEntries = true)
     public void clearCache() {
 
     }

@@ -21,7 +21,8 @@
         "vue-router": "^3.0.1",
         "vue-schart": "^1.0.0",
         "vuedraggable": "^2.16.0",
-        "vue-video-player": "^5.0.2"
+        "vue-video-player": "^5.0.2",
+        "vue-cookie": "^1.1.4"
     },
     "devDependencies": {
         "autoprefixer": "^7.1.2",

@@ -97,7 +97,7 @@
                 return this.name;
             },
             sysuser(){
-                let sysuser = JSON.parse(localStorage.getItem('sysuser'));
+                let sysuser = JSON.parse(this.$cookie.get('sysuser'));
                 return sysuser?sysuser:this.user;
             }
         },
@@ -137,8 +137,10 @@
                 }
             },
             handleLogout(){
-                AccountApi.handleLogout().then((res) => {
-                    localStorage.removeItem('sysuser');
+                AccountApi.handleLogout().then(() => {
+                    this.$cookie.delete('sysuser');
+                    this.$cookie.delete('menuItems');
+                    this.$cookie.delete('buttonItems');
                     this.$router.push('/login');
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -147,8 +149,8 @@
             clearCache(){
                 AccountApi.clearCache().then((res) => {
                     bus.$emit('closeAll', "");
-                    localStorage.removeItem('menuItems');
-                    localStorage.removeItem('buttonItems');
+                    this.$cookie.delete('menuItems');
+                    this.$cookie.delete('buttonItems');
                     this.$message({
                         showClose: true,
                         type: 'success',

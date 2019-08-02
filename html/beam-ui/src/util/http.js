@@ -1,4 +1,5 @@
 import axios from 'axios'
+import cookie from 'vue-cookie';
 import {Message} from 'element-ui'
 
 const Http = {
@@ -38,6 +39,7 @@ const Http = {
 
     //get请求
     get(url, params) {
+        axios.defaults.headers['Shiro-Token'] = cookie.get('shiroToken');
         const data = Object.assign({}, params);
         url = "/beam_ht" + url;
         return axios.get(url, {params: data}).then((res) => {
@@ -50,6 +52,7 @@ const Http = {
     //post请求
     post(url, data) {
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+        axios.defaults.headers['Shiro-Token'] = cookie.get('shiroToken');
         url = "/beam_ht" + url;
         return axios.post(url, data).then((res) => {
             return this.result(res);
@@ -63,6 +66,7 @@ const Http = {
             return Promise.resolve(res.data); //成功
         } else {
             if (res.data.code === -1) {
+                cookie.delete('sysuser');
                 window.location = "/login";
             } else if (res.data.code === 403) {
                 window.location = "/403";

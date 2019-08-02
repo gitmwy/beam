@@ -116,7 +116,7 @@
         },
         computed: {
             sysuser(){
-                let sysuser = JSON.parse(localStorage.getItem('sysuser'));
+                let sysuser = JSON.parse(this.$cookie.get('sysuser'));
                 return sysuser?sysuser:this.user;
             }
         },

@@ -59,7 +59,7 @@
             getNavList(){
                 AccountApi.getNavList().then((res)=>{
                         this.menuItems = res.data;
-                        localStorage.setItem("menuItems",res.data);
+                    this.$cookie.set("menuItems", res.data, 1);
                     }, (err) => {
                         this.list = [];
                         this.$message.error(err.msg);
@@ -68,7 +68,7 @@
             getButtonList(){
                 AccountApi.getButtonList().then((res)=>{
                         this.buttonItems = res.data;
-                        localStorage.setItem("buttonItems",res.data);
+                        this.$cookie.set("buttonItems", res.data, 1);
                     }, (err) => {
                         this.buttonItems = [];
                         this.$message.error(err.msg);

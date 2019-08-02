@@ -3,7 +3,9 @@ package com.ksh.beam.common.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ksh.beam.common.constant.cache.Cache;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.ksh.beam.common.constant.CacheConstant;
+import com.ksh.beam.common.utils.RedisManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -38,33 +40,33 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
     public RedisCacheManager cacheManager() {
         return new RedisCacheManager(
                 RedisCacheWriter.nonLockingRedisCacheWriter(factory),
-                this.getRedisCacheConfigurationWithTtl(30*60), // 默认策略，未配置的 key 会使用这个
+                this.getRedisCacheConfigurationWithTtl(30*60L), // 默认策略，未配置的 key 会使用这个
                 this.getRedisCacheConfigurationMap() // 指定 key 策略
         );
+    }
 
+    @Bean
+    public Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer(){
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+        return jackson2JsonRedisSerializer;
     }
 
     private Map<String, RedisCacheConfiguration> getRedisCacheConfigurationMap() {
         Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new HashMap<>();
         //SsoCache和BasicDataCache进行过期时间配置
-        redisCacheConfigurationMap.put(Cache.CONSTANT, this.getRedisCacheConfigurationWithTtl(24*60*60));
+        redisCacheConfigurationMap.put(CacheConstant.SHIRO_CACHE_KEY_PREFIX, this.getRedisCacheConfigurationWithTtl(RedisManager.DEFAULT_EXPIRE));
         return redisCacheConfigurationMap;
     }
 
-    private RedisCacheConfiguration getRedisCacheConfigurationWithTtl(Integer seconds) {
-        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-        jackson2JsonRedisSerializer.setObjectMapper(om);
-
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
-        redisCacheConfiguration = redisCacheConfiguration.serializeValuesWith(
-                RedisSerializationContext
-                        .SerializationPair
-                        .fromSerializer(jackson2JsonRedisSerializer)
-        ).entryTtl(Duration.ofSeconds(seconds));
-
-        return redisCacheConfiguration;
+    private RedisCacheConfiguration getRedisCacheConfigurationWithTtl(Long seconds) {
+        return RedisCacheConfiguration
+                .defaultCacheConfig()
+                .computePrefixWith(cacheName -> cacheName)
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer()))
+                .entryTtl(Duration.ofSeconds(seconds));
     }
 }

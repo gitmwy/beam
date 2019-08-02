@@ -1,7 +1,7 @@
 package com.ksh.beam.common.shiro;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ksh.beam.common.constant.cache.CacheKey;
+import com.ksh.beam.common.constant.CacheConstant;
 import com.ksh.beam.common.utils.RedisManager;
 import com.ksh.beam.system.dao.UserMapper;
 import com.ksh.beam.system.entity.sys.User;
@@ -29,7 +29,7 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
     private RedisManager redisManager;
 
     private String getRedisRetryLimitKey(String account) {
-        return CacheKey.CACHE_KEY_PREFIX + account;
+        return CacheConstant.SHIRO_RETRYLIMIT_KEY_PREFIX + account;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
             //如果正确,从缓存中将用户登录计数 清除
             redisManager.del(getRedisRetryLimitKey(account));
         }else {
-            redisManager.set(getRedisRetryLimitKey(account), retryCount);
+            redisManager.set(getRedisRetryLimitKey(account), retryCount, RedisManager.DEFAULT_EXPIRE);
         }
         return matches;
     }

@@ -50,7 +50,7 @@ public class LoginController {
         try {
             Subject subject = ShiroUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(loginForm.getUsername(), loginForm.getPassword());
-            subject.isAuthenticated();
+//            token.setRememberMe(true);
             subject.login(token);
             LogManager.me().executeLog(LogTaskFactory.loginSuccessLog(ShiroUtils.getUserId(), getIp()));
         } catch (UnknownAccountException e) {

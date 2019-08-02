@@ -1,7 +1,7 @@
 package com.ksh.beam.common.factory;
 
-import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.Dict;
+import com.ksh.beam.system.entity.sys.User;
 
 import java.util.List;
 
@@ -21,6 +21,9 @@ public interface IConstantFactory {
     //根据父级字典code和获取字典名称
     List<Dict> getDictListByCode(String pcode);
 
-    //根据子ID查询所有父级
-    List<Dept> queryDeptNameById(Long deptId);
+     //获取用户权限
+    List<String> findPermissionsByUserId(Long userId);
+
+    //获取用户
+    User getUserByAccount(String account);
 }

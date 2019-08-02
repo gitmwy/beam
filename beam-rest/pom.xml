@@ -76,14 +76,6 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-        </dependency>
-
-
-
-
         <!--dubbo依赖包 使用dubbo时把注释打开-->
         <!--<dependency>-->
             <!--<groupId>com.alibaba.boot</groupId>-->
@@ -106,9 +98,6 @@
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
         </dependency>
-
-
-
     </dependencies>
 
     <build>
@@ -144,6 +133,4 @@
             </resource>
         </resources>
     </build>
-
-
 </project>

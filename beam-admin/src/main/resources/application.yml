@@ -31,7 +31,7 @@ spring:
     host: 127.0.0.1
     port: 6379
     password: 123456
-    timeout: 6000ms
+    timeout: 6000 #超时时间（毫秒）
 log:
   path: /home/beam/local
 
@@ -49,7 +49,7 @@ spring:
     host: 127.0.0.1
     port: 6379
     password:
-    timeout: 6000ms
+    timeout: 6000
 log:
   path: /home/beam/dev
 
@@ -67,6 +67,6 @@ spring:
     host: 127.0.0.1
     port: 6379
     password:
-    timeout: 6000ms
+    timeout: 6000
 log:
   path: /home/beam/pro

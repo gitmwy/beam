@@ -76,7 +76,7 @@
                             this.loading = false;
                             if (res.error === false) {
                                 this.$message.success(res.msg);
-                                localStorage.setItem('sysuser', JSON.stringify(res.data));
+                                this.$cookie.set("sysuser",JSON.stringify(res.data), 1);
                                 this.$router.push({path: '/'});
                             } else {
                                 this.$refs.slider.reloadSlider();

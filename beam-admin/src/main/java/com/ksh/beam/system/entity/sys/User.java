@@ -88,20 +88,30 @@ public class User extends DataEntity<Long> {
 	 * 公司ID
 	 */
 	private Long companyId;
-
+	/**
+	 * 公司名称
+	 */
 	@TableField(exist = false)
 	private String companyName;
-
+	/**
+	 * 部门名称
+	 */
 	@TableField(exist = false)
 	private String deptName;
-
+	/**
+	 * 多个部门ID
+	 */
 	@TableField(exist = false)
 	private String deptIds;
-
+	/**
+	 * 选择的角色
+	 */
 	@NotEmpty(message = "请选择角色")
 	@TableField(exist = false)
 	private List<Long> roleIds;
-
+	/**
+	 * 性别
+	 */
 	@TableField(exist = false)
 	private String sexName;
 

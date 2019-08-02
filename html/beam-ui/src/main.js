@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import axios from 'axios';
+import cookie from 'vue-cookie';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import '../static/css/icon/el-icon-lx/lx-iconfont.css';
@@ -11,9 +12,10 @@ import "babel-polyfill";
 // import '../static/css/theme/green/index.css';
 
 Vue.use(ElementUI, {size: 'small'});
+Vue.use(cookie);
 Vue.prototype.$axios = axios;
 Vue.prototype.getPerms = function () {
-    let buttonItems = localStorage.getItem("buttonItems");
+    let buttonItems = cookie.get("buttonItems");
     if (buttonItems) {
         return buttonItems;
     } else {
@@ -23,8 +25,8 @@ Vue.prototype.getPerms = function () {
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    let sysuser = localStorage.getItem("sysuser");
-    let buttonItems = localStorage.getItem("buttonItems");
+    let sysuser = cookie.get("sysuser");
+    let buttonItems = cookie.get("buttonItems");
     if(!sysuser && to.path !== '/login'){
         next('/login');
     }else if (to.meta.permission && buttonItems) {

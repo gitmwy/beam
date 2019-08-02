@@ -3,12 +3,14 @@ package com.ksh.beam.system.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ksh.beam.system.entity.sys.Dept;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * 企业管理
  */
+@Repository
 public interface DeptMapper extends BaseMapper<Dept> {
 
     List<Dept> queryListParentId(Long parentId);

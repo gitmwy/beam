@@ -1,22 +1,25 @@
 package com.ksh.beam.common.factory.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ksh.beam.common.constant.cache.Cache;
-import com.ksh.beam.common.constant.cache.CacheKey;
+import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.factory.IConstantFactory;
 import com.ksh.beam.common.utils.SpringContextHolder;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.DeptMapper;
 import com.ksh.beam.system.dao.DictMapper;
+import com.ksh.beam.system.dao.MenuMapper;
 import com.ksh.beam.system.dao.RoleMapper;
 import com.ksh.beam.system.dao.UserMapper;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.Dict;
+import com.ksh.beam.system.entity.sys.Menu;
 import com.ksh.beam.system.entity.sys.Role;
-import org.springframework.cache.annotation.Cacheable;
+import com.ksh.beam.system.entity.sys.User;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,11 +27,13 @@ import java.util.List;
  */
 @Component
 @DependsOn("springContextHolder")
+@Transactional(readOnly = true)
 public class ConstantFactory implements IConstantFactory {
 
     private RoleMapper roleMapper = SpringContextHolder.getBean(RoleMapper.class);
     private DeptMapper deptMapper = SpringContextHolder.getBean(DeptMapper.class);
     private UserMapper userMapper = SpringContextHolder.getBean(UserMapper.class);
+    private MenuMapper menuMapper = SpringContextHolder.getBean(MenuMapper.class);
     private DictMapper dictMapper = SpringContextHolder.getBean(DictMapper.class);
 
     public static IConstantFactory me() {
@@ -44,7 +49,6 @@ public class ConstantFactory implements IConstantFactory {
      * 通过角色id获取角色名称
      */
     @Override
-    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.SINGLE_ROLE_NAME + "'+#roleId")
     public String getSingleRoleName(Long roleId) {
         if (0 == roleId) {
             return "--";
@@ -56,25 +60,21 @@ public class ConstantFactory implements IConstantFactory {
         return "";
     }
 
+    @Override
+    public User getUserByAccount(String account){
+        return userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getAccount,account));
+    }
+
     /**
      * 获取部门名称
      */
     @Override
-    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_NAME + "'+#deptId")
     public String getDeptName(Long deptId) {
         Dept dept = deptMapper.selectById(deptId);
         if (ToolUtil.isNotEmpty(dept) && ToolUtil.isNotEmpty(dept.getName())) {
             return dept.getName();
         }
         return "";
-    }
-
-    /**
-     * 根据子ID查询所有父级
-     */
-    @Override
-    public List<Dept> queryDeptNameById(Long deptId) {
-        return deptMapper.queryDeptNameById(deptId);
     }
 
     @Override
@@ -107,5 +107,21 @@ public class ConstantFactory implements IConstantFactory {
             wrapper = wrapper.eq("pid", dict.getId());
             return dictMapper.selectList(wrapper);
         }
+    }
+
+    @Override
+    public List<String> findPermissionsByUserId(Long userId) {
+        List<String> permsList;
+        //系统管理员，拥有最高权限
+        if(userId == Constant.SUPER_ADMIN){
+            List<Menu> menuList = menuMapper.selectList(null);
+            permsList = new ArrayList<>(menuList.size());
+            for(Menu menu : menuList){
+                permsList.add(menu.getPerms());
+            }
+        }else{
+            permsList = userMapper.queryAllPerms(userId);
+        }
+        return permsList;
     }
 }

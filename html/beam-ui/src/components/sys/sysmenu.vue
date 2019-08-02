@@ -200,8 +200,8 @@
                 MenuApi.add(this.menu).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
-                        localStorage.removeItem('menuItems');
-                        localStorage.removeItem('buttonItems');
+                        this.$cookie.delete('menuItems');
+                        this.$cookie.delete('buttonItems');
                         this.editVisible = false;
                         this.$message.success(res.msg);
                         this.reload()

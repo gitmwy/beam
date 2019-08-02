@@ -61,10 +61,10 @@ public class SysLogAspect {
             e.printStackTrace();
         }
         //如果当前用户未登录，不做日志
-        ShiroUser user = ShiroUtils.getUserEntity();
-        if (null == user) {
+        ShiroUser shiroUser = ShiroUtils.getUserEntity();
+        if (null == shiroUser) {
             return;
         }
-        LogManager.me().executeLog(LogTaskFactory.businessLog(user.getId(), bussinessName, className, methodName, params, time));
+        LogManager.me().executeLog(LogTaskFactory.businessLog(shiroUser.getId(), bussinessName, className, methodName, params, time));
     }
 }

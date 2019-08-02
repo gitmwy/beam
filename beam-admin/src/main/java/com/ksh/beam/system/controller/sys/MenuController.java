@@ -1,9 +1,8 @@
 package com.ksh.beam.system.controller.sys;
 
 import com.ksh.beam.common.base.controller.BaseController;
-import com.ksh.beam.common.shiro.IShiro;
+import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.shiro.ShiroUtils;
-import com.ksh.beam.common.shiro.factory.ShiroFactroy;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.Menu;
 import com.ksh.beam.system.service.MenuService;
@@ -32,8 +31,6 @@ public class MenuController extends BaseController {
     @Autowired
     private MenuService menuService;
 
-    private IShiro shiroFactory = ShiroFactroy.me();
-
     /**
      * 树形菜单
      */
@@ -59,7 +56,7 @@ public class MenuController extends BaseController {
     @ApiOperation(value = "按钮权限")
     @GetMapping("/button")
     public R button() {
-        return R.ok(shiroFactory.findPermissionsByUserId(ShiroUtils.getUserId()));
+        return R.ok(ConstantFactory.me().findPermissionsByUserId(ShiroUtils.getUserId()));
     }
 
     @ApiOperation("新增")
