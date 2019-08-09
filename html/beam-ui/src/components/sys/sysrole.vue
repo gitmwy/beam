@@ -10,8 +10,8 @@
                 <el-input style="width: 130px" v-model="req.roleName" placeholder="请输入角色名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
                 <el-button type="primary" icon="el-icon-refresh" @click="refresh">重置</el-button>
-                <el-button v-if="canDel" type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
+                <el-button v-if="canDel" type="danger" icon="delete" @click="delAll">批量删除</el-button>
+                <el-button v-if="canAdd" type="primary" icon="add" @click="handleAdd">新增</el-button>
             </div>
             <el-table :data="tableData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -197,7 +197,7 @@
                 this.role = {};
                 this.editVisible = true;
             },
-            handleEdit(index, row) {
+            handleEdit(index) {
                 this.idx = index;
                 this.role = this.tableData[index];
                 this.editVisible=true;
@@ -228,7 +228,6 @@
             },
             // 保存编辑
             saveEdit() {
-                // this.$set(this.tableData, this.idx, this.role);
                 this.loading = true;
                 RoleApi.add(this.role).then((res) => {
                     this.loading = false;

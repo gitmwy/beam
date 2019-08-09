@@ -3,7 +3,7 @@ package com.ksh.beam.common.exception;
 import com.ksh.beam.common.enumeration.RetEnum;
 
 /**
- * 封装guns的异常
+ * 封装异常
  */
 public class BeamException extends RuntimeException {
 

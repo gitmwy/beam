@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.shiro.ShiroUtils;
-import com.ksh.beam.common.util.OSSFactory;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisManager;
 import com.ksh.beam.common.utils.ToolUtil;
@@ -22,12 +21,9 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * 管理员表
@@ -142,9 +138,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public R changePassword(ChangePassowdForm changePassowdForm) {
-        if (!changePassowdForm.getNewPwd().equals(changePassowdForm.getPassword_confirm())) {
-            return R.fail("两次密码不一致");
-        }
         User user = this.getById(ShiroUtils.getUserId());
         Assert.notNull(user, "找不到该用户");
         String old = ShiroUtils.sha256(changePassowdForm.getOldPwd(), user.getSalt());
@@ -157,11 +150,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         } else {
             return R.fail("密码有误");
         }
-    }
-
-    @Override
-    public List<Long> queryAllMenuId(Long userId) {
-        return baseMapper.queryAllMenuId(userId);
     }
 
     /**
@@ -186,17 +174,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setDeptName(deptName.substring(0, deptName.lastIndexOf(">")));
         }
         return R.ok(user);
-    }
-
-    @Override
-    public R uploadAvatar(MultipartFile file) {
-        String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
-        try {
-            String url = Objects.requireNonNull(OSSFactory.buildCloud()).upload(file.getBytes(), fileName);
-            return R.ok(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return R.fail("上传图片失败");
-        }
     }
 }

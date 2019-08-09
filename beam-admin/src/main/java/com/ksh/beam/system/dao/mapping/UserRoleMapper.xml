@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksh.beam.system.dao.UserRoleMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ksh.beam.system.entity.user.UserRole" id="BaseResultMap">
+        <result property="id" column="id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="level" column="level"/>
+        <result property="levelName" column="level_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!--    查询条件-->
+    <sql id="Where_List">
+        <if test="role.roleName != null and role.roleName != ''">
+            and u.role_name like concat("%",#{role.roleName},"%")
+        </if>
+    </sql>
+
+    <!--    分页-->
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.user.UserRole">
+        select u.* from user_role u
+        <where>
+            1 = 1
+            <include refid="Where_List"/>
+        </where>
+        order by u.level asc
+    </select>
+</mapper>

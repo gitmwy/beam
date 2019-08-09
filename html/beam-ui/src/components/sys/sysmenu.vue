@@ -10,8 +10,8 @@
                 <el-input style="width: 150px" v-model="req.name" placeholder="请输入菜单名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
                 <el-button type="primary" icon="el-icon-refresh" @click="refresh">重置</el-button>
-                <el-button v-if="canDel" type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
+                <el-button v-if="canDel" type="danger" icon="delete" @click="delAll">批量删除</el-button>
+                <el-button v-if="canAdd" type="primary" icon="add" @click="handleAdd">新增</el-button>
             </div>
             <el-table row-key="id" :data="treeData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -31,12 +31,12 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑(父菜单空，菜单名称即为顶级菜单)" :visible.sync="editVisible" width="50%">
+        <el-dialog title="编辑(父级空，名称即为顶级名)" :visible.sync="editVisible" width="50%">
             <el-form ref="menu" :model="menu" label-width="100px">
-                <el-form-item label="父菜单" prop="parentId">
+                <el-form-item label="父级" prop="parentId">
                     <el-input @click.native="goToSelectMenu" readonly="readonly" v-model.trim="menu.pname"></el-input>
                 </el-form-item>
-                <el-form-item label="菜单名称" prop="name">
+                <el-form-item label="名称" prop="name">
                     <el-input v-model.trim="menu.name"></el-input>
                 </el-form-item>
                 <el-form-item label="URL" prop="url">
@@ -171,10 +171,8 @@
                 MenuApi.edit({menuId: row.id}).then((res) => {
                     if (res.error === false) {
                         this.menu = res.data;
-                        console.log(this.menu);
                     }
                 }, (err) => {
-                    this.loading = false;
                     this.$message.error(err.msg);
                 });
                 this.editVisible = true;
@@ -200,8 +198,8 @@
                 MenuApi.add(this.menu).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
-                        this.$cookie.delete('menuItems');
-                        this.$cookie.delete('buttonItems');
+                        sessionStorage.removeItem('menuItems');
+                        sessionStorage.removeItem('buttonItems');
                         this.editVisible = false;
                         this.$message.success(res.msg);
                         this.reload()

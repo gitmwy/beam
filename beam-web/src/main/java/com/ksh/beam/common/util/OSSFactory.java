@@ -3,12 +3,12 @@ package com.ksh.beam.common.util;
 import com.ksh.beam.common.cloud.AliyunCloudStorageService;
 import com.ksh.beam.common.cloud.CloudStorageConfig;
 import com.ksh.beam.common.cloud.CloudStorageService;
-import com.ksh.beam.common.base.ConfigConstant;
+import com.ksh.beam.common.constant.ConfigConstant;
 import com.ksh.beam.common.cloud.QcloudCloudStorageService;
 import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.file.FtpConfig;
 import com.ksh.beam.common.file.FtpService;
-import com.ksh.beam.common.file.FtpUtil;
+import com.ksh.beam.common.file.FtpManager;
 import com.ksh.beam.common.service.ISysConfigService;
 import com.ksh.beam.common.utils.SpringContextHolder;
 
@@ -44,6 +44,6 @@ public final class OSSFactory {
     public static FtpService buildFtp() {
         FtpConfig config = sysConfigService.getConfigObject(ConfigConstant.FTP_CONFIG_KEY, FtpConfig.class);
 
-        return new FtpUtil(config);
+        return new FtpManager(config);
     }
 }

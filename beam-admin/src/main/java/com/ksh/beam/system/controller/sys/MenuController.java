@@ -1,6 +1,6 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.ksh.beam.common.base.controller.BaseController;
+import com.ksh.beam.common.base.BaseController;
 import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
@@ -69,7 +69,7 @@ public class MenuController extends BaseController {
     @ApiOperation("编辑")
     @GetMapping(value = "/edit")
     @RequiresPermissions("sys:menu:edit")
-    public R edit(@RequestParam Long menuId) {
+    public R edit(@RequestParam(required = false) Long menuId) {
         Assert.notNull(menuId, "请选择要编辑的记录");
        return menuService.getEditInfo(menuId);
     }

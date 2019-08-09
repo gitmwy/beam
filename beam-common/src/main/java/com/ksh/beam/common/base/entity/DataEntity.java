@@ -1,7 +1,6 @@
 package com.ksh.beam.common.base.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.ksh.beam.common.constant.DataBaseConstant;
 
 import java.util.Date;
 
@@ -9,7 +8,6 @@ import java.util.Date;
  * 数据Entity类
  */
 public abstract class DataEntity<ID> extends AbstractEntity<ID> {
-
 
 	@TableField(value = "create_by",  fill = FieldFill.INSERT)
 	private Long createBy; // 创建者
@@ -24,10 +22,8 @@ public abstract class DataEntity<ID> extends AbstractEntity<ID> {
 
 	public DataEntity() {
 		super();
-		this.delFlag = DataBaseConstant.DEL_FLAG_NORMAL;
+		this.delFlag = 0;
 	}
-
-
 
 	public Long getCreateBy() {
 		return createBy;
@@ -37,8 +33,6 @@ public abstract class DataEntity<ID> extends AbstractEntity<ID> {
 		this.createBy = createBy;
 	}
 
-
-
 	public Long getUpdateBy() {
 		return updateBy;
 	}
@@ -46,8 +40,6 @@ public abstract class DataEntity<ID> extends AbstractEntity<ID> {
 	public void setUpdateBy(Long updateBy) {
 		this.updateBy = updateBy;
 	}
-
-
 
 	public Integer getDelFlag() {
 		return delFlag;

@@ -1,6 +1,6 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.ksh.beam.common.base.controller.BaseController;
+import com.ksh.beam.common.base.BaseController;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.dto.ChangePassowdForm;
 import com.ksh.beam.system.entity.sys.User;
@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -64,7 +62,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("编辑")
     @GetMapping(value = "/edit")
-    public R edit(@RequestParam Long userId) {
+    public R edit(@RequestParam(required = false) Long userId) {
         Assert.notNull(userId, "请选择要编辑的用户");
         return userService.editUser(userId);
     }
@@ -81,13 +79,9 @@ public class UserController extends BaseController {
     @RequiresPermissions("sys:user:changePassword")
     @PostMapping(value = "/change/password")
     public R changePassword(@RequestBody @Valid ChangePassowdForm changePassowdForm) {
+        if (!changePassowdForm.getNewPwd().equals(changePassowdForm.getPassword_confirm())) {
+            return R.fail("两次密码不一致");
+        }
         return userService.changePassword(changePassowdForm);
-    }
-
-    @ApiOperation(value = "对象存储文件上传")
-    @PostMapping("/upload")
-    public Object upload(@RequestPart("file") MultipartFile file) {
-        Assert.notNull(file, "请选择要上传的文件");
-        return userService.uploadAvatar(file);
     }
 }

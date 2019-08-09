@@ -80,7 +80,7 @@
 </template>
 
 <script>
-    import vMeeting from './meetinglist.vue';
+    import vDetail from './meetingdetail.vue';
     import myVideoPlayer from '../common/VideoPlayer'
 
     export default {
@@ -108,7 +108,7 @@
             }
         },
         components: {
-            vMeeting,
+            vDetail,
             "player": myVideoPlayer
         },
         methods: {

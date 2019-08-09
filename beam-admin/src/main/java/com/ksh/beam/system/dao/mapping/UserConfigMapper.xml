@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksh.beam.system.dao.UserConfigMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ksh.beam.system.entity.user.UserConfig" id="BaseResultMap">
+        <result property="id" column="id"/>
+        <result property="configId" column="config_id"/>
+        <result property="paramKey" column="param_key"/>
+        <result property="paramValue" column="param_value"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!--获取级别信息-->
+    <select id="selectLevel" resultType="com.ksh.beam.system.entity.user.UserConfig">
+        select u.* from user_config u where u.config_id=1004 and u.status=1 and u.param_key &lt;= #{level} order by u.param_key asc
+    </select>
+</mapper>

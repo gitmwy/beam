@@ -81,7 +81,7 @@ const Http = {
         if (err.response) {
             const res = {
                 code: err.response.data.code,
-                msg: err.response.data.msg,
+                msg: err.response.data.message,
             };
             return Promise.reject(res)
         } else if (err.request) {

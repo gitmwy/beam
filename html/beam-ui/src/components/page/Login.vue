@@ -76,7 +76,7 @@
                             this.loading = false;
                             if (res.error === false) {
                                 this.$message.success(res.msg);
-                                this.$cookie.set("sysuser",JSON.stringify(res.data), 1);
+                                sessionStorage.setItem("sysuser", JSON.stringify(res.data));
                                 this.$router.push({path: '/'});
                             } else {
                                 this.$refs.slider.reloadSlider();
@@ -87,7 +87,6 @@
                             this.$message.error(err.msg);
                         })
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });

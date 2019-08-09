@@ -1,6 +1,6 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.ksh.beam.common.base.controller.BaseController;
+import com.ksh.beam.common.base.BaseController;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.service.DeptService;
@@ -54,7 +54,7 @@ public class DeptController extends BaseController {
     @ApiOperation("编辑")
     @GetMapping(value = "/edit")
     @RequiresPermissions("sys:dept:edit")
-    public R edit(@RequestParam Long deptId) {
+    public R edit(@RequestParam(required = false) Long deptId) {
         Assert.notNull(deptId, "请选择要编辑的记录");
         return deptService.getEditInfo(deptId);
     }

@@ -1,6 +1,6 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.ksh.beam.common.base.controller.BaseController;
+import com.ksh.beam.common.base.BaseController;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.LoginLog;
 import com.ksh.beam.system.service.LoginLogService;

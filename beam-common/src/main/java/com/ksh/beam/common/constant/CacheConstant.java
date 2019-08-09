@@ -1,7 +1,7 @@
 package com.ksh.beam.common.constant;
 
 /**
- * 缓存标识前缀集合
+ * Redis缓存标识前缀集合
  */
 public interface CacheConstant {
 

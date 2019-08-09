@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksh.beam.system.dao.UserDetailMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ksh.beam.system.entity.user.UserDetail" id="BaseResultMap">
+        <result property="id" column="id"/>
+        <result property="jobCode" column="job_code"/>
+        <result property="avatar" column="avatar"/>
+        <result property="nickname" column="nickname"/>
+        <result property="username" column="username"/>
+        <result property="phone" column="phone"/>
+        <result property="areaId" column="area_id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="status" column="status"/>
+        <result property="boundTime" column="bound_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!--    查询条件-->
+    <sql id="Where_List">
+        <if test="user.username != null and user.username != ''">
+            and u.username like concat("%",#{user.username},"%")
+        </if>
+        <if test="user.areaId != null and user.areaId != ''">
+            and u.area_id = #{user.areaId}
+        </if>
+        <if test="user.roleId != null and user.roleId != ''">
+            and u.role_id = #{user.roleId}
+        </if>
+    </sql>
+
+    <!--    分页-->
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.user.UserDetail">
+        select u.*,a.area_name as areaName,r.role_name as roleName
+        from user_detail u
+        left join user_area a on a.id = u.area_id
+        left join user_role r on r.id = u.role_id
+        <where>
+            1 = 1
+            <include refid="Where_List"/>
+        </where>
+        order by u.create_time desc
+    </select>
+
+    <!--    导出数据-->
+    <select id="exportData" resultType="java.util.HashMap">
+        select case u.status when 1 then '正常' else '锁定' end status_name, u.*, a.area_name, r.role_name
+        from user_detail u
+        left join user_area a on a.id = u.area_id
+        left join user_role r on r.id = u.role_id
+        <where>
+            1 = 1
+            <include refid="Where_List"/>
+        </where>
+        order by u.create_time desc
+    </select>
+</mapper>

@@ -35,6 +35,7 @@ export default new Router({
                     component: resolve => require(['../components/common/403.vue'], resolve),
                     meta: {title: '403'}
                 },
+//系统管理=============================================================================
                 {
                     path: '/sysuser',
                     component: resolve => require(['../components/sys/sysuser.vue'], resolve),
@@ -56,8 +57,8 @@ export default new Router({
                     meta: {title: '企业管理', permission: true, perms: "sys:dept:list"}
                 },
                 {
-                    path: '/schedulejob',
-                    component: resolve => require(['../components/sys/schedulejob.vue'], resolve),
+                    path: '/sysschedule',
+                    component: resolve => require(['../components/sys/sysschedule.vue'], resolve),
                     meta: {title: '定时任务管理', permission: true, perms: "sys:schedule:list"}
                 },
                 {
@@ -66,24 +67,41 @@ export default new Router({
                     meta: {title: '字典管理', permission: true, perms: "sys:dict:list"}
                 },
                 {
-                    path: '/loginlog',
-                    component: resolve => require(['../components/sys/loginlog.vue'], resolve),
+                    path: '/sysloginlog',
+                    component: resolve => require(['../components/sys/sysloginlog.vue'], resolve),
                     meta: {title: '登陆日志', permission: true, perms: "sys:loginLog:list"}
                 },
                 {
-                    path: '/operationlog',
-                    component: resolve => require(['../components/sys/operationlog.vue'], resolve),
+                    path: '/sysoperationlog',
+                    component: resolve => require(['../components/sys/sysoperationlog.vue'], resolve),
                     meta: {title: '操作日志', permission: true, perms: "sys:operationLog:list"}
                 },
+//会议管理=============================================================================
                 {
-                    path: '/meetinglist',
-                    component: resolve => require(['../components/meeting/meetinglist.vue'], resolve),
-                    meta: { title: '会议列表',permission: true, perms: "meeting:list"}
+                    path: '/meetingdetail',
+                    component: resolve => require(['../components/meeting/meetingdetail.vue'], resolve),
+                    meta: { title: '会议列表',permission: true, perms: "meeting:detail:list"}
                 },
                 {
                     path: '/meetingcourse',
                     component: resolve => require(['../components/meeting/meetingcourse.vue'], resolve),
                     meta: { title: '会议课件',permission: true, perms: "meeting:course"}
+                },
+//用户管理=============================================================================
+                {
+                    path: '/userdetail',
+                    component: resolve => require(['../components/user/userdetail.vue'], resolve),
+                    meta: { title: '用户列表',permission: true, perms: "user:detail:list"}
+                },
+                {
+                    path: '/userarea',
+                    component: resolve => require(['../components/user/userarea.vue'], resolve),
+                    meta: { title: '区域管理',permission: true, perms: "user:area:list"}
+                },
+                {
+                    path: '/userrole',
+                    component: resolve => require(['../components/user/userrole.vue'], resolve),
+                    meta: { title: '角色管理',permission: true, perms: "user:role:list"}
                 }
             ]
         },

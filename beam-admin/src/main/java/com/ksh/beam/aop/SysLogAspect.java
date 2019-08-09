@@ -6,6 +6,7 @@ import com.ksh.beam.common.log.LogManager;
 import com.ksh.beam.common.log.factory.LogTaskFactory;
 import com.ksh.beam.common.shiro.ShiroUser;
 import com.ksh.beam.common.shiro.ShiroUtils;
+import com.ksh.beam.common.utils.ToolUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -55,10 +56,8 @@ public class SysLogAspect {
         //请求的参数
         Object[] args = joinPoint.getArgs();
         String params = "";
-        try {
+        if(ToolUtil.isNotEmpty(args)){
             params = new Gson().toJson(args[0]);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         //如果当前用户未登录，不做日志
         ShiroUser shiroUser = ShiroUtils.getUserEntity();

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksh.beam.system.dao.UserAreaMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ksh.beam.system.entity.user.UserArea" id="BaseResultMap">
+        <result property="id" column="id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="areaName" column="area_name"/>
+        <result property="level" column="level"/>
+        <result property="levelName" column="level_name"/>
+        <result property="optionAreas" column="option_areas"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!--查询条件-->
+    <sql id="Where_List">
+        <if test="area.level != null">
+            and u.level = #{area.level}
+        </if>
+    </sql>
+
+    <!--分页-->
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.user.UserArea">
+        select u.* from user_area u
+        <where>
+            1 = 1
+            <include refid="Where_List"/>
+        </where>
+        order by u.level asc
+    </select>
+
+    <!--根据父ID和等级获取区域-->
+    <select id="getAreaByParentIdAndLevel" resultType="com.ksh.beam.system.entity.user.UserArea">
+        select u.* from user_area u
+        <where>
+            <if test="topLevel != null">
+                and u.level = #{topLevel}
+            </if>
+            <if test="level != null">
+                and u.level &lt; #{level}
+            </if>
+            <if test="parentId != null">
+                and u.parent_id = #{parentId}
+            </if>
+        </where>
+    </select>
+
+    <!--获取最大的等级-->
+    <select id="getMaxLevel" resultType="java.lang.Integer">
+        SELECT max(u.level) FROM user_area u
+    </select>
+</mapper>

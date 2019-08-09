@@ -9,7 +9,7 @@
             <div class="handle-box">
                 <el-input style="width: 150px" v-model="req.name" placeholder="请输入部门名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
-                <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增</el-button>
+                <el-button v-if="canAdd" type="primary" icon="add" @click="handleAdd">新增</el-button>
             </div>
             <el-table row-key="id" :data="treeData" v-loading="loading" border class="table">
                 <el-table-column label="公司名称" align="center" prop="name"></el-table-column>
@@ -25,12 +25,12 @@
             </el-table>
         </div>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑(上级部门空，部门名称即为公司名)" :visible.sync="editVisible" width="50%">
+        <el-dialog title="编辑(父级空，名称即为公司名)" :visible.sync="editVisible" width="50%">
             <el-form ref="dept" :model="dept" label-width="100px">
-                <el-form-item label="上级部门" prop="parentId">
+                <el-form-item label="父级" prop="parentId">
                     <el-input @click.native="goToSelectDept" readonly="readonly" v-model.trim="dept.pname"></el-input>
                 </el-form-item>
-                <el-form-item label="部门名称" prop="name">
+                <el-form-item label="名称" prop="name">
                     <el-input v-model.trim="dept.name"></el-input>
                 </el-form-item>
                 <el-form-item label="排序" prop="orderNum">

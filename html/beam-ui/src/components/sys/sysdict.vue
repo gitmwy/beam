@@ -45,7 +45,7 @@
         <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
             <el-form ref="dict" :model="dict" :rules="rules" label-width="100px">
                 <el-form-item label="父级字典" prop="pid">
-                    <el-select filterable v-model="dict.pid" placeholder="请选择">
+                    <el-select v-model="dict.pid" placeholder="请选择">
                         <el-option v-for="item in dictList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>

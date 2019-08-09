@@ -65,7 +65,7 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
     private RedisCacheConfiguration getRedisCacheConfigurationWithTtl(Long seconds) {
         return RedisCacheConfiguration
                 .defaultCacheConfig()
-                .computePrefixWith(cacheName -> cacheName)
+                .computePrefixWith(cacheNames -> cacheNames)
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer()))
                 .entryTtl(Duration.ofSeconds(seconds));
     }

@@ -16,8 +16,8 @@
                             <el-input style="width: 120px" v-model="req.name" placeholder="请输入姓名"></el-input>
                             <el-button type="primary" icon="search" @click="search">搜索</el-button>
                             <el-button type="primary" icon="el-icon-refresh" @click="refresh">重置</el-button>
-                            <el-button v-if="canDel" type="danger" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                            <el-button v-if="canAdd" type="primary" icon="add" class="handle-del mr10" @click="handleAdd">新增用户</el-button>
+                            <el-button v-if="canDel" type="danger" icon="delete" @click="delAll">批量删除</el-button>
+                            <el-button v-if="canAdd" type="primary" icon="add" @click="handleAdd">新增用户</el-button>
                     </el-header>
                     <el-main>
                         <el-table :data="tableData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
@@ -38,7 +38,7 @@
                             <el-table-column prop="birthday" align="center" label="出生日期" width="150"></el-table-column>
                             <el-table-column width="160" label="是否可用" align="center">
                                 <template slot-scope="scope">
-                                    <el-switch v-model="scope.row.status" :active-text="scope.row.status ? '可用' : '不可用'" @change="changeStatus(scope.row.id, scope.row.status)"></el-switch>
+                                    <el-switch v-model="scope.row.status" :active-text="scope.row.status ? '可用' : '不可用'" inactive-color="#ff4949" @change="changeStatus(scope.row.id, scope.row.status)"></el-switch>
                                 </template>
                             </el-table-column>
                             <el-table-column label="操作" width="180" align="center">
@@ -72,7 +72,7 @@
                 <el-upload
                     label=" 头像"
                     class="avatar-uploader el-dialog--center"
-                    action="/beam_ht/sys/user/upload"
+                    action="/beam_ht/file/upload"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
@@ -194,13 +194,12 @@
                 },
                 rules: {
                     phone: [
-                        {validator: Common.validatePhone, trigger: 'blur'}
+                        {required:true, validator: Common.validatePhone, trigger: 'blur'}
                     ],
                     email: [
-                        {validator: Common.validateEMail, trigger: 'blur'}
+                        {required:true, validator: Common.validateEMail, trigger: 'blur'}
                     ]
                 },
-                idx: -1,
                 ids: [],
                 req: {},
                 accountInput: true,
@@ -242,7 +241,6 @@
                         this.roleList = res.data;
                     }
                 }, (err) => {
-                    this.loading = false;
                     this.$message.error(err.msg);
                 });
             },
@@ -326,12 +324,10 @@
             },
             getDeptTreeData() {
                 DeptApi.getTreeData().then((res) => {
-                    this.loading = false;
                     if (res.error === false) {
                         this.deptTreeData = res.data;
                     }
                 }, (err) => {
-                    this.loading = false;
                     this.$message.error(err.msg);
                 });
             },
@@ -348,9 +344,7 @@
                 this.getRoleList();
             },
             handleEdit(index, row) {
-                this.idx = index;
                 SysUserApi.edit({userId:row.id}).then((res) => {
-                    this.loading = false;
                     if (res.error === false) {
                         if("1" === res.data.id){
                                 this.deptFlag = false;
@@ -359,7 +353,6 @@
                         this.form.status = Boolean(this.form.status);
                     }
                 }, (err) => {
-                    this.loading = false;
                     this.$message.error(err.msg);
                 });
                 this.getRoleList();
@@ -432,7 +425,7 @@
             changeStatus(id, flag) {
                 SysUserApi.changeStatus(id, !flag ? 0 : 1).then((res) => {
                     if (res.error === false) {
-                        this.$message.success('操作成功');
+                        this.$message.success(res.msg);
                         this.reload()
                     }
                 }, (err) => {

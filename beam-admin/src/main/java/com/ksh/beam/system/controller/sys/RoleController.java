@@ -58,7 +58,7 @@ public class RoleController {
 
     @ApiOperation(value = "获取角色的菜单权限")
     @GetMapping(value = "/menu/list")
-    public R menuList(@RequestParam Long roleId) {
+    public R menuList(@RequestParam(required = false) Long roleId) {
         Assert.notNull(roleId, "请选择要配置权限的角色");
         return roleService.getCheckMenuIds(roleId);
     }

@@ -1,8 +1,7 @@
-
 package com.ksh.beam.common.base.entity;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.ksh.beam.common.constant.DataBaseConstant;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
@@ -12,9 +11,9 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 public abstract class AbstractEntity<ID> extends Model {
 
 	@TableField(exist = false)
-	public long currentPage;
+	private long currentPage;
 	@TableField(exist = false)
-	public long pageSize = DataBaseConstant.PAGE_SIZE;
+	private long pageSize = 10L;
 
 	public abstract ID getId();
 

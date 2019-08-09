@@ -17,10 +17,6 @@ public enum RetEnum {
      */
     FORBID(403,"禁止访问"),
     /**
-     * SIGN签名无效
-     */
-    ERRORSIGN(401,"无效的签名"),
-    /**
      * 参数异常
      */
     ERRORPARAM(1004,"参数异常"),
@@ -43,21 +39,7 @@ public enum RetEnum {
     /**
      * 其他
      */
-    INVLIDE_DATE_STRING(400, "输入日期格式不对"),
-    /**
-     * 其他
-     */
     WRITE_ERROR(500, "渲染界面错误"),
-    /**
-     * 文件上传
-     */
-    FILE_NOT_FOUND(404, "未找到文件"),
-    FILE_READING_ERROR(500, "文件读取错误"),
-    UPLOAD_ERROR(500,"上传文件出错"),
-    /**
-     * 导出
-     */
-    EXPORT_ERROR(500, "导出文件失败"),
     /**
     *  服务器异常
     */

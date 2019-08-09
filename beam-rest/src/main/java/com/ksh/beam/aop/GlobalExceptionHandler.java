@@ -1,5 +1,5 @@
 package com.ksh.beam.aop;
-import com.ksh.beam.common.aop.BaseControllerExceptionHandler;
+import com.ksh.beam.common.base.BaseExceptionHandler;
 import com.ksh.beam.common.enumeration.RetEnum;
 import com.ksh.beam.common.utils.R;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * 全局的的异常拦截器（拦截所有的控制器）（带有@RequestMapping注解的方法上都会拦截）
  */
 @ControllerAdvice
-public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
+public class GlobalExceptionHandler extends BaseExceptionHandler {
 
 
     @ExceptionHandler(IllegalArgumentException.class)

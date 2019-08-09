@@ -111,9 +111,6 @@
                         this.tableData = res.data.records ? res.data.records : [];
                         this.page.pageNo = parseInt(res.data.current);
                         this.page.totalRows = parseInt(res.data.total);
-                        this.tableData.forEach(item => {
-                            item.status = Boolean(item.status)
-                        })
                     }
                 }, (err) => {
                     this.loading = false;

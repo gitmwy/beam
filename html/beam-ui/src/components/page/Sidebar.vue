@@ -58,8 +58,8 @@
         methods:{
             getNavList(){
                 AccountApi.getNavList().then((res)=>{
-                        this.menuItems = res.data;
-                    this.$cookie.set("menuItems", res.data, 1);
+                    this.menuItems = res.data;
+                    sessionStorage.setItem('menuItems', res.data);
                     }, (err) => {
                         this.list = [];
                         this.$message.error(err.msg);
@@ -67,9 +67,9 @@
             },
             getButtonList(){
                 AccountApi.getButtonList().then((res)=>{
-                        this.buttonItems = res.data;
-                        this.$cookie.set("buttonItems", res.data, 1);
-                    }, (err) => {
+                    this.buttonItems = res.data;
+                    sessionStorage.setItem('buttonItems', res.data);
+                }, (err) => {
                         this.buttonItems = [];
                         this.$message.error(err.msg);
                     })

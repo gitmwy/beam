@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ksh.beam.common.base.entity.DataEntity;
+import com.ksh.beam.common.constant.RegexConstant;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -67,14 +68,14 @@ public class User extends DataEntity<Long> {
 	/**
 	 * 电子邮件
 	 */
-	@Pattern(regexp = "^([a-zA-Z0-9]+[-_.]?)+@[a-zA-Z0-9]+\\.[a-z]+$", message = "请输入正确的邮箱")
+	@Pattern(regexp = RegexConstant.EMAIL_REGEX, message = "请输入正确的邮箱")
 	private String email;
 	/**
 	 * 电话
 	 */
 	@NotBlank(message = "手机号不能为空")
 	@Size(max = 11)
-	@Pattern(regexp = "^[1][3456789][0-9]{9}$", message = "请输入正确的手机号")
+	@Pattern(regexp = RegexConstant.PHONE_REGEX, message = "请输入正确的手机号")
 	private String phone;
 	/**
 	 * 状态(1：可用  0：不可用 ）

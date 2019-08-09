@@ -63,7 +63,7 @@
         JOIN sys_dept T2 ON T1._id = T2.id
         WHERE T2.del_flag = 0
         ORDER BY T1.lvl DESC
-        ]]>
+    ]]>
     </select>
 
 </mapper>

@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
@@ -23,7 +23,7 @@ public class RedisConfig  {
     private RedisConnectionFactory factory;
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer) {
+    public RedisTemplate<String, Object> redisTemplate() {
         // 创建一个模板类
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         // 设置key的序列化器
@@ -31,8 +31,8 @@ public class RedisConfig  {
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         // 设置value的序列化器
         //使用Jackson 2，将对象序列化为JSON
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
         // 将刚才的redis连接工厂设置到模板类中
         redisTemplate.setConnectionFactory(factory);
         return redisTemplate;
