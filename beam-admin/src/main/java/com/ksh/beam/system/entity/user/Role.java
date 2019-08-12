@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @TableName("user_role")
-public class UserRole extends RestEntity<Long> {
+public class Role extends RestEntity<Long> {
 
     @TableId
     private Long id;

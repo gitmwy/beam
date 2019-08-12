@@ -1,7 +1,7 @@
 package com.ksh.beam.system.service;
 
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.meeting.MeetingDetail;
+import com.ksh.beam.system.entity.meeting.Detail;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 public interface MeetingDetailService {
 
     //分页
-    R selectPageList(MeetingDetail meeting);
+    R selectPageList(Detail meeting);
 
     //导出
-    void exportData(MeetingDetail meeting, HttpServletResponse response);
+    void exportData(Detail meeting, HttpServletResponse response);
 }

@@ -1,34 +1,23 @@
 <template>
-    <div class="table" v-loading="canLoading">
+    <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item>会议</el-breadcrumb-item>
-                <el-breadcrumb-item>会议课件</el-breadcrumb-item>
+                <el-breadcrumb-item>会议场所</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-upload
-                        v-if="canUpload"
-                        style="float: left"
-                        action="/beam_ht/meeting/course/upload"
-                        :data="data"
-                        :show-file-list="false"
-                        :before-upload="beforeUpload"
-                        :on-success="handleSuccess"
-                        :on-error="handleError">
-                    <el-button icon="el-icon-upload2" type="primary" style="float: left">上传课件</el-button>
-                </el-upload>
+                <el-button v-if="canAdd" type="primary" icon="add" @click="handleAdd">新增场所</el-button>
             </div>
             <el-table :data="tableData" v-loading="loading" class="table">
                 <el-table-column label="#" align="center" prop="id" width="100"/>
-                <el-table-column label="课件" align="left" prop="courseName" width="700"/>
-                <el-table-column label="大小" align="center" prop="fileSize" width="100"/>
-                <el-table-column label="次数" align="center" prop="downloadTimes" width="100"/>
-                <el-table-column label="操作" align="center" prop="operation">
+                <el-table-column label="类型名称" align="left" prop="typeName"/>
+                <el-table-column label="操作" align="center" prop="operation" width="180">
                     <template slot-scope="scope">
-                        <el-button v-if="canDownload" type="text" class="my-icon-download" @click="handleDownload(scope.$index, scope.row)">下载</el-button>
-                        <el-button v-if="canDel" type="text" icon="el-icon-delete" @click="handleDelete(scope.$index, scope.row)" >删除</el-button>
+                        <el-tooltip effect="dark" content="删除" placement="right">
+                            <el-button v-if="canDel" type="text" icon="el-icon-delete" @click="handleDelete(scope.$index, scope.row)" >删除</el-button>
+                        </el-tooltip>
                     </template>
                 </el-table-column>
             </el-table>
@@ -46,6 +35,19 @@
                 </el-pagination>
             </div>
 
+            <!-- 编辑弹出框 -->
+            <el-dialog title="编辑" :visible.sync="editVisible" width="50%" @close="handleClose">
+                <el-form ref="place" :model="place" :rules="rules" label-width="100px">
+                    <el-form-item label="类型名称" prop="typeName">
+                        <el-input v-model.trim="place.typeName" placeholder="请输入类型名称"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button type="primary" :loading="loading" @click="saveEdit">确 定</el-button>
+            </span>
+            </el-dialog>
+
             <!-- 删除提示框 -->
             <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -59,7 +61,7 @@
 </template>
 
 <script>
-    import MeetingCourseApi from '../../api/meeting/meetingcourse';
+    import MeetingPlaceApi from '../../api/meeting/meetingplace';
 
     export default {
         data() {
@@ -68,20 +70,23 @@
                 tableData: [],
                 req: {},
                 page: {pageNo: 1, pageSize: 10},
-                data: {fileType: "course"},
                 ids: [],
-                canLoading: false,
+                place: {},
+                rules: {
+                    typeName: [
+                        {required: true, message: '请输入类型名称', trigger: 'blur'},
+                    ],
+                },
                 delVisible: false,
-                canUpload: true,
-                canDownload: true,
+                editVisible: false,
+                canAdd: true,
                 canDel: true
             }
         },
         created() {
             this.getData();
-            this.canUpload = this.getPerms().indexOf("meeting:course:upload")!==-1;
-            this.canDownload = this.getPerms().indexOf("meeting:course:download")!==-1;
-            this.canDel = this.getPerms().indexOf("meeting:course:del")!==-1;
+            this.canAdd = this.getPerms().indexOf("meeting:place:add")!==-1;
+            this.canDel = this.getPerms().indexOf("meeting:place:del")!==-1;
         },
         methods: {
             handleCurrentChange(val) {
@@ -100,7 +105,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                MeetingCourseApi.getData(this.req).then((res) => {
+                MeetingPlaceApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -112,43 +117,41 @@
                     this.$message.error(err.msg);
                 });
             },
-            beforeUpload(){
-                this.canLoading = true;
-            },
-            handleSuccess(res){
-                if (res.error === false) {
-                    this.$message.success(res.msg);
-                    this.reload();
-                }
-                this.canLoading = false;
-            },
-            handleError(){
-                this.$message.error("上传课件失败，请稍后再试");
-                this.canLoading = false;
-            },
             handleDelete(index, row) {
                 this.ids = [row.id];
                 this.delVisible = true;
             },
-            handleDownload(index, row){
-                this.canLoading = true;
-                MeetingCourseApi.download({id:row.id}).then(() => {
-                    this.canLoading = false;
-                });
-            },
             reload(){
                 this.getData();
             },
+            handleAdd(){
+                this.editVisible = true;
+            },
+            saveEdit(){
+                this.$refs.place.validate((valid) =>{
+                    if(valid){
+                        this.loading = true;
+                        MeetingPlaceApi.add(this.place).then((res) => {
+                            this.loading = false;
+                            if (res.error === false) {
+                                this.editVisible = false;
+                                this.$message.success(res.msg);
+                                this.reload()
+                            }
+                        }, (err) => {
+                            this.loading = false;
+                            this.$message.error(err.msg);
+                        })
+                    }
+                })
+            },
             deleteRow() {
-                this.canLoading = true;
-                MeetingCourseApi.del(this.ids).then((res) => {
+                MeetingPlaceApi.del(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload();
                     }
-                    this.canLoading = false
                 }, (err) => {
-                    this.canLoading = false;
                     this.$message.error(err.msg);
                 });
                 this.delVisible = false;
@@ -160,10 +163,6 @@
 <style scoped>
     .handle-box {
         margin-bottom: 20px;
-    }
-    .handle-box >>> .el-upload--text{
-        height: unset;
-        border: none;
     }
     .table {
         width: 100%;

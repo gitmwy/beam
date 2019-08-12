@@ -3,7 +3,7 @@
 <mapper namespace="com.ksh.beam.system.dao.UserRoleMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.ksh.beam.system.entity.user.UserRole" id="BaseResultMap">
+    <resultMap type="com.ksh.beam.system.entity.user.Role" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="roleName" column="role_name"/>
         <result property="level" column="level"/>
@@ -20,7 +20,7 @@
     </sql>
 
     <!--    分页-->
-    <select id="selectPageList" resultType="com.ksh.beam.system.entity.user.UserRole">
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.user.Role">
         select u.* from user_role u
         <where>
             1 = 1

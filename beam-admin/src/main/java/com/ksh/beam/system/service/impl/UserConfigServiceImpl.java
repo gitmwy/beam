@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.dao.UserAreaMapper;
 import com.ksh.beam.system.dao.UserConfigMapper;
-import com.ksh.beam.system.entity.user.UserConfig;
+import com.ksh.beam.system.entity.user.Config;
 import com.ksh.beam.system.service.UserConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * 配置管理
  */
 @Service
-public class UserConfigServiceImpl extends ServiceImpl<UserConfigMapper, UserConfig> implements UserConfigService {
+public class UserConfigServiceImpl extends ServiceImpl<UserConfigMapper, Config> implements UserConfigService {
 
     @Autowired
     private UserAreaMapper userAreaMapper;
@@ -36,7 +36,7 @@ public class UserConfigServiceImpl extends ServiceImpl<UserConfigMapper, UserCon
      */
     @Override
     public R selectRoleLevel() {
-        QueryWrapper<UserConfig> qw = new QueryWrapper<>();
+        QueryWrapper<Config> qw = new QueryWrapper<>();
         qw.eq("config_id", 1004);
         qw.eq("status", 1);
         return R.ok(baseMapper.selectList(qw));

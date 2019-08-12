@@ -2,33 +2,33 @@ package com.ksh.beam.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.meeting.Course;
+import com.ksh.beam.system.entity.meeting.Question;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 会议课件
+ * 会议问卷
  */
-public interface MeetingCourseService extends IService<Course> {
+public interface MeetingQuestionService extends IService<Question> {
 
     /**
      * 分页
      */
-    R selectPageList(Course course);
+    R selectPageList(Question question);
 
     /**
-     * 保存上传课件数据
+     * 保存上传问卷数据
      */
-    R saveCourse(MultipartFile file, String fileType);
+    R saveQuestion(MultipartFile file, String fileType);
 
     /**
-     *删除课件数据
+     *删除问卷
      */
-    R deleteCourse(Long[] userIds);
+    R deleteQuestion(Long[] userIds);
 
     /**
-     *下载课件
+     *下载问卷
      */
     void downloadFile(Long id, HttpServletResponse response);
 }

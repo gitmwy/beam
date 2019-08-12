@@ -3,7 +3,7 @@
 <mapper namespace="com.ksh.beam.system.dao.UserConfigMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.ksh.beam.system.entity.user.UserConfig" id="BaseResultMap">
+    <resultMap type="com.ksh.beam.system.entity.user.Config" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="configId" column="config_id"/>
         <result property="paramKey" column="param_key"/>
@@ -14,7 +14,7 @@
     </resultMap>
 
     <!--获取级别信息-->
-    <select id="selectLevel" resultType="com.ksh.beam.system.entity.user.UserConfig">
+    <select id="selectLevel" resultType="com.ksh.beam.system.entity.user.Config">
         select u.* from user_config u where u.config_id=1004 and u.status=1 and u.param_key &lt;= #{level} order by u.param_key asc
     </select>
 </mapper>

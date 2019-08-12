@@ -2,7 +2,7 @@ package com.ksh.beam.system.controller.user;
 
 import com.ksh.beam.common.annotion.SysLog;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.user.UserDetail;
+import com.ksh.beam.system.entity.user.Detail;
 import com.ksh.beam.system.service.UserDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,16 +32,16 @@ public class UserDetailController {
     @ApiOperation("用户列表分页")
     @GetMapping(value = "/page/list")
     @RequiresPermissions("user:detail:list")
-    public R pageList(UserDetail userDetail) {
-        return userDetailService.selectPageList(userDetail);
+    public R pageList(Detail detail) {
+        return userDetailService.selectPageList(detail);
     }
 
     @SysLog(value = "用户列表导出")
     @ApiOperation(value = "用户列表导出")
     @RequiresPermissions("user:detail:export")
     @GetMapping("/export")
-    public void export(UserDetail userDetail, HttpServletResponse response) {
-        userDetailService.exportData(userDetail, response);
+    public void export(Detail detail, HttpServletResponse response) {
+        userDetailService.exportData(detail, response);
     }
 
     @SysLog(value = "用户删除")
@@ -57,8 +57,8 @@ public class UserDetailController {
     @ApiOperation("用户新增")
     @PostMapping(value = "/add")
     @RequiresPermissions("user:detail:add")
-    public R add(@RequestBody UserDetail userDetail) {
-        return userDetailService.saveUserDetail(userDetail);
+    public R add(@RequestBody Detail detail) {
+        return userDetailService.saveUserDetail(detail);
     }
 
     @ApiOperation("改变状态,是否可用")

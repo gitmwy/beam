@@ -24,6 +24,7 @@ public abstract class FtpService {
         maps.put("img", config.getImgPath());
         maps.put("video", config.getVideoPath());
         maps.put("course", config.getCoursePath());
+        maps.put("question", config.getQuestionPath());
         return maps;
     }
 

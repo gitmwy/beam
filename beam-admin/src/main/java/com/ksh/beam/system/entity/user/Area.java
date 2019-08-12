@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @TableName("user_area")
-public class UserArea extends RestEntity<Long> {
+public class Area extends RestEntity<Long> {
 
     @TableId
     private Long id;

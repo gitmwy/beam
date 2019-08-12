@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.file.ExcelManager;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.dao.MeetingDetailMapper;
-import com.ksh.beam.system.entity.meeting.MeetingDetail;
+import com.ksh.beam.system.entity.meeting.Detail;
 import com.ksh.beam.system.service.MeetingDetailService;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +19,13 @@ import java.util.Map;
  * 会议列表
  */
 @Service
-public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, MeetingDetail> implements MeetingDetailService {
+public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, Detail> implements MeetingDetailService {
 
     /**
      * 分页
      */
     @Override
-    public R selectPageList(MeetingDetail meeting) {
+    public R selectPageList(Detail meeting) {
         IPage page = baseMapper.selectPageList(new Page(meeting.getCurrentPage(), meeting.getPageSize()),meeting);
         return R.ok(page);
     }
@@ -34,7 +34,7 @@ public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, M
      * 导出
      */
     @Override
-    public void exportData(MeetingDetail meeting, HttpServletResponse response) {
+    public void exportData(Detail meeting, HttpServletResponse response) {
         List<Map<String, Object>> list = baseMapper.exportData(meeting);
         //定义存放英文字段名和中文字段名的Map
         LinkedHashMap<String, String> fieldMap = new LinkedHashMap<>();

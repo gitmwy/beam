@@ -20,7 +20,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @TableName("user_detail")
-public class UserDetail extends RestEntity<Long> {
+public class Detail extends RestEntity<Long> {
 
     @TableId
     private Long id;

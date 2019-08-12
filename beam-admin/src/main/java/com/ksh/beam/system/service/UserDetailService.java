@@ -2,24 +2,24 @@ package com.ksh.beam.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.user.UserDetail;
+import com.ksh.beam.system.entity.user.Detail;
 
 import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户列表
  */
-public interface UserDetailService extends IService<UserDetail> {
+public interface UserDetailService extends IService<Detail> {
 
     //分页
-    R selectPageList(UserDetail userDetail);
+    R selectPageList(Detail detail);
 
     //导出
-    void exportData(UserDetail userDetail, HttpServletResponse response);
+    void exportData(Detail detail, HttpServletResponse response);
 
     R deleteBatch(Long[] deptIds);
 
-    R saveUserDetail(UserDetail userDetail);
+    R saveUserDetail(Detail detail);
 
     R changeStatus(Long userId, Integer flag);
 }

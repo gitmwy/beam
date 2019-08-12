@@ -2,7 +2,7 @@ package com.ksh.beam.system.controller.meeting;
 
 import com.ksh.beam.common.annotion.SysLog;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.meeting.MeetingDetail;
+import com.ksh.beam.system.entity.meeting.Detail;
 import com.ksh.beam.system.service.MeetingDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +28,7 @@ public class MeetingDetailController {
     @ApiOperation("会议列表分页")
     @GetMapping(value = "/page/list")
     @RequiresPermissions("meeting:detail:list")
-    public R pageList(MeetingDetail meeting) {
+    public R pageList(Detail meeting) {
         return meetingService.selectPageList(meeting);
     }
 
@@ -36,7 +36,7 @@ public class MeetingDetailController {
     @ApiOperation(value = "会议数据导出")
     @RequiresPermissions("meeting:detail:export")
     @GetMapping("/export")
-    public void export(MeetingDetail meeting, HttpServletResponse response) {
+    public void export(Detail meeting, HttpServletResponse response) {
         meetingService.exportData(meeting, response);
     }
 }

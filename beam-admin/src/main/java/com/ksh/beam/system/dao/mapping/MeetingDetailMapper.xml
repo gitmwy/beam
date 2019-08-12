@@ -3,7 +3,7 @@
 <mapper namespace="com.ksh.beam.system.dao.MeetingDetailMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.ksh.beam.system.entity.meeting.MeetingDetail" id="BaseResultMap">
+    <resultMap type="com.ksh.beam.system.entity.meeting.Detail" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="code" column="code"/>
         <result property="meetingTime" column="meeting_time"/>
@@ -36,7 +36,7 @@
     </sql>
 
     <!--    分页-->
-    <select id="selectPageList" resultType="com.ksh.beam.system.entity.meeting.MeetingDetail">
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.meeting.Detail">
         select m.* from meeting_detail m
         <where>
             1 = 1

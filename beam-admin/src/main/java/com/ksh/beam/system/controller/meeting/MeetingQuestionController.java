@@ -2,8 +2,8 @@ package com.ksh.beam.system.controller.meeting;
 
 import com.ksh.beam.common.annotion.SysLog;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.meeting.Course;
-import com.ksh.beam.system.service.MeetingCourseService;
+import com.ksh.beam.system.entity.meeting.Question;
+import com.ksh.beam.system.service.MeetingQuestionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -21,48 +21,48 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 会议课件
+ * 会议问卷
  */
-@Api(value = "MeetingCourseController", tags = {"MeetingCourse接口"})
+@Api(value = "MeetingQuestionController", tags = {"MeetingQuestion接口"})
 @RestController
-@RequestMapping("/meeting/course")
-public class MeetingCourseController {
+@RequestMapping("/meeting/question")
+public class MeetingQuestionController {
 
     @Autowired
-    private MeetingCourseService meetingCourseService;
+    private MeetingQuestionService meetingQuestionService;
 
-    @ApiOperation("课件分页")
+    @ApiOperation("问卷分页")
     @GetMapping(value = "/page/list")
-    @RequiresPermissions("meeting:course:list")
-    public R pageList(Course course) {
-        return meetingCourseService.selectPageList(course);
+    @RequiresPermissions("meeting:question:list")
+    public R pageList(Question question) {
+        return meetingQuestionService.selectPageList(question);
     }
 
-    @SysLog(value = "课件上传")
-    @ApiOperation(value = "课件上传")
+    @SysLog(value = "问卷上传")
+    @ApiOperation(value = "问卷上传")
     @PostMapping("/upload")
-    @RequiresPermissions("meeting:course:upload")
+    @RequiresPermissions("meeting:question:upload")
     public R upload(@RequestPart("file") MultipartFile file, @RequestParam(value = "fileType", required = false) String fileType) {
         Assert.notNull(fileType, "fileType不能为空");
         Assert.notNull(file, "请选择要上传的资源");
-        return meetingCourseService.saveCourse(file, fileType);
+        return meetingQuestionService.saveQuestion(file, fileType);
     }
 
-    @SysLog(value = "课件删除")
-    @ApiOperation("课件删除")
+    @SysLog(value = "问卷删除")
+    @ApiOperation("问卷删除")
     @PostMapping(value = "/del")
-    @RequiresPermissions("meeting:course:del")
+    @RequiresPermissions("meeting:question:del")
     public R del(@RequestBody Long[] userIds) {
         Assert.notEmpty(userIds, "请选择要删除的资源");
-        return meetingCourseService.deleteCourse(userIds);
+        return meetingQuestionService.deleteQuestion(userIds);
     }
 
-    @SysLog(value = "课件下载")
-    @ApiOperation(value = "课件下载")
-    @RequiresPermissions("meeting:course:download")
+    @SysLog(value = "问卷下载")
+    @ApiOperation(value = "问卷下载")
+    @RequiresPermissions("meeting:question:download")
     @GetMapping("/download")
     public void download(@RequestParam(required = false) Long id, HttpServletResponse response){
         Assert.notNull(id, "请选择要下载的资源");
-        meetingCourseService.downloadFile(id, response);
+        meetingQuestionService.downloadFile(id, response);
     }
 }

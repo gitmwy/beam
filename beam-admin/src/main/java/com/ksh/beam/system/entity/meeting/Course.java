@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @TableName("meeting_course")
-public class MeetingCourse extends RestEntity<Long> {
+public class Course extends RestEntity<Long> {
 
     @TableId
     private Long id;

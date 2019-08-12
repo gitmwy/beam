@@ -2,7 +2,7 @@ package com.ksh.beam.system.controller.user;
 
 import com.ksh.beam.common.annotion.SysLog;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.user.UserRole;
+import com.ksh.beam.system.entity.user.Role;
 import com.ksh.beam.system.service.UserRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,8 +31,8 @@ public class UserRoleController {
     @ApiOperation("角色分页")
     @GetMapping(value = "/page/list")
     @RequiresPermissions("user:role:list")
-    public R pageList(UserRole userRole) {
-        return userRoleService.selectPageList(userRole);
+    public R pageList(Role role) {
+        return userRoleService.selectPageList(role);
     }
 
     @ApiOperation("用户所属角色")
@@ -45,8 +45,8 @@ public class UserRoleController {
     @ApiOperation("角色新增")
     @PostMapping(value = "/add")
     @RequiresPermissions("user:role:add")
-    public R add(@RequestBody @Valid UserRole userRole) {
-        return userRoleService.saveUserArea(userRole);
+    public R add(@RequestBody @Valid Role role) {
+        return userRoleService.saveUserArea(role);
     }
 
     @SysLog(value = "角色删除")

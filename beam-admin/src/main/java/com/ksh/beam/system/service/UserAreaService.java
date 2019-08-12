@@ -2,17 +2,17 @@ package com.ksh.beam.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.user.UserArea;
+import com.ksh.beam.system.entity.user.Area;
 
 /**
  * 区域管理
  */
-public interface UserAreaService extends IService<UserArea> {
+public interface UserAreaService extends IService<Area> {
 
     //分页
-    R selectPageList(UserArea userArea);
+    R selectPageList(Area area);
 
-    R saveUserArea(UserArea userArea);
+    R saveUserArea(Area area);
 
     //关联区域
     R getOptions(Integer level);

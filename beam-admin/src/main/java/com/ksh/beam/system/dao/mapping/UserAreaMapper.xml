@@ -3,7 +3,7 @@
 <mapper namespace="com.ksh.beam.system.dao.UserAreaMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.ksh.beam.system.entity.user.UserArea" id="BaseResultMap">
+    <resultMap type="com.ksh.beam.system.entity.user.Area" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="parentId" column="parent_id"/>
         <result property="areaName" column="area_name"/>
@@ -22,7 +22,7 @@
     </sql>
 
     <!--分页-->
-    <select id="selectPageList" resultType="com.ksh.beam.system.entity.user.UserArea">
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.user.Area">
         select u.* from user_area u
         <where>
             1 = 1
@@ -32,7 +32,7 @@
     </select>
 
     <!--根据父ID和等级获取区域-->
-    <select id="getAreaByParentIdAndLevel" resultType="com.ksh.beam.system.entity.user.UserArea">
+    <select id="getAreaByParentIdAndLevel" resultType="com.ksh.beam.system.entity.user.Area">
         select u.* from user_area u
         <where>
             <if test="topLevel != null">

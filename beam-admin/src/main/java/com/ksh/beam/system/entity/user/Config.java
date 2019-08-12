@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @TableName("user_config")
-public class UserConfig implements Serializable {
+public class Config implements Serializable {
 
     private static final long serialVersionUID = -3504418053853304999L;
 

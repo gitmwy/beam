@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.file.ExcelManager;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.dao.UserDetailMapper;
-import com.ksh.beam.system.entity.user.UserDetail;
+import com.ksh.beam.system.entity.user.Detail;
 import com.ksh.beam.system.service.UserDetailService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -21,20 +21,20 @@ import java.util.Map;
  * 用户列表
  */
 @Service
-public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, UserDetail> implements UserDetailService {
+public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail> implements UserDetailService {
 
     /**
      * 分页
      */
     @Override
-    public R selectPageList(UserDetail userDetail) {
-        IPage page = baseMapper.selectPageList(new Page(userDetail.getCurrentPage(), userDetail.getPageSize()), userDetail);
+    public R selectPageList(Detail detail) {
+        IPage page = baseMapper.selectPageList(new Page(detail.getCurrentPage(), detail.getPageSize()), detail);
         return R.ok(page);
     }
 
     @Override
-    public void exportData(UserDetail userDetail, HttpServletResponse response) {
-        List<Map<String, Object>> list = baseMapper.exportData(userDetail);
+    public void exportData(Detail detail, HttpServletResponse response) {
+        List<Map<String, Object>> list = baseMapper.exportData(detail);
         //定义存放英文字段名和中文字段名的Map
         LinkedHashMap<String, String> fieldMap = new LinkedHashMap<>();
         fieldMap.put("job_code", "编号");
@@ -64,17 +64,17 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, UserDet
      * 保存用户
      */
     @Override
-    public R saveUserDetail(UserDetail userDetail) {
-        this.saveOrUpdate(userDetail);
+    public R saveUserDetail(Detail detail) {
+        this.saveOrUpdate(detail);
         return R.ok();
     }
 
     @Override
     public R changeStatus(Long userId, Integer flag) {
-        UserDetail userDetail = this.getById(userId);
-        Assert.notNull(userDetail, "找不到用户");
-        userDetail.setStatus(flag);
-        if(this.updateById(userDetail)){
+        Detail detail = this.getById(userId);
+        Assert.notNull(detail, "找不到用户");
+        detail.setStatus(flag);
+        if(this.updateById(detail)){
             return R.ok();
         }
         return R.fail();

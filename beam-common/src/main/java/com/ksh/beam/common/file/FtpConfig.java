@@ -20,6 +20,8 @@ public class FtpConfig implements Serializable{
     private String videoPath;
     @NotBlank(message="课件路径不能为空")
     private String coursePath;
+    @NotBlank(message="问卷路径不能为空")
+    private String questionPath;
 
     public String getFtpIp() {
         return ftpIp;
@@ -75,5 +77,13 @@ public class FtpConfig implements Serializable{
 
     public void setCoursePath(String coursePath) {
         this.coursePath = coursePath;
+    }
+
+    public String getQuestionPath() {
+        return questionPath;
+    }
+
+    public void setQuestionPath(String questionPath) {
+        this.questionPath = questionPath;
     }
 }

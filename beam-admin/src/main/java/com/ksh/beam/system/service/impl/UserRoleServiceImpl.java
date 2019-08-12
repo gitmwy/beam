@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.dao.UserRoleMapper;
-import com.ksh.beam.system.entity.user.UserRole;
+import com.ksh.beam.system.entity.user.Role;
 import com.ksh.beam.system.service.UserRoleService;
 import org.springframework.stereotype.Service;
 
@@ -16,20 +16,20 @@ import java.util.Arrays;
  * 角色管理
  */
 @Service
-public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
+public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, Role> implements UserRoleService {
 
     /**
      * 分页
      */
     @Override
-    public R selectPageList(UserRole userRole) {
-        IPage page = baseMapper.selectPageList(new Page(userRole.getCurrentPage(), userRole.getPageSize()), userRole);
+    public R selectPageList(Role role) {
+        IPage page = baseMapper.selectPageList(new Page(role.getCurrentPage(), role.getPageSize()), role);
         return R.ok(page);
     }
 
     @Override
     public R getUserRole() {
-        QueryWrapper<UserRole> qw = new QueryWrapper<>();
+        QueryWrapper<Role> qw = new QueryWrapper<>();
         qw.orderByAsc("level");
         return R.ok(baseMapper.selectList(qw));
     }
@@ -38,8 +38,8 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
      * 保存角色
      */
     @Override
-    public R saveUserArea(UserRole userRole) {
-        this.saveOrUpdate(userRole);
+    public R saveUserArea(Role role) {
+        this.saveOrUpdate(role);
         return R.ok();
     }
 

@@ -3,7 +3,7 @@ package com.ksh.beam.system.controller.user;
 import com.ksh.beam.common.annotion.SysLog;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
-import com.ksh.beam.system.entity.user.UserArea;
+import com.ksh.beam.system.entity.user.Area;
 import com.ksh.beam.system.service.UserAreaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,22 +33,22 @@ public class UserAreaController {
     @ApiOperation("区域分页")
     @GetMapping(value = "/page/list")
     @RequiresPermissions("user:area:list")
-    public R pageList(UserArea userArea) {
-        return userAreaService.selectPageList(userArea);
+    public R pageList(Area area) {
+        return userAreaService.selectPageList(area);
     }
 
     @SysLog(value = "区域新增")
     @ApiOperation("区域新增")
     @PostMapping(value = "/add")
     @RequiresPermissions("user:area:add")
-    public R add(@RequestBody @Valid UserArea userArea) {
-        if(userArea.getLevel() > 1 && null == userArea.getParentId()){
+    public R add(@RequestBody @Valid Area area) {
+        if(area.getLevel() > 1 && null == area.getParentId()){
             return R.fail("关联区域不能为空");
         }
-        if(ToolUtil.isNotEmpty(userArea.getId()) && userArea.getId().equals(userArea.getParentId())){
+        if(ToolUtil.isNotEmpty(area.getId()) && area.getId().equals(area.getParentId())){
             return R.fail("不能选择关联区域为当前编辑区域");
         }
-        return userAreaService.saveUserArea(userArea);
+        return userAreaService.saveUserArea(area);
     }
 
     @ApiOperation("关联区域")
