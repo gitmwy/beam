@@ -49,15 +49,16 @@
                                 </template>
                             </el-table-column>
                         </el-table>
+                        <!--分页-->
                         <div class="pagination">
                             <el-pagination
                                 background
-                                :page-sizes="[10, 20, 30, 40, 50]"
+                                :page-sizes="[10, 20, 30, 40]"
                                 :page-size="page.pageSize"
                                 :current-page="page.pageNo"
                                 @current-change="handleCurrentChange"
                                 @size-change="changePageSize"
-                                layout="prev, pager, next"
+                                layout="total, sizes, prev, pager, next, jumper"
                                 :total="page.totalRows">
                             </el-pagination>
                         </div>
@@ -131,40 +132,6 @@
         </el-dialog>
     </div>
 </template>
-
-<style>
-    .avatar-uploader .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        width: 100px;
-        height: 100px;
-    }
-    .avatar-uploader .el-upload:hover {
-        border-color: #409EFF;
-    }
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 100px;
-        height: 100px;
-        line-height: 100px;
-        text-align: center;
-    }
-    .avatar {
-        width: 100px;
-        height: 100px;
-        display: block;
-    }
-    .warning {
-        color: #E6A23C;
-    }
-    .red {
-        color: #ff0000;
-    }
-</style>
 
 <script>
     import SysUserApi from '../../api/sys/sysuser';
@@ -436,14 +403,34 @@
     }
 </script>
 
-<style scoped>
-    .del-dialog-cnt {
-        font-size: 16px;
-        text-align: center
+<style>
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        width: 100px;
+        height: 100px;
     }
-    .table {
-        width: 100%;
-        font-size: 14px;
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+    }
+    .avatar {
+        width: 100px;
+        height: 100px;
+        display: block;
+    }
+    .warning {
+        color: #E6A23C;
     }
     .red {
         color: #ff0000;

@@ -122,17 +122,3 @@
     }
 
 </script>
-
-<style scoped>
-    .handle-box {
-        margin-bottom: 20px;
-    }
-    .del-dialog-cnt {
-        font-size: 16px;
-        text-align: center
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-</style>

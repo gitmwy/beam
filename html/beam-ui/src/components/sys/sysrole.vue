@@ -26,15 +26,16 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <!--分页-->
             <div class="pagination">
                 <el-pagination
                     background
-                    :page-sizes="[10, 20, 30, 40, 50]"
+                    :page-sizes="[10, 20, 30, 40]"
                     :page-size="page.pageSize"
                     :current-page="page.pageNo"
                     @current-change="handleCurrentChange"
                     @size-change="changePageSize"
-                    layout="prev, pager, next"
+                    layout="total, sizes, prev, pager, next, jumper"
                     :total="page.totalRows">
                 </el-pagination>
             </div>
@@ -259,24 +260,6 @@
 </script>
 
 <style scoped>
-    .handle-box {
-        margin-bottom: 20px;
-    }
-
-    .del-dialog-cnt {
-        font-size: 16px;
-        text-align: center
-    }
-
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-
-    .red {
-        color: #ff0000;
-    }
-
     .success {
         color: #67C23A;
     }

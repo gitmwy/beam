@@ -28,11 +28,11 @@
                 <el-table-column label="操作" align="center" prop="operation">
                     <template slot-scope="scope">
                         <el-button v-if="canDownload" type="text" class="my-icon-download" @click="handleDownload(scope.$index, scope.row)">下载</el-button>
-                        <el-button v-if="canDel" type="text" icon="el-icon-delete" @click="handleDelete(scope.$index, scope.row)" >删除</el-button>
+                        <el-button v-if="canDel" type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)" >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <!--            分页-->
+            <!-- 分页-->
             <div class="pagination">
                 <el-pagination
                     background
@@ -45,16 +45,16 @@
                     :total="page.totalRows">
                 </el-pagination>
             </div>
+        </div>
 
-            <!-- 删除提示框 -->
-            <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-                <span slot="footer" class="dialog-footer">
+        <!-- 删除提示框 -->
+        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
+            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
+            <span slot="footer" class="dialog-footer">
                     <el-button @click="delVisible = false">取 消</el-button>
                     <el-button type="primary" @click="deleteRow">确 定</el-button>
                 </span>
-            </el-dialog>
-        </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -158,15 +158,8 @@
 </script>
 
 <style scoped>
-    .handle-box {
-        margin-bottom: 20px;
-    }
     .handle-box >>> .el-upload--text{
         height: unset;
         border: none;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
     }
 </style>

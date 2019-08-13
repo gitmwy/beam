@@ -154,13 +154,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .handle-box {
-        margin-bottom: 20px;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-</style>

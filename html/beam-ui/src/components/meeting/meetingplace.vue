@@ -16,7 +16,7 @@
                 <el-table-column label="操作" align="center" prop="operation" width="180">
                     <template slot-scope="scope">
                         <el-tooltip effect="dark" content="删除" placement="right">
-                            <el-button v-if="canDel" type="text" icon="el-icon-delete" @click="handleDelete(scope.$index, scope.row)" >删除</el-button>
+                            <el-button v-if="canDel" type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)" >删除</el-button>
                         </el-tooltip>
                     </template>
                 </el-table-column>
@@ -34,29 +34,29 @@
                     :total="page.totalRows">
                 </el-pagination>
             </div>
+        </div>
 
-            <!-- 编辑弹出框 -->
-            <el-dialog title="编辑" :visible.sync="editVisible" width="50%" @close="handleClose">
-                <el-form ref="place" :model="place" :rules="rules" label-width="100px">
-                    <el-form-item label="类型名称" prop="typeName">
-                        <el-input v-model.trim="place.typeName" placeholder="请输入类型名称"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
+        <!-- 编辑弹出框 -->
+        <el-dialog title="编辑" :visible.sync="editVisible" width="50%" @close="handleClose">
+            <el-form ref="place" :model="place" :rules="rules" label-width="100px">
+                <el-form-item label="类型名称" prop="typeName">
+                    <el-input v-model.trim="place.typeName" placeholder="请输入类型名称"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" :loading="loading" @click="saveEdit">确 定</el-button>
             </span>
-            </el-dialog>
+        </el-dialog>
 
-            <!-- 删除提示框 -->
-            <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-                <span slot="footer" class="dialog-footer">
+        <!-- 删除提示框 -->
+        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
+            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
+            <span slot="footer" class="dialog-footer">
                     <el-button @click="delVisible = false">取 消</el-button>
                     <el-button type="primary" @click="deleteRow">确 定</el-button>
                 </span>
-            </el-dialog>
-        </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -159,13 +159,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .handle-box {
-        margin-bottom: 20px;
-    }
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-</style>
