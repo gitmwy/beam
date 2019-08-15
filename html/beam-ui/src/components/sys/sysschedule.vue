@@ -84,46 +84,10 @@
                 <el-button type="primary" :loading="loading" @click="saveEdit">确 定</el-button>
             </span>
         </el-dialog>
-
-        <!-- 删除提示框 -->
-        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteRow">确 定</el-button>
-            </span>
-        </el-dialog>
-        <!-- 运行提示框 -->
-        <el-dialog title="提示" :visible.sync="runVisible" width="300px" center>
-            <div class="del-dialog-cnt">是否确定运行这些定时任务？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="runVisible = false">取 消</el-button>
-                <el-button type="primary" @click="runJob">确 定</el-button>
-            </span>
-        </el-dialog>
-        <!-- 停止提示框 -->
-        <el-dialog title="提示" :visible.sync="pauseVisible" width="300px" center>
-            <div class="del-dialog-cnt">是否确定停止这些定时任务？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="pauseVisible = false">取 消</el-button>
-                <el-button type="primary" @click="pauseJob">确 定</el-button>
-            </span>
-        </el-dialog>
-        <!-- 恢复提示框 -->
-        <el-dialog title="提示" :visible.sync="resumeVisible" width="300px" center>
-            <div class="del-dialog-cnt">是否确定恢复这些定时任务？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="resumeVisible = false">取 消</el-button>
-                <el-button type="primary" @click="resumeJob">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-    import ScheduleJobApi from '../../api/sys/sysschedule';
-    import http from '../../util/http';
-
     export default {
         data() {
             return {
@@ -133,12 +97,7 @@
                 is_search: false,
                 editVisible: false,
                 isNew: false,
-                delVisible: false,
-                runVisible: false,
-                pauseVisible: false,
-                resumeVisible: false,
                 scheduleJob: {},
-                idx: -1,
                 ids: [],
                 req: {},
                 accountInput: true,
@@ -155,12 +114,12 @@
         created() {
             this.getData();
             this.getStatusList();
-            this.canEdit = this.getPerms().indexOf("sys:schedule:edit")!==-1;
-            this.canAdd = this.getPerms().indexOf("sys:schedule:add")!==-1;
-            this.canDel = this.getPerms().indexOf("sys:schedule:del")!==-1;
-            this.canResume = this.getPerms().indexOf("sys:schedule:resume")!==-1;
-            this.canPause = this.getPerms().indexOf("sys:schedule:pause")!==-1;
-            this.canRun = this.getPerms().indexOf("sys:schedule:run")!==-1;
+            this.canEdit = this.$tools.getPerms().indexOf("sys:schedule:edit")!==-1;
+            this.canAdd = this.$tools.getPerms().indexOf("sys:schedule:add")!==-1;
+            this.canDel = this.$tools.getPerms().indexOf("sys:schedule:del")!==-1;
+            this.canResume = this.$tools.getPerms().indexOf("sys:schedule:resume")!==-1;
+            this.canPause = this.$tools.getPerms().indexOf("sys:schedule:pause")!==-1;
+            this.canRun = this.$tools.getPerms().indexOf("sys:schedule:run")!==-1;
         },
         computed: {},
         methods: {
@@ -182,7 +141,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                ScheduleJobApi.getData(this.req).then((res) => {
+                this.$api.SysScheduleApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -204,48 +163,46 @@
                 this.scheduleJob = {status: 0};
                 this.editVisible = true;
             },
-            handleEdit(index, row) {
+            handleEdit(index) {
                 this.isNew = false;
+                this.scheduleJob = this.$tools.assign(this.tableData[index]);
                 this.editVisible = true;
-                this.idx = index;
-                const item = this.tableData[index];
-                this.scheduleJob = item;
             },
             handleDelete(index, row) {
                 this.ids = [row.id];
-                this.delVisible = true;
+                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
             },
             delAll() {
-                this.delVisible = true;
                 this.ids = [];
                 const length = this.multipleSelection.length;
                 for (let i = 0; i < length; i++) {
                     this.ids.push(this.multipleSelection[i].id);
                 }
+                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
             },
             handleRun() {
-                this.runVisible = true;
                 this.ids = [];
                 const length = this.multipleSelection.length;
                 for (let i = 0; i < length; i++) {
                     this.ids.push(this.multipleSelection[i].id);
                 }
+                this.$tools.messageBox('是否确定运行这些定时任务？', this.runJob);
             },
             handlePause() {
-                this.pauseVisible = true;
                 this.ids = [];
                 const length = this.multipleSelection.length;
                 for (let i = 0; i < length; i++) {
                     this.ids.push(this.multipleSelection[i].id);
                 }
+                this.$tools.messageBox('是否确定停止这些定时任务？', this.pauseJob);
             },
             handleResume() {
-                this.resumeVisible = true;
                 this.ids = [];
                 const length = this.multipleSelection.length;
                 for (let i = 0; i < length; i++) {
                     this.ids.push(this.multipleSelection[i].id);
                 }
+                this.$tools.messageBox('是否确定恢复这些定时任务？', this.resumeJob);
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
@@ -254,7 +211,7 @@
             saveEdit() {
                 this.loading = true;
                 if (this.isNew) {
-                    ScheduleJobApi.add(this.scheduleJob).then((res) => {
+                    this.$api.SysScheduleApi.add(this.scheduleJob).then((res) => {
                         this.loading = false;
                         if (res.error === false) {
                             this.editVisible = false;
@@ -266,7 +223,7 @@
                         this.$message.error(err.msg);
                     })
                 } else {
-                    ScheduleJobApi.edit(this.scheduleJob).then((res) => {
+                    this.$api.SysScheduleApi.edit(this.scheduleJob).then((res) => {
                         this.loading = false;
                         if (res.error === false) {
                             this.editVisible = false;
@@ -281,7 +238,7 @@
             },
             // 确定删除
             deleteRow() {
-                ScheduleJobApi.batchDelete(this.ids).then((res) => {
+                this.$api.SysScheduleApi.batchDelete(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
@@ -289,11 +246,10 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.delVisible = false;
             },
             // 确定运行
             runJob() {
-                ScheduleJobApi.runJob(this.ids).then((res) => {
+                this.$api.SysScheduleApi.runJob(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
@@ -301,11 +257,10 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.runVisible = false;
             },
             // 确定暂停
             pauseJob() {
-                ScheduleJobApi.pauseJob(this.ids).then((res) => {
+                this.$api.SysScheduleApi.pauseJob(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
@@ -313,11 +268,10 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.pauseVisible = false;
             },
             // 确定恢复
             resumeJob() {
-                ScheduleJobApi.resumeJob(this.ids).then((res) => {
+                this.$api.SysScheduleApi.resumeJob(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
@@ -325,10 +279,9 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.resumeVisible = false;
             },
             getStatusList() {
-                http.get("/sys/schedule/status/list").then((res) => {
+                this.$api.SysScheduleApi.statusList().then((res) => {
                     if (res.error === false) {
                         this.statusName = res.data;
                         this.statusName.forEach(item => {
@@ -338,8 +291,13 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-            }
+            },
         }
     }
-
 </script>
+
+<style scoped>
+    .red {
+        color: #ff0000;
+    }
+</style>

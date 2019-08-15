@@ -17,7 +17,7 @@ public interface UserDetailService extends IService<Detail> {
     //导出
     void exportData(Detail detail, HttpServletResponse response);
 
-    R deleteBatch(Long[] deptIds);
+    R deleteBatch(Long[] ids);
 
     R saveUserDetail(Detail detail);
 

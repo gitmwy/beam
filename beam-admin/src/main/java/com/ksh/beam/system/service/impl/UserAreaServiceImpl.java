@@ -83,8 +83,8 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
      * 删除区域
      */
     @Override
-    public R deleteBatch(Long[] deptIds) {
-        this.removeByIds(Arrays.asList(deptIds));
+    public R deleteBatch(Long[] ids) {
+        this.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 }

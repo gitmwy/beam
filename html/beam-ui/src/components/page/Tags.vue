@@ -23,7 +23,6 @@
 </template>
 
 <script>
-    import bus from '../../api/page/bus';
     export default {
         data() {
             return {
@@ -51,10 +50,9 @@
             },
             // 关闭其他标签
             closeOther(){
-                const curItem = this.tagsList.filter(item => {
+                this.tagsList = this.tagsList.filter(item => {
                     return item.path === this.$route.fullPath;
                 });
-                this.tagsList = curItem;
             },
             // 设置标签
             setTags(route){
@@ -71,7 +69,7 @@
                         name: route.matched[1].components.default.name
                     })
                 }
-                bus.$emit('tags', this.tagsList);
+                this.$emit('tags', this.tagsList);
             },
             handleTags(command){
                 command === 'other' ? this.closeOther() : this.closeAll();
@@ -89,7 +87,7 @@
         },
         created(){
             this.setTags(this.$route);
-            bus.$on('closeAll', msg => {
+            this.$on('closeAll', msg => {
                 this.closeAll();
             })
         }

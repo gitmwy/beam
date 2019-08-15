@@ -52,9 +52,9 @@ public class MeetingCourseController {
     @ApiOperation("课件删除")
     @PostMapping(value = "/del")
     @RequiresPermissions("meeting:course:del")
-    public R del(@RequestBody Long[] userIds) {
-        Assert.notEmpty(userIds, "请选择要删除的资源");
-        return meetingCourseService.deleteCourse(userIds);
+    public R del(@RequestBody Long[] ids) {
+        Assert.notEmpty(ids, "请选择要删除的资源");
+        return meetingCourseService.deleteCourse(ids);
     }
 
     @SysLog(value = "课件下载")

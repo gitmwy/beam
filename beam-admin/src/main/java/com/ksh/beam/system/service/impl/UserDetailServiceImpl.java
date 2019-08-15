@@ -55,8 +55,8 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail>
      * 删除用户
      */
     @Override
-    public R deleteBatch(Long[] deptIds) {
-        this.removeByIds(Arrays.asList(deptIds));
+    public R deleteBatch(Long[] ids) {
+        this.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 

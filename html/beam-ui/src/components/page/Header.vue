@@ -49,9 +49,6 @@
 </template>
 
 <script>
-    import bus from '../../api/page/bus';
-    import AccountApi from '../../api/page/account';
-
     export default {
         data() {
             return {
@@ -103,15 +100,15 @@
         },
         methods:{
             created() {
-                this.canClearCache = this.getPerms().indexOf("sys:user:clearCache")!==-1;
-                this.canChangePassword = this.getPerms().indexOf("sys:user:changePassword")!==-1;
+                this.canClearCache = this.$tools.getPerms().indexOf("sys:user:clearCache")!==-1;
+                this.canChangePassword = this.$tools.getPerms().indexOf("sys:user:changePassword")!==-1;
             },
             // 修改密码
             modifyPwd() {
                 this.$refs.AccountForm.validate((valid) => {
                     if (valid) {
                         this.loading = true;
-                        AccountApi.modifyPwd(this.pwdForm).then((res) => {
+                        this.$api.AccountApi.modifyPwd(this.pwdForm).then((res) => {
                             this.loading = false;
                             if (res.error === false) {
                                 this.dialogFormVisible = false;
@@ -137,7 +134,7 @@
                 }
             },
             handleLogout(){
-                AccountApi.handleLogout().then(() => {
+                this.$api.AccountApi.handleLogout().then(() => {
                     sessionStorage.clear();
                     this.$router.push('/login');
                 }, (err) => {
@@ -145,8 +142,8 @@
                 })
             },
             clearCache(){
-                AccountApi.clearCache().then((res) => {
-                    bus.$emit('closeAll', "");
+                this.$api.AccountApi.clearCache().then((res) => {
+                    this.$emit('closeAll', "");
                     sessionStorage.removeItem('menuItems');
                     sessionStorage.removeItem('buttonItems');
                     this.$message({
@@ -165,7 +162,7 @@
             // 侧边栏折叠
             collapseChage(){
                 this.collapse = !this.collapse;
-                bus.$emit('collapse', this.collapse);
+                this.$emit('collapse', this.collapse);
             },
             // 全屏事件
             handleFullScreen(){

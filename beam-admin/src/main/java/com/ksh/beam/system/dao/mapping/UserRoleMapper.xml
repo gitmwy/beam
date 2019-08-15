@@ -14,8 +14,8 @@
 
     <!--    查询条件-->
     <sql id="Where_List">
-        <if test="role.roleName != null and role.roleName != ''">
-            and u.role_name like concat("%",#{role.roleName},"%")
+        <if test="role.level != null">
+            and u.level = #{role.level}
         </if>
     </sql>
 

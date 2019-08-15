@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
-import cookie from 'vue-cookie';
+import utils from './util';
+import api from './api';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import '../static/css/icon/el-icon-lx/lx-iconfont.css';
@@ -11,15 +12,8 @@ import "babel-polyfill";
 // import '../static/css/theme/green/index.css';
 
 Vue.use(ElementUI, {size: 'small'});
-Vue.use(cookie);
-Vue.prototype.getPerms = function () {
-    let buttonItems = sessionStorage.getItem("buttonItems");
-    if (buttonItems) {
-        return buttonItems;
-    } else {
-        return [];
-    }
-};
+Vue.use(api);
+Vue.use(utils);
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {

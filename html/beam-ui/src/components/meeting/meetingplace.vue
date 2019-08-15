@@ -48,21 +48,10 @@
                 <el-button type="primary" :loading="loading" @click="saveEdit">确 定</el-button>
             </span>
         </el-dialog>
-
-        <!-- 删除提示框 -->
-        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                    <el-button @click="delVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="deleteRow">确 定</el-button>
-                </span>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-    import MeetingPlaceApi from '../../api/meeting/meetingplace';
-
     export default {
         data() {
             return{
@@ -77,7 +66,6 @@
                         {required: true, message: '请输入类型名称', trigger: 'blur'},
                     ],
                 },
-                delVisible: false,
                 editVisible: false,
                 canAdd: true,
                 canDel: true
@@ -85,8 +73,8 @@
         },
         created() {
             this.getData();
-            this.canAdd = this.getPerms().indexOf("meeting:place:add")!==-1;
-            this.canDel = this.getPerms().indexOf("meeting:place:del")!==-1;
+            this.canAdd = this.$tools.getPerms().indexOf("meeting:place:add")!==-1;
+            this.canDel = this.$tools.getPerms().indexOf("meeting:place:del")!==-1;
         },
         methods: {
             handleCurrentChange(val) {
@@ -105,7 +93,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                MeetingPlaceApi.getData(this.req).then((res) => {
+                this.$api.MeetingPlaceApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -119,7 +107,7 @@
             },
             handleDelete(index, row) {
                 this.ids = [row.id];
-                this.delVisible = true;
+                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
             },
             reload(){
                 this.getData();
@@ -131,7 +119,7 @@
                 this.$refs.place.validate((valid) =>{
                     if(valid){
                         this.loading = true;
-                        MeetingPlaceApi.add(this.place).then((res) => {
+                        this.$api.MeetingPlaceApi.add(this.place).then((res) => {
                             this.loading = false;
                             if (res.error === false) {
                                 this.editVisible = false;
@@ -146,7 +134,7 @@
                 })
             },
             deleteRow() {
-                MeetingPlaceApi.del(this.ids).then((res) => {
+                this.$api.MeetingPlaceApi.del(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload();
@@ -154,8 +142,13 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.delVisible = false;
             },
         }
     }
 </script>
+
+<style scoped>
+    .red {
+        color: #ff0000;
+    }
+</style>

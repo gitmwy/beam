@@ -156,7 +156,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 编辑用户
      */
     @Override
-    public R editUser(Long userId) {
+    public R getEditInfo(Long userId) {
         User user = baseMapper.selectById(userId);
         if (ToolUtil.isEmpty(user)) {
             return R.fail("找不到该用户");

@@ -20,5 +20,5 @@ public interface UserAreaService extends IService<Area> {
     //用户所属区域
     R getUserArea();
 
-    R deleteBatch(Long[] deptIds);
+    R deleteBatch(Long[] ids);
 }

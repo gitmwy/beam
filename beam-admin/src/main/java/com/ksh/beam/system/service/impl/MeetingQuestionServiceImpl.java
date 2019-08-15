@@ -58,8 +58,8 @@ public class MeetingQuestionServiceImpl extends ServiceImpl<MeetingQuestionMappe
      *删除问卷
      */
     @Override
-    public R deleteQuestion(Long[] userIds) {
-        List<Question> questions = baseMapper.selectBatchIds(Arrays.asList(userIds));
+    public R deleteQuestion(Long[] ids) {
+        List<Question> questions = baseMapper.selectBatchIds(Arrays.asList(ids));
         for(Question question : questions){
             if(baseMapper.deleteById(question.getId()) == 1){
                 if(OSSFactory.buildFtp().ftpDelete(question.getFilePath(), question.getFileName())){

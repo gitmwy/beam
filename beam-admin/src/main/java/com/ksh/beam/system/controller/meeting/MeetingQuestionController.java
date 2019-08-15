@@ -52,9 +52,9 @@ public class MeetingQuestionController {
     @ApiOperation("问卷删除")
     @PostMapping(value = "/del")
     @RequiresPermissions("meeting:question:del")
-    public R del(@RequestBody Long[] userIds) {
-        Assert.notEmpty(userIds, "请选择要删除的资源");
-        return meetingQuestionService.deleteQuestion(userIds);
+    public R del(@RequestBody Long[] ids) {
+        Assert.notEmpty(ids, "请选择要删除的资源");
+        return meetingQuestionService.deleteQuestion(ids);
     }
 
     @SysLog(value = "问卷下载")

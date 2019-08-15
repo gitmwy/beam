@@ -22,4 +22,7 @@ export default {
     resumeJob: ids => {
         return http.post("/sys/schedule/resume", ids)
     },
+    statusList: () => {
+        return http.get("/sys/schedule/status/list")
+    }
 }

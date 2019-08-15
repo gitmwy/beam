@@ -25,7 +25,7 @@ public interface MeetingCourseService extends IService<Course> {
     /**
      *删除课件数据
      */
-    R deleteCourse(Long[] userIds);
+    R deleteCourse(Long[] ids);
 
     /**
      *下载课件

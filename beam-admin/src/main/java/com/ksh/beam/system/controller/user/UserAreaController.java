@@ -68,8 +68,8 @@ public class UserAreaController {
     @ApiOperation("区域删除")
     @PostMapping(value = "/del")
     @RequiresPermissions("user:area:del")
-    public R del(@RequestBody Long[] deptIds) {
-        Assert.notEmpty(deptIds, "请选择要删除的记录");
-        return userAreaService.deleteBatch(deptIds);
+    public R del(@RequestBody Long[] ids) {
+        Assert.notEmpty(ids, "请选择要删除的记录");
+        return userAreaService.deleteBatch(ids);
     }
 }

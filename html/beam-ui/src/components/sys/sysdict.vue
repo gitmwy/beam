@@ -69,15 +69,6 @@
             </span>
         </el-dialog>
 
-        <!-- 删除提示框 -->
-        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteRow">确 定</el-button>
-            </span>
-        </el-dialog>
-
         <el-dialog title="字典值" :visible.sync="subDictVisible">
             <el-table :data="subDictList">
                 <el-table-column label="名称" align="center" prop="name"></el-table-column>
@@ -98,8 +89,6 @@
 </template>
 
 <script>
-    import DictApi from '../../api/sys/sysdict';
-
     export default {
         data() {
             return {
@@ -108,10 +97,8 @@
                 multipleSelection: [],
                 is_search: false,
                 editVisible: false,
-                delVisible: false,
                 subDictVisible: false,
                 dict: {},
-                idx: -1,
                 ids: [],
                 req: {},
                 accountInput: true,
@@ -136,10 +123,10 @@
         },
         created() {
             this.getData();
-            this.canEdit = this.getPerms().indexOf("sys:dict:edit")!==-1;
-            this.canAdd = this.getPerms().indexOf("sys:dict:add")!==-1;
-            this.canDel = this.getPerms().indexOf("sys:dict:del")!==-1;
-            this.canInfo = this.getPerms().indexOf("sys:dict:info")!==-1;
+            this.canEdit = this.$tools.getPerms().indexOf("sys:dict:edit")!==-1;
+            this.canAdd = this.$tools.getPerms().indexOf("sys:dict:add")!==-1;
+            this.canDel = this.$tools.getPerms().indexOf("sys:dict:del")!==-1;
+            this.canInfo = this.$tools.getPerms().indexOf("sys:dict:info")!==-1;
         },
         computed: {},
         methods: {
@@ -161,7 +148,7 @@
                 this.getSubData();
             },
             getSubData() {
-                DictApi.getData({pid: this.pid}).then((res) => {
+                this.$api.SysDictApi.getData({pid: this.pid}).then((res) => {
                     if (res.error === false) {
                         this.subDictList = res.data.records ? res.data.records : []
                     }
@@ -173,7 +160,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                DictApi.getData(this.req).then((res) => {
+                this.$api.SysDictApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -189,7 +176,7 @@
                 });
             },
             getDictList() {
-                DictApi.getDictList().then((res) => {
+                this.$api.SysDictApi.getDictList().then((res) => {
                     if (res.error === false) {
                         this.dictList = res.data;
                     }
@@ -205,34 +192,31 @@
                 this.editVisible = true;
                 this.getDictList();
             },
-            handleEdit(index, row) {
+            handleEdit(index,) {
                 this.getDictList();
+                this.dict = this.$tools.assign(this.tableData[index]);
                 this.editVisible = true;
-                this.idx = index;
-                this.dict = this.tableData[index];
             },
-            subHandleEdit(index, row) {
+            subHandleEdit(index) {
                 this.getDictList();
-                this.editVisible = true;
-                this.idx = index;
-                this.dict = this.subDictList[index];
+                this.dict = this.$tools.assign(this.tableData[index]);
                 this.mark = 1;
+                this.editVisible = true;
             },
-            handleView(index, row) {
-                this.subDictVisible = true;
-                this.idx = index;
-                this.dict = this.tableData[index];
+            handleView(index) {
+                this.dict = this.$tools.assign(this.tableData[index]);
                 this.pid = this.dict.id;
                 this.getSubData();
+                this.subDictVisible = true;
             },
             handleDelete(index, row) {
                 this.ids = [row.id];
-                this.delVisible = true;
+                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
             },
             subHandleDelete(index, row) {
                 this.ids = [row.id];
-                this.delVisible = true;
                 this.mark = 1;
+                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
@@ -240,7 +224,7 @@
             // 保存编辑
             saveEdit() {
                 this.loading = true;
-                DictApi.add(this.dict).then((res) => {
+                this.$api.SysDictApi.add(this.dict).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.editVisible = false;
@@ -259,7 +243,7 @@
             },
             // 确定删除
             deleteRow() {
-                DictApi.batchDelete(this.ids).then((res) => {
+                this.$api.SysDictApi.batchDelete(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         if (this.mark === 1) {
@@ -272,7 +256,6 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.delVisible = false;
             },
         }
     }
@@ -280,24 +263,9 @@
 </script>
 
 <style scoped>
-    .handle-box {
-        margin-bottom: 20px;
-    }
-
-    .del-dialog-cnt {
-        font-size: 16px;
-        text-align: center
-    }
-
-    .table {
-        width: 100%;
-        font-size: 14px;
-    }
-
     .red {
         color: #ff0000;
     }
-
     .yellow {
         color: #e6a23c;
     }

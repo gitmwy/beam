@@ -17,5 +17,5 @@ public interface UserRoleService extends IService<Role> {
 
     R saveUserArea(Role role);
 
-    R deleteBatch(Long[] deptIds);
+    R deleteBatch(Long[] ids);
 }

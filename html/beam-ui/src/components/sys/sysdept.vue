@@ -45,20 +45,10 @@
         <el-dialog title="选择部门" :modal="false" :visible.sync="selectDeptDialog" width="30%">
             <el-tree :data="treeData" :props="defaultProps" :expand-on-click-node="false" @node-click="selectDeptClick"></el-tree>
         </el-dialog>
-        <!-- 删除提示框 -->
-        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteRow">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-    import DeptApi from '../../api/sys/sysdept';
-
     export default {
         data() {
             return {
@@ -66,7 +56,6 @@
                 treeData: [],
                 is_search: false,
                 editVisible: false,
-                delVisible: false,
                 dept: {},
                 ids: [],
                 req: {},
@@ -82,9 +71,9 @@
         },
         created() {
             this.getTreeData();
-            this.canEdit = this.getPerms().indexOf("sys:dept:edit")!==-1;
-            this.canAdd = this.getPerms().indexOf("sys:dept:add")!==-1;
-            this.canDel = this.getPerms().indexOf("sys:dept:del")!==-1;
+            this.canEdit = this.$tools.getPerms().indexOf("sys:dept:edit")!==-1;
+            this.canAdd = this.$tools.getPerms().indexOf("sys:dept:add")!==-1;
+            this.canDel = this.$tools.getPerms().indexOf("sys:dept:del")!==-1;
         },
         methods: {
             refresh() {
@@ -105,7 +94,7 @@
             },
             getTreeData() {
                 this.loading = true;
-                DeptApi.getTreeData(this.req).then((res) => {
+                this.$api.SysDeptApi.getTreeData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.treeData = res.data;
@@ -125,24 +114,23 @@
                 this.editVisible = true;
             },
             handleEdit(index, row) {
-                DeptApi.edit({deptId: row.id}).then((res) => {
+                this.$api.SysDeptApi.edit({deptId: row.id}).then((res) => {
                     if (res.error === false) {
                         this.dept = res.data;
                     }
                 }, (err) => {
-                    this.loading = false;
                     this.$message.error(err.msg);
                 });
                 this.editVisible = true;
             },
             handleDelete(index, row) {
                 this.ids = [row.id];
-                this.delVisible = true;
+                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
             },
             // 保存编辑
             saveEdit() {
                 this.loading = true;
-                DeptApi.add(this.dept).then((res) => {
+                this.$api.SysDeptApi.add(this.dept).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.editVisible = false;
@@ -156,7 +144,7 @@
             },
             // 确定删除
             deleteRow() {
-                DeptApi.batchDelete(this.ids).then((res) => {
+                this.$api.SysDeptApi.batchDelete(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
@@ -164,9 +152,13 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.delVisible = false;
             }
         }
     }
-
 </script>
+
+<style scoped>
+    .red {
+        color: #ff0000;
+    }
+</style>

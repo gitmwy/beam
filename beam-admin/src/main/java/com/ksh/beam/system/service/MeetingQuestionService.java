@@ -25,7 +25,7 @@ public interface MeetingQuestionService extends IService<Question> {
     /**
      *删除问卷
      */
-    R deleteQuestion(Long[] userIds);
+    R deleteQuestion(Long[] ids);
 
     /**
      *下载问卷

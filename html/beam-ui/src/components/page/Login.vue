@@ -33,7 +33,6 @@
 </template>
 
 <script>
-    import loginApi from '../../api/page/login';
     import Slider from "../common/Slider";
 
     export default {
@@ -72,7 +71,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.loading = true;
-                        loginApi.login(this.ruleForm).then((res) => {
+                        this.$api.LoginApi.login(this.ruleForm).then((res) => {
                             this.loading = false;
                             if (res.error === false) {
                                 this.$message.success(res.msg);

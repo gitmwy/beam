@@ -47,8 +47,8 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, Role> imple
      * 删除角色
      */
     @Override
-    public R deleteBatch(Long[] deptIds) {
-        this.removeByIds(Arrays.asList(deptIds));
+    public R deleteBatch(Long[] ids) {
+        this.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 }

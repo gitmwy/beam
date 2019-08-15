@@ -53,8 +53,8 @@ public class UserRoleController {
     @ApiOperation("角色删除")
     @PostMapping(value = "/del")
     @RequiresPermissions("user:role:del")
-    public R del(@RequestBody Long[] deptIds) {
-        Assert.notEmpty(deptIds, "请选择要删除的记录");
-        return userRoleService.deleteBatch(deptIds);
+    public R del(@RequestBody Long[] ids) {
+        Assert.notEmpty(ids, "请选择要删除的记录");
+        return userRoleService.deleteBatch(ids);
     }
 }

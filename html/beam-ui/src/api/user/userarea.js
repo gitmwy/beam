@@ -15,6 +15,6 @@ export default {
     },
     getAreaLevel: params =>{
         return http.get("/user/config/area/level", params)
-    },
+    }
 }
 

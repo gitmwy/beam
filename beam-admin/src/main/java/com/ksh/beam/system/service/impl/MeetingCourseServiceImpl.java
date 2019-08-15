@@ -59,8 +59,8 @@ public class MeetingCourseServiceImpl extends ServiceImpl<MeetingCourseMapper, C
      *删除课件数据
      */
     @Override
-    public R deleteCourse(Long[] userIds) {
-        List<Course> cours = baseMapper.selectBatchIds(Arrays.asList(userIds));
+    public R deleteCourse(Long[] ids) {
+        List<Course> cours = baseMapper.selectBatchIds(Arrays.asList(ids));
         for(Course course : cours){
             if(baseMapper.deleteById(course.getId()) == 1){
                 if(OSSFactory.buildFtp().ftpDelete(course.getFilePath(), course.getFileName())){

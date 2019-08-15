@@ -59,7 +59,6 @@
 </template>
 
 <script>
-    import MeetingDetailApi from '../../api/meeting/meetingdetail';
     import vInfo from './meetinginfo.vue';
 
     export default {
@@ -86,14 +85,14 @@
         //初始化
         created() {
             this.getData();
-            this.canExport = this.getPerms().indexOf("meeting:detail:export")!==-1;
-            this.canInfo = this.getPerms().indexOf("meeting:detail:info")!==-1;
+            this.canExport = this.$tools.getPerms().indexOf("meeting:detail:export")!==-1;
+            this.canInfo = this.$tools.getPerms().indexOf("meeting:detail:info")!==-1;
         },
         methods: {
-            back(index){
+            back(){
                 this.showMeeting = true;
                 this.showInfo = false;
-                this.items.splice(index,1)
+                this.items.splice(0,1);
             },
             handleCurrentChange(val) {
                 this.page.pageNo = val;
@@ -111,7 +110,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                MeetingDetailApi.getData(this.req).then((res) => {
+                this.$api.MeetingDetailApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -147,7 +146,7 @@
             //导出数据
             exportData(){
                 this.exportLoading = true;
-                MeetingDetailApi.export(this.req).then(()=>{
+                this.$api.MeetingDetailApi.export(this.req).then(()=>{
                     this.exportLoading = false;
                 });
             }

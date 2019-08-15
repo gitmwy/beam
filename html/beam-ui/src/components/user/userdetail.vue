@@ -114,29 +114,16 @@
                 <el-button type="primary" :loading="loading" @click="saveEdit">确 定</el-button>
             </span>
         </el-dialog>
-
-        <!-- 删除提示框 -->
-        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteRow">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-    import UserDetailApi from '../../api/user/userdetail';
-    import Common from '../../util/common';
-
     export default {
         data() {
             return {
                 tableData: [],
                 page: {pageNo: 1, pageSize: 10},
                 is_search: false,
-                delVisible: false,
                 editVisible: false,
                 req: {},
                 areaItems: [],
@@ -163,7 +150,7 @@
                         {required: true, message: '请输入姓名', trigger: 'blur'},
                     ],
                     phone: [
-                        {required:true, validator: Common.validatePhone, trigger: 'blur'},
+                        {required:true, validator: this.$verify.validatePhone, trigger: 'blur'},
                     ]
                 },
                 canExport: true,
@@ -177,10 +164,10 @@
             this.getUserArea();
             this.getUserRole();
             this.getData();
-            this.canExport = this.getPerms().indexOf("user:detail:export")!==-1;
-            this.canAdd = this.getPerms().indexOf("user:detail:add")!==-1;
-            this.canEdit = this.getPerms().indexOf("user:detail:edit")!==-1;
-            this.canDel = this.getPerms().indexOf("user:detail:del")!==-1;
+            this.canExport = this.$tools.getPerms().indexOf("user:detail:export")!==-1;
+            this.canAdd = this.$tools.getPerms().indexOf("user:detail:add")!==-1;
+            this.canEdit = this.$tools.getPerms().indexOf("user:detail:edit")!==-1;
+            this.canDel = this.$tools.getPerms().indexOf("user:detail:del")!==-1;
         },
         methods: {
             handleCurrentChange(val) {
@@ -199,7 +186,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                UserDetailApi.getData(this.req).then((res) => {
+                this.$api.UserDetailApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -235,16 +222,16 @@
                 this.loading = true;
             },
             getUserArea(){
-                UserDetailApi.userArea().then((res) => {
+                this.$api.UserDetailApi.userArea().then((res) => {
                     if (res.error === false) {
-                        this.areaItems = Common.getTreeData(res.data);
+                        this.areaItems = this.$tools.getTreeData(res.data);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
             },
             getUserRole(){
-                UserDetailApi.userRole().then((res) => {
+                this.$api.UserDetailApi.userRole().then((res) => {
                     if (res.error === false) {
                         this.roleList = res.data;
                     }
@@ -267,7 +254,7 @@
             //导出数据
             exportData(){
                 this.exportLoading = true;
-                UserDetailApi.export(this.req).then(()=>{
+                this.$api.UserDetailApi.export(this.req).then(()=>{
                     this.exportLoading = false;
                 });
             },
@@ -276,14 +263,14 @@
                 this.editVisible = true;
             },
             handleEdit(index){
-                this.user = this.tableData[index];
+                this.user = this.$tools.assign(this.tableData[index]);
                 this.editVisible = true;
             },
             saveEdit(){
                 this.$refs.user.validate((valid) =>{
                     if(valid){
                         this.loading = true;
-                        UserDetailApi.add(this.user).then((res) => {
+                        this.$api.UserDetailApi.add(this.user).then((res) => {
                             this.loading = false;
                             if (res.error === false) {
                                 this.editVisible = false;
@@ -299,10 +286,10 @@
             },
             handleDelete(index, row) {
                 this.ids = [row.id];
-                this.delVisible = true;
+                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
             },
             deleteRow(){
-                UserDetailApi.batchDelete(this.ids).then((res) => {
+                this.$api.UserDetailApi.batchDelete(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload();
@@ -310,10 +297,9 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.delVisible = false;
             },
             changeStatus(id, flag) {
-                UserDetailApi.changeStatus(id, !flag ? 0 : 1).then((res) => {
+                this.$api.UserDetailApi.changeStatus(id, !flag ? 0 : 1).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
@@ -354,5 +340,8 @@
     }
     .cascader .el-cascader{
         width: 100%;
+    }
+    .red {
+     color: #ff0000;
     }
 </style>

@@ -64,20 +64,10 @@
                 <el-button type="primary" @click="saveRoleMenu">确 定</el-button>
             </span>
         </el-dialog>
-        <!-- 删除提示框 -->
-        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteRow">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-    import RoleApi from '../../api/sys/sysrole';
-
     export default {
         data() {
             return {
@@ -87,9 +77,7 @@
                 multipleSelection: [],
                 is_search: false,
                 editVisible: false,
-                delVisible: false,
                 role: {},
-                idx: -1,
                 ids: [],
                 req: {},
                 accountInput: true,
@@ -109,10 +97,10 @@
         },
         created() {
             this.getData();
-            this.canEdit = this.getPerms().indexOf("sys:role:edit")!==-1;
-            this.canAdd = this.getPerms().indexOf("sys:role:add")!==-1;
-            this.canDel = this.getPerms().indexOf("sys:role:del")!==-1;
-            this.canConfigPerm = this.getPerms().indexOf("sys:role:configPerm")!==-1;
+            this.canEdit = this.$tools.getPerms().indexOf("sys:role:edit")!==-1;
+            this.canAdd = this.$tools.getPerms().indexOf("sys:role:add")!==-1;
+            this.canDel = this.$tools.getPerms().indexOf("sys:role:del")!==-1;
+            this.canConfigPerm = this.$tools.getPerms().indexOf("sys:role:configPerm")!==-1;
         },
         methods: {
             refresh() {
@@ -123,7 +111,7 @@
                 this.checkMenuData = [];
                 this.checkMenuData = this.checkMenuData.concat(this.$refs.treeMenu.getCheckedKeys());
                 this.checkMenuData = this.checkMenuData.concat(this.$refs.treeMenu.getHalfCheckedKeys());
-                RoleApi.saveRoleMenu({id:this.roleId,menuIds:this.checkMenuData}).then((res) => {
+                this.$api.SysRoleApi.saveRoleMenu({id:this.roleId,menuIds:this.checkMenuData}).then((res) => {
                     this.configMenuDialog = false;
                     this.checkMenuData = [];
                     if (res.error === false) {
@@ -154,7 +142,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                RoleApi.getData(this.req).then((res) => {
+                this.$api.SysRoleApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -170,7 +158,7 @@
                 });
             },
             getMenuTreeData() {
-                RoleApi.getMenuTreeData().then((res) => {
+                this.$api.SysRoleApi.getMenuTreeData().then((res) => {
                     if (res.error === false) {
                         this.menuTreeData = res.data;
                     }
@@ -180,7 +168,7 @@
                 });
             },
             getCheckMenuData(roleId) {
-                RoleApi.getCheckMenuData({roleId:roleId}).then((res) => {
+                this.$api.SysRoleApi.getCheckMenuData({roleId:roleId}).then((res) => {
                     if (res.error === false) {
                         this.checkMenuData = res.data;
                         this.loading = false;
@@ -199,8 +187,7 @@
                 this.editVisible = true;
             },
             handleEdit(index) {
-                this.idx = index;
-                this.role = this.tableData[index];
+                this.role = this.$tools.assign(this.tableData[index]);
                 this.editVisible=true;
             },
             handleConfigPerms(index, row) {
@@ -214,10 +201,9 @@
             },
             handleDelete(index, row) {
                 this.ids = [row.id];
-                this.delVisible = true;
+                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
             },
             delAll() {
-                this.delVisible = true;
                 this.ids = [];
                 const length = this.multipleSelection.length;
                 for (let i = 0; i < length; i++) {
@@ -230,7 +216,7 @@
             // 保存编辑
             saveEdit() {
                 this.loading = true;
-                RoleApi.add(this.role).then((res) => {
+                this.$api.SysRoleApi.add(this.role).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.editVisible = false;
@@ -244,7 +230,7 @@
             },
             // 确定删除
             deleteRow() {
-                RoleApi.batchDelete(this.ids).then((res) => {
+                this.$api.SysRoleApi.batchDelete(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload()
@@ -252,7 +238,6 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.delVisible = false;
             },
         }
     }
@@ -262,5 +247,8 @@
 <style scoped>
     .success {
         color: #67C23A;
+    }
+    .red {
+        color: #ff0000;
     }
 </style>

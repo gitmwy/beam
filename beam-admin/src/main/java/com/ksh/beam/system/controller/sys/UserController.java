@@ -62,9 +62,10 @@ public class UserController extends BaseController {
 
     @ApiOperation("编辑")
     @GetMapping(value = "/edit")
+    @RequiresPermissions("sys:user:edit")
     public R edit(@RequestParam(required = false) Long userId) {
         Assert.notNull(userId, "请选择要编辑的用户");
-        return userService.editUser(userId);
+        return userService.getEditInfo(userId);
     }
 
     @ApiOperation("重置用户密码")

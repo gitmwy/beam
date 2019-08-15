@@ -8,17 +8,22 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-upload
-                    v-if="canUpload"
-                    style="float: left"
-                    action="/beam_ht/meeting/question/upload"
-                    :data="data"
-                    :show-file-list="false"
-                    :before-upload="beforeUpload"
-                    :on-success="handleSuccess"
-                    :on-error="handleError">
-                    <el-button icon="el-icon-upload2" type="primary" style="float: left">上传问卷</el-button>
-                </el-upload>
+                <el-row type="flex" align="middle" class="handle-row-upload">
+                    <el-col :span="12">统计：{{total}}</el-col>
+                    <el-col :span="12">
+                        <el-upload
+                            v-if="canUpload"
+                            style="float: right"
+                            action="/beam_ht/meeting/question/upload"
+                            :data="data"
+                            :show-file-list="false"
+                            :before-upload="beforeUpload"
+                            :on-success="handleSuccess"
+                            :on-error="handleError">
+                            <el-button icon="el-icon-upload2" type="text" size="medium">上传问卷</el-button>
+                        </el-upload>
+                    </el-col>
+                </el-row>
             </div>
             <el-table :data="tableData" v-loading="loading" class="table">
                 <el-table-column label="#" align="center" prop="id" width="100"/>
@@ -45,21 +50,10 @@
                 </el-pagination>
             </div>
         </div>
-
-        <!-- 删除提示框 -->
-        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                    <el-button @click="delVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="deleteRow">确 定</el-button>
-                </span>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-    import MeetingQuestionApi from '../../api/meeting/meetingquestion';
-
     export default {
         data() {
             return{
@@ -69,8 +63,8 @@
                 page: {pageNo: 1, pageSize: 10},
                 data: {fileType: "question"},
                 ids: [],
+                total: 0,
                 canLoading: false,
-                delVisible: false,
                 canUpload: true,
                 canDownload: true,
                 canDel: true
@@ -78,9 +72,9 @@
         },
         created() {
             this.getData();
-            this.canUpload = this.getPerms().indexOf("meeting:question:upload")!==-1;
-            this.canDownload = this.getPerms().indexOf("meeting:question:download")!==-1;
-            this.canDel = this.getPerms().indexOf("meeting:question:del")!==-1;
+            this.canUpload = this.$tools.getPerms().indexOf("meeting:question:upload")!==-1;
+            this.canDownload = this.$tools.getPerms().indexOf("meeting:question:download")!==-1;
+            this.canDel = this.$tools.getPerms().indexOf("meeting:question:del")!==-1;
         },
         methods: {
             handleCurrentChange(val) {
@@ -99,9 +93,10 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                MeetingQuestionApi.getData(this.req).then((res) => {
+                this.$api.MeetingQuestionApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
+                        this.total = res.data.total;
                         this.tableData = res.data.records ? res.data.records : [];
                         this.page.pageNo = parseInt(res.data.current);
                         this.page.totalRows = parseInt(res.data.total);
@@ -125,13 +120,9 @@
                 this.$message.error("上传课件失败，请稍后再试");
                 this.canLoading = false;
             },
-            handleDelete(index, row) {
-                this.ids = [row.id];
-                this.delVisible = true;
-            },
             handleDownload(index, row){
                 this.canLoading = true;
-                MeetingQuestionApi.download({id:row.id}).then(() => {
+                this.$api.MeetingQuestionApi.download({id:row.id}).then(() => {
                     this.canLoading = false;
                 });
             },
@@ -145,7 +136,7 @@
                 this.$refs.place.validate((valid) =>{
                     if(valid){
                         this.loading = true;
-                        MeetingQuestionApi.add(this.place).then((res) => {
+                        this.$api.MeetingQuestionApi.add(this.place).then((res) => {
                             this.loading = false;
                             if (res.error === false) {
                                 this.editVisible = false;
@@ -159,8 +150,12 @@
                     }
                 })
             },
+            handleDelete(index, row) {
+                this.ids = [row.id];
+                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
+            },
             deleteRow() {
-                MeetingQuestionApi.del(this.ids).then((res) => {
+                this.$api.MeetingQuestionApi.del(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload();
@@ -168,15 +163,16 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.delVisible = false;
             },
         }
     }
 </script>
 
 <style scoped>
-    .handle-box >>> .el-upload--text{
-        height: unset;
-        border: none;
+    .handle-box >>> .el-upload{
+        display: unset;
+    }
+    .red {
+     color: #ff0000;
     }
 </style>

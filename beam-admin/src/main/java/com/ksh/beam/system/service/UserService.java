@@ -22,5 +22,5 @@ public interface UserService extends IService<User> {
 
     R changePassword(ChangePassowdForm changePassowdForm);
 
-    R editUser(Long userId);
+    R getEditInfo(Long userId);
 }

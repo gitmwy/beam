@@ -32,8 +32,6 @@
 </template>
 
 <script>
-    import bus from '../../api/page/bus';
-    import AccountApi from '../../api/page/account';
     export default {
         data() {
             return {
@@ -48,8 +46,7 @@
             }
         },
         created(){
-            // 通过 Event Bus 进行组件间通信，来折叠侧边栏
-            bus.$on('collapse', msg => {
+            this.$on('collapse', msg => {
                 this.collapse = msg;
             });
             this.getNavList();
@@ -57,7 +54,7 @@
         },
         methods:{
             getNavList(){
-                AccountApi.getNavList().then((res)=>{
+                this.$api.AccountApi.getNavList().then((res)=>{
                     this.menuItems = res.data;
                     sessionStorage.setItem('menuItems', res.data);
                     }, (err) => {
@@ -66,7 +63,7 @@
                 })
             },
             getButtonList(){
-                AccountApi.getButtonList().then((res)=>{
+                this.$api.AccountApi.getButtonList().then((res)=>{
                     this.buttonItems = res.data;
                     sessionStorage.setItem('buttonItems', res.data);
                 }, (err) => {

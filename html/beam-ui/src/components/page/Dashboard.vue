@@ -15,22 +15,23 @@
                 </el-card>
             </el-col>
         </el-row>
+
+        <div>
+            <component :is="currentRole" />
+        </div>
     </div>
 </template>
 
 <script>
-    import Schart from 'vue-schart';
-    import DashboardApi from '../../api/page/dashboard';
+    import adminDashboard from './dashboards'
 
     export default {
-        name: 'dashboard',
+        components: { adminDashboard },
         data() {
             return {
+                currentRole: 'adminDashboard',
                 user : null
             }
-        },
-        components: {
-            Schart
         },
         computed: {
             sysuser(){
@@ -43,7 +44,7 @@
         },
         methods: {
             getDashboardContent(){
-                DashboardApi.getDashboardContent().then((res)=>{
+                this.$api.DashboardApi.getDashboardContent().then((res)=>{
                     console.log(res);
                 },(err) => {
                     this.$message.error(err.msg);

@@ -11,7 +11,7 @@
                 <el-input style="width: 120px" v-model="req.logType" placeholder="日志类型"></el-input>
                 <el-input style="width: 120px" v-model="req.logName" placeholder="日志名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
-                <el-button v-if="canClear" type="danger" icon="delete" @click="delVisible=true">清空日志</el-button>
+                <el-button v-if="canClear" type="danger" icon="delete" @click="clearAll">清空日志</el-button>
             </div>
             <el-table :data="tableData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -38,21 +38,10 @@
                 </el-pagination>
             </div>
         </div>
-
-        <!-- 删除提示框 -->
-        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="clearAll">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-    import OperationLogApi from '../../api/sys/sysoperationlog';
-
     export default {
         data() {
             return {
@@ -60,7 +49,6 @@
                 page: {pageNo: 1, pageSize: 20},
                 multipleSelection: [],
                 is_search: false,
-                delVisible: false,
                 operationLog: {},
                 req: {},
                 loading: false,
@@ -69,7 +57,7 @@
         },
         created() {
             this.getData();
-            this.canClear = this.getPerms().indexOf("sys:operationLog:clear")!==-1;
+            this.canClear = this.$tools.getPerms().indexOf("sys:operationLog:clear")!==-1;
         },
         methods: {
             handleCurrentChange(val) {
@@ -90,7 +78,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                OperationLogApi.getData(this.req).then((res) => {
+                this.$api.SysOperationLogApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -113,15 +101,16 @@
                 this.multipleSelection = val;
             },
             clearAll() {
-                OperationLogApi.clear(this.reqs).then((res) => {
-                    this.delVisible = false;
+                this.$tools.messageBox('清空日志不可恢复，是否确定清空日志？', this.clear);
+            },
+            clear(){
+                this.$api.SysOperationLogApi.clear().then((res) => {
                     this.$message.success(res.msg);
                     this.reload();
                 }, (err) => {
-                    this.loading = false;
                     this.$message.error(err.msg);
                 });
-            },
+            }
         }
     }
 

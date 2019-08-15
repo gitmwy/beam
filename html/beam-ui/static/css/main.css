@@ -59,23 +59,19 @@ a {
     margin-bottom: 20px;
 }
 
+.handle-row-upload{
+    background-color: #E8E8E8;
+    padding: 0 20px;
+}
+
 .table {
     width: 100%;
     font-size: 14px;
 }
 
-.red {
-    color: #ff0000;
-}
-
 .pagination {
     margin: 20px 0;
     text-align: right;
-}
-
-.del-dialog-cnt {
-    font-size: 16px;
-    text-align: center
 }
 
 

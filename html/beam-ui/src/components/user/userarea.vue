@@ -73,22 +73,10 @@
                 <el-button type="primary" :loading="loading" @click="saveEdit">确 定</el-button>
             </span>
         </el-dialog>
-
-        <!-- 删除提示框 -->
-        <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteRow">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-    import UserAreaApi from '../../api/user/userarea';
-    import Common from '../../util/common';
-
     export default {
         data() {
             return {
@@ -96,7 +84,6 @@
                 tableData: [],
                 page: {pageNo: 1, pageSize: 10},
                 editVisible: false,
-                delVisible: false,
                 req: {},
                 area: {},
                 levelList: [],
@@ -125,13 +112,13 @@
         created() {
             this.getAreaLevel();
             this.getData();
-            this.canAdd = this.getPerms().indexOf("user:area:add")!==-1;
-            this.canEdit = this.getPerms().indexOf("user:area:edit")!==-1;
-            this.canDel = this.getPerms().indexOf("user:area:del")!==-1;
+            this.canAdd = this.$tools.getPerms().indexOf("user:area:add")!==-1;
+            this.canEdit = this.$tools.getPerms().indexOf("user:area:edit")!==-1;
+            this.canDel = this.$tools.getPerms().indexOf("user:area:del")!==-1;
         },
         methods: {
             getAreaLevel(){
-                UserAreaApi.getAreaLevel().then((res) => {
+                this.$api.UserAreaApi.getAreaLevel().then((res) => {
                     if (res.error === false) {
                         this.levelList = res.data;
                     }
@@ -155,7 +142,7 @@
                 this.loading = true;
                 this.req.currentPage = this.page.pageNo;
                 this.req.pageSize = this.page.pageSize;
-                UserAreaApi.getData(this.req).then((res) => {
+                this.$api.UserAreaApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.tableData = res.data.records ? res.data.records : [];
@@ -184,7 +171,7 @@
                 this.editVisible = true;
             },
             handleEdit(index){
-                this.area = this.tableData[index];
+                this.area = this.$tools.assign(this.tableData[index]);
                 this.getOptionArea(this.area.level);
                 this.editVisible=true;
             },
@@ -197,9 +184,9 @@
                 this.getOptionArea(id);
             },
             getOptionArea(id){
-                UserAreaApi.options({level:id}).then((res) => {
+                this.$api.UserAreaApi.options({level:id}).then((res) => {
                     if (res.error === false) {
-                        this.areaItems = Common.getTreeData(res.data);
+                        this.areaItems = this.$tools.getTreeData(res.data);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -220,7 +207,7 @@
                 this.$refs.area.validate((valid) =>{
                     if(valid){
                         this.loading = true;
-                        UserAreaApi.add(this.area).then((res) => {
+                        this.$api.UserAreaApi.add(this.area).then((res) => {
                             this.loading = false;
                             if (res.error === false) {
                                 this.editVisible = false;
@@ -240,10 +227,10 @@
             },
             handleDelete(index, row) {
                 this.ids = [row.id];
-                this.delVisible = true;
+                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
             },
             deleteRow(){
-                UserAreaApi.batchDelete(this.ids).then((res) => {
+                this.$api.UserAreaApi.batchDelete(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload();
@@ -251,7 +238,6 @@
                 }, (err) => {
                     this.$message.error(err.msg);
                 });
-                this.delVisible = false;
             }
         }
     }
@@ -260,5 +246,8 @@
 <style scoped>
     .cascader .el-cascader{
         width: 100%;
+    }
+    .red {
+        color: #ff0000;
     }
 </style>
