@@ -37,5 +37,5 @@ export default {
     //拷贝
     assign:(params) => {
         return Object.assign({}, params);
-    }
+    },
 }

@@ -30,11 +30,11 @@ public class UserAreaController {
     @Autowired
     private UserAreaService userAreaService;
 
-    @ApiOperation("区域分页")
+    @ApiOperation("树形区域")
     @GetMapping(value = "/page/list")
     @RequiresPermissions("user:area:list")
-    public R pageList(Area area) {
-        return userAreaService.selectPageList(area);
+    public R treeDept(Area area) {
+        return userAreaService.treeAreaList(area);
     }
 
     @SysLog(value = "区域新增")
@@ -62,6 +62,14 @@ public class UserAreaController {
     @GetMapping(value = "/userArea")
     public R userArea() {
         return userAreaService.getUserArea();
+    }
+
+    @ApiOperation("编辑")
+    @GetMapping(value = "/edit")
+    @RequiresPermissions("user:area:edit")
+    public R edit(@RequestParam(required = false) Long areaId) {
+        Assert.notNull(areaId, "请选择要编辑的用户");
+        return userAreaService.getEditInfo(areaId);
     }
 
     @SysLog(value = "区域删除")

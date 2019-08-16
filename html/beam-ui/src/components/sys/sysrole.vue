@@ -57,8 +57,8 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="配置菜单" :modal="false" :visible.sync="configMenuDialog" width="30%">
-            <el-tree check-strictly="true" v-loading="loading" show-checkbox node-key="id" :data="menuTreeData" :default-checked-keys="checkMenuData" :props="defaultProps"  ref="treeMenu" default-expand-all :expand-on-click-node="false" ></el-tree>
+        <el-dialog title="配置菜单" :visible.sync="configMenuDialog" width="30%">
+            <el-tree :check-strictly="true" v-loading="treeLoading" show-checkbox node-key="id" :data="menuTreeData" :default-checked-keys="checkMenuData" :props="defaultProps"  ref="treeMenu" default-expand-all :expand-on-click-node="false"></el-tree>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="configMenuDialog = false">取 消</el-button>
                 <el-button type="primary" @click="saveRoleMenu">确 定</el-button>
@@ -82,6 +82,7 @@
                 req: {},
                 accountInput: true,
                 loading: false,
+                treeLoading: false,
                 menuTreeData: [],
                 defaultProps: {
                     children: 'children',
@@ -120,7 +121,6 @@
                     }
                 }, (err) => {
                     this.checkMenuData = [];
-                    this.loading = false;
                     this.$message.error(err.msg);
                 });
             },
@@ -163,7 +163,7 @@
                         this.menuTreeData = res.data;
                     }
                 }, (err) => {
-                    this.loading = false;
+                    this.treeLoading = false;
                     this.$message.error(err.msg);
                 });
             },
@@ -171,10 +171,10 @@
                 this.$api.SysRoleApi.getCheckMenuData({roleId:roleId}).then((res) => {
                     if (res.error === false) {
                         this.checkMenuData = res.data;
-                        this.loading = false;
+                        this.treeLoading = false;
                     }
                 }, (err) => {
-                    this.loading = false;
+                    this.treeLoading = false;
                     this.$message.error(err.msg);
                 });
             },
@@ -191,7 +191,7 @@
                 this.editVisible=true;
             },
             handleConfigPerms(index, row) {
-                this.loading=true;
+                this.treeLoading=true;
                 this.roleId = row.id;
                 this.checkMenuData=[];
                 this.menuTreeData=[];

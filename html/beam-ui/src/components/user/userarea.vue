@@ -15,8 +15,7 @@
                 <el-button type="primary" icon="el-icon-refresh" @click="refresh">重置</el-button>
                 <el-button v-if="canAdd" type="primary" icon="add" @click="handleAdd">新增区域</el-button>
             </div>
-            <el-table :data="tableData" v-loading="loading" border class="table">
-                <el-table-column label="#" width="50" prop="id" align="center"></el-table-column>
+            <el-table row-key="id" :data="treeData" v-loading="loading" border class="table" indent="32">
                 <el-table-column label="区域名称" align="center" prop="areaName" width="300"/>
                 <el-table-column label="等级" align="center" prop="levelName" width="100"/>
                 <el-table-column label="关联" align="center" prop="optionAreas"/>
@@ -27,19 +26,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <!--            分页-->
-            <div class="pagination">
-                <el-pagination
-                    background
-                    :page-sizes="[10, 20, 30, 40, 50]"
-                    :page-size="page.pageSize"
-                    :current-page="page.pageNo"
-                    @current-change="handleCurrentChange"
-                    @size-change="changePageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="page.totalRows">
-                </el-pagination>
-            </div>
         </div>
 
         <!-- 编辑弹出框 -->
@@ -81,8 +67,7 @@
         data() {
             return {
                 areaItems: [],
-                tableData: [],
-                page: {pageNo: 1, pageSize: 10},
+                treeData: [],
                 editVisible: false,
                 req: {},
                 area: {},
@@ -111,7 +96,7 @@
         //初始化
         created() {
             this.getAreaLevel();
-            this.getData();
+            this.getTreeData();
             this.canAdd = this.$tools.getPerms().indexOf("user:area:add")!==-1;
             this.canEdit = this.$tools.getPerms().indexOf("user:area:edit")!==-1;
             this.canDel = this.$tools.getPerms().indexOf("user:area:del")!==-1;
@@ -126,28 +111,13 @@
                     this.$message.error(err.msg);
                 });
             },
-            handleCurrentChange(val) {
-                this.page.pageNo = val;
-                this.getData();
-            },
-            // 修改每页条数size
-            changePageSize(value) {
-                this.page.pageNo = 1;
-                this.page.pageSize = value;
-                this.tableData = null;
-                this.getData()
-            },
             //获取表格数据
-            getData() {
+            getTreeData() {
                 this.loading = true;
-                this.req.currentPage = this.page.pageNo;
-                this.req.pageSize = this.page.pageSize;
-                this.$api.UserAreaApi.getData(this.req).then((res) => {
+                this.$api.UserAreaApi.getTreeData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
-                        this.tableData = res.data.records ? res.data.records : [];
-                        this.page.pageNo = parseInt(res.data.current);
-                        this.page.totalRows = parseInt(res.data.total);
+                        this.treeData = res.data;
                     }
                 }, (err) => {
                     this.loading = false;
@@ -156,7 +126,7 @@
             },
             // 搜索
             search() {
-                this.getData();
+                this.getTreeData();
             },
             // 重置查询条件
             refresh() {
@@ -170,10 +140,16 @@
             handleAdd(){
                 this.editVisible = true;
             },
-            handleEdit(index){
-                this.area = this.$tools.assign(this.tableData[index]);
-                this.getOptionArea(this.area.level);
-                this.editVisible=true;
+            handleEdit(index, row){
+                this.$api.UserAreaApi.edit({areaId:row.id}).then((res) => {
+                    if (res.error === false) {
+                        this.area = res.data;
+                        this.getOptionArea(this.area.level);
+                        this.editVisible=true;
+                    }
+                }, (err) => {
+                    this.$message.error(err.msg);
+                });
             },
             goToSelectLevel(data){
                 let [id, name] = data.split("|");
@@ -223,7 +199,7 @@
             },
             reload() {
                 this.getAreaLevel();
-                this.getData();
+                this.getTreeData();
             },
             handleDelete(index, row) {
                 this.ids = [row.id];

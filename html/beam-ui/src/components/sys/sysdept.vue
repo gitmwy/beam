@@ -9,9 +9,11 @@
             <div class="handle-box">
                 <el-input style="width: 150px" v-model="req.name" placeholder="请输入部门名称"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
+                <el-button v-if="canDel" type="danger" icon="delete" @click="delAll">批量删除</el-button>
                 <el-button v-if="canAdd" type="primary" icon="add" @click="handleAdd">新增</el-button>
             </div>
-            <el-table row-key="id" :data="treeData" v-loading="loading" border class="table">
+            <el-table row-key="id" :data="treeData" v-loading="loading" border class="table" @selection-change="handleSelectionChange">
+                <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <el-table-column label="公司名称" align="center" prop="name"></el-table-column>
                 <el-table-column label="排序" align="center" prop="orderNum"></el-table-column>
                 <el-table-column label="创建时间" align="center" prop="createTime"></el-table-column>
@@ -56,6 +58,7 @@
                 treeData: [],
                 is_search: false,
                 editVisible: false,
+                multipleSelection: [],
                 dept: {},
                 ids: [],
                 req: {},
@@ -109,6 +112,9 @@
                 this.treeData = [];
                 this.getTreeData();
             },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
             handleAdd() {
                 this.dept = {};
                 this.editVisible = true;
@@ -125,7 +131,15 @@
             },
             handleDelete(index, row) {
                 this.ids = [row.id];
-                this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
+                this.$tools.messageBox('删除不可恢复，关联的所有部门都将删除，是否确定删除？', this.deleteRow);
+            },
+            delAll() {
+                this.ids = [];
+                const length = this.multipleSelection.length;
+                for (let i = 0; i < length; i++) {
+                    this.ids.push(this.multipleSelection[i].id);
+                }
+                this.$tools.messageBox('删除不可恢复，关联的所有部门都将删除，是否确定删除？', this.deleteRow);
             },
             // 保存编辑
             saveEdit() {

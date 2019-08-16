@@ -1,5 +1,6 @@
 package com.ksh.beam.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.shiro.ShiroUtils;
@@ -10,6 +11,7 @@ import com.ksh.beam.system.dao.UserMapper;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.User;
 import com.ksh.beam.system.service.DeptService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
             dept.setId(user.getCompanyId());
         }else{
             //超级管理员
-            if(null == dept.getName()){
+            if(StringUtils.isBlank(dept.getName())){
                 dept.setParentId(0L);
             }
         }
@@ -68,8 +70,19 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
 
     @Override
     public R deleteBatch(Long[] deptIds) {
-        this.removeByIds(Arrays.asList(deptIds));
+        List<Dept> deptList = baseMapper.selectBatchIds(Arrays.asList(deptIds));
+        deleteChilren(deptList);
         return R.ok();
+    }
+
+    /**
+     * 递归删除所有子节点
+     */
+    private void deleteChilren(List<Dept> deptList){
+        for(Dept dept : deptList){
+            this.removeById(dept.getId());
+            deleteChilren(baseMapper.selectList(new QueryWrapper<Dept>().eq("parent_id", dept.getId())));
+        }
     }
 
     @Override

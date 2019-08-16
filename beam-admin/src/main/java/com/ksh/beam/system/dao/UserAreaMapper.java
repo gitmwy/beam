@@ -18,7 +18,7 @@ public interface UserAreaMapper extends BaseMapper<Area> {
     IPage<Area> selectPageList(Page page, @Param("area") Area area);
 
     //根据父ID和等级获取区域
-    List<Area> getAreaByParentIdAndLevel(@Param("topLevel") Integer topLevel, @Param("level") Integer level, @Param("parentId") Long parentId);
+    List<Area> getAreaByParentIdAndLevel(@Param("level") Integer level, @Param("parentId") Long parentId);
 
     //获取最大的等级
     Integer getMaxLevel();

@@ -1,5 +1,6 @@
 package com.ksh.beam.system.entity.user;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -23,7 +24,7 @@ public class Area extends RestEntity<Long> {
     @TableId
     private Long id;
 
-    @TableField(value = "parent_id")
+    @TableField(value = "parent_id", strategy = FieldStrategy.IGNORED)
     private Long parentId;
 
     @TableField(value = "area_name")
@@ -39,6 +40,9 @@ public class Area extends RestEntity<Long> {
 
     @TableField(value = "option_areas")
     private String optionAreas;
+
+    @TableField(value = "option_status")
+    private Integer optionStatus;
 
     @TableField(exist = false)
     private List<?> children;

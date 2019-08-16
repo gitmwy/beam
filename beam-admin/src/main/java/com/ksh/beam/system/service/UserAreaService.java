@@ -9,8 +9,8 @@ import com.ksh.beam.system.entity.user.Area;
  */
 public interface UserAreaService extends IService<Area> {
 
-    //分页
-    R selectPageList(Area area);
+    //树形区域
+    R treeAreaList(Area area);
 
     R saveUserArea(Area area);
 
@@ -21,4 +21,6 @@ public interface UserAreaService extends IService<Area> {
     R getUserArea();
 
     R deleteBatch(Long[] ids);
+
+    R getEditInfo(Long areaId);
 }

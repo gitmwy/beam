@@ -51,7 +51,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         for(Long roleId:roleIds){
             Integer count = baseMapper.getCountByRoleId(roleId);
             if(count>0){
-                return R.fail("当前删除的角色，还有用户关联，请先取消其关联");
+                return R.fail("当前删除角色，还有用户关联，请先取消其关联");
             }
         }
         this.removeByIds(Arrays.asList(roleIds));

@@ -1,7 +1,7 @@
 import http from '@/util/http'
 
 export default {
-    getData: params => {
+    getTreeData: params => {
         return http.get("/user/area/page/list", params)
     },
     add: params => {
@@ -15,6 +15,9 @@ export default {
     },
     getAreaLevel: params =>{
         return http.get("/user/config/area/level", params)
-    }
+    },
+    edit: params =>{
+        return http.get("/user/area/edit", params)
+    },
 }
 

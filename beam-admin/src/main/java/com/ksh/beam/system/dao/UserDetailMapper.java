@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ksh.beam.system.entity.user.Detail;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import java.util.Map;
 /**
  * 用户列表
  */
+@Repository
 public interface UserDetailMapper extends BaseMapper<Detail> {
 
     IPage<Detail> selectPageList(Page page, @Param("user") Detail detail);

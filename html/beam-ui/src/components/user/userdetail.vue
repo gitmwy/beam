@@ -16,7 +16,7 @@
                     clearable
                     v-model="req.areaId"
                     :options="areaItems"
-                    :props="searchProps"
+                    :props="defaultProps"
                     placeholder="区域"
                     :show-all-levels="false">
                 </el-cascader>
@@ -133,12 +133,6 @@
                 loading: false,
                 exportLoading: false,
                 defaultProps: {
-                    children: 'children',
-                    label: 'areaName',
-                    value: 'id',
-                    emitPath: false
-                },
-                searchProps: {
                     children: 'children',
                     label: 'areaName',
                     value: 'id',
@@ -266,6 +260,9 @@
                 this.user = this.$tools.assign(this.tableData[index]);
                 this.editVisible = true;
             },
+            reload() {
+                this.getData();
+            },
             saveEdit(){
                 this.$refs.user.validate((valid) =>{
                     if(valid){
@@ -275,7 +272,7 @@
                             if (res.error === false) {
                                 this.editVisible = false;
                                 this.$message.success(res.msg);
-                                this.reload()
+                                this.reload();
                             }
                         }, (err) => {
                             this.loading = false;
