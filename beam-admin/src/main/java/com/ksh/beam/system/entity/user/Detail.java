@@ -62,6 +62,12 @@ public class Detail extends RestEntity<Long> {
     @TableField(exist = false)
     private String roleName;
 
+    @TableField(exist = false)
+    private Integer areaLevel;
+
+    @TableField(exist = false)
+    private Integer roleLevel;
+
     @Override
     protected Serializable pkVal() {
         return this.id;

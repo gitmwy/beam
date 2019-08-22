@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.file.ExcelManager;
 import com.ksh.beam.common.utils.R;
+import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.UserDetailMapper;
 import com.ksh.beam.system.entity.user.Detail;
 import com.ksh.beam.system.service.UserDetailService;
@@ -65,6 +66,10 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail>
      */
     @Override
     public R saveUserDetail(Detail detail) {
+        if(ToolUtil.isNotEmpty(detail.getAreaLevel()) && ToolUtil.isNotEmpty(detail.getRoleLevel())
+            && !detail.getAreaLevel().equals(detail.getRoleLevel())){
+            return R.fail("区域等级和角色等级不一致");
+        }
         this.saveOrUpdate(detail);
         return R.ok();
     }

@@ -26,7 +26,7 @@
                 <el-button  v-if="canExport" type="success" icon="el-icon-download" @click="exportData">导出数据</el-button>
             </div>
             <el-table :data="tableData" v-loading="loading" border class="table">
-                <el-table-column label="编号" align="center" prop="jobCode"/>
+                <el-table-column label="编号" align="center" prop="id"/>
                 <el-table-column label="头像" min-width="120" align="center">
                     <template v-if="scope.row.avatar" slot-scope="scope">
                         <img :src="scope.row.avatar" style="width: 100px;height: 100px"/>
@@ -92,17 +92,19 @@
                     <el-form-item label="所属区域" prop="areaId">
                         <el-cascader
                             clearable
+                            ref="cascaderAddr"
                             v-model="user.areaId"
                             :options="areaItems"
                             :props="defaultProps"
                             placeholder="请选择所属区域"
-                            :show-all-levels="false">
+                            :show-all-levels="false"
+                            @change="handleArea">
                         </el-cascader>
                     </el-form-item>
                 </div>
                 <el-form-item label="所属角色" prop="roleId">
-                    <el-select v-model="user.roleId" placeholder="请选择所属角色">
-                        <el-option v-for="item in roleList" :key="item.id" :label="item.roleName" :value="item.id"></el-option>
+                    <el-select v-model="user.roleId" placeholder="请选择所属角色" @change="handleRole">
+                        <el-option v-for="item in roleList" :key="item.id" :label="`${item.roleName}（${item.levelName}）`" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="是否锁定">
@@ -231,6 +233,19 @@
                     }
                 }, (err) => {
                     this.$message.error(err.msg);
+                });
+            },
+            handleArea(){
+                let node = this.$refs.cascaderAddr.getCheckedNodes()[0];
+                if(null != node){
+                    this.user.areaLevel = node.data.level;
+                }
+            },
+            handleRole(data){
+                this.roleList.forEach(item => {
+                    if(data === item.id){
+                        this.user.roleLevel = item.level;
+                    }
                 });
             },
             // 搜索

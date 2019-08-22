@@ -42,6 +42,8 @@ public class ShiroConfig {
         sessionManager.setDeleteInvalidSessions(true);
         //是否开启定时调度器进行检测过期session 默认为true
         sessionManager.setSessionValidationSchedulerEnabled(true);
+        //设置session失效的扫描时间, 清理用户直接关闭浏览器造成的孤立会话(单位：毫秒) 默认为 1个小时
+        sessionManager.setSessionValidationInterval(30 * 60 * 1000);
         //取消url 后面的 JSESSIONID
         sessionManager.setSessionIdUrlRewritingEnabled(false);
 
