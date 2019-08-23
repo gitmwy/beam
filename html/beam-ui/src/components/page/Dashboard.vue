@@ -35,7 +35,7 @@
         },
         computed: {
             sysuser(){
-                let sysuser = JSON.parse(sessionStorage.getItem('sysuser'));
+                let sysuser = JSON.parse(localStorage.getItem('sysuser'));
                 return sysuser?sysuser:this.user;
             }
         },

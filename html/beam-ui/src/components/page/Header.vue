@@ -94,7 +94,7 @@
                 return this.name;
             },
             sysuser(){
-                let sysuser = JSON.parse(sessionStorage.getItem('sysuser'));
+                let sysuser = JSON.parse(localStorage.getItem('sysuser'));
                 return sysuser?sysuser:this.user;
             }
         },
@@ -135,7 +135,7 @@
             },
             handleLogout(){
                 this.$api.AccountApi.handleLogout().then(() => {
-                    sessionStorage.clear();
+                    localStorage.clear();
                     this.$router.push('/login');
                 }, (err) => {
                     this.$message.error(err.msg);
@@ -144,8 +144,8 @@
             clearCache(){
                 this.$api.AccountApi.clearCache().then((res) => {
                     this.$emit('closeAll', "");
-                    sessionStorage.removeItem('menuItems');
-                    sessionStorage.removeItem('buttonItems');
+                    localStorage.removeItem('menuItems');
+                    localStorage.removeItem('buttonItems');
                     this.$message({
                         showClose: true,
                         type: 'success',

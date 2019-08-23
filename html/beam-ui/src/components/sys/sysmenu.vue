@@ -220,8 +220,8 @@
                 this.$api.SysMenuApi.add(this.menu).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
-                        sessionStorage.removeItem('menuItems');
-                        sessionStorage.removeItem('buttonItems');
+                        localStorage.removeItem('menuItems');
+                        localStorage.removeItem('buttonItems');
                         this.editVisible = false;
                         this.$message.success(res.msg);
                         this.reload()

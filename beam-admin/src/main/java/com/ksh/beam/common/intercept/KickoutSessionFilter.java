@@ -15,11 +15,9 @@ import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.Deque;
@@ -51,8 +49,8 @@ public class KickoutSessionFilter extends AccessControlFilter {
         this.maxSession = maxSession;
     }
 
-    private String getRedisKickoutKey(String sessionId) {
-        return CacheConstant.SHIRO_KICKOUT_KEY_PREFIX + sessionId;
+    private String getRedisKickoutKey(String account) {
+        return CacheConstant.SHIRO_KICKOUT_KEY_PREFIX + account;
     }
 
     /**
@@ -68,12 +66,6 @@ public class KickoutSessionFilter extends AccessControlFilter {
      * 如果onAccessDenied也返回false，则直接返回，不会进入请求的方法（只有isAccessAllowed和onAccessDenied的情况下）
      * */
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
-        //处理跨域问题，跨域的请求首先会发一个options类型的请求
-        HttpServletRequest servletRequest = (HttpServletRequest) request;
-        if (servletRequest.getMethod().equals(HttpMethod.OPTIONS.name())) {
-            return true;
-        }
-
         HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
         Subject subject = getSubject(request, response);
         if(isLoginRequest(request, response)){

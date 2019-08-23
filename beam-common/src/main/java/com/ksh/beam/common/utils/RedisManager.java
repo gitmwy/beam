@@ -10,7 +10,6 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -61,9 +60,10 @@ public class RedisManager {
     }
 
     /**
-     * 批量删除key
+     * 模糊匹配删除
      */
-    public void del(Collection keys){
+    public void batchDel(String pattern){
+        Set<String> keys = redisTemplate.keys(pattern);
         redisTemplate.delete(keys);
     }
 

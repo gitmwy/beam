@@ -21,7 +21,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 //从application.yml 取前缀为beam name为 swagger-open 值为true时 configuration生效
-@ConditionalOnProperty(prefix = BeamAdminProperties.BEAM_REST_PREFIX, name = "swagger-open", havingValue = "true",matchIfMissing = false)
+@ConditionalOnProperty(prefix = BeamAdminProperties.BEAM_REST_PREFIX, name = "swagger-open", havingValue = "true")
 public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
@@ -29,7 +29,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))                         //这里采用包含注解的方式来确定要显示的接口
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))//这里采用包含注解的方式来确定要显示的接口
                 .paths(PathSelectors.any())
                 .build();
     }

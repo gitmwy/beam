@@ -5,6 +5,7 @@ import com.ksh.beam.common.shiro.RedisShiroSessionDAO;
 import com.ksh.beam.common.shiro.RetryLimitHashedCredentialsMatcher;
 import com.ksh.beam.common.shiro.ShiroRealm;
 import com.ksh.beam.common.shiro.ShiroUtils;
+import com.ksh.beam.config.properties.BeamAdminProperties;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -13,7 +14,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,13 +29,15 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
+    @Autowired
+    private BeamAdminProperties beamAdminProperties;
+
+    @Autowired
+    private RedisShiroSessionDAO redisShiroSessionDAO;
+
     //配置会话管理器，设定会话超时及保存
     @Bean
-    public SessionManager sessionManager(
-            RedisShiroSessionDAO redisShiroSessionDAO,
-            @Value("${beam.admin.redis-open}") boolean redisOpen,
-            @Value("${beam.admin.shiro-redis}") boolean shiroRedis
-    ) {
+    public SessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         //设置session过期时间为1小时(单位：毫秒)，默认为30分钟
         sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
@@ -43,18 +46,36 @@ public class ShiroConfig {
         //是否开启定时调度器进行检测过期session 默认为true
         sessionManager.setSessionValidationSchedulerEnabled(true);
         //设置session失效的扫描时间, 清理用户直接关闭浏览器造成的孤立会话(单位：毫秒) 默认为 1个小时
-        sessionManager.setSessionValidationInterval(30 * 60 * 1000);
+        sessionManager.setSessionValidationInterval(15 * 60 * 1000);
         //取消url 后面的 JSESSIONID
         sessionManager.setSessionIdUrlRewritingEnabled(false);
 
         //如果开启redis缓存且beam.admin.shiro-redis=true，则shiro session存到redis里
-        if (redisOpen && shiroRedis) {
+        if (beamAdminProperties.getRedisOpen() && beamAdminProperties.getShiroRedis()) {
             sessionManager.setSessionDAO(redisShiroSessionDAO);
         }
         return sessionManager;
     }
 
-     //配置密码比较器
+//    //配置Cookie的生成模版，比如cookie的name，cookie的有效时间等。
+//    @Bean
+//    public SimpleCookie rememberMeCookie(){
+//        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+//        //cookie生效时间，单位秒;
+//        simpleCookie.setMaxAge(24 * 60 * 60);
+//        return simpleCookie;
+//    }
+//
+//    //配置cookie管理对象
+//    @Bean
+//    public CookieRememberMeManager rememberMeManager(){
+//        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+//        cookieRememberMeManager.setCookie(rememberMeCookie());
+//        cookieRememberMeManager.setCipherKey(Base64.decode("2AvVhdsgUs0FSA3SDFAdag=="));
+//        return cookieRememberMeManager;
+//    }
+
+    //配置密码比较器
     @Bean("credentialsMatcher")
     public RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher(){
         RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher = new RetryLimitHashedCredentialsMatcher();
@@ -77,6 +98,8 @@ public class ShiroConfig {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm);
         securityManager.setSessionManager(sessionManager);
+        //注入记住我管理器
+//        securityManager.setRememberMeManager(rememberMeManager());
         return securityManager;
     }
 

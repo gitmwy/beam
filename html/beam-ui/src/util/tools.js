@@ -3,7 +3,7 @@ import {MessageBox} from 'element-ui';
 export default {
     //获取按钮权限
     getPerms:() =>{
-        let buttonItems = sessionStorage.getItem("buttonItems");
+        let buttonItems = localStorage.getItem("buttonItems");
         if (buttonItems) {
             return buttonItems;
         } else {

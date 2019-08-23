@@ -63,7 +63,7 @@ const http = {
             return Promise.resolve(res.data); //成功
         } else {
             if (res.data.code === -1) {
-                sessionStorage.removeItem('sysuser');
+                localStorage.removeItem('sysuser');
                 window.location = "/login";
             } else if (res.data.code === 403) {
                 window.location = "/403";

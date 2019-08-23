@@ -56,7 +56,7 @@
             getNavList(){
                 this.$api.AccountApi.getNavList().then((res)=>{
                     this.menuItems = res.data;
-                    sessionStorage.setItem('menuItems', res.data);
+                    localStorage.setItem('menuItems', res.data);
                     }, (err) => {
                         this.list = [];
                         this.$message.error(err.msg);
@@ -65,7 +65,7 @@
             getButtonList(){
                 this.$api.AccountApi.getButtonList().then((res)=>{
                     this.buttonItems = res.data;
-                    sessionStorage.setItem('buttonItems', res.data);
+                    localStorage.setItem('buttonItems', res.data);
                 }, (err) => {
                         this.buttonItems = [];
                         this.$message.error(err.msg);

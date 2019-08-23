@@ -17,8 +17,8 @@ Vue.use(utils);
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    let sysuser = sessionStorage.getItem("sysuser");
-    let buttonItems = sessionStorage.getItem("buttonItems");
+    let sysuser = localStorage.getItem("sysuser");
+    let buttonItems = localStorage.getItem("buttonItems");
     if(!sysuser && to.path !== '/login'){
         next('/login');
     }else if (to.meta.permission && buttonItems) {

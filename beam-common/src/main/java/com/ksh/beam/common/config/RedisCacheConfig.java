@@ -2,8 +2,9 @@ package com.ksh.beam.common.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ksh.beam.common.constant.CacheConstant;
 import com.ksh.beam.common.utils.RedisManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +46,15 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
         );
     }
 
+    //使用Jackson 2，将对象序列化为JSON
     @Bean
     public Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer(){
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);//解决截取实体缺少的属性
+        om.configure(MapperFeature.USE_GETTERS_AS_SETTERS, false);//解决实体缺少 set get 方法
         jackson2JsonRedisSerializer.setObjectMapper(om);
         return jackson2JsonRedisSerializer;
     }

@@ -75,7 +75,7 @@
                             this.loading = false;
                             if (res.error === false) {
                                 this.$message.success(res.msg);
-                                sessionStorage.setItem("sysuser", JSON.stringify(res.data));
+                                localStorage.setItem("sysuser", JSON.stringify(res.data));
                                 this.$router.push({path: '/'});
                             } else {
                                 this.$refs.slider.reloadSlider();

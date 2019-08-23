@@ -1,11 +1,13 @@
 package com.ksh.beam.system.controller.common;
 
+import com.ksh.beam.common.constant.CacheConstant;
 import com.ksh.beam.common.log.LogManager;
 import com.ksh.beam.common.log.factory.LogTaskFactory;
+import com.ksh.beam.common.shiro.ShiroUser;
 import com.ksh.beam.common.shiro.ShiroUtils;
-import com.ksh.beam.common.util.CaptchaUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisManager;
+import com.ksh.beam.config.properties.BeamAdminProperties;
 import com.ksh.beam.system.dto.LoginForm;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,11 +36,14 @@ public class LoginController {
     @Autowired
     private RedisManager redisManager;
 
+    @Autowired
+    private BeamAdminProperties beamAdminProperties;
+
     @ApiOperation("登陆")
     @PostMapping(value = "/login")
     @ResponseBody
     public Object login(@RequestBody @Valid LoginForm loginForm) {
-        if (new CaptchaUtil().isCaptchaOnOff()) {
+        if (beamAdminProperties.getCaptchaOpen()) {
 //            String captcha = ShiroUtils.getCaptcha(Constants.KAPTCHA_SESSION_KEY);
 //            if (StringUtils.isBlank(captcha)) {
 //                return R.fail("验证码已失效，请点击图片重新刷新");
@@ -72,7 +77,10 @@ public class LoginController {
     @GetMapping(value = "/logout")
     @ResponseBody
     public Object logout() {
-        LogManager.me().executeLog(LogTaskFactory.exitLog(ShiroUtils.getUserId(), getIp()));
+        ShiroUser shiroUser = ShiroUtils.getUserEntity();
+        redisManager.del(CacheConstant.SHIRO_KICKOUT_KEY_PREFIX + shiroUser.getAccount(),
+                CacheConstant.SHIRO_CACHE_KEY_PREFIX + CacheConstant.USER_MENU + shiroUser.getId());
+        LogManager.me().executeLog(LogTaskFactory.exitLog(shiroUser.getId(), getIp()));
         ShiroUtils.logout();
         return R.ok("退出成功");
     }
