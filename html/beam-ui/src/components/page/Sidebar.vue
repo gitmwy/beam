@@ -1,7 +1,6 @@
 <template>
     <div class="sidebar">
-        <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
-            text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
+        <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157" text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
             <template v-for="item in menuItems">
                 <template v-if="item.list">
                     <el-submenu :index="item.url" :key="item.url">
@@ -36,8 +35,7 @@
         data() {
             return {
                 collapse: false,
-                menuItems:[],
-                buttonItems:[]
+                menuItems:[]
             }
         },
         computed:{
@@ -46,30 +44,36 @@
             }
         },
         created(){
-            this.$on('collapse', msg => {
+            this.$bus.$on('collapse', msg => {
                 this.collapse = msg;
             });
-            this.getNavList();
-            this.getButtonList();
+            this.$bus.$on("dashboard", msg =>{
+                if(msg === false){
+                    this.getNavList();
+                    this.getButtonList();
+                }
+            });
+            let menuItems = JSON.parse(localStorage.getItem('menuItems'));
+            if(null != menuItems && menuItems.length > 0){
+                this.menuItems = menuItems;
+            }
         },
         methods:{
-            getNavList(){
-                this.$api.AccountApi.getNavList().then((res)=>{
+            getNavList() {
+                this.$api.AccountApi.getNavList().then((res) => {
                     this.menuItems = res.data;
-                    localStorage.setItem('menuItems', res.data);
-                    }, (err) => {
-                        this.list = [];
-                        this.$message.error(err.msg);
+                    localStorage.setItem('menuItems', JSON.stringify(res.data));
+                }, (err) => {
+                    this.menuItems = [];
+                    this.$message.error(err.msg);
                 })
             },
-            getButtonList(){
-                this.$api.AccountApi.getButtonList().then((res)=>{
-                    this.buttonItems = res.data;
+            getButtonList() {
+                this.$api.AccountApi.getButtonList().then((res) => {
                     localStorage.setItem('buttonItems', res.data);
                 }, (err) => {
-                        this.buttonItems = [];
-                        this.$message.error(err.msg);
-                    })
+                    this.$message.error(err.msg);
+                })
             }
         }
     }

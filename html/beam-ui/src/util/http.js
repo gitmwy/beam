@@ -41,7 +41,7 @@ const http = {
         const data = Object.assign({}, params);
         url = "/beam_ht" + url;
         return axios.get(url, {params: data}).then((res) => {
-            return this.result(res);
+            return this.correct(res);
         }).catch((err) => {
             return this.error(err);
         })
@@ -52,13 +52,13 @@ const http = {
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
         url = "/beam_ht" + url;
         return axios.post(url, data).then((res) => {
-            return this.result(res);
+            return this.correct(res);
         }).catch((err) => {
             return this.error(err);
         })
     },
 
-    result(res){
+    correct(res){
         if (res.data.error === false) {
             return Promise.resolve(res.data); //成功
         } else {

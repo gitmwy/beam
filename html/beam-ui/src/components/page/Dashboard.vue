@@ -46,6 +46,7 @@
             getDashboardContent(){
                 this.$api.DashboardApi.getDashboardContent().then((res)=>{
                     console.log(res);
+                    this.$bus.$emit("dashboard", res.error);
                 },(err) => {
                     this.$message.error(err.msg);
                 })

@@ -55,7 +55,6 @@
             this.getData();
             this.canClear = this.$tools.getPerms().indexOf("sys:loginLog:clear")!==-1;
         },
-        computed: {},
         methods: {
             handleCurrentChange(val) {
                 this.page.pageNo = val;

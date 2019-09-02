@@ -128,7 +128,6 @@
             this.canDel = this.$tools.getPerms().indexOf("sys:dict:del")!==-1;
             this.canInfo = this.$tools.getPerms().indexOf("sys:dict:info")!==-1;
         },
-        computed: {},
         methods: {
             handleCurrentChange(val) {
                 this.page.pageNo = val;

@@ -98,11 +98,11 @@
                 return sysuser?sysuser:this.user;
             }
         },
+        created() {
+            this.canClearCache = this.$tools.getPerms().indexOf("sys:user:clearCache")!==-1;
+            this.canChangePassword = this.$tools.getPerms().indexOf("sys:user:changePassword")!==-1;
+        },
         methods:{
-            created() {
-                this.canClearCache = this.$tools.getPerms().indexOf("sys:user:clearCache")!==-1;
-                this.canChangePassword = this.$tools.getPerms().indexOf("sys:user:changePassword")!==-1;
-            },
             // 修改密码
             modifyPwd() {
                 this.$refs.AccountForm.validate((valid) => {
@@ -143,7 +143,7 @@
             },
             clearCache(){
                 this.$api.AccountApi.clearCache().then((res) => {
-                    this.$emit('closeAll', "");
+                    this.$bus.$emit('closeAll', "");
                     localStorage.removeItem('menuItems');
                     localStorage.removeItem('buttonItems');
                     this.$message({
@@ -162,7 +162,7 @@
             // 侧边栏折叠
             collapseChage(){
                 this.collapse = !this.collapse;
-                this.$emit('collapse', this.collapse);
+                this.$bus.$emit('collapse', this.collapse);
             },
             // 全屏事件
             handleFullScreen(){
@@ -190,11 +190,6 @@
                     }
                 }
                 this.fullscreen = !this.fullscreen;
-            }
-        },
-        mounted(){
-            if(document.body.clientWidth < 1500){
-                this.collapseChage();
             }
         }
     }

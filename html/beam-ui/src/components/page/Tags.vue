@@ -69,7 +69,7 @@
                         name: route.matched[1].components.default.name
                     })
                 }
-                this.$emit('tags', this.tagsList);
+                this.$bus.$emit('tags', this.tagsList);
             },
             handleTags(command){
                 command === 'other' ? this.closeOther() : this.closeAll();
@@ -87,7 +87,7 @@
         },
         created(){
             this.setTags(this.$route);
-            this.$on('closeAll', msg => {
+            this.$bus.$on('closeAll', msg => {
                 this.closeAll();
             })
         }

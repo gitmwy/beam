@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item>会议</el-breadcrumb-item>
-                <el-breadcrumb-item>会议列表</el-breadcrumb-item>
+                <el-breadcrumb-item><a href="/meetingdetail">会议列表</a></el-breadcrumb-item>
                 <el-breadcrumb-item v-for="(item, index) in items" :key="index">{{item.title}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>

@@ -6,8 +6,8 @@
             <el-tag size="medium" effect="dark" type="warning">待审核</el-tag>
             <el-button class="el-icon-lx-forward" type="text" style="float: right" @click="onBack">返回</el-button>
         </div>
-        <el-tabs v-model="initTab">
-            <el-tab-pane label="会议信息" name="0" class="collapse">
+        <el-tabs v-model="initTab" class="collapse">
+            <el-tab-pane label="会议信息" name="0">
                 <el-collapse v-model="info">
                     <el-collapse-item title="医院信息" name="0">
                         <div>医院名称：大连市第一人民医院</div>
@@ -22,7 +22,7 @@
                         <div>手机号：18866668888</div>
                     </el-collapse-item>
                 </el-collapse>
-                <div v-show="passBtn">
+                <div v-show="passBtn" style="margin-top:20px">
                     <el-button type="danger" style="width: 10%" @click="noPass">审核不通过</el-button>
                     <el-button type="success" style="width: 10%" @click="pass">审核通过</el-button>
                 </div>
@@ -34,7 +34,7 @@
                 </el-dialog>
             </el-tab-pane>
 
-            <el-tab-pane label="会议现场" name="1" class="collapse">
+            <el-tab-pane label="会议现场" name="1">
                 <el-collapse v-model="scene">
                     <el-collapse-item title="会议现场" name="0">
                         <div>实际人数：6人</div>
@@ -57,7 +57,7 @@
                 </el-dialog>
             </el-tab-pane>
 
-            <el-tab-pane label="会议总结" name="2" class="collapse">
+            <el-tab-pane label="会议总结" name="2">
                 <el-collapse v-model="conclusion">
                     <el-collapse-item title="会议现场" name="0">
                         <div>劳务报销单</div>
@@ -134,5 +134,9 @@
     .collapse >>> .el-collapse-item__header{
         font-size: 15px;
         font-weight: bold;
+    }
+    .collapse div{
+        font-size: 14px;
+        padding: 2px 0;
     }
 </style>
