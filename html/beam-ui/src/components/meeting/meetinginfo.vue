@@ -85,7 +85,7 @@
 
     export default {
         props:{
-            code: {}
+            code: Number
         },
         data() {
             return {
@@ -105,6 +105,9 @@
                     "https://mwy-1259572200.cos.ap-beijing.myqcloud.com/50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg"
                 ]
             }
+        },
+        create(){
+          console.log(this.code);
         },
         components: {
             vDetail,

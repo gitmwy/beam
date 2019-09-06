@@ -54,7 +54,7 @@
                 </el-pagination>
             </div>
         </div>
-        <v-info v-show="showInfo" :code="code" @back="back"></v-info>
+        <v-info v-show="showInfo" :code="parentCode" @back="back"></v-info>
     </div>
 </template>
 
@@ -74,7 +74,7 @@
                 showInfo: false,
                 showMeeting: true,
                 items: [],
-                code: {},
+                parentCode: 1,
                 canExport: true,
                 canInfo: true
             }
