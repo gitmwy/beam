@@ -2,7 +2,7 @@ package com.ksh.beam.config;
 
 import com.ksh.beam.common.config.DefaultFastjsonConfig;
 import com.ksh.beam.config.properties.BeamRestProperties;
-import com.ksh.beam.interceptors.AppInterceptor;
+import com.ksh.beam.interceptor.APIInterceptor;
 import com.ksh.beam.sign.converter.WithSignMessageConverter;
 import com.ksh.beam.sign.security.DataSecurityAction;
 import com.ksh.beam.sign.security.impl.Base64SecurityAction;
@@ -18,7 +18,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @ConditionalOnProperty(prefix = BeamRestProperties.BEAM_REST_PREFIX, name = "auth-open", havingValue = "true", matchIfMissing = true)
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AppInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new APIInterceptor()).addPathPatterns("/**");
     }
 
     @Bean

@@ -1,4 +1,4 @@
-package com.ksh.beam.interceptors;
+package com.ksh.beam.interceptor;
 
 import com.ksh.beam.common.annotion.IgnoreUTokenAuth;
 import com.ksh.beam.common.enumeration.RetEnum;
@@ -17,12 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 小程序拦截器
+ * 拦截器
  */
 @Component
-public class AppInterceptor implements HandlerInterceptor {
+public class APIInterceptor implements HandlerInterceptor {
 
-    private Logger logger = LoggerFactory.getLogger(AppInterceptor.class);
+    private Logger logger = LoggerFactory.getLogger(APIInterceptor.class);
 
     @Autowired
     private RedisManager redisManager;
