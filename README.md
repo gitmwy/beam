@@ -28,10 +28,10 @@ beam
 │           ├─application.yml  配置文件
 │           ├─logback-spring.xml  日志配置文件
 │ 
-├─beam-rest        API服务 （post请求签名、token)
+├─beam-rest       API服务 （post请求签名、token)
 │             
 │ 
-├─beam-web  公用实体类、dao、service
+├─beam-web      公用实体类、dao、service
 │   
 │ 
 ├─html 前端代码
