@@ -1,27 +1,13 @@
 package com.ksh.beam.sign.converter;
 
+import lombok.Data;
+
 /**
  * 基础的传输bean
  */
+@Data
 public class BaseTransferEntity {
 
     private String object; //base64编码的json字符串
-
-    private String sign;   //签名
-
-    public String getObject() {
-        return object;
-    }
-
-    public void setObject(String object) {
-        this.object = object;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
+    private String sign; //签名
 }

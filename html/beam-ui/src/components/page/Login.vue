@@ -64,7 +64,7 @@
         // },
         methods: {
             // refreshCaptcha() {
-            //     this.ruleForm.src = "/beam_ht/captcha?t=" + new Date().getTime();
+            //     this.ruleForm.src = "/beam_admin/captcha?t=" + new Date().getTime();
             // },
             submitForm(formName) {
                 this.ruleForm.confirmSuccess = this.$refs.slider.confirmSuccess;

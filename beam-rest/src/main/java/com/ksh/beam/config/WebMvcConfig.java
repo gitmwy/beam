@@ -1,11 +1,11 @@
 package com.ksh.beam.config;
+
 import com.ksh.beam.common.config.DefaultFastjsonConfig;
 import com.ksh.beam.config.properties.BeamRestProperties;
+import com.ksh.beam.interceptors.AppInterceptor;
 import com.ksh.beam.sign.converter.WithSignMessageConverter;
 import com.ksh.beam.sign.security.DataSecurityAction;
 import com.ksh.beam.sign.security.impl.Base64SecurityAction;
-import com.ksh.beam.interceptors.AppInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,16 +15,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private AppInterceptor appInterceptor;
-
     @ConditionalOnProperty(prefix = BeamRestProperties.BEAM_REST_PREFIX, name = "auth-open", havingValue = "true", matchIfMissing = true)
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(appInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(new AppInterceptor()).addPathPatterns("/**");
     }
-
-
 
     @Bean
     @ConditionalOnProperty(prefix = BeamRestProperties.BEAM_REST_PREFIX, name = "sign-open", havingValue = "true", matchIfMissing = true)
@@ -40,6 +35,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public DataSecurityAction dataSecurityAction() {
         return new Base64SecurityAction();
     }
-
-
 }

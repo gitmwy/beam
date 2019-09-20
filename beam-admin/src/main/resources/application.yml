@@ -7,7 +7,7 @@ beam:
 server:
    port: 8080
    servlet:
-     context-path: /beam_ht
+     context-path: /beam_admin
 spring:
   profiles:
     active: @spring.active@
@@ -15,7 +15,6 @@ spring:
     multipart:
       max-file-size: 512MB
       max-request-size: 1024MB
-
 
 ---
 #开发环境
@@ -32,7 +31,7 @@ spring:
     password: 123456
     timeout: 6000 #超时时间（毫秒）
 log:
-  path: /home/beam/local
+  path: /home/beam/admin/local
 
 ---
 #测试环境
@@ -49,7 +48,7 @@ spring:
     password:
     timeout: 6000
 log:
-  path: /home/beam/dev
+  path: /home/beam/admin/dev
 
 ---
 #生产环境
@@ -66,4 +65,4 @@ spring:
     password:
     timeout: 6000
 log:
-  path: /home/beam/pro
+  path: /home/beam/admin/pro

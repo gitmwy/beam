@@ -73,7 +73,7 @@
                 <el-upload
                     label=" 头像"
                     class="avatar-uploader el-dialog--center"
-                    action="/beam_ht/file/upload"
+                    action="/beam_admin/file/upload"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">

@@ -18,6 +18,4 @@ public class SignTest {
         String encrypt =  MD5Util.encrypt(o + "miyao");
         System.out.println(encrypt);
     }
-
-
 }

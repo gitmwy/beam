@@ -1,4 +1,5 @@
 package com.ksh.beam.interceptors;
+
 import com.ksh.beam.common.annotion.IgnoreUTokenAuth;
 import com.ksh.beam.common.enumeration.RetEnum;
 import com.ksh.beam.common.utils.R;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class AppInterceptor implements HandlerInterceptor {
 
-    Logger logger = LoggerFactory.getLogger(AppInterceptor.class);
+    private Logger logger = LoggerFactory.getLogger(AppInterceptor.class);
 
     @Autowired
     private RedisManager redisManager;
@@ -30,9 +31,8 @@ public class AppInterceptor implements HandlerInterceptor {
      * 执行完控制器后调用，即离开时
      */
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object arg2, Exception e) throws Exception {
-        logger.info("className--->" + arg2);
-        logger.info("request--->" + request);
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object arg, Exception e) {
+
     }
 
     @Override
@@ -41,7 +41,7 @@ public class AppInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
 
         String referer = request.getHeader("Referer");
         if(!org.springframework.util.StringUtils.isEmpty(referer) && (referer.contains("swagger") || referer.contains("apiDoc"))){
@@ -50,7 +50,6 @@ public class AppInterceptor implements HandlerInterceptor {
         if(request.getServletPath().contains("swagger") || request.getServletPath().contains("api-docs") || request.getServletPath().contains("webjars") || request.getServletPath().contains("configuration")){
             return true;
         }
-
 
         IgnoreUTokenAuth annotation;
         if(handler instanceof HandlerMethod) {
@@ -76,5 +75,4 @@ public class AppInterceptor implements HandlerInterceptor {
         request.setAttribute("uid", uid);
         return true;
     }
-
 }

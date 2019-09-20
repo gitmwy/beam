@@ -6,7 +6,7 @@ const http = {
     downloadFile(url, params) {
         return axios({
             method: "get",
-            url: "/beam_ht" + url,
+            url: "/beam_admin" + url,
             params: params,
             responseType: "blob"
         }).then((res) => {
@@ -39,7 +39,7 @@ const http = {
     //get请求
     get(url, params) {
         const data = Object.assign({}, params);
-        url = "/beam_ht" + url;
+        url = "/beam_admin" + url;
         return axios.get(url, {params: data}).then((res) => {
             return this.correct(res);
         }).catch((err) => {
@@ -50,7 +50,7 @@ const http = {
     //post请求
     post(url, data) {
         axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
-        url = "/beam_ht" + url;
+        url = "/beam_admin" + url;
         return axios.post(url, data).then((res) => {
             return this.correct(res);
         }).catch((err) => {

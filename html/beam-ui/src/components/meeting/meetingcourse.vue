@@ -14,7 +14,7 @@
                         <el-upload
                                 v-if="canUpload"
                                 style="float: right"
-                                action="/beam_ht/meeting/course/upload"
+                                action="/beam_admin/meeting/course/upload"
                                 :data="data"
                                 :show-file-list="false"
                                 :before-upload="beforeUpload"

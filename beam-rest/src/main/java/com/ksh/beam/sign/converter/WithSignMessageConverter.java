@@ -1,4 +1,5 @@
 package com.ksh.beam.sign.converter;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.ksh.beam.config.properties.BeamRestProperties;
@@ -20,7 +21,6 @@ import java.lang.reflect.Type;
  */
 public class WithSignMessageConverter extends FastJsonHttpMessageConverter {
 
-
     @Autowired
     BeamRestProperties beamRestProperties;
 
@@ -30,12 +30,9 @@ public class WithSignMessageConverter extends FastJsonHttpMessageConverter {
     @Override
     public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
 
-
-
         InputStream in = inputMessage.getBody();
 
         Object o = JSON.parseObject(in, super.getFastJsonConfig().getCharset(), BaseTransferEntity.class, super.getFastJsonConfig().getFeatures());
-
 
         //先转化成原始的对象
         BaseTransferEntity baseTransferEntity = (BaseTransferEntity) o;
@@ -61,6 +58,5 @@ public class WithSignMessageConverter extends FastJsonHttpMessageConverter {
             //校验签名后再转化成应该的对象
             return JSON.parseObject(json, type);
         }
-
     }
 }

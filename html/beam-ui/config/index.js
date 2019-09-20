@@ -7,7 +7,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/beam_ht':{
+      '/beam_admin':{
           target: 'http://localhost:8080',
           changeOrigin: true
       }

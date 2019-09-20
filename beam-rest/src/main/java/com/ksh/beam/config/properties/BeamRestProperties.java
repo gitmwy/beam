@@ -8,6 +8,7 @@ import java.io.File;
 
 import static com.ksh.beam.common.utils.ToolUtil.getTempPath;
 import static com.ksh.beam.common.utils.ToolUtil.isEmpty;
+
 @Data
 @Configuration
 @ConfigurationProperties(prefix = BeamRestProperties.BEAM_REST_PREFIX)
@@ -24,8 +25,6 @@ public class BeamRestProperties {
     private Boolean haveCreatePath = false;
 
     private String secret;
-
-
 
     public String getFileUploadPath() {
         //如果没有写文件上传路径,保存到临时目录

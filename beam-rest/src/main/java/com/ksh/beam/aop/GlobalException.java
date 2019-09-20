@@ -1,4 +1,5 @@
 package com.ksh.beam.aop;
+
 import com.ksh.beam.common.base.BaseExceptionHandler;
 import com.ksh.beam.common.enumeration.RetEnum;
 import com.ksh.beam.common.utils.R;
@@ -14,8 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * 全局的的异常拦截器（拦截所有的控制器）（带有@RequestMapping注解的方法上都会拦截）
  */
 @ControllerAdvice
-public class GlobalExceptionHandler extends BaseExceptionHandler {
-
+public class GlobalException extends BaseExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.OK)
@@ -24,7 +24,6 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
         e.printStackTrace();
         return R.fail(e.getMessage());
     }
-
 
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.OK)
@@ -50,7 +49,6 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
         return R.fail(e.getBindingResult().getFieldErrors().get(0).getDefaultMessage());
     }
 
-
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -58,8 +56,4 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
         e.printStackTrace();
         return R.fail(RetEnum.SERVER_EXCEPTION.getRet(),e.getMessage());
     }
-
-
-
-
 }
