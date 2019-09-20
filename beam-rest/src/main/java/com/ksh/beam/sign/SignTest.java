@@ -1,4 +1,4 @@
-package com.ksh.beam.sign.util;
+package com.ksh.beam.sign;
 
 import com.ksh.beam.sign.security.impl.Base64SecurityAction;
 import com.ksh.beam.common.utils.MD5Util;

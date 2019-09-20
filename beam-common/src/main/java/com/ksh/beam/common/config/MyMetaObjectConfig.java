@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 /**  自定义填充公共 name 字段  */
 @Component
-public class MyMetaObjectHandler implements MetaObjectHandler {
+public class MyMetaObjectConfig implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {

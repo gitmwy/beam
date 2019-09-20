@@ -1,4 +1,4 @@
-package com.ksh.beam.common.config;
+package com.ksh.beam.common.config.properties;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
