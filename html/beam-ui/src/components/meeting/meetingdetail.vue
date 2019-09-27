@@ -18,21 +18,21 @@
                 <el-button  v-if="canExport" type="success" icon="el-icon-download" @click="exportData">导出数据</el-button>
             </div>
             <el-tabs v-model="initTab" @tab-click="handleClick">
-                <el-tab-pane label="全部" name="0" flag=""/>
-                <el-tab-pane label="待审核" name="1" flag="01"/>
-                <el-tab-pane label="待修改" name="2" flag="02"/>
-                <el-tab-pane label="待开展" name="3" flag="03"/>
-                <el-tab-pane label="开展中" name="4" flag="04"/>
-                <el-tab-pane label="已结束" name="5" flag="05"/>
+                <el-tab-pane label="全部" name="0" auditStatus=""/>
+                <el-tab-pane label="待审核" name="1" auditStatus="01"/>
+                <el-tab-pane label="待修改" name="2" auditStatus="02"/>
+                <el-tab-pane label="待开展" name="3" auditStatus="03"/>
+                <el-tab-pane label="开展中" name="4" auditStatus="04"/>
+                <el-tab-pane label="已结束" name="5" auditStatus="05"/>
             </el-tabs>
             <el-table :data="tableData" v-loading="loading" border class="table">
                 <el-table-column label="编号" align="center" prop="code" width="60"/>
-                <el-table-column label="会议日期" align="center" prop="meetingTime" width="200"/>
                 <el-table-column label="医院名称" align="center" prop="hospitalName" width="200"/>
-                <el-table-column label="所在省市" align="center" prop="city" width="200"/>
-                <el-table-column label="课件" align="center" prop="courseware" width="200"/>
-                <el-table-column label="讲者" align="center" prop="speakers" width="120"/>
-                <el-table-column label="申请日期" align="center" prop="applicationTime" width="160"/>
+                <el-table-column label="所在省市" align="center" prop="hospitalAddress" width="200"/>
+                <el-table-column label="课件" align="center" prop="courseName" width="300"/>
+                <el-table-column label="讲者" align="center" prop="speakersName" width="120"/>
+                <el-table-column label="会议日期" align="center" prop="meetingTime" width="200"/>
+                <el-table-column label="申请日期" align="center" prop="applicantTime" width="160"/>
                 <el-table-column label="来源" align="center" prop="source" width="120"/>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
@@ -54,7 +54,7 @@
                 </el-pagination>
             </div>
         </div>
-        <v-info v-show="showInfo" :code="parentCode" @back="back"></v-info>
+        <v-info v-show="showInfo" :meetingId="meetingId" @back="back"></v-info>
     </div>
 </template>
 
@@ -74,7 +74,7 @@
                 showInfo: false,
                 showMeeting: true,
                 items: [],
-                parentCode: 1,
+                meetingId: {},
                 canExport: true,
                 canInfo: true
             }
@@ -133,14 +133,14 @@
             },
             // 查看
             handleInfo(index,row,event){
-                this.code = row.code;
+                this.meetingId = row.id;
                 this.showMeeting = false;
                 this.showInfo = true;
                 this.items.push({title:event.target.innerText});
             },
             // 切换标签页
             handleClick(tab){
-                this.req.flag = tab.$attrs.flag;
+                this.req.auditStatus = tab.$attrs.auditStatus;
                 this.getData();
             },
             //导出数据

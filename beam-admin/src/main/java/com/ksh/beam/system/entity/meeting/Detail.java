@@ -3,11 +3,12 @@ package com.ksh.beam.system.entity.meeting;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.ksh.beam.common.base.entity.RestEntity;
+import com.ksh.beam.common.base.entity.AbstractEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -16,40 +17,76 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @TableName("meeting_detail")
-public class Detail extends RestEntity<Long> {
+public class Detail extends AbstractEntity<Long> {
 
     @TableId
     private Long id;
 
     @TableField(value = "code")
-    private Long code;
+    private String code;
 
     @TableField(value = "meeting_time")
     private Date meetingTime;
 
-    @TableField(value = "hospital_name")
-    private String hospitalName;
+    @TableField(value = "meeting_type")
+    private Integer meetingType;
 
-    @TableField(value = "city")
-    private String city;
+    @TableField(value = "hospital_id")
+    private Long hospitalId;
 
-    @TableField(value = "courseware")
-    private String courseware;
+    @TableField(value = "course_id")
+    private Long courseId;
 
-    @TableField(value = "speakers")
-    private String speakers;
+    @TableField(value = "question_id")
+    private Long questionId;
 
-    @TableField(value = "application_time")
-    private Date applicationTime;
+    @TableField(value = "speakers_id")
+    private Long speakersId;
+
+    @TableField(value = "applicant_id")
+    private Long applicantId;
+
+    @TableField(value = "auditor_id")
+    private Long auditorId;
+
+    @TableField(value = "pre_cost")
+    private BigDecimal preCost;
+
+    @TableField(value = "labor_cost")
+    private BigDecimal laborCost;
+
+    @TableField(value = "activity_cost")
+    private BigDecimal activityCost;
+
+    @TableField(value = "pre_persons")
+    private Integer prePersons;
+
+    @TableField(value = "real_persons")
+    private Integer realPersons;
+
+    @TableField(value = "applicant_time")
+    private Date applicantTime;
 
     @TableField(value = "source")
     private String source;
 
-    @TableField(value = "operation")
-    private String operation;
+    @TableField(value="status")
+    private String status;
 
-    @TableField(value="flag")
-    private String flag;
+    @TableField(value="address")
+    private String address;
+
+    @TableField(exist = false)
+    private String hospitalName;
+
+    @TableField(exist = false)
+    private String hospitalAddress;
+
+    @TableField(exist = false)
+    private String courseName;
+
+    @TableField(exist = false)
+    private String speakersName;
 
     @TableField(exist = false)
     private String startTime;

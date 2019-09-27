@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>beam-rest</name>
-    <description>Demo project for Spring Boot</description>
+    <description>API接口</description>
 
     <parent>
         <groupId>com.ksh</groupId>
@@ -36,11 +36,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
 
         <dependency>

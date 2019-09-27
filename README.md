@@ -5,7 +5,7 @@
 - 项目特点：
   - **持久层：mybatis持久化，使用MyBatis-Plus优化，减少sql开发量；Transtraction注解事务。**
   - **使用SpringBoot自动装配，MyBatis-Plus配置文件提为默认配置放在了common包的default-config.properties中，
-  子项目的xml只需固定放在com/ksh/beam/modular/\*/mapping/\*.xml，实体类固定放在com.ksh.beam.modular.\**.entity中。
+  子项目的xml只需固定放在com/ksh/beam/modular/\*/mapping/\*.xml，实体类固定放在com.ksh.beam.*.entity中。
   即可使用MyBatis-Plus。若不使用默认配置，可在子工程配置文件直接写入自己的配置即可覆盖。**
   - **提出公共的模块，service、dao、entity接口和后台管理系统可共用（将相应的模块放在beam-web中），当然也可不共用，只需将相应的模块放在子工程中**
   - **接口模块已添加拦截和post请求签名，可直接使用**

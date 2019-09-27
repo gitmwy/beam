@@ -15,4 +15,7 @@ public interface MeetingDetailService {
 
     //导出
     void exportData(Detail meeting, HttpServletResponse response);
+
+    //会议详细信息
+    R getInfo(Long meetingId);
 }

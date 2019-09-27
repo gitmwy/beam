@@ -1,25 +1,34 @@
 <template>
     <div class="container">
         <div class="handle-box">
-            <el-tag size="medium" effect="dark">S201906250001</el-tag>
+            <el-tag size="medium" effect="dark">{{records.code}}</el-tag>
             <el-tag size="medium" effect="dark" type="info" >内部系统</el-tag>
-            <el-tag size="medium" effect="dark" type="warning">待审核</el-tag>
+            <el-tag size="medium" effect="dark" type="warning">{{records.status}}</el-tag>
             <el-button class="el-icon-lx-forward" type="text" style="float: right" @click="onBack">返回</el-button>
         </div>
         <el-tabs v-model="initTab" class="collapse">
             <el-tab-pane label="会议信息" name="0">
                 <el-collapse v-model="info">
                     <el-collapse-item title="医院信息" name="0">
-                        <div>医院名称：大连市第一人民医院</div>
-                        <div>所在省市：辽宁省大连市</div>
+                        <div>医院名称：{{records.hospitalName}}</div>
+                        <div>所在省市：{{records.hospitalAddress}}</div>
+                        <div>医院等级：{{records.hospitalLevel}}</div>
+                        <div>医院编号：{{records.hospitalCode}}</div>
+                        <div>所属区域：{{records.hospitalArea}}</div>
                     </el-collapse-item>
                     <el-collapse-item title="会议信息" name="1">
-                        <div>会议日期：2019-01-01</div>
-                        <div>会议课件：药品临床使用说明</div>
+                        <div>会议日期：{{records.meetingTime}}</div>
+                        <div>会议课件：{{records.courseName}}</div>
+                        <div>会议讲者：{{records.speakersName}}</div>
+                        <div>劳务费用：{{records.laborCost}}</div>
+                        <div>预估人数：{{records.prePersons}}</div>
                     </el-collapse-item>
                     <el-collapse-item title="申请信息" name="2">
-                        <div>申请人：李玉刚</div>
-                        <div>手机号：18866668888</div>
+                        <div>申请人：{{records.applicantName}}</div>
+                        <div>手机号：{{records.phone}}</div>
+                        <div>申请时间：{{records.applicantTime}}</div>
+                        <div>活动费用：{{records.activityCost}}</div>
+                        <div>审批人：{{records.auditorName}}</div>
                     </el-collapse-item>
                 </el-collapse>
                 <div v-show="passBtn" style="margin-top:20px">
@@ -37,16 +46,20 @@
             <el-tab-pane label="会议现场" name="1">
                 <el-collapse v-model="scene">
                     <el-collapse-item title="会议现场" name="0">
-                        <div>实际人数：6人</div>
-                        <div>实际定位：辽宁省大连市中心街道</div>
+                        <div>实际人数：{{records.realPersons}}</div>
+                        <div>实际定位：{{records.address}}</div>
                         <div>现场视频：<br>
                             <el-row :gutter="20">
-                                <el-col :span="7"><video :src="videoUrl" width="320" height="240" @click="videoShow"></video></el-col>
+                                <el-col :span="7" v-for="item in records.meetingVideo" :key="item.id">
+                                    <video :src="item.filePath" width="320" height="240" @click="videoShow(item.filePath)"></video>
+                                </el-col>
                             </el-row>
                         </div>
                         <div>现场照片：<br>
                             <el-row :gutter="20">
-                                <el-col :span="6" v-for="url in urls" :key="url"><el-image :src="url" lazy style="width:300px;height:200px"></el-image></el-col>
+                                <el-col :span="7" v-for="item in records.meetingImg" :key="item.id">
+                                    <el-image :src="item.filePath" lazy style="width:320px;height:240px"></el-image>
+                                </el-col>
                             </el-row>
                         </div>
                     </el-collapse-item>
@@ -60,9 +73,21 @@
             <el-tab-pane label="会议总结" name="2">
                 <el-collapse v-model="conclusion">
                     <el-collapse-item title="会议现场" name="0">
-                        <div>劳务报销单</div>
-                        <div>活动费用：270元</div>
-                        <div>费用发票</div>
+                        <div>劳务报销单：<br>
+                            <el-row :gutter="20">
+                                <el-col :span="7" v-for="item in records.laborImg" :key="item.id">
+                                    <el-image :src="item.filePath" lazy style="width:300px;height:200px"></el-image>
+                                </el-col>
+                            </el-row>
+                        </div>
+                        <div>活动费用：{{records.activityCost}}</div>
+                        <div>费用发票：<br>
+                            <el-row :gutter="20">
+                                <el-col :span="7" v-for="item in records.invoiceImg" :key="item.id">
+                                    <el-image :src="item.filePath" lazy style="width:300px;height:200px"></el-image>
+                                </el-col>
+                            </el-row>
+                        </div>
                     </el-collapse-item>
                 </el-collapse>
             </el-tab-pane>
@@ -85,7 +110,7 @@
 
     export default {
         props:{
-            code: Number
+            meetingId: {}
         },
         data() {
             return {
@@ -98,23 +123,31 @@
                 noPassVisible: false,
                 reasons: "",
                 passBtn: true,
-                videoUrl: "https://mwy-1259572200.cos.ap-beijing.myqcloud.com/2019-07-04%2009-25-04.mkv",
+                videoUrl: "",
                 videoType: "video/mp4",
                 videoVisible: false,
-                urls: [
-                    "https://mwy-1259572200.cos.ap-beijing.myqcloud.com/50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg"
-                ]
+                records: {}
             }
         },
-        create(){
-          console.log(this.code);
+        watch: {
+            meetingId(id) {
+                this.$api.MeetingDetailApi.getInfo({meetingId:id}).then((res) => {
+                    this.loading = false;
+                    if (res.error === false) {
+                        this.records = res.data;
+                    }
+                }, (err) => {
+                    this.$message.error(err.msg);
+                });
+            }
         },
         components: {
             vDetail,
             "player": myVideoPlayer
         },
         methods: {
-            videoShow(){
+            videoShow(val){
+                this.videoUrl = val;
                 this.videoVisible = true;
             },
             noPass(){

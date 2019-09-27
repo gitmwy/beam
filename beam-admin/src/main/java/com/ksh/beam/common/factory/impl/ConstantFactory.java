@@ -10,6 +10,8 @@ import com.ksh.beam.system.dao.DictMapper;
 import com.ksh.beam.system.dao.MenuMapper;
 import com.ksh.beam.system.dao.RoleMapper;
 import com.ksh.beam.system.dao.UserMapper;
+import com.ksh.beam.system.dao.mapping.MeetingSceneMapper;
+import com.ksh.beam.system.entity.meeting.Scene;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.Dict;
 import com.ksh.beam.system.entity.sys.Menu;
@@ -35,6 +37,7 @@ public class ConstantFactory implements IConstantFactory {
     private UserMapper userMapper = SpringContextHolder.getBean(UserMapper.class);
     private MenuMapper menuMapper = SpringContextHolder.getBean(MenuMapper.class);
     private DictMapper dictMapper = SpringContextHolder.getBean(DictMapper.class);
+    private MeetingSceneMapper meetingSceneMapper = SpringContextHolder.getBean(MeetingSceneMapper.class);
 
     public static IConstantFactory me() {
         return SpringContextHolder.getBean("constantFactory");
@@ -123,5 +126,16 @@ public class ConstantFactory implements IConstantFactory {
             permsList = userMapper.queryAllPerms(userId);
         }
         return permsList;
+    }
+
+    /**
+     *获取会议相关视频、照片
+     */
+    @Override
+    public List<Scene> getScene(Long meetingId, Integer fileType) {
+        QueryWrapper<Scene> qw = new QueryWrapper<>();
+        qw.eq("meeting_id", meetingId);
+        qw.eq("file_type", fileType);
+        return meetingSceneMapper.selectList(qw);
     }
 }

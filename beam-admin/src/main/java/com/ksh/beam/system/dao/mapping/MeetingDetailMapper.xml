@@ -2,18 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ksh.beam.system.dao.MeetingDetailMapper">
 
-    <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.ksh.beam.system.entity.meeting.Detail" id="BaseResultMap">
+    <!-- 会议详细信息返回数据 -->
+    <resultMap type="java.util.HashMap" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="code" column="code"/>
         <result property="meetingTime" column="meeting_time"/>
-        <result property="hospitalName" column="hospital_name"/>
-        <result property="city" column="city"/>
-        <result property="courseware" column="courseware"/>
-        <result property="speakers" column="speakers"/>
-        <result property="applicationTime" column="application_time"/>
+        <result property="meetingType" column="meeting_type"/>
+        <result property="hospitalId" column="hospital_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="speakersId" column="speakers_id"/>
+        <result property="applicantId" column="applicant_id"/>
+        <result property="auditorId" column="auditor_id"/>
+        <result property="preCost" column="pre_cost"/>
+        <result property="laborCost" column="labor_cost"/>
+        <result property="activityCost" column="activity_cost"/>
+        <result property="prePersons" column="pre_persons"/>
+        <result property="realPersons" column="real_persons"/>
+        <result property="applicantTime" column="applicant_time"/>
+        <result property="address" column="address"/>
         <result property="source" column="source"/>
-        <result property="flag" column="flag"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+
+        <result property="courseName" column="course_name"/>
+        <result property="questionName" column="question_name"/>
     </resultMap>
 
     <!--    查询条件-->
@@ -22,7 +36,7 @@
             and m.code = #{meeting.code}
         </if>
         <if test="meeting.hospitalName != null and meeting.hospitalName != ''">
-            and m.hospital_name like concat("%",#{meeting.hospitalName},"%")
+            and m.hospitalName like concat("%",#{meeting.hospitalName},"%")
         </if>
         <if test="meeting.startTime != null and meeting.startTime != ''">
             <![CDATA[ and date_format(m.meeting_time,'%Y-%m-%d') >= date_format(#{meeting.startTime},'%Y-%m-%d') ]]>
@@ -30,14 +44,19 @@
         <if test="meeting.endTime != null and meeting.endTime != ''">
             <![CDATA[ and date_format(m.meeting_time,'%Y-%m-%d') <= date_format(#{meeting.endTime},'%Y-%m-%d') ]]>
         </if>
-        <if test="meeting.flag != null and meeting.flag != ''">
-            and m.flag = #{meeting.flag}
+        <if test="meeting.status != null and meeting.status != ''">
+            and m.status = #{meeting.status}
         </if>
     </sql>
 
     <!--    分页-->
     <select id="selectPageList" resultType="com.ksh.beam.system.entity.meeting.Detail">
-        select m.* from meeting_detail m
+        select * from
+        (select md.*,hde.name hospital_name, hde.address hospital_address,mc.course_name, hdc.name speakers_name
+        from meeting_detail md
+        left join hospital_detail hde on md.hospital_id = hde.id
+        left join meeting_course mc on md.course_id = mc.id
+        left join hospital_doctor hdc on md.speakers_id = hdc.id) m
         <where>
             1 = 1
             <include refid="Where_List"/>
@@ -45,13 +64,18 @@
         order by m.meeting_time desc
     </select>
 
-    <!--    导出数据-->
-    <select id="exportData" resultType="java.util.HashMap">
-        select m.* from meeting_detail m
-        <where>
-            1 = 1
-            <include refid="Where_List"/>
-        </where>
-        order by m.meeting_time desc
+    <!--    会议详细信息-->
+    <select id="getInfo" resultMap="BaseResultMap">
+        select * from
+        (select md.*,hde.name hospitalName,hde.code hospitalCode, hde.address hospitalAddress,hde.level hospitalLevel,
+        mc.course_name, mq.question_name, hdc.name speakersName,
+        ud.username applicantName, ud.phone
+        from meeting_detail md
+        left join hospital_detail hde on md.hospital_id = hde.id
+        left join meeting_course mc on md.course_id = mc.id
+        left join meeting_question mq on md.question_id = mq.id
+        left join hospital_doctor hdc on md.speakers_id = hdc.id
+        left join user_detail ud on md.applicant_id = ud.id) m
+        where m.id = #{meetingId}
     </select>
 </mapper>

@@ -6,13 +6,16 @@
     <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.ksh.beam.system.entity.meeting.Place" id="BaseResultMap">
         <result property="id" column="id"/>
-        <result property="typeName" column="type_name"/>
+        <result property="typeId" column="type_id"/>
+        <result property="place" column="place"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <!--    分页-->
     <select id="selectPageList" resultType="com.ksh.beam.system.entity.meeting.Place">
-        select m.* from meeting_place m order by m.create_time desc
+        select mp.*,mpt.type_name from meeting_place mp
+        left join meeting_place_type mpt on mp.type_id = mpt.id
+        order by mp.create_time desc
     </select>
 </mapper>

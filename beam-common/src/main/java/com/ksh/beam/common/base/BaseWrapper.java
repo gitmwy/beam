@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public abstract class BaseWrapper {
 
-    public Object obj;
+    private Object obj;
 
     public BaseWrapper(Object obj) {
         this.obj = obj;
@@ -28,30 +28,24 @@ public abstract class BaseWrapper {
                 wrapTheMap(map);
             }
             return list;
-        }
-        else if(this.obj instanceof Page){
+        } else if (this.obj instanceof Page) {
             List<Map> mapList = new ArrayList<>();
-            if((((Page) this.obj).getRecords()).size()>0){
-                if(!((((Page) this.obj).getRecords()).get(0) instanceof  Map)){
+            if ((((Page) this.obj).getRecords()).size() > 0) {
+                if (!((((Page) this.obj).getRecords()).get(0) instanceof Map)) {
                     List<Object> list = ((Page) this.obj).getRecords();
-                    for(Object o:list){
+                    for (Object o : list) {
                         mapList.add(beanToMap(o));
                     }
-                }
-                else {
+                } else {
                     mapList = ((Page) this.obj).getRecords();
                 }
-
                 for (Map map : mapList) {
                     wrapTheMap(map);
                 }
             }
-
             ((Page) this.obj).setRecords(mapList);
-
             return this.obj;
-        }
-        else if (this.obj instanceof Map) {
+        } else if (this.obj instanceof Map) {
             Map<String, Object> map = (Map<String, Object>) this.obj;
             wrapTheMap(map);
             return map;
@@ -65,8 +59,8 @@ public abstract class BaseWrapper {
         try {
             PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
             PropertyDescriptor[] descriptors = propertyUtilsBean.getPropertyDescriptors(obj);
-            for (int i = 0; i < descriptors.length; i++) {
-                String name = descriptors[i].getName();
+            for (PropertyDescriptor descriptor : descriptors) {
+                String name = descriptor.getName();
                 if (!"class".equals(name)) {
                     params.put(name, propertyUtilsBean.getNestedProperty(obj, name));
                 }

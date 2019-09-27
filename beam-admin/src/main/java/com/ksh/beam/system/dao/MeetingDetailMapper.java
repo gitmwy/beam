@@ -16,5 +16,7 @@ public interface MeetingDetailMapper extends BaseMapper<Detail> {
 
     IPage<Detail> selectPageList(Page page, @Param("meeting") Detail meeting);
 
-    List<Map<String, Object>> exportData(@Param("meeting") Detail meeting);
+    List<Detail> selectPageList(@Param("meeting") Detail meeting);
+
+    Map<String, Object> getInfo(Long meetingId);
 }

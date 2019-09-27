@@ -5,7 +5,6 @@ package com.ksh.beam.common.base.entity;
  */
 public class ExcelEntity {
 
-
     //类别
      private String category;
     //管理者

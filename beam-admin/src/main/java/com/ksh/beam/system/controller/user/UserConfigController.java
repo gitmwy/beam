@@ -1,6 +1,5 @@
 package com.ksh.beam.system.controller.user;
 
-
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.service.UserConfigService;
 import io.swagger.annotations.Api;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user/config")
 @RestController
 public class UserConfigController {
-
 
     @Autowired
     private UserConfigService userConfigService;

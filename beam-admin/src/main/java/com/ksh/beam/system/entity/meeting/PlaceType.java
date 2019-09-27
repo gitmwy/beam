@@ -7,30 +7,20 @@ import com.ksh.beam.common.base.entity.RestEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 会议场所
+ * 会议场所类型表
  */
 @Data
 @NoArgsConstructor
-@TableName("meeting_place")
-public class Place extends RestEntity<Long> {
+@TableName("meeting_place_type")
+public class PlaceType extends RestEntity<Long> {
 
     @TableId
     private Long id;
 
-    @NotNull(message = "会议类型不能为空")
-    @TableField(value = "type_id")
-    private Long typeId;
-
-    @NotBlank(message = "会议场所不能为空")
-    @TableField(value = "place")
-    private String place;
-
-    @TableField(exist = false)
+    @TableField(value = "type_name")
     private String typeName;
 
     @Override

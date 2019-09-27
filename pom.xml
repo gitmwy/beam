@@ -37,25 +37,20 @@
 		<ehcache.core.version>2.6.11</ehcache.core.version>
 		<zxing.version>3.2.1</zxing.version>
 		<mysql-connector-java.version>8.0.16</mysql-connector-java.version>
-		<mybatis-plus.version>3.0-RC1</mybatis-plus.version>
 		<mybatis-plus-boot-starter.version>3.0-RC1</mybatis-plus-boot-starter.version>
 
 		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<commons-io-version>2.5</commons-io-version>
-		<flywaydb.version>5.1.4</flywaydb.version>
 		<shiro.version>1.4.0</shiro.version>
 		<ehcache.version>3.3.1</ehcache.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
 
 		<quartz.version>2.3.0</quartz.version>
-		<mp3spi-version>1.9.5.4</mp3spi-version>
 
 		<aliyun.oss.version>2.5.0</aliyun.oss.version>
 		<qcloud.cos.version>5.5.6</qcloud.cos.version>
 
 		<lombok-version>1.16.12</lombok-version>
-
-		<hibernate.validator.version>6.0.2.Final</hibernate.validator.version>
 
 		<dubbo-version>0.2.0</dubbo-version>
 		<email-version>1.3.3</email-version>
@@ -85,12 +80,6 @@
 				<groupId>com.ksh</groupId>
 				<artifactId>beam-web</artifactId>
 				<version>${beam.web.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.hibernate.validator</groupId>
-				<artifactId>hibernate-validator</artifactId>
-				<version>${hibernate.validator.version}</version>
 			</dependency>
 
 			 <!--swagger-->
@@ -146,13 +135,12 @@
 				<version>${spring.boot.jpa.version}</version>
 			</dependency>
 
-			<!-- mybatis-plus begin -->
+			<!-- mybatis-plus -->
 			<dependency>
 				<groupId>com.baomidou</groupId>
 				<artifactId>mybatis-plus-boot-starter</artifactId>
 				<version>${mybatis-plus-boot-starter.version}</version>
 			</dependency>
-			<!-- mybatis-plus end -->
 
 			<!-- common-lang3 -->
 			<dependency>
@@ -165,13 +153,6 @@
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io-version}</version>
-			</dependency>
-
-			<!--  flywaydb数据库版本控制工具  -->
-			<dependency>
-				<groupId>org.flywaydb</groupId>
-				<artifactId>flyway-core</artifactId>
-				<version>${flywaydb.version}</version>
 			</dependency>
 
 			<!--shiro依赖-->
@@ -210,13 +191,6 @@
 				<groupId>org.quartz-scheduler</groupId>
 				<artifactId>quartz</artifactId>
 				<version>${quartz.version}</version>
-			</dependency>
-
-			<!--MP3ToWav转化时需要用到-->
-			<dependency>
-				<groupId>com.googlecode.soundlibs</groupId>
-				<artifactId>mp3spi</artifactId>
-				<version>${mp3spi-version}</version>
 			</dependency>
 
 			<!-- 阿里 腾讯 -->

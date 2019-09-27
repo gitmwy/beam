@@ -38,16 +38,6 @@ public class Role extends RestEntity<Long> {
     private String adminRole;
 
     @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
     protected Serializable pkVal() {
         return this.id;
     }
