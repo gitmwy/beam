@@ -3,7 +3,10 @@ package com.ksh.beam.system.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ksh.beam.common.base.BaseWrapper;
+import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.file.ExcelManager;
+import com.ksh.beam.common.utils.DateUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.UserDetailMapper;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,26 +32,35 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail>
      * 分页
      */
     @Override
-    public R selectPageList(Detail detail) {
-        IPage page = baseMapper.selectPageList(new Page(detail.getCurrentPage(), detail.getPageSize()), detail);
+    public R selectPageList(Detail user) {
+        IPage page = baseMapper.selectPageList(new Page(user.getCurrentPage(), user.getPageSize()), user);
         return R.ok(page);
     }
 
     @Override
-    public void exportData(Detail detail, HttpServletResponse response) {
-        List<Map<String, Object>> list = baseMapper.exportData(detail);
+    public void exportData(Detail user, HttpServletResponse response) {
+        List<Detail> details = baseMapper.selectPageList(user);
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Detail detail : details){
+            Map<String, Object> map = BaseWrapper.beanToMap(detail);
+            map.put("status", ConstantFactory.me().getDictsByCode("status",map.get("status")+""));
+            map.put("boundTime", DateUtil.greenwichTime(map.get("boundTime")+""));
+            map.put("createTime", DateUtil.greenwichTime(map.get("createTime")+""));
+            map.put("updateTime", DateUtil.greenwichTime(map.get("updateTime")+""));
+            list.add(map);
+        }
         //定义存放英文字段名和中文字段名的Map
         LinkedHashMap<String, String> fieldMap = new LinkedHashMap<>();
-        fieldMap.put("job_code", "编号");
+        fieldMap.put("jobCode", "编号");
         fieldMap.put("nickname", "昵称");
         fieldMap.put("username", "姓名");
         fieldMap.put("phone", "手机号");
-        fieldMap.put("area_name", "区域名称");
-        fieldMap.put("role_name", "角色名称");
-        fieldMap.put("status_name", "状态");
-        fieldMap.put("bound_time", "绑定时间");
-        fieldMap.put("create_time", "创建时间");
-        fieldMap.put("update_time", "更新时间");
+        fieldMap.put("areaName", "区域名称");
+        fieldMap.put("roleName", "角色名称");
+        fieldMap.put("status", "状态");
+        fieldMap.put("boundTime", "绑定时间");
+        fieldMap.put("createTime", "创建时间");
+        fieldMap.put("updateTime", "更新时间");
         //导出文件
         ExcelManager.exportExcel(list, fieldMap, "用户数据", null, response);
     }

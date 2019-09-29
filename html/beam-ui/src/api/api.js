@@ -23,6 +23,9 @@ import MeetingQuestionApi from './meeting/meetingquestion'
 import UserRoleApi from './user/userrole'
 import UserDetailApi from './user/userdetail'
 import UserAreaApi from './user/userarea'
+//======================医生管理===============
+import HospitalDetailApi from './hospital/hospitaldetail'
+import HospitalDoctorApi from './hospital/hospitaldoctor'
 
 // 默认全部导出
 export default {
@@ -45,4 +48,6 @@ export default {
     UserRoleApi,
     UserDetailApi,
     UserAreaApi,
+    HospitalDetailApi,
+    HospitalDoctorApi
 }

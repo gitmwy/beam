@@ -43,17 +43,4 @@
         </where>
         order by u.create_time desc
     </select>
-
-    <!--    导出数据-->
-    <select id="exportData" resultType="java.util.HashMap">
-        select case u.status when 1 then '正常' else '锁定' end status_name, u.*, a.area_name, r.role_name
-        from user_detail u
-        left join user_area a on a.id = u.area_id
-        left join user_role r on r.id = u.role_id
-        <where>
-            1 = 1
-            <include refid="Where_List"/>
-        </where>
-        order by u.create_time desc
-    </select>
 </mapper>

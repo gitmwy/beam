@@ -112,7 +112,18 @@ export default new Router({
                     path: '/userrole',
                     component: resolve => require(['../components/user/userrole.vue'], resolve),
                     meta: { title: '角色管理',permission: true, perms: "user:role:list"}
-                }
+                },
+//医生管理=============================================================================
+                {
+                    path: '/hospitaldetail',
+                    component: resolve => require(['../components/hospital/hospitaldetail.vue'], resolve),
+                    meta: { title: '医院列表',permission: true, perms: "hospital:detail:list"}
+                },
+                {
+                    path: '/hospitaldoctor',
+                    component: resolve => require(['../components/hospital/hospitaldoctor.vue'], resolve),
+                    meta: { title: '医生列表',permission: true, perms: "hospital:doctor:list"}
+                },
             ]
         },
         {

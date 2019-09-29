@@ -1,5 +1,6 @@
 package com.ksh.beam.system.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.meeting.Detail;
 
@@ -8,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 会议列表
  */
-public interface MeetingDetailService {
+public interface MeetingDetailService extends IService<Detail> {
 
     //分页
     R selectPageList(Detail meeting);

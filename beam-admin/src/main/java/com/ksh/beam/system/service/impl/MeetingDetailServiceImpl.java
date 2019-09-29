@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.base.BaseWrapper;
 import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.file.ExcelManager;
+import com.ksh.beam.common.utils.DateUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.dao.MeetingDetailMapper;
 import com.ksh.beam.system.entity.meeting.Detail;
@@ -43,6 +44,8 @@ public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, D
         for (Detail detail : details){
             Map<String, Object> map = BaseWrapper.beanToMap(detail);
             map.put("status", ConstantFactory.me().getDictsByCode("meeting_status",map.get("status")+""));
+            map.put("meetingTime", DateUtil.greenwichTime(map.get("meetingTime")+""));
+            map.put("applicantTime", DateUtil.greenwichTime(map.get("applicantTime")+""));
             list.add(map);
         }
         //定义存放英文字段名和中文字段名的Map

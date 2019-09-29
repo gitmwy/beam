@@ -3,17 +3,17 @@ package com.ksh.beam.system.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ksh.beam.system.entity.user.Detail;
+import com.ksh.beam.system.entity.hospital.Detail;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
- * 用户列表
+ * 医院列表
  */
-public interface UserDetailMapper extends BaseMapper<Detail> {
+public interface HospitalDetailMapper extends BaseMapper<Detail> {
 
-    IPage<Detail> selectPageList(Page page, @Param("user") Detail user);
+    IPage<Detail> selectPageList(Page page, @Param("hospital") Detail hospital);
 
-    List<Detail> selectPageList(@Param("user") Detail detail);
+    List<Detail> selectPageList(@Param("hospital") Detail hospital);
 }

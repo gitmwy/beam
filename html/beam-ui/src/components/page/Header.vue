@@ -98,11 +98,11 @@
                 return sysuser?sysuser:this.user;
             }
         },
-        created() {
-            this.canClearCache = this.$tools.getPerms().indexOf("sys:user:clearCache")!==-1;
-            this.canChangePassword = this.$tools.getPerms().indexOf("sys:user:changePassword")!==-1;
-        },
         methods:{
+            created() {
+                this.canClearCache = this.$tools.getPerms().indexOf("sys:user:clearCache")!==-1;
+                this.canChangePassword = this.$tools.getPerms().indexOf("sys:user:changePassword")!==-1;
+            },
             // 修改密码
             modifyPwd() {
                 this.$refs.AccountForm.validate((valid) => {

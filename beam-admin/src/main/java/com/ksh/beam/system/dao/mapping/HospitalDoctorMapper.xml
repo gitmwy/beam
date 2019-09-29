@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksh.beam.system.dao.HospitalDoctorMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.ksh.beam.system.entity.hospital.Doctor" id="BaseResultMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="nickname" column="nickname"/>
+        <result property="hospital_id" column="hospital_id"/>
+        <result property="hospital_dept_id" column="hospital_dept_id"/>
+        <result property="hospital_position_id" column="hospital_position_id"/>
+        <result property="hospital_title_id" column="hospital_title_id"/>
+        <result property="reg_time" column="reg_time"/>
+        <result property="flag" column="flag"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!--    查询条件-->
+    <sql id="Where_List">
+        <if test="doctor.name != null and doctor.name != ''">
+            and d.name like concat("%",#{doctor.name},"%")
+        </if>
+         <if test="doctor.phone != null and doctor.phone != ''">
+            and d.phone like concat("%",#{doctor.phone},"%")
+        </if>
+    </sql>
+
+    <!--    分页-->
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.hospital.Doctor">
+        select d.* from hospital_doctor d
+        <where>
+            1 = 1 <include refid="Where_List"/>
+        </where>
+        order by d.reg_time desc
+    </select>
+</mapper>

@@ -26,17 +26,32 @@ public class Detail extends RestEntity<Long> {
     @TableField(value = "name")
     private String name;
 
-    @TableField(value = "province_id")
-    private Long provinceId;
+    @TableField(value = "address")
+    private String address;
 
-    @TableField(value = "city_id")
-    private Long cityId;
+    @TableField(value = "level")
+    private String level;
+
+    @TableField(value = "province_name")
+    private String provinceName;
+
+    @TableField(value = "province_code")
+    private String provinceCode;
+
+    @TableField(value = "city_name")
+    private String cityName;
+
+    @TableField(value = "city_code")
+    private String cityCode;
+
+    @TableField(value = "county_name")
+    private String countyName;
+
+    @TableField(value = "county_code")
+    private String countyCode;
 
     @TableField(value = "managers_id")
-    private Long managersId;
-
-    @TableField(value = "county_id")
-    private Long countyId;
+    private String managersId;
 
     @Override
     protected Serializable pkVal() {

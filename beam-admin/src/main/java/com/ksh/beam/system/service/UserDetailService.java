@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public interface UserDetailService extends IService<Detail> {
 
     //分页
-    R selectPageList(Detail detail);
+    R selectPageList(Detail user);
 
     //导出
     void exportData(Detail detail, HttpServletResponse response);

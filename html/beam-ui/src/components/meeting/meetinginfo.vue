@@ -135,6 +135,7 @@
                     this.loading = false;
                     if (res.error === false) {
                         this.records = res.data;
+                        this.$emit('info', res.error);
                     }
                 }, (err) => {
                     this.$message.error(err.msg);

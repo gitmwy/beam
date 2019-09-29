@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateUtil {
 
@@ -84,7 +85,7 @@ public class DateUtil {
     }
 
     public static String formatDate(Date date, String pattern) {
-        String formatDate = null;
+        String formatDate;
         if (StringUtils.isNotBlank(pattern)) {
             formatDate = DateFormatUtils.format(date, pattern);
         } else {
@@ -95,8 +96,6 @@ public class DateUtil {
 
     /**
      * 日期比较，如果s>=e 返回true 否则返回false)
-     *
-     * @author luguosui
      */
     public static boolean compareDate(String s, String e) {
         if (parseDate(s) == null || parseDate(e) == null) {
@@ -139,6 +138,19 @@ public class DateUtil {
     }
 
     /**
+     * 格林威治时间格式化
+     */
+    public static String greenwichTime(String dateStr) {
+        try {
+            Date date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).parse(dateStr);
+            return getTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * 格式化日期
      */
     public static String format(Date date, String pattern) {
@@ -169,9 +181,8 @@ public class DateUtil {
     public static int getDiffYear(String startTime, String endTime) {
         DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            int years = (int) (((fmt.parse(endTime).getTime() - fmt.parse(
+            return (int) (((fmt.parse(endTime).getTime() - fmt.parse(
                     startTime).getTime()) / (1000 * 60 * 60 * 24)) / 365);
-            return years;
         } catch (Exception e) {
             // 如果throw java.text.ParseException或者NullPointerException，就说明格式不对
             return 0;
@@ -182,12 +193,10 @@ public class DateUtil {
      * <li>功能描述：时间相减得到天数
      */
     public static long getDaySub(String beginDateStr, String endDateStr) {
-        long day = 0;
-        SimpleDateFormat format = new SimpleDateFormat(
-                "yyyy-MM-dd");
+        long day;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date beginDate = null;
         Date endDate = null;
-
         try {
             beginDate = format.parse(beginDateStr);
             endDate = format.parse(endDateStr);
@@ -195,7 +204,6 @@ public class DateUtil {
             e.printStackTrace();
         }
         day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
-        // System.out.println("相隔的天数="+day);
 
         return day;
     }
@@ -206,7 +214,7 @@ public class DateUtil {
     public static String getAfterDayDate(String days) {
         int daysInt = Integer.parseInt(days);
 
-        Calendar canlendar = Calendar.getInstance(); // java.util包
+        Calendar canlendar = Calendar.getInstance();
         canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
         Date date = canlendar.getTime();
         return getTime(date);
@@ -218,7 +226,7 @@ public class DateUtil {
     public static String getBeforeDayDate(String days) {
         int daysInt = Integer.parseInt(days);
 
-        Calendar canlendar = Calendar.getInstance(); // java.util包
+        Calendar canlendar = Calendar.getInstance();
         canlendar.add(Calendar.DATE, -daysInt); // 日期减 如果不够减会将月变动
         Date date = canlendar.getTime();
         return getTime(date);
@@ -226,32 +234,27 @@ public class DateUtil {
 
     /**
      * 得到n分钟之前的日期
-     *
-     * @param min
-     * @return
      */
-    public static String getBeforeMinDate(Date nowDate,String min) {
+    public static String getBeforeMinDate(Date nowDate, String min) {
         int minInt = Integer.parseInt(min);
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(nowDate);
-        calendar.add(Calendar.MINUTE,-minInt);
-        Date dt=calendar.getTime();
+        calendar.add(Calendar.MINUTE, -minInt);
+        Date dt = calendar.getTime();
         return getTime(dt);
-
     }
 
     /**
      * 得到n分钟之前的日期
-     *
-     * @param min
-     * @return
      */
-    public static String getAfterMinDate(Date nowDate,String min) {
+    public static String getAfterMinDate(Date nowDate, String min) {
         int minInt = Integer.parseInt(min);
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(nowDate);
-        calendar.add(Calendar.MINUTE,minInt);
-        Date dt=calendar.getTime();
+        calendar.add(Calendar.MINUTE, minInt);
+        Date dt = calendar.getTime();
         return getTime(dt);
     }
 
@@ -261,14 +264,11 @@ public class DateUtil {
     public static String getAfterDayWeek(String days) {
         int daysInt = Integer.parseInt(days);
 
-        Calendar canlendar = Calendar.getInstance(); // java.util包
+        Calendar canlendar = Calendar.getInstance();
         canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
         Date date = canlendar.getTime();
-
         SimpleDateFormat sdf = new SimpleDateFormat("E");
-        String dateStr = sdf.format(date);
-
-        return dateStr;
+        return sdf.format(date);
     }
 
 }

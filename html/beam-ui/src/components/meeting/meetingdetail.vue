@@ -54,7 +54,7 @@
                 </el-pagination>
             </div>
         </div>
-        <v-info v-show="showInfo" :meetingId="meetingId" @back="back"></v-info>
+        <v-info v-show="showInfo" :meetingId="meetingId" @back="back" @info="info"></v-info>
     </div>
 </template>
 
@@ -132,11 +132,15 @@
                 this.initTab = "0";
             },
             // 查看
-            handleInfo(index,row,event){
+            handleInfo(index,row){
                 this.meetingId = row.id;
-                this.showMeeting = false;
-                this.showInfo = true;
-                this.items.push({title:event.target.innerText});
+            },
+            info(msg){
+                if(!msg){
+                    this.showMeeting = false;
+                    this.showInfo = true;
+                    this.items.push({title:"查看"});
+                }
             },
             // 切换标签页
             handleClick(tab){
