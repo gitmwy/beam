@@ -37,7 +37,7 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
         List<Area> areas = baseMapper.selectList(new QueryWrapper<Area>().eq("parent_id", 0L));
         areas = getAllChildrenArea(areas, null);
 
-        List<Area> noOptionAreas = baseMapper.selectList( new QueryWrapper<Area>().isNull("parent_id"));
+        List<Area> noOptionAreas = baseMapper.selectList(new QueryWrapper<Area>().isNull("parent_id"));
         noOptionAreas = getAllChildrenArea(noOptionAreas, null);
 
         areas.addAll(noOptionAreas);
@@ -49,18 +49,18 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
      */
     @Override
     public R saveUserArea(Area area) {
-        if(ToolUtil.isEmpty(area.getParentId())){
+        if (ToolUtil.isEmpty(area.getParentId())) {
             area.setParentId(0L);
         }
         List<Area> areas = baseMapper.selectList(new QueryWrapper<Area>().eq("id", area.getParentId()));
-        if(ToolUtil.isNotEmpty(areas)){
+        if (ToolUtil.isNotEmpty(areas)) {
             int poor = area.getLevel() - areas.get(0).getLevel();
-            if(poor > 1){
+            if (poor > 1) {
                 return R.fail("新建区域级别是" + area.getLevel() + "级，请选择" + (area.getLevel() - 1) + "级的关联区域");
             }
         }
         //无关联的区域
-        if(ToolUtil.isNotEmpty(area.getOptionStatus()) && 0 == area.getOptionStatus()){
+        if (ToolUtil.isNotEmpty(area.getOptionStatus()) && 0 == area.getOptionStatus()) {
             List<Area> noOptionAreas = baseMapper.selectList(new QueryWrapper<Area>().eq("parent_id", area.getId()));
             updateChildrenAreas(noOptionAreas, area.getOptionAreas());
         }
@@ -72,11 +72,11 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
     /**
      * 无关联的区域修改时，递归修改子节点区域
      */
-    private void updateChildrenAreas(List<Area> areas, String saveOptionAreas){
+    private void updateChildrenAreas(List<Area> areas, String saveOptionAreas) {
         QueryWrapper<Area> qw = new QueryWrapper<>();
-        for(Area area : areas){
-            area.setOptionAreas(saveOptionAreas + "/" + area.getOptionAreas());
-            area.setOptionStatus(1);
+        for (Area area : areas) {
+            area.setOptionAreas(saveOptionAreas + "/" + area.getOptionAreas())
+                    .setOptionStatus(1);
             this.updateById(area);
             updateChildrenAreas(baseMapper.selectList(qw.eq("parent_id", area.getId())), saveOptionAreas);
         }
@@ -87,7 +87,7 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
      */
     @Override
     public R getOptions(Integer level) {
-        List<Area> areas = baseMapper.getAreaByParentIdAndLevel( level, 0L);
+        List<Area> areas = baseMapper.getAreaByParentIdAndLevel(level, 0L);
         return R.ok(getAllChildrenArea(areas, level));
     }
 
@@ -101,11 +101,11 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
     }
 
     /**
-     *递归获取子区域
+     * 递归获取子区域
      */
-    private List<Area> getAllChildrenArea(List<Area> areas, Integer level){
+    private List<Area> getAllChildrenArea(List<Area> areas, Integer level) {
         List<Area> allAreaList = new ArrayList<>();
-        for(Area area : areas){
+        for (Area area : areas) {
             area.setChildren(getAllChildrenArea(baseMapper.getAreaByParentIdAndLevel(level, area.getId()), level));
             allAreaList.add(area);
         }
@@ -118,17 +118,17 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
     @Override
     public R deleteBatch(Long[] ids) {
         List<Detail> details = userDetailMapper.selectList(new QueryWrapper<Detail>().in("area_id", Arrays.asList(ids)));
-        if(ToolUtil.isNotEmpty(details)){
+        if (ToolUtil.isNotEmpty(details)) {
             return R.fail("当前删除区域，还有用户关联，请先取消其关联");
         }
         List<Area> areas = baseMapper.selectBatchIds(Arrays.asList(ids));
-        for(Area area : areas){
+        for (Area area : areas) {
             List<Area> childrenAreas = baseMapper.selectList(new QueryWrapper<Area>().eq("parent_id", area.getId()));
-            for(Area childrenArea : childrenAreas){
+            for (Area childrenArea : childrenAreas) {
                 editChildrenAreas(baseMapper.selectList(new QueryWrapper<Area>().eq("parent_id", childrenArea.getId())), childrenArea.getOptionAreas());
-                childrenArea.setParentId(null);
-                childrenArea.setOptionStatus(0);
-                childrenArea.setOptionAreas("无关联区域");
+                childrenArea.setParentId(null)
+                        .setOptionStatus(0)
+                        .setOptionAreas("无关联区域");
                 this.updateById(childrenArea);
             }
         }
@@ -139,11 +139,11 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
     /**
      * 删除父区域后，递归修改子节点的关联区域
      */
-    private void editChildrenAreas(List<Area> areas, String delOptionAreas){
+    private void editChildrenAreas(List<Area> areas, String delOptionAreas) {
         QueryWrapper<Area> qw = new QueryWrapper<>();
-        for(Area area : areas){
-            area.setOptionAreas(area.getOptionAreas().replace(delOptionAreas + "/",""));
-            area.setOptionStatus(0);
+        for (Area area : areas) {
+            area.setOptionAreas(area.getOptionAreas().replace(delOptionAreas + "/", ""))
+                    .setOptionStatus(0);
             this.updateById(area);
             editChildrenAreas(baseMapper.selectList(qw.eq("parent_id", area.getId())), delOptionAreas);
         }

@@ -40,30 +40,30 @@ public class MeetingCourseServiceImpl extends ServiceImpl<MeetingCourseMapper, C
     public R saveCourse(MultipartFile file, String fileType) {
         String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
         Map<String, String> maps = OSSFactory.buildFtp().ftpUpload(file, fileName, fileType);
-        if(null == maps){
+        if (null == maps) {
             return R.fail("上传课件失败");
         }
         Course course = new Course();
-        course.setCourseName(file.getOriginalFilename());
-        course.setFileName(maps.get("fileName"));
-        course.setFilePath(maps.get("filePath"));
-        course.setFileSize(maps.get("fileSize"));
-        course.setDownloadTimes(0);
-        if(!this.saveOrUpdate(course)){
+        course.setCourseName(file.getOriginalFilename())
+                .setFileName(maps.get("fileName"))
+                .setFilePath(maps.get("filePath"))
+                .setFileSize(maps.get("fileSize"))
+                .setDownloadTimes(0);
+        if (!this.saveOrUpdate(course)) {
             OSSFactory.buildFtp().ftpDelete(course.getFilePath(), course.getFileName());
         }
         return R.ok();
     }
 
     /**
-     *删除课件数据
+     * 删除课件数据
      */
     @Override
     public R deleteCourse(Long[] ids) {
         List<Course> cours = baseMapper.selectBatchIds(Arrays.asList(ids));
-        for(Course course : cours){
-            if(baseMapper.deleteById(course.getId()) == 1){
-                if(OSSFactory.buildFtp().ftpDelete(course.getFilePath(), course.getFileName())){
+        for (Course course : cours) {
+            if (baseMapper.deleteById(course.getId()) == 1) {
+                if (OSSFactory.buildFtp().ftpDelete(course.getFilePath(), course.getFileName())) {
                     return R.ok();
                 }
             }
@@ -72,7 +72,7 @@ public class MeetingCourseServiceImpl extends ServiceImpl<MeetingCourseMapper, C
     }
 
     /**
-     *下载课件
+     * 下载课件
      */
     @Override
     public void downloadFile(Long id, HttpServletResponse response) {

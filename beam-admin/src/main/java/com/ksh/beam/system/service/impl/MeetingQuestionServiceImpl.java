@@ -40,29 +40,29 @@ public class MeetingQuestionServiceImpl extends ServiceImpl<MeetingQuestionMappe
     public R saveQuestion(MultipartFile file, String fileType) {
         String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
         Map<String, String> maps = OSSFactory.buildFtp().ftpUpload(file, fileName, fileType);
-        if(null == maps){
+        if (null == maps) {
             return R.fail("上传问卷失败");
         }
         Question question = new Question();
-        question.setQuestionName(file.getOriginalFilename());
-        question.setFilePath(maps.get("filePath"));
-        question.setFileName(maps.get("fileName"));
-        question.setDownloadTimes(0);
-        if(!this.saveOrUpdate(question)){
+        question.setQuestionName(file.getOriginalFilename())
+                .setFilePath(maps.get("filePath"))
+                .setFileName(maps.get("fileName"))
+                .setDownloadTimes(0);
+        if (!this.saveOrUpdate(question)) {
             OSSFactory.buildFtp().ftpDelete(question.getFilePath(), question.getFileName());
         }
         return R.ok();
     }
 
     /**
-     *删除问卷
+     * 删除问卷
      */
     @Override
     public R deleteQuestion(Long[] ids) {
         List<Question> questions = baseMapper.selectBatchIds(Arrays.asList(ids));
-        for(Question question : questions){
-            if(baseMapper.deleteById(question.getId()) == 1){
-                if(OSSFactory.buildFtp().ftpDelete(question.getFilePath(), question.getFileName())){
+        for (Question question : questions) {
+            if (baseMapper.deleteById(question.getId()) == 1) {
+                if (OSSFactory.buildFtp().ftpDelete(question.getFilePath(), question.getFileName())) {
                     return R.ok();
                 }
             }
@@ -71,7 +71,7 @@ public class MeetingQuestionServiceImpl extends ServiceImpl<MeetingQuestionMappe
     }
 
     /**
-     *下载问卷
+     * 下载问卷
      */
     @Override
     public void downloadFile(Long id, HttpServletResponse response) {
