@@ -2,19 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <artifactId>beam-common</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>beam-common</name>
+    <description>核心包</description>
+
     <parent>
         <groupId>com.ksh</groupId>
         <artifactId>beam-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
-    <artifactId>beam-common</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
-
-    <name>beam-common</name>
-    <description>核心包</description>
 
     <dependencies>
 
@@ -65,13 +64,13 @@
             </exclusions>
         </dependency>
 
+        <!-- 定时任务-->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <!-- 该依赖必加，里面有sping对schedule的支持 -->
+        <!-- 该依赖必加，里面有spring对schedule的支持 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -96,7 +95,6 @@
             <artifactId>springfox-swagger2</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
@@ -126,6 +124,7 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--邮件-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-email</artifactId>
@@ -138,6 +137,7 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--excel-->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
