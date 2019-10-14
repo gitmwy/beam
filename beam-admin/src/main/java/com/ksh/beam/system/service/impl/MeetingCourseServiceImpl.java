@@ -44,11 +44,11 @@ public class MeetingCourseServiceImpl extends ServiceImpl<MeetingCourseMapper, C
             return R.fail("上传课件失败");
         }
         Course course = new Course();
-        course.setCourseName(file.getOriginalFilename())
-                .setFileName(maps.get("fileName"))
-                .setFilePath(maps.get("filePath"))
-                .setFileSize(maps.get("fileSize"))
-                .setDownloadTimes(0);
+        course.setCourseName(file.getOriginalFilename());
+        course.setFileName(maps.get("fileName"));
+        course.setFilePath(maps.get("filePath"));
+        course.setFileSize(maps.get("fileSize"));
+        course.setDownloadTimes(0);
         if (!this.saveOrUpdate(course)) {
             OSSFactory.buildFtp().ftpDelete(course.getFilePath(), course.getFileName());
         }

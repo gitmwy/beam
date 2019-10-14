@@ -75,8 +75,8 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
     private void updateChildrenAreas(List<Area> areas, String saveOptionAreas) {
         QueryWrapper<Area> qw = new QueryWrapper<>();
         for (Area area : areas) {
-            area.setOptionAreas(saveOptionAreas + "/" + area.getOptionAreas())
-                    .setOptionStatus(1);
+            area.setOptionAreas(saveOptionAreas + "/" + area.getOptionAreas());
+            area.setOptionStatus(1);
             this.updateById(area);
             updateChildrenAreas(baseMapper.selectList(qw.eq("parent_id", area.getId())), saveOptionAreas);
         }
@@ -126,9 +126,9 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
             List<Area> childrenAreas = baseMapper.selectList(new QueryWrapper<Area>().eq("parent_id", area.getId()));
             for (Area childrenArea : childrenAreas) {
                 editChildrenAreas(baseMapper.selectList(new QueryWrapper<Area>().eq("parent_id", childrenArea.getId())), childrenArea.getOptionAreas());
-                childrenArea.setParentId(null)
-                        .setOptionStatus(0)
-                        .setOptionAreas("无关联区域");
+                childrenArea.setParentId(null);
+                childrenArea.setOptionStatus(0);
+                childrenArea.setOptionAreas("无关联区域");
                 this.updateById(childrenArea);
             }
         }
@@ -142,8 +142,8 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
     private void editChildrenAreas(List<Area> areas, String delOptionAreas) {
         QueryWrapper<Area> qw = new QueryWrapper<>();
         for (Area area : areas) {
-            area.setOptionAreas(area.getOptionAreas().replace(delOptionAreas + "/", ""))
-                    .setOptionStatus(0);
+            area.setOptionAreas(area.getOptionAreas().replace(delOptionAreas + "/", ""));
+            area.setOptionStatus(0);
             this.updateById(area);
             editChildrenAreas(baseMapper.selectList(qw.eq("parent_id", area.getId())), delOptionAreas);
         }

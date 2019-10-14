@@ -44,10 +44,10 @@ public class MeetingQuestionServiceImpl extends ServiceImpl<MeetingQuestionMappe
             return R.fail("上传问卷失败");
         }
         Question question = new Question();
-        question.setQuestionName(file.getOriginalFilename())
-                .setFilePath(maps.get("filePath"))
-                .setFileName(maps.get("fileName"))
-                .setDownloadTimes(0);
+        question.setQuestionName(file.getOriginalFilename());
+        question.setFilePath(maps.get("filePath"));
+        question.setFileName(maps.get("fileName"));
+        question.setDownloadTimes(0);
         if (!this.saveOrUpdate(question)) {
             OSSFactory.buildFtp().ftpDelete(question.getFilePath(), question.getFileName());
         }

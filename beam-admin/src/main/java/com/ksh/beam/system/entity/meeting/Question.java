@@ -16,7 +16,6 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @TableName("meeting_question")
-@Accessors(chain = true)
 public class Question extends RestEntity<Long> {
 
     @TableId
