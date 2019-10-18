@@ -25,7 +25,7 @@ public class Scene extends AbstractEntity<Long> {
     private Long meetingId;
 
     @TableField(value = "file_type")
-    private Integer fileType;
+    private String fileType;
 
     @TableField(value = "upload_time")
     private Date uploadTime;

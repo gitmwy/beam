@@ -29,5 +29,5 @@ public interface IConstantFactory {
     User getUserByAccount(String account);
 
      //获取会议相关视频、照片
-    List<Scene> getScene(Long meetingId, Integer fileType);
+    List<Scene> getScene(Long meetingId, String fileType);
 }

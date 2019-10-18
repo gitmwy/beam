@@ -1,4 +1,4 @@
-package com.ksh.beam.interceptor;
+package com.ksh.beam.common.interceptor;
 
 import com.ksh.beam.common.annotion.IgnoreUTokenAuth;
 import com.ksh.beam.common.enumeration.RetEnum;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,7 +45,7 @@ public class APIInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
 
         String referer = request.getHeader("Referer");
-        if(!org.springframework.util.StringUtils.isEmpty(referer) && (referer.contains("swagger") || referer.contains("apiDoc"))){
+        if(!StringUtils.isEmpty(referer) && (referer.contains("swagger") || referer.contains("apiDoc"))){
             return true;
         }
         if(request.getServletPath().contains("swagger") || request.getServletPath().contains("api-docs") || request.getServletPath().contains("webjars") || request.getServletPath().contains("configuration")){

@@ -1,4 +1,4 @@
-package com.ksh.beam.sign.security;
+package com.ksh.beam.common.sign.security;
 
 /**
  * 对数据进行base64编码的方式

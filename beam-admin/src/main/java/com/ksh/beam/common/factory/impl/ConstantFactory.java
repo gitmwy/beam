@@ -7,10 +7,10 @@ import com.ksh.beam.common.utils.SpringContextHolder;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.DeptMapper;
 import com.ksh.beam.system.dao.DictMapper;
+import com.ksh.beam.system.dao.MeetingSceneMapper;
 import com.ksh.beam.system.dao.MenuMapper;
 import com.ksh.beam.system.dao.RoleMapper;
 import com.ksh.beam.system.dao.UserMapper;
-import com.ksh.beam.system.dao.mapping.MeetingSceneMapper;
 import com.ksh.beam.system.entity.meeting.Scene;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.Dict;
@@ -132,7 +132,7 @@ public class ConstantFactory implements IConstantFactory {
      *获取会议相关视频、照片
      */
     @Override
-    public List<Scene> getScene(Long meetingId, Integer fileType) {
+    public List<Scene> getScene(Long meetingId, String fileType) {
         QueryWrapper<Scene> qw = new QueryWrapper<>();
         qw.eq("meeting_id", meetingId);
         qw.eq("file_type", fileType);

@@ -1,4 +1,4 @@
-package com.ksh.beam.sign.converter;
+package com.ksh.beam.common.sign.converter;
 
 import lombok.Data;
 

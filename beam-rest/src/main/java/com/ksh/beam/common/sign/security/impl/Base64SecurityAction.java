@@ -1,6 +1,6 @@
-package com.ksh.beam.sign.security.impl;
+package com.ksh.beam.common.sign.security.impl;
 
-import com.ksh.beam.sign.security.DataSecurityAction;
+import com.ksh.beam.common.sign.security.DataSecurityAction;
 import org.springframework.util.Base64Utils;
 
 /**

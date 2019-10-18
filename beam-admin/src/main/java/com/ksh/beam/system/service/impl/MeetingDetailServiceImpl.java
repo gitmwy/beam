@@ -71,10 +71,10 @@ public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, D
         Map<String, Object> map = baseMapper.getInfo(meetingId);
         map.put("meetingType", ConstantFactory.me().getDictsByCode("meeting_type",map.get("meetingType")+""));
         map.put("status", ConstantFactory.me().getDictsByCode("meeting_status",map.get("status")+""));
-        map.put("meetingVideo", ConstantFactory.me().getScene(meetingId,1));
-        map.put("meetingImg", ConstantFactory.me().getScene(meetingId,2));
-        map.put("laborImg", ConstantFactory.me().getScene(meetingId,3));
-        map.put("invoiceImg", ConstantFactory.me().getScene(meetingId,4));
+        map.put("meetingVideo", ConstantFactory.me().getScene(meetingId,"01"));
+        map.put("meetingImg", ConstantFactory.me().getScene(meetingId,"02"));
+        map.put("laborImg", ConstantFactory.me().getScene(meetingId,"03"));
+        map.put("invoiceImg", ConstantFactory.me().getScene(meetingId,"04"));
         map.put("preCost", map.get("preCost")+"");
         map.put("laborCost", map.get("laborCost")+"");
         map.put("activityCost", map.get("activityCost")+"");

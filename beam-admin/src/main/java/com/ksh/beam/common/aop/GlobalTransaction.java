@@ -1,4 +1,4 @@
-package com.ksh.beam.aop;
+package com.ksh.beam.common.aop;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.Advisor;

@@ -1,4 +1,4 @@
-package com.ksh.beam.aop;
+package com.ksh.beam.common.aop;
 
 import com.google.gson.Gson;
 import com.ksh.beam.common.annotion.SysLog;

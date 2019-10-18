@@ -1,8 +1,12 @@
-package com.ksh.beam.aop;
+package com.ksh.beam.common.aop;
 
 import com.ksh.beam.common.base.BaseException;
 import com.ksh.beam.common.enumeration.RetEnum;
+import com.ksh.beam.common.log.LogManager;
+import com.ksh.beam.common.log.factory.LogTaskFactory;
+import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -49,11 +53,26 @@ public class GlobalException extends BaseException {
         return R.fail(e.getBindingResult().getFieldErrors().get(0).getDefaultMessage());
     }
 
-    @ExceptionHandler(Exception.class)
+    /**
+     * 拦截权限异常
+     */
+    @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public R exception(Exception e) {
+    public R exception(UnauthorizedException e) {
         e.printStackTrace();
-        return R.fail(RetEnum.SERVER_EXCEPTION.getRet(),e.getMessage());
+        return R.fail(RetEnum.FORBID.getRet(), e.getMessage());
+    }
+
+    /**
+     * 拦截未知的运行时异常
+     */
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public R notFount(RuntimeException e) {
+        e.printStackTrace();
+        LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroUtils.getUserId(), e.getMessage()));
+        return R.fail(RetEnum.SERVER_EXCEPTION.getRet(), RetEnum.SERVER_EXCEPTION.getMsg());
     }
 }

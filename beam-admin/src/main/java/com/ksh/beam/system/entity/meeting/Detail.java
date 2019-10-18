@@ -76,6 +76,9 @@ public class Detail extends AbstractEntity<Long> {
     @TableField(value="address")
     private String address;
 
+    @TableField(value="topic")
+    private String topic;
+
     @TableField(exist = false)
     private String hospitalName;
 
