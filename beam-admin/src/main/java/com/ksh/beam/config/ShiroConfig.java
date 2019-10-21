@@ -132,7 +132,7 @@ public class ShiroConfig {
 
         filterMap.put("/favicon.ico", "anon");
         //加入自定义过滤器
-        filterMap.put("/**", "kickout,user");
+        filterMap.put("/**", "user");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;
