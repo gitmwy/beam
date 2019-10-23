@@ -29,7 +29,7 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
     private RedisManager redisManager;
 
     private String getRedisRetryLimitKey(String account) {
-        return CacheConstant.SHIRO_RETRYLIMIT_KEY_PREFIX + account;
+        return CacheConstant.BEAM_RETRYLIMIT_KEY_PREFIX + account;
     }
 
     @Override

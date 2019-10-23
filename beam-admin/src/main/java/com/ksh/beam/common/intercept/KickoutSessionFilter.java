@@ -50,7 +50,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
     }
 
     private String getRedisKickoutKey(String account) {
-        return CacheConstant.SHIRO_KICKOUT_KEY_PREFIX + account;
+        return CacheConstant.BEAM_KICKOUT_KEY_PREFIX + account;
     }
 
     /**

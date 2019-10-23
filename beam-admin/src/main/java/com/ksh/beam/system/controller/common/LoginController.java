@@ -78,8 +78,8 @@ public class LoginController {
     @ResponseBody
     public Object logout() {
         ShiroUser shiroUser = ShiroUtils.getUserEntity();
-        redisManager.del(CacheConstant.SHIRO_KICKOUT_KEY_PREFIX + shiroUser.getAccount(),
-                CacheConstant.SHIRO_CACHE_KEY_PREFIX + CacheConstant.USER_MENU + shiroUser.getId());
+        redisManager.del(CacheConstant.BEAM_KICKOUT_KEY_PREFIX + shiroUser.getAccount(),
+                CacheConstant.BEAM_CACHE_KEY_PREFIX + CacheConstant.BEAM_USER_MENU + shiroUser.getId());
         LogManager.me().executeLog(LogTaskFactory.exitLog(shiroUser.getId(), getIp()));
         ShiroUtils.logout();
         return R.ok("退出成功");

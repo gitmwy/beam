@@ -129,7 +129,7 @@ public class RedisManager {
         });
     }
 
-    @CacheEvict(value = {CacheConstant.SHIRO_CACHE_KEY_PREFIX}, allEntries = true)
+    @CacheEvict(value = {CacheConstant.BEAM_CACHE_KEY_PREFIX}, allEntries = true)
     public void clearCache() {
 
     }

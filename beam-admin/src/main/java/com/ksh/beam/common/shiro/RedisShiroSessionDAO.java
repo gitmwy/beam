@@ -16,7 +16,7 @@ public class RedisShiroSessionDAO extends EnterpriseCacheSessionDAO {
     private RedisManager redisManager;
 
     private String getShiroSessionKey(String sessionId) {
-        return CacheConstant.SHIRO_SESSION_KEY_PREFIX + sessionId;
+        return CacheConstant.BEAM_SESSION_KEY_PREFIX + sessionId;
     }
 
     //创建session

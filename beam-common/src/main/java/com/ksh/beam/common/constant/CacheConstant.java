@@ -8,21 +8,21 @@ public interface CacheConstant {
     /**
      * 注解Cacheable的value
      */
-    String SHIRO_CACHE_KEY_PREFIX = "shiro:cache:";
+    String BEAM_CACHE_KEY_PREFIX = "beam:cache:";
     /**
      * 菜单信息
      */
-    String USER_MENU = "user_menu_";
+    String BEAM_USER_MENU = "beam_user_menu_";
     /**
      * shiro登陆次数限制
      */
-    String SHIRO_RETRYLIMIT_KEY_PREFIX = "shiro:retrylimit:";
+    String BEAM_RETRYLIMIT_KEY_PREFIX = "beam:retrylimit:";
     /**
      * 登陆人数访问控制拦截器
      */
-    String SHIRO_KICKOUT_KEY_PREFIX = "shiro:kickout:";
+    String BEAM_KICKOUT_KEY_PREFIX = "beam:kickout:";
     /**
      * shiro的session
      */
-    String SHIRO_SESSION_KEY_PREFIX = "shiro:session:";
+    String BEAM_SESSION_KEY_PREFIX = "beam:session:";
 }

@@ -82,7 +82,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    @Cacheable(value = CacheConstant.SHIRO_CACHE_KEY_PREFIX, key = "'" + CacheConstant.USER_MENU + "'+#userId")
+    @Cacheable(value = CacheConstant.BEAM_CACHE_KEY_PREFIX, key = "'" + CacheConstant.BEAM_USER_MENU + "'+#userId")
     public List<Map<String, Object>> getUserMenuList(Long userId) {
         //系统管理员，拥有最高权限
         if (userId == Constant.SUPER_ADMIN) {
