@@ -21,9 +21,19 @@ spring:
 spring:
   profiles: local
   datasource:
-    url: jdbc:mysql://localhost:3306/beam?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://127.0.0.1:3306/beam?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
     password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 8
+      min-idle: 1
+      max-active: 20
+      max-wait: 60000
+      validation-query: select 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
   redis:
     database: 0
     host: 127.0.0.1
