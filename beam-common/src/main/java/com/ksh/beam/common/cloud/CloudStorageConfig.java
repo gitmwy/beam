@@ -1,5 +1,6 @@
 package com.ksh.beam.common.cloud;
 
+import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
@@ -10,11 +11,12 @@ import java.io.Serializable;
 /**
  * 云存储配置信息
  */
+@Data
 public class CloudStorageConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    //类型 1：阿里云  2：腾讯云
-    @Range(min=1, max=2, message = "类型错误")
+    //类型 1：阿里云  2：腾讯云 3：七牛
+    @Range(min=1, max=3, message = "类型错误")
     private Integer type;
 
     //阿里云绑定的域名
@@ -58,115 +60,18 @@ public class CloudStorageConfig implements Serializable {
     @NotBlank(message="所属地区不能为空")
     private String qcloudRegion;
 
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public String getAliyunDomain() {
-        return aliyunDomain;
-    }
-
-    public void setAliyunDomain(String aliyunDomain) {
-        this.aliyunDomain = aliyunDomain;
-    }
-
-    public String getAliyunPrefix() {
-        return aliyunPrefix;
-    }
-
-    public void setAliyunPrefix(String aliyunPrefix) {
-        this.aliyunPrefix = aliyunPrefix;
-    }
-
-    public String getAliyunEndPoint() {
-        return aliyunEndPoint;
-    }
-
-    public void setAliyunEndPoint(String aliyunEndPoint) {
-        this.aliyunEndPoint = aliyunEndPoint;
-    }
-
-    public String getAliyunAccessKeyId() {
-        return aliyunAccessKeyId;
-    }
-
-    public void setAliyunAccessKeyId(String aliyunAccessKeyId) {
-        this.aliyunAccessKeyId = aliyunAccessKeyId;
-    }
-
-    public String getAliyunAccessKeySecret() {
-        return aliyunAccessKeySecret;
-    }
-
-    public void setAliyunAccessKeySecret(String aliyunAccessKeySecret) {
-        this.aliyunAccessKeySecret = aliyunAccessKeySecret;
-    }
-
-    public String getAliyunBucketName() {
-        return aliyunBucketName;
-    }
-
-    public void setAliyunBucketName(String aliyunBucketName) {
-        this.aliyunBucketName = aliyunBucketName;
-    }
-
-    public String getQcloudDomain() {
-        return qcloudDomain;
-    }
-
-    public void setQcloudDomain(String qcloudDomain) {
-        this.qcloudDomain = qcloudDomain;
-    }
-
-    public String getQcloudPrefix() {
-        return qcloudPrefix;
-    }
-
-    public void setQcloudPrefix(String qcloudPrefix) {
-        this.qcloudPrefix = qcloudPrefix;
-    }
-
-    public Integer getQcloudAppId() {
-        return qcloudAppId;
-    }
-
-    public void setQcloudAppId(Integer qcloudAppId) {
-        this.qcloudAppId = qcloudAppId;
-    }
-
-    public String getQcloudSecretId() {
-        return qcloudSecretId;
-    }
-
-    public void setQcloudSecretId(String qcloudSecretId) {
-        this.qcloudSecretId = qcloudSecretId;
-    }
-
-    public String getQcloudSecretKey() {
-        return qcloudSecretKey;
-    }
-
-    public void setQcloudSecretKey(String qcloudSecretKey) {
-        this.qcloudSecretKey = qcloudSecretKey;
-    }
-
-    public String getQcloudBucketName() {
-        return qcloudBucketName;
-    }
-
-    public void setQcloudBucketName(String qcloudBucketName) {
-        this.qcloudBucketName = qcloudBucketName;
-    }
-
-    public String getQcloudRegion() {
-        return qcloudRegion;
-    }
-
-    public void setQcloudRegion(String qcloudRegion) {
-        this.qcloudRegion = qcloudRegion;
-    }
+    //七牛绑定的域名
+    @NotBlank(message="七牛绑定的域名不能为空")
+    private String qiniuDomain;
+    //七牛路径前缀
+    private String qiniuPrefix;
+    //七牛ACCESS_KEY
+    @NotBlank(message="七牛AccessKey不能为空")
+    private String qiniuAccessKey;
+    //七牛SECRET_KEY
+    @NotBlank(message="七牛SecretKey不能为空")
+    private String qiniuSecretKey;
+    //七牛存储空间名
+    @NotBlank(message="七牛空间名不能为空")
+    private String qiniuBucketName;
 }

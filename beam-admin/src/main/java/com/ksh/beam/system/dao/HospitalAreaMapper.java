@@ -3,17 +3,17 @@ package com.ksh.beam.system.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ksh.beam.system.entity.user.Area;
+import com.ksh.beam.system.entity.hospital.Area;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * 用户区域管理
+ * 医院区域管理
  */
 @Repository
-public interface UserAreaMapper extends BaseMapper<Area> {
+public interface HospitalAreaMapper extends BaseMapper<Area> {
 
     IPage<Area> selectPageList(Page page, @Param("area") Area area);
 

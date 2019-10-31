@@ -3,6 +3,8 @@ package com.ksh.beam.system.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ksh.beam.common.constant.Constant;
+import com.ksh.beam.common.file.FileUtil;
 import com.ksh.beam.common.util.OSSFactory;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
@@ -15,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -37,20 +39,23 @@ public class MeetingCourseServiceImpl extends ServiceImpl<MeetingCourseMapper, C
      * 保存上传课件数据
      */
     @Override
-    public R saveCourse(MultipartFile file, String fileType) {
-        String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
-        Map<String, String> maps = OSSFactory.buildFtp().ftpUpload(file, fileName, fileType);
-        if (null == maps) {
-            return R.fail("上传课件失败");
-        }
-        Course course = new Course();
-        course.setCourseName(file.getOriginalFilename());
-        course.setFileName(maps.get("fileName"));
-        course.setFilePath(maps.get("filePath"));
-        course.setFileSize(maps.get("fileSize"));
-        course.setDownloadTimes(0);
-        if (!this.saveOrUpdate(course)) {
-            OSSFactory.buildFtp().ftpDelete(course.getFilePath(), course.getFileName());
+    public R saveCourse(MultipartFile file) {
+        String fileName = "";
+        try {
+            fileName = Constant.COURSE + UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
+            String url = Objects.requireNonNull(OSSFactory.buildCloud()).upload(file.getBytes(),  fileName);
+            Course course = new Course();
+            course.setName(file.getOriginalFilename());
+            course.setUrl(url);
+            course.setSize(FileUtil.getFileSize(file.getSize()));
+            course.setTimes(0);
+            if (!this.save(course)) {
+                Objects.requireNonNull(OSSFactory.buildCloud()).delete(fileName);
+            }
+        } catch (Exception e) {
+            Objects.requireNonNull(OSSFactory.buildCloud()).delete(fileName);
+            e.printStackTrace();
+            return R.fail("上传图片失败");
         }
         return R.ok();
     }
@@ -63,9 +68,8 @@ public class MeetingCourseServiceImpl extends ServiceImpl<MeetingCourseMapper, C
         List<Course> cours = baseMapper.selectBatchIds(Arrays.asList(ids));
         for (Course course : cours) {
             if (baseMapper.deleteById(course.getId()) == 1) {
-                if (OSSFactory.buildFtp().ftpDelete(course.getFilePath(), course.getFileName())) {
-                    return R.ok();
-                }
+                Objects.requireNonNull(OSSFactory.buildCloud()).delete(Constant.COURSE + course.getName());
+                return R.ok();
             }
         }
         return R.fail("删除文件失败");
@@ -77,8 +81,11 @@ public class MeetingCourseServiceImpl extends ServiceImpl<MeetingCourseMapper, C
     @Override
     public void downloadFile(Long id, HttpServletResponse response) {
         Course course = baseMapper.selectById(id);
-        OSSFactory.buildFtp().ftpDownload(course.getFilePath(), course.getFileName(), course.getCourseName(), response);
-        course.setDownloadTimes(course.getDownloadTimes() + 1);
+        FileUtil.urlDownload(
+                Objects.requireNonNull(OSSFactory.buildCloud()).getDownloadUrl(course.getUrl()),
+                course.getName(),
+                response);
+        course.setTimes(course.getTimes() + 1);
         this.updateById(course);
     }
 }

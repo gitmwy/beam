@@ -97,9 +97,9 @@
         created() {
             this.getAreaLevel();
             this.getTreeData();
-            this.canAdd = this.$tools.getPerms().indexOf("user:area:add")!==-1;
-            this.canEdit = this.$tools.getPerms().indexOf("user:area:edit")!==-1;
-            this.canDel = this.$tools.getPerms().indexOf("user:area:del")!==-1;
+            this.canAdd = this.$tools.getPerms().indexOf("hospital:area:add")!==-1;
+            this.canEdit = this.$tools.getPerms().indexOf("hospital:area:edit")!==-1;
+            this.canDel = this.$tools.getPerms().indexOf("hospital:area:del")!==-1;
         },
         methods: {
             getAreaLevel(){
@@ -114,7 +114,7 @@
             //获取表格数据
             getTreeData() {
                 this.loading = true;
-                this.$api.UserAreaApi.getTreeData(this.req).then((res) => {
+                this.$api.HospitalAreaApi.getTreeData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
                         this.treeData = res.data;
@@ -141,7 +141,7 @@
                 this.editVisible = true;
             },
             handleEdit(index, row){
-                this.$api.UserAreaApi.edit({areaId:row.id}).then((res) => {
+                this.$api.HospitalAreaApi.edit({areaId:row.id}).then((res) => {
                     if (res.error === false) {
                         this.area = res.data;
                         this.getOptionArea(this.area.level);
@@ -160,7 +160,7 @@
                 this.getOptionArea(id);
             },
             getOptionArea(id){
-                this.$api.UserAreaApi.options({level:id}).then((res) => {
+                this.$api.HospitalAreaApi.options({level:id}).then((res) => {
                     if (res.error === false) {
                         this.areaItems = this.$tools.getTreeData(res.data);
                     }
@@ -183,7 +183,7 @@
                 this.$refs.area.validate((valid) =>{
                     if(valid){
                         this.loading = true;
-                        this.$api.UserAreaApi.add(this.area).then((res) => {
+                        this.$api.HospitalAreaApi.add(this.area).then((res) => {
                             this.loading = false;
                             if (res.error === false) {
                                 this.editVisible = false;
@@ -206,7 +206,7 @@
                 this.$tools.messageBox('删除不可恢复，是否确定删除？', this.deleteRow);
             },
             deleteRow(){
-                this.$api.UserAreaApi.batchDelete(this.ids).then((res) => {
+                this.$api.HospitalAreaApi.batchDelete(this.ids).then((res) => {
                     if (res.error === false) {
                         this.$message.success(res.msg);
                         this.reload();

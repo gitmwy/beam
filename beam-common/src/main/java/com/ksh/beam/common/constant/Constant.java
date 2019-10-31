@@ -9,44 +9,32 @@ public class Constant {
 	public static final int SUPER_ADMIN = 1;
 
     /**
-	 * 菜单类型
-	 */
-    public enum MenuType {
-        //目录
-    	CATALOG(0),
-        //菜单
-        MENU(1),
-        //按钮
-        BUTTON(2);
-
-        private int value;
-
-        MenuType(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
-
-    /**
      * 云服务
      */
-    public enum CloudService {
-        //阿里云
-        ALIYUN(1),
-        //腾讯云
-        QCLOUD(2);
+    //阿里云
+	public static final int ALIYUN = 1;
+    //腾讯云
+    public static final int QCLOUD = 2;
+    //七牛
+    public static final int QINIU = 3;
 
-        private int value;
+    /**
+     * 云存储目录
+     */
+    //课件
+    public static final String COURSE = "course/";
+    //问卷
+    public static final String QUESTION = "question/";
 
-        CloudService(int value) {
-            this.value = value;
-        }
+    /**
+	 * 菜单类型
+	 */
+    //目录
+    public static final int CATALOG = 0;
+    //菜单
+    public static final int MENU = 1;
+    //按钮
+    public static final int BUTTON = 2;
 
-        public int getValue() {
-            return value;
-        }
-    }
+
 }

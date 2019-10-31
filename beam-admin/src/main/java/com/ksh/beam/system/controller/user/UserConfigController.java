@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 配置管理
  */
-@Api(value = "UserConfigController", tags = {"UserConfig接口"})
+@Api(value = "UserConfigController", tags = {"配置管理"})
 @RequestMapping("/user/config")
 @RestController
 public class UserConfigController {

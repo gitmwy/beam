@@ -7,6 +7,7 @@ import com.ksh.beam.common.base.entity.RestEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -23,12 +24,14 @@ public class Detail extends RestEntity<Long> {
     @TableField(value = "code")
     private String code;
 
+    @NotBlank(message = "医院名不能为空")
     @TableField(value = "name")
     private String name;
 
     @TableField(value = "address")
     private String address;
 
+    @NotBlank(message = "医院级别不能为空")
     @TableField(value = "level")
     private String level;
 
@@ -52,6 +55,12 @@ public class Detail extends RestEntity<Long> {
 
     @TableField(value = "managers_id")
     private String managersId;
+
+    @TableField(value = "area_id")
+    private String areaId;
+
+    @TableField(exist = false)
+    private String areaName;
 
     @Override
     protected Serializable pkVal() {

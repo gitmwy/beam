@@ -20,7 +20,7 @@ public interface MeetingCourseService extends IService<Course> {
     /**
      * 保存上传课件数据
      */
-    R saveCourse(MultipartFile file, String fileType);
+    R saveCourse(MultipartFile file);
 
     /**
      *删除课件数据

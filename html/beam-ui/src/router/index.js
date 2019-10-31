@@ -124,6 +124,11 @@ export default new Router({
                     component: resolve => require(['../components/hospital/hospitaldoctor.vue'], resolve),
                     meta: { title: '医生列表',permission: true, perms: "hospital:doctor:list"}
                 },
+                {
+                    path: '/hospitalarea',
+                    component: resolve => require(['../components/hospital/hospitalarea.vue'], resolve),
+                    meta: { title: '区域管理',permission: true, perms: "hospital:area:list"}
+                }
             ]
         },
         {

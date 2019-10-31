@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
-import com.ksh.beam.system.dao.UserAreaMapper;
-import com.ksh.beam.system.dao.UserDetailMapper;
-import com.ksh.beam.system.entity.user.Area;
-import com.ksh.beam.system.entity.user.Detail;
-import com.ksh.beam.system.service.UserAreaService;
+import com.ksh.beam.system.dao.HospitalAreaMapper;
+import com.ksh.beam.system.dao.HospitalDetailMapper;
+import com.ksh.beam.system.entity.hospital.Area;
+import com.ksh.beam.system.entity.hospital.Detail;
+import com.ksh.beam.system.service.HospitalAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 用户区域管理
+ * 医院区域管理
  */
 @Service
-public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> implements UserAreaService {
+public class HospitalAreaServiceImpl extends ServiceImpl<HospitalAreaMapper, Area> implements HospitalAreaService {
 
     @Autowired
-    private UserDetailMapper userDetailMapper;
+    private HospitalDetailMapper hospitalDetailMapper;
 
     /**
      * 树形区域
@@ -48,7 +48,7 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
      * 保存区域
      */
     @Override
-    public R saveUserArea(Area area) {
+    public R saveHospitalArea(Area area) {
         if (ToolUtil.isEmpty(area.getParentId())) {
             area.setParentId(0L);
         }
@@ -92,10 +92,10 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
     }
 
     /**
-     * 用户所属区域
+     * 医院所属区域
      */
     @Override
-    public R getUserArea() {
+    public R getHospitalArea() {
         List<Area> areas = baseMapper.getAreaByParentIdAndLevel(null, 0L);
         return R.ok(getAllChildrenArea(areas, null));
     }
@@ -117,7 +117,7 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
      */
     @Override
     public R deleteBatch(Long[] ids) {
-        List<Detail> details = userDetailMapper.selectList(new QueryWrapper<Detail>().in("area_id", Arrays.asList(ids)));
+        List<Detail> details = hospitalDetailMapper.selectList(new QueryWrapper<Detail>().in("area_id", Arrays.asList(ids)));
         if (ToolUtil.isNotEmpty(details)) {
             return R.fail("当前删除区域，还有用户关联，请先取消其关联");
         }

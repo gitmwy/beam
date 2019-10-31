@@ -1,17 +1,20 @@
 package com.ksh.beam.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.base.BaseWrapper;
 import com.ksh.beam.common.factory.impl.ConstantFactory;
-import com.ksh.beam.common.file.ExcelManager;
+import com.ksh.beam.common.file.ExcelUtil;
+import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.DateUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.UserDetailMapper;
 import com.ksh.beam.system.entity.user.Detail;
 import com.ksh.beam.system.service.UserDetailService;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -51,7 +54,8 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail>
         }
         //定义存放英文字段名和中文字段名的Map
         LinkedHashMap<String, String> fieldMap = new LinkedHashMap<>();
-        fieldMap.put("jobCode", "编号");
+        fieldMap.put("jobCode", "工号");
+        fieldMap.put("account", "账号名");
         fieldMap.put("nickname", "昵称");
         fieldMap.put("username", "姓名");
         fieldMap.put("phone", "手机号");
@@ -62,7 +66,7 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail>
         fieldMap.put("createTime", "创建时间");
         fieldMap.put("updateTime", "更新时间");
         //导出文件
-        ExcelManager.exportExcel(list, fieldMap, "用户数据", null, response);
+        ExcelUtil.exportExcel(list, fieldMap, "用户数据", null, response);
     }
 
     /**
@@ -80,11 +84,25 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail>
     @Override
     public R saveUserDetail(Detail detail) {
         if(ToolUtil.isNotEmpty(detail.getAreaLevel()) && ToolUtil.isNotEmpty(detail.getRoleLevel())
-            && !detail.getAreaLevel().equals(detail.getRoleLevel())){
+                && !detail.getAreaLevel().equals(detail.getRoleLevel())){
             return R.fail("区域等级和角色等级不一致");
         }
-        this.saveOrUpdate(detail);
-        return R.ok();
+        if (ToolUtil.isNotEmpty(detail.getId())) {
+            Detail oldUser = this.getById(detail.getId());
+            Assert.notNull(oldUser, "找不到该用户");
+            this.updateById(detail);
+            return R.ok();
+        }else{
+            Detail tempUser = this.getOne(new QueryWrapper<Detail>().eq("account", detail.getAccount()));
+            if(null != tempUser){
+                return R.fail("该账号名已存在");
+            }
+            String salt = RandomStringUtils.randomAlphanumeric(20);
+            detail.setSalt(salt);
+            detail.setPassword(ShiroUtils.sha256("123456", salt));
+            this.save(detail);
+            return R.ok();
+        }
     }
 
     @Override

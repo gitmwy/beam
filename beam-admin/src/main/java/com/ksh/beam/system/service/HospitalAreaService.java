@@ -2,23 +2,23 @@ package com.ksh.beam.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.user.Area;
+import com.ksh.beam.system.entity.hospital.Area;
 
 /**
- * 用户区域管理
+ * 医院区域管理
  */
-public interface UserAreaService extends IService<Area> {
+public interface HospitalAreaService extends IService<Area> {
 
     //树形区域
     R treeAreaList(Area area);
 
-    R saveUserArea(Area area);
+    R saveHospitalArea(Area area);
 
     //关联区域
     R getOptions(Integer level);
 
-    //用户所属区域
-    R getUserArea();
+    //医院所属区域
+    R getHospitalArea();
 
     R deleteBatch(Long[] ids);
 

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.base.BaseWrapper;
 import com.ksh.beam.common.factory.impl.ConstantFactory;
-import com.ksh.beam.common.file.ExcelManager;
+import com.ksh.beam.common.file.ExcelUtil;
 import com.ksh.beam.common.utils.DateUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.dao.MeetingDetailMapper;
@@ -60,7 +60,7 @@ public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, D
         fieldMap.put("source", "来源");
         fieldMap.put("status", "状态");
         //导出文件
-        ExcelManager.exportExcel(list, fieldMap, "会议数据", null, response);
+        ExcelUtil.exportExcel(list, fieldMap, "会议数据", null, response);
     }
 
     /**

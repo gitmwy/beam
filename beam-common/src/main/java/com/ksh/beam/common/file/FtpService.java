@@ -4,7 +4,6 @@ package com.ksh.beam.common.file;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,18 +14,6 @@ public abstract class FtpService {
      * ftp配置信息
      */
     FtpConfig config;
-
-    /**
-     * 初始化文件类型map
-     */
-    Map<String, String> fileTypeMaps(){
-        Map<String, String> maps = new HashMap<>();
-        maps.put("img", config.getImgPath());
-        maps.put("video", config.getVideoPath());
-        maps.put("course", config.getCoursePath());
-        maps.put("question", config.getQuestionPath());
-        return maps;
-    }
 
     /**
      * 上传文件附件到ftp服务器

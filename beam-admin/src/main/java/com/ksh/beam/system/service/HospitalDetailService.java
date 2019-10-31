@@ -16,4 +16,8 @@ public interface HospitalDetailService extends IService<Detail> {
 
     //导出
     void exportData(Detail hospital, HttpServletResponse response);
+
+    R deleteBatch(Long[] ids);
+
+    R saveHospitalDetail(Detail detail);
 }

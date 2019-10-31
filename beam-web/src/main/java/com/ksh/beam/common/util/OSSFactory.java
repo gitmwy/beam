@@ -3,12 +3,13 @@ package com.ksh.beam.common.util;
 import com.ksh.beam.common.cloud.AliyunCloudStorageService;
 import com.ksh.beam.common.cloud.CloudStorageConfig;
 import com.ksh.beam.common.cloud.CloudStorageService;
-import com.ksh.beam.common.constant.ConfigConstant;
 import com.ksh.beam.common.cloud.QcloudCloudStorageService;
+import com.ksh.beam.common.cloud.QiniuCloudStorageService;
+import com.ksh.beam.common.constant.ConfigConstant;
 import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.file.FtpConfig;
 import com.ksh.beam.common.file.FtpService;
-import com.ksh.beam.common.file.FtpManager;
+import com.ksh.beam.common.file.FtpUtil;
 import com.ksh.beam.common.service.ISysConfigService;
 import com.ksh.beam.common.utils.SpringContextHolder;
 
@@ -30,10 +31,12 @@ public final class OSSFactory {
         //获取云存储配置信息
         CloudStorageConfig config = sysConfigService.getConfigObject(ConfigConstant.CLOUD_STORAGE_CONFIG_KEY, CloudStorageConfig.class);
 
-        if (config.getType() == Constant.CloudService.ALIYUN.getValue()) {
+        if (config.getType() == Constant.ALIYUN) {
             return new AliyunCloudStorageService(config);
-        } else if (config.getType() == Constant.CloudService.QCLOUD.getValue()) {
+        } else if (config.getType() == Constant.QCLOUD) {
             return new QcloudCloudStorageService(config);
+        }else if (config.getType() == Constant.QINIU) {
+            return new QiniuCloudStorageService(config);
         }
         return null;
     }
@@ -44,6 +47,6 @@ public final class OSSFactory {
     public static FtpService buildFtp() {
         FtpConfig config = sysConfigService.getConfigObject(ConfigConstant.FTP_CONFIG_KEY, FtpConfig.class);
 
-        return new FtpManager(config);
+        return new FtpUtil(config);
     }
 }

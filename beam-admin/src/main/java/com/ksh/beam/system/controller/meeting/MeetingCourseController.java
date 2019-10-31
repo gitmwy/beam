@@ -42,10 +42,9 @@ public class MeetingCourseController {
     @ApiOperation(value = "课件上传")
     @PostMapping("/upload")
     @RequiresPermissions("meeting:course:upload")
-    public R upload(@RequestPart("file") MultipartFile file, @RequestParam(value = "fileType", required = false) String fileType) {
-        Assert.notNull(fileType, "fileType不能为空");
+    public R upload(@RequestPart("file") MultipartFile file) {
         Assert.notNull(file, "请选择要上传的资源");
-        return meetingCourseService.saveCourse(file, fileType);
+        return meetingCourseService.saveCourse(file);
     }
 
     @SysLog(value = "课件删除")

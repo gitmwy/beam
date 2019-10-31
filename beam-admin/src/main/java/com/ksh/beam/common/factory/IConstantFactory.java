@@ -1,6 +1,6 @@
 package com.ksh.beam.common.factory;
 
-import com.ksh.beam.system.entity.meeting.Scene;
+import com.ksh.beam.system.entity.meeting.Cloud;
 import com.ksh.beam.system.entity.sys.Dict;
 import com.ksh.beam.system.entity.sys.User;
 
@@ -29,5 +29,8 @@ public interface IConstantFactory {
     User getUserByAccount(String account);
 
      //获取会议相关视频、照片
-    List<Scene> getScene(Long meetingId, String fileType);
+    List<Cloud> getScene(Long meetingId, String fileType);
+
+    //获取编号
+    String getSequence(String type);
 }

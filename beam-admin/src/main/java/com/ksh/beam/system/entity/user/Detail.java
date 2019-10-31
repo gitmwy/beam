@@ -56,6 +56,16 @@ public class Detail extends RestEntity<Long> {
     @TableField(value = "bound_time")
     private Date boundTime;
 
+    @NotBlank(message = "账号名不能为空")
+    @TableField(value = "account")
+    private String account;
+
+    @TableField(value = "password")
+    private String password;
+
+    @TableField(value = "salt")
+    private String salt;
+
     @TableField(exist = false)
     private String areaName;
 

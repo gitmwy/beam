@@ -32,7 +32,8 @@
 
     <!--    分页-->
     <select id="selectPageList" resultType="com.ksh.beam.system.entity.hospital.Detail">
-        select h.* from hospital_detail h
+        select h.*, ha.area_name from hospital_detail h
+        left join hospital_area ha on h.area_id = ha.id
         <where>
             1 = 1 <include refid="Where_List"/>
         </where>

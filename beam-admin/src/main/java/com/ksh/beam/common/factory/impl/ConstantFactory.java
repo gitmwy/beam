@@ -10,8 +10,9 @@ import com.ksh.beam.system.dao.DictMapper;
 import com.ksh.beam.system.dao.MeetingSceneMapper;
 import com.ksh.beam.system.dao.MenuMapper;
 import com.ksh.beam.system.dao.RoleMapper;
+import com.ksh.beam.system.dao.SequenceMapper;
 import com.ksh.beam.system.dao.UserMapper;
-import com.ksh.beam.system.entity.meeting.Scene;
+import com.ksh.beam.system.entity.meeting.Cloud;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.entity.sys.Dict;
 import com.ksh.beam.system.entity.sys.Menu;
@@ -32,6 +33,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ConstantFactory implements IConstantFactory {
 
+    private SequenceMapper sequenceMapper = SpringContextHolder.getBean(SequenceMapper.class);
     private RoleMapper roleMapper = SpringContextHolder.getBean(RoleMapper.class);
     private DeptMapper deptMapper = SpringContextHolder.getBean(DeptMapper.class);
     private UserMapper userMapper = SpringContextHolder.getBean(UserMapper.class);
@@ -132,10 +134,21 @@ public class ConstantFactory implements IConstantFactory {
      *获取会议相关视频、照片
      */
     @Override
-    public List<Scene> getScene(Long meetingId, String fileType) {
-        QueryWrapper<Scene> qw = new QueryWrapper<>();
+    public List<Cloud> getScene(Long meetingId, String fileType) {
+        QueryWrapper<Cloud> qw = new QueryWrapper<>();
         qw.eq("meeting_id", meetingId);
         qw.eq("file_type", fileType);
         return meetingSceneMapper.selectList(qw);
+    }
+
+    /**
+     * 获取编号
+     */
+    @Override
+    public String getSequence(String type) {
+        if("H".equals(type)){
+            return sequenceMapper.getHospitalNum();
+        }
+        return "";
     }
 }

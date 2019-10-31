@@ -1,4 +1,4 @@
-package com.ksh.beam.system.entity.user;
+package com.ksh.beam.system.entity.hospital;
 
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -14,11 +14,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 用户区域表
+ * 医院区域表
  */
 @Data
 @NoArgsConstructor
-@TableName("user_area")
+@TableName("hospital_area")
 public class Area extends RestEntity<Long> {
 
     @TableId

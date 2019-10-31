@@ -89,4 +89,9 @@ public class QcloudCloudStorageService extends CloudStorageService {
             cosClient.shutdown();
         }
     }
+
+    @Override
+    public String getDownloadUrl(String url) {
+        return "";
+    }
 }

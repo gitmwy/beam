@@ -19,13 +19,13 @@ import java.util.Map;
 /**
  * ftp工具
  */
-public class FtpManager extends FtpService{
+public class FtpUtil extends FtpService{
 
-    private static final Logger logger = LoggerFactory.getLogger(FtpManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(FtpUtil.class);
 
     private FTPClient ftpClient = new FTPClient();
 
-    public FtpManager(FtpConfig config){
+    public FtpUtil(FtpConfig config){
         this.config = config;
     }
 
@@ -40,7 +40,7 @@ public class FtpManager extends FtpService{
             ftpClient.enterLocalPassiveMode();
             setFileType();
             //改变文件路径
-            String path = fileTypeMaps().get(fileType);
+            String path = "beam/";
             if (!existDirectory(path)) {
                 createDirectory(path);
             }
@@ -53,7 +53,7 @@ public class FtpManager extends FtpService{
                 maps = new HashMap<>();
                 maps.put("fileName", fileName);
                 maps.put("filePath", path);
-                maps.put("fileSize", FileManager.getFileSize(file.getSize()));
+                maps.put("fileSize", FileUtil.getFileSize(file.getSize()));
             }
         } catch (Exception e) {
             logger.error("上传文件失败", e);
@@ -77,7 +77,7 @@ public class FtpManager extends FtpService{
             ftpClient.changeWorkingDirectory(path);
             ftpFileName = new String(ftpFileName.getBytes("GBK"), StandardCharsets.ISO_8859_1);
             InputStream is = ftpClient.retrieveFileStream(ftpFileName);
-            FileManager.downloadFile(is, null, fileName, response);
+            FileUtil.downloadFile(is, null, fileName, response);
         } catch (Exception e) {
             logger.error("下载文件失败", e);
         } finally {

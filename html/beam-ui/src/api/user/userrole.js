@@ -9,8 +9,5 @@ export default {
     },
     batchDelete: ids =>{
         return http.post("/user/role/del", ids)
-    },
-    getRoleLevel: params =>{
-        return http.get("/user/config/role/level", params)
     }
 }

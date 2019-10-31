@@ -73,4 +73,9 @@ public abstract class CloudStorageService {
     public abstract String uploadSuffix(InputStream inputStream, String suffix);
 
     public abstract void delete(String path);
+
+    /**
+     *获取下载路径
+     */
+    public abstract String getDownloadUrl(String url);
 }

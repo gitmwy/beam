@@ -1,4 +1,4 @@
-package com.ksh.beam.common.base.entity;
+package com.ksh.beam.common.file;
 
 /**
  * Excel实体

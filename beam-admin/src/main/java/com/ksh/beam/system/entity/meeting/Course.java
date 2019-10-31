@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.ksh.beam.common.base.entity.RestEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -21,20 +20,17 @@ public class Course extends RestEntity<Long> {
     @TableId
     private Long id;
 
-    @TableField(value = "course_name")
-    private String courseName;
+    @TableField(value = "name")
+    private String name;
 
-    @TableField(value = "file_name")
-    private String fileName;
+    @TableField(value = "url")
+    private String url;
 
-    @TableField(value = "file_path")
-    private String filePath;
+    @TableField(value = "size")
+    private String size;
 
-    @TableField(value = "file_size")
-    private String fileSize;
-
-    @TableField(value = "download_times")
-    private Integer downloadTimes;
+    @TableField(value = "times")
+    private Integer times;
 
 
     @Override

@@ -65,4 +65,9 @@ public class AliyunCloudStorageService extends CloudStorageService {
             ossClient.shutdown();
         }
     }
+
+    @Override
+    public String getDownloadUrl(String url) {
+        return "";
+    }
 }

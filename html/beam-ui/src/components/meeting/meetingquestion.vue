@@ -27,8 +27,9 @@
             </div>
             <el-table :data="tableData" v-loading="loading" class="table">
                 <el-table-column label="#" align="center" prop="id" width="100"/>
-                <el-table-column label="问卷" align="left" prop="questionName"/>
-                <el-table-column label="次数" align="center" prop="downloadTimes" width="100"/>
+                <el-table-column label="问卷" align="left" prop="name"/>
+                <el-table-column label="大小" align="center" prop="size" width="100"/>
+                <el-table-column label="次数" align="center" prop="times" width="100"/>
                 <el-table-column label="操作" align="center" prop="operation" width="180">
                     <template slot-scope="scope">
                         <el-button v-if="canDownload" type="text" class="my-icon-download" @click="handleDownload(scope.$index, scope.row)">下载</el-button>

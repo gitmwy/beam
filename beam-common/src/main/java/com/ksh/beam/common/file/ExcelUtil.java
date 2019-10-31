@@ -1,6 +1,5 @@
 package com.ksh.beam.common.file;
 
-import com.ksh.beam.common.base.entity.ExcelEntity;
 import org.apache.poi.hpsf.DocumentSummaryInformation;
 import org.apache.poi.hpsf.SummaryInformation;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -18,7 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ExcelManager {
+public class ExcelUtil {
 
     /**
      * 导出Excel文件
@@ -134,6 +133,6 @@ public class ExcelManager {
             // 解决自动设置列宽中文失效的问题
             sheet.setColumnWidth(i, sheet.getColumnWidth(i) * 17 / 10);
         }
-        FileManager.downloadFile(null, workbook, fileName + ".xls", response);
+        FileUtil.downloadFile(null, workbook, fileName + ".xls", response);
     }
 }

@@ -15,7 +15,6 @@
                                 v-if="canUpload"
                                 style="float: right"
                                 action="/beam_admin/meeting/course/upload"
-                                :data="data"
                                 :show-file-list="false"
                                 :before-upload="beforeUpload"
                                 :on-success="handleSuccess"
@@ -27,9 +26,9 @@
             </div>
             <el-table :data="tableData" v-loading="loading" class="table">
                 <el-table-column label="#" align="center" prop="id" width="100"/>
-                <el-table-column label="课件" align="left" prop="courseName" width="700"/>
-                <el-table-column label="大小" align="center" prop="fileSize" width="100"/>
-                <el-table-column label="次数" align="center" prop="downloadTimes" width="100"/>
+                <el-table-column label="课件" align="left" prop="name" width="700"/>
+                <el-table-column label="大小" align="center" prop="size" width="100"/>
+                <el-table-column label="次数" align="center" prop="times" width="100"/>
                 <el-table-column label="操作" align="center" prop="operation">
                     <template slot-scope="scope">
                         <el-button v-if="canDownload" type="text" class="my-icon-download" @click="handleDownload(scope.$index, scope.row)">下载</el-button>
@@ -62,7 +61,6 @@
                 tableData: [],
                 req: {},
                 page: {pageNo: 1, pageSize: 10},
-                data: {fileType: "course"},
                 ids: [],
                 total: 0,
                 canLoading: false,

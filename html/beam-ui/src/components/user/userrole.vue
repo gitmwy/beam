@@ -96,7 +96,7 @@
         },
         methods: {
             getRoleLevel(){
-                this.$api.UserRoleApi.getRoleLevel().then((res) => {
+                this.$api.UserConfigApi.getRoleLevel().then((res) => {
                     if (res.error === false) {
                         this.levelList = res.data;
                     }

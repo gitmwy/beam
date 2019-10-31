@@ -23,15 +23,18 @@ import MeetingQuestionApi from './meeting/meetingquestion'
 import UserRoleApi from './user/userrole'
 import UserDetailApi from './user/userdetail'
 import UserAreaApi from './user/userarea'
+import UserConfigApi from './user/userconfig'
 //======================医生管理===============
 import HospitalDetailApi from './hospital/hospitaldetail'
 import HospitalDoctorApi from './hospital/hospitaldoctor'
+import HospitalAreaApi from './hospital/hospitalarea'
 
 // 默认全部导出
 export default {
     AccountApi,
     DashboardApi,
     LoginApi,
+    //系统管理
     SysDeptApi,
     SysDictApi,
     SysLoginLogApi,
@@ -40,14 +43,19 @@ export default {
     SysRoleApi,
     SysScheduleApi,
     SysUserApi,
+    //会议管理
     MeetingCourseApi,
     MeetingDetailApi,
     MeetingInfoApi,
     MeetingPlaceApi,
     MeetingQuestionApi,
+    //用户管理
     UserRoleApi,
     UserDetailApi,
     UserAreaApi,
+    UserConfigApi,
+    //医生管理
     HospitalDetailApi,
-    HospitalDoctorApi
+    HospitalDoctorApi,
+    HospitalAreaApi
 }

@@ -15,8 +15,8 @@ import java.util.Date;
  */
 @Data
 @NoArgsConstructor
-@TableName("meeting_scene")
-public class Scene extends AbstractEntity<Long> {
+@TableName("meeting_cloud")
+public class Cloud extends AbstractEntity<Long> {
 
     @TableId
     private Long id;
@@ -24,23 +24,23 @@ public class Scene extends AbstractEntity<Long> {
     @TableField(value = "meeting_id")
     private Long meetingId;
 
-    @TableField(value = "file_type")
-    private String fileType;
+    @TableField(value = "meeting_code")
+    private String meetingCode;
+
+    @TableField(value = "type")
+    private String type;
 
     @TableField(value = "upload_time")
     private Date uploadTime;
 
-    @TableField(value = "uploader_id")
-    private Long uploaderId;
+    @TableField(value = "user_id")
+    private Long userId;
 
-    @TableField(value = "file_path")
-    private String filePath;
+    @TableField(value = "url")
+    private String url;
 
-    @TableField(value = "file_name")
-    private String fileName;
-
-    @TableField(value = "real_name")
-    private String realName;
+    @TableField(value = "name")
+    private String name;
 
     @Override
     protected Serializable pkVal() {

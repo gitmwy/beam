@@ -3,6 +3,8 @@ package com.ksh.beam.system.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ksh.beam.common.constant.Constant;
+import com.ksh.beam.common.file.FileUtil;
 import com.ksh.beam.common.util.OSSFactory;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
@@ -15,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -38,18 +40,22 @@ public class MeetingQuestionServiceImpl extends ServiceImpl<MeetingQuestionMappe
      */
     @Override
     public R saveQuestion(MultipartFile file, String fileType) {
-        String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
-        Map<String, String> maps = OSSFactory.buildFtp().ftpUpload(file, fileName, fileType);
-        if (null == maps) {
-            return R.fail("上传问卷失败");
-        }
-        Question question = new Question();
-        question.setQuestionName(file.getOriginalFilename());
-        question.setFilePath(maps.get("filePath"));
-        question.setFileName(maps.get("fileName"));
-        question.setDownloadTimes(0);
-        if (!this.saveOrUpdate(question)) {
-            OSSFactory.buildFtp().ftpDelete(question.getFilePath(), question.getFileName());
+        String fileName = "";
+        try {
+            fileName = Constant.QUESTION + UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
+            String url = Objects.requireNonNull(OSSFactory.buildCloud()).upload(file.getBytes(),  fileName);
+            Question question = new Question();
+            question.setUrl(url);
+            question.setName(file.getOriginalFilename());
+            question.setSize(FileUtil.getFileSize(file.getSize()));
+            question.setTimes(0);
+            if (!this.save(question)) {
+                Objects.requireNonNull(OSSFactory.buildCloud()).delete(fileName);
+            }
+        } catch (Exception e) {
+            Objects.requireNonNull(OSSFactory.buildCloud()).delete(fileName);
+            e.printStackTrace();
+            return R.fail("上传图片失败");
         }
         return R.ok();
     }
@@ -62,9 +68,8 @@ public class MeetingQuestionServiceImpl extends ServiceImpl<MeetingQuestionMappe
         List<Question> questions = baseMapper.selectBatchIds(Arrays.asList(ids));
         for (Question question : questions) {
             if (baseMapper.deleteById(question.getId()) == 1) {
-                if (OSSFactory.buildFtp().ftpDelete(question.getFilePath(), question.getFileName())) {
-                    return R.ok();
-                }
+                Objects.requireNonNull(OSSFactory.buildCloud()).delete(Constant.QUESTION + question.getName());
+                return R.ok();
             }
         }
         return R.fail("删除文件失败");
@@ -76,8 +81,11 @@ public class MeetingQuestionServiceImpl extends ServiceImpl<MeetingQuestionMappe
     @Override
     public void downloadFile(Long id, HttpServletResponse response) {
         Question question = baseMapper.selectById(id);
-        OSSFactory.buildFtp().ftpDownload(question.getFilePath(), question.getFileName(), question.getQuestionName(), response);
-        question.setDownloadTimes(question.getDownloadTimes() + 1);
+        FileUtil.urlDownload(
+                Objects.requireNonNull(OSSFactory.buildCloud()).getDownloadUrl(question.getUrl()),
+                question.getName(),
+                response);
+        question.setTimes(question.getTimes() + 1);
         this.updateById(question);
     }
 }

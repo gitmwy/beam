@@ -111,7 +111,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     private List<Map<String, Object>> getMenuTreeList(List<Map<String, Object>> menuList, List<Long> menuIdList) {
         List<Map<String, Object>> subMenuList = new ArrayList<>();
         for (Map<String, Object> entity : menuList) {
-            if (Integer.parseInt(entity.get("type") + "") == Constant.MenuType.CATALOG.getValue()) {
+            if (Integer.parseInt(entity.get("type") + "") == Constant.CATALOG) {
                 entity.put("list", getMenuTreeList(queryListParentId(Long.parseLong(entity.get("id") + ""), menuIdList), menuIdList));
             }
             subMenuList.add(entity);

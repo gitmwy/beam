@@ -1,11 +1,11 @@
 package com.ksh.beam.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ksh.beam.system.entity.meeting.Scene;
+import com.ksh.beam.system.entity.meeting.Cloud;
 
 /**
  * 会议文件
  */
-public interface MeetingSceneService extends IService<Scene> {
+public interface MeetingSceneService extends IService<Cloud> {
 
 }

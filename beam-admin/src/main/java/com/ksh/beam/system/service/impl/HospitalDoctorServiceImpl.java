@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.base.BaseWrapper;
-import com.ksh.beam.common.file.ExcelManager;
+import com.ksh.beam.common.file.ExcelUtil;
 import com.ksh.beam.common.utils.DateUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.dao.HospitalDoctorMapper;
@@ -52,6 +52,6 @@ public class HospitalDoctorServiceImpl extends ServiceImpl<HospitalDoctorMapper,
         fieldMap.put("nickname", "微信昵称");
         fieldMap.put("regTime", "注册日期");
         //导出文件
-        ExcelManager.exportExcel(list, fieldMap, "医生数据", null, response);
+        ExcelUtil.exportExcel(list, fieldMap, "医生数据", null, response);
     }
 }

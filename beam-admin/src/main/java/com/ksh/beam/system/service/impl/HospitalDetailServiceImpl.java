@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.base.BaseWrapper;
-import com.ksh.beam.common.file.ExcelManager;
+import com.ksh.beam.common.factory.impl.ConstantFactory;
+import com.ksh.beam.common.file.ExcelUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.dao.HospitalDetailMapper;
 import com.ksh.beam.system.entity.hospital.Detail;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,26 @@ public class HospitalDetailServiceImpl extends ServiceImpl<HospitalDetailMapper,
         fieldMap.put("address", "医院地址");
         fieldMap.put("level", "医院级别");
         //导出文件
-        ExcelManager.exportExcel(list, fieldMap, "医院数据", null, response);
+        ExcelUtil.exportExcel(list, fieldMap, "医院数据", null, response);
+    }
+
+    /**
+     * 删除医院
+     */
+    @Override
+    public R deleteBatch(Long[] ids) {
+        this.removeByIds(Arrays.asList(ids));
+        return R.ok();
+    }
+
+    /**
+     * 保存医院
+     */
+    @Override
+    public R saveHospitalDetail(Detail detail) {
+        detail.setCode(ConstantFactory.me().getSequence("H"));
+        detail.setAddress(detail.getProvinceName() + detail.getCityName() + detail.getCountyName());
+        this.saveOrUpdate(detail);
+        return R.ok();
     }
 }

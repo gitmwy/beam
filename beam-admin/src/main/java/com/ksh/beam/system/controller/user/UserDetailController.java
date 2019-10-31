@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 /**
  * 用户列表
@@ -57,7 +58,7 @@ public class UserDetailController {
     @ApiOperation("用户新增")
     @PostMapping(value = "/add")
     @RequiresPermissions("user:detail:add")
-    public R add(@RequestBody Detail detail) {
+    public R add(@RequestBody @Valid Detail detail) {
         return userDetailService.saveUserDetail(detail);
     }
 

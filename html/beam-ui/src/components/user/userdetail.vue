@@ -26,12 +26,13 @@
                 <el-button  v-if="canExport" type="success" icon="el-icon-download" @click="exportData">导出数据</el-button>
             </div>
             <el-table :data="tableData" v-loading="loading" border class="table">
-                <el-table-column label="编号" align="center" prop="id"/>
+                <el-table-column label="#" align="center" prop="id"/>
                 <el-table-column label="头像" min-width="120" align="center">
                     <template v-if="scope.row.avatar" slot-scope="scope">
                         <img :src="scope.row.avatar" style="width: 100px;height: 100px"/>
                     </template>
                 </el-table-column>
+                <el-table-column label="账号名" align="center" prop="account"/>
                 <el-table-column label="昵称" align="center" prop="nickname"/>
                 <el-table-column label="姓名" align="center" prop="username"/>
                 <el-table-column label="手机号" align="center" prop="phone" width="120"/>
@@ -82,6 +83,9 @@
                 <el-form-item label="昵称">
                     <el-input v-model.trim="user.nickname" placeholder="请输入昵称"></el-input>
                 </el-form-item>
+                <el-form-item label="账号名" prop="account">
+                    <el-input v-model.trim="user.account" placeholder="请输入账号名"></el-input>
+                </el-form-item>
                 <el-form-item label="姓名" prop="username">
                     <el-input v-model.trim="user.username" placeholder="请输入姓名"></el-input>
                 </el-form-item>
@@ -112,6 +116,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
+                <el-tag type="danger">新增的用户密码默认:123456</el-tag>
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" :loading="loading" @click="saveEdit">确 定</el-button>
             </span>
@@ -142,6 +147,9 @@
                     emitPath: false
                 },
                 rules: {
+                    account: [
+                        {required: true, message: '请输入账号名', trigger: 'blur'},
+                    ],
                     username: [
                         {required: true, message: '请输入姓名', trigger: 'blur'},
                     ],

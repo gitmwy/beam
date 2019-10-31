@@ -13,9 +13,6 @@ export default {
     batchDelete: ids =>{
         return http.post("/user/area/del", ids)
     },
-    getAreaLevel: params =>{
-        return http.get("/user/config/area/level", params)
-    },
     edit: params =>{
         return http.get("/user/area/edit", params)
     },
