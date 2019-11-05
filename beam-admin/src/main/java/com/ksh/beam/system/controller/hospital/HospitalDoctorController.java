@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 医生列表
  */
-@Api(value = "HospitalDoctorController", tags = {"HospitalDoctor接口"})
+@Api(value = "HospitalDoctorController", tags = {"医生列表"})
 @RequestMapping("/hospital/doctor")
 @RestController
 public class HospitalDoctorController {

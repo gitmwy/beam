@@ -25,6 +25,10 @@ public class Constant {
     public static final String COURSE = "course/";
     //问卷
     public static final String QUESTION = "question/";
+    //后台系统用户头像
+    public static final String SYS_AVATAR = "sysAvatar/";
+    //小程序用户头像
+    public static final String USER_AVATAR = "userAvatar/";
 
     /**
 	 * 菜单类型
@@ -35,6 +39,4 @@ public class Constant {
     public static final int MENU = 1;
     //按钮
     public static final int BUTTON = 2;
-
-
 }

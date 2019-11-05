@@ -1,6 +1,5 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.ksh.beam.common.base.BaseController;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.Dept;
 import com.ksh.beam.system.service.DeptService;
@@ -21,10 +20,10 @@ import javax.validation.Valid;
 /**
  * 企业管理
  */
-@Api(value = "DeptController", tags = {"Dept接口"})
+@Api(value = "DeptController", tags = {"企业管理"})
 @RequestMapping("/sys/dept")
 @RestController
-public class DeptController extends BaseController {
+public class DeptController {
 
     @Autowired
     private DeptService deptService;

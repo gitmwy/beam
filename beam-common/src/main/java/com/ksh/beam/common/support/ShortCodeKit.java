@@ -1,4 +1,4 @@
-package com.ksh.beam.common.utils;
+package com.ksh.beam.common.support;
 
 import java.util.Arrays;
 import java.util.Stack;
@@ -13,9 +13,6 @@ public class ShortCodeKit {
 
     /**
      * Feistel密码结构：如果permutedId(a)=b，那么必然会有permutedId(b)=a
-     *
-     * @param id
-     * @return
      */
     public static Long permutedId(Long id) {
         Long l1 = (id >> 16) & 65535;
@@ -43,14 +40,11 @@ public class ShortCodeKit {
 
     /**
      * 将10进制转化为62进制
-     *
-     * @param number
      * @param length 转化成的62进制长度，不足length长度的话高位补0，否则不改变什么
-     * @return
      */
     public static String convertDecimalToBase62(long number, int length) {
-        Long rest = number;
-        Stack<Character> stack = new Stack<Character>();
+        long rest = number;
+        Stack<Character> stack = new Stack<>();
         StringBuilder result = new StringBuilder(0);
         while (rest != 0) {
             stack.add(charSet[new Long((rest - (rest / 62) * 62)).intValue()]);
@@ -69,9 +63,6 @@ public class ShortCodeKit {
 
     /**
      * 将62进制转换成10进制数
-     *
-     * @param str
-     * @return
      */
     public static String convertBase62ToDecimal(String str) {
         int multiple = 1;
@@ -87,9 +78,6 @@ public class ShortCodeKit {
 
     /**
      * 获取字符下标
-     *
-     * @param c
-     * @return
      */
     private static int getCharValue(Character c) {
         for (int i = 0; i < charSet.length; i++) {
@@ -103,27 +91,25 @@ public class ShortCodeKit {
 
     public static void main(String[] args) {
         //转码测试
-//        Long id = permutedId(10230L);
-//        Long oid = permutedId(id);
-//        System.out.println(id);
-//        System.out.println(oid);
-//        String s = convertDecimalToBase62(id, 8);
-//        System.out.println(s);
-//        String r = convertBase62ToDecimal(s);
-//        System.out.println(r);
-//        System.out.println(permutedId(Long.parseLong(r)));
+        Long id = permutedId(123456L);
+        Long oid = permutedId(id);
+        System.out.println(id);
+        System.out.println(oid);
+        String s = convertDecimalToBase62(id, 8);
+        System.out.println(s);
+        String r = convertBase62ToDecimal(s);
+        System.out.println(r);
+        System.out.println(permutedId(Long.parseLong(r)));
 
-        String a[] = new String[1000000];
+        String[] a = new String[10];
         //相邻转码无关性测试
-        for (int i = 0; i < 1000000; i++) {
-            Long newId = permutedId(Long.valueOf(i));
+        for (int i = 0; i < 10; i++) {
+            Long newId = permutedId((long) i);
             String code = ShortCodeKit.convertDecimalToBase62(newId, 8);
             a[i]=code;
-
         }
         Arrays.sort(a);
-        for (int i = 0; i < 1000000; i++) {
-
+        for (int i = 0; i < 10; i++) {
             if(i>0&&a[i].equals(a[i-1])){
                 System.out.println(a[i]+":"+a[i-1]);
             }

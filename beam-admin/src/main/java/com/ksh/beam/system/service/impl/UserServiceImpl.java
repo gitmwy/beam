@@ -8,7 +8,7 @@ import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.RedisManager;
+import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.DeptMapper;
 import com.ksh.beam.system.dao.UserMapper;
@@ -32,7 +32,7 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
-    private RedisManager redisManager;
+    private RedisUtil redisUtil;
 
     @Autowired
     private DeptMapper deptMapper;
@@ -69,7 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 //删除用户关联角色
                 baseMapper.delURByUserId(user.getId());
                 // 插入用户角色关系
-                redisManager.clearCache();
+                redisUtil.clearCache();
                 if (user.getRoleIds().size() <= 0) {
                     return R.ok();
                 } else {

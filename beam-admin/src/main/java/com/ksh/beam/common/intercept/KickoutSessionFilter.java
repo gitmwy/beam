@@ -4,7 +4,7 @@ import com.ksh.beam.common.constant.CacheConstant;
 import com.ksh.beam.common.enumeration.RetEnum;
 import com.ksh.beam.common.shiro.ShiroUser;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.RedisManager;
+import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.common.utils.RenderUtil;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.DefaultSessionKey;
@@ -36,7 +36,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
     private int maxSession = 1;
 
     @Autowired
-    private RedisManager redisManager;
+    private RedisUtil redisUtil;
 
     @Autowired
     private SessionManager sessionManager;
@@ -81,7 +81,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
         Serializable sessionId = session.getId();
 
         // 初始化用户的队列放到缓存里
-        Deque<Serializable> deque = (Deque<Serializable>) redisManager.get(getRedisKickoutKey(account));
+        Deque<Serializable> deque = (Deque<Serializable>) redisUtil.get(getRedisKickoutKey(account));
         if(deque == null || deque.size()==0) {
             deque = new LinkedList<>();
         }
@@ -111,7 +111,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
                 e.printStackTrace();
             }
         }
-        redisManager.set(getRedisKickoutKey(account), deque, RedisManager.DEFAULT_EXPIRE);
+        redisUtil.set(getRedisKickoutKey(account), deque, RedisUtil.DEFAULT_EXPIRE);
 
         //如果被踢出了，直接退出
         if (session.getAttribute("kickout") != null) {

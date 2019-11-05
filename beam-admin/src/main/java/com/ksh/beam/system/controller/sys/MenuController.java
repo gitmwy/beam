@@ -1,6 +1,5 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.ksh.beam.common.base.BaseController;
 import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
@@ -23,10 +22,10 @@ import javax.validation.Valid;
 /**
  * 菜单管理
  */
-@Api(value = "MenuController", tags = {"Menu接口"})
+@Api(value = "MenuController", tags = {"菜单管理"})
 @RestController
 @RequestMapping("/sys/menu")
-public class MenuController extends BaseController {
+public class MenuController {
 
     @Autowired
     private MenuService menuService;

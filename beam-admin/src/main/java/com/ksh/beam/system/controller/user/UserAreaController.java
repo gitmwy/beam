@@ -22,7 +22,7 @@ import javax.validation.Valid;
 /**
  * 用户区域管理
  */
-@Api(value = "UserAreaController", tags = {"UserArea接口"})
+@Api(value = "UserAreaController", tags = {"用户区域"})
 @RequestMapping("/user/area")
 @RestController
 public class UserAreaController {

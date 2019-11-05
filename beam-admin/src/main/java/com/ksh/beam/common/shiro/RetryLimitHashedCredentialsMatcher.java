@@ -2,7 +2,7 @@ package com.ksh.beam.common.shiro;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ksh.beam.common.constant.CacheConstant;
-import com.ksh.beam.common.utils.RedisManager;
+import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.system.dao.UserMapper;
 import com.ksh.beam.system.entity.sys.User;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -26,7 +26,7 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
     private UserMapper userMapper;
 
     @Autowired
-    private RedisManager redisManager;
+    private RedisUtil redisUtil;
 
     private String getRedisRetryLimitKey(String account) {
         return CacheConstant.BEAM_RETRYLIMIT_KEY_PREFIX + account;
@@ -38,7 +38,7 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
         //获取用户名
         String account = (String) token.getPrincipal();
         //获取用户登录次数
-        AtomicInteger retryCount = (AtomicInteger) redisManager.get(getRedisRetryLimitKey(account));
+        AtomicInteger retryCount = (AtomicInteger) redisUtil.get(getRedisRetryLimitKey(account));
         if (null == retryCount) {
             //如果用户没有登陆过,登陆次数加1 并放入缓存
             retryCount = new AtomicInteger(0);
@@ -57,9 +57,9 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
         boolean matches = super.doCredentialsMatch(token, info);
         if (matches) {
             //如果正确,从缓存中将用户登录计数 清除
-            redisManager.del(getRedisRetryLimitKey(account));
+            redisUtil.del(getRedisRetryLimitKey(account));
         }else {
-            redisManager.set(getRedisRetryLimitKey(account), retryCount, RedisManager.DEFAULT_EXPIRE);
+            redisUtil.set(getRedisRetryLimitKey(account), retryCount, RedisUtil.DEFAULT_EXPIRE);
         }
         return matches;
     }
@@ -72,7 +72,7 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
         if (user != null){
             user.setStatus(1);
             userMapper.updateById(user);
-            redisManager.del(getRedisRetryLimitKey(account));
+            redisUtil.del(getRedisRetryLimitKey(account));
         }
     }
 }

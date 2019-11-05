@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
+/**
+ * 国际化
+ */
 @Component
 public class LocaleMessage {
 

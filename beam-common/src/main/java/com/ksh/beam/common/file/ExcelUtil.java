@@ -27,22 +27,22 @@ public class ExcelUtil {
      * @param fileName    文件名
      * @param response    响应
      */
-    public static void exportExcel(List<Map<String, Object>> list, LinkedHashMap<String, String> fieldMap, String fileName, ExcelEntity excelEntity, HttpServletResponse response) {
+    public static void exportExcel(List<Map<String, Object>> list, LinkedHashMap<String, String> fieldMap, String fileName, Excel excel, HttpServletResponse response) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         //设置Excel文档属性
-        if (null != excelEntity) {
+        if (null != excel) {
             //Excel文档信息
             workbook.createInformationProperties();
             DocumentSummaryInformation info = workbook.getDocumentSummaryInformation();
-            info.setCompany(excelEntity.getCompany());
-            info.setManager(excelEntity.getManager());
-            info.setCategory(excelEntity.getCategory());
+            info.setCompany(excel.getCompany());
+            info.setManager(excel.getManager());
+            info.setCategory(excel.getCategory());
             //Excel摘要信息
             SummaryInformation si = workbook.getSummaryInformation();
-            si.setSubject(excelEntity.getSubject());
-            si.setTitle(excelEntity.getTitle());
-            si.setAuthor(excelEntity.getAuthor());
-            si.setComments(excelEntity.getComments());
+            si.setSubject(excel.getSubject());
+            si.setTitle(excel.getTitle());
+            si.setAuthor(excel.getAuthor());
+            si.setComments(excel.getComments());
         }
 
         // 定义存放英文字段名和中文字段名的数组

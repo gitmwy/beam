@@ -6,7 +6,7 @@ import com.ksh.beam.common.log.factory.LogTaskFactory;
 import com.ksh.beam.common.shiro.ShiroUser;
 import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.RedisManager;
+import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.config.properties.BeamAdminProperties;
 import com.ksh.beam.system.dto.LoginForm;
 import io.swagger.annotations.Api;
@@ -29,12 +29,12 @@ import javax.validation.Valid;
 
 import static com.ksh.beam.common.support.HttpKit.getIp;
 
-@Api(value = "LoginController", tags = {"Login接口"})
+@Api(value = "LoginController", tags = {"登陆"})
 @RestController
 public class LoginController {
 
     @Autowired
-    private RedisManager redisManager;
+    private RedisUtil redisUtil;
 
     @Autowired
     private BeamAdminProperties beamAdminProperties;
@@ -78,7 +78,7 @@ public class LoginController {
     @ResponseBody
     public Object logout() {
         ShiroUser shiroUser = ShiroUtils.getUserEntity();
-        redisManager.del(CacheConstant.BEAM_KICKOUT_KEY_PREFIX + shiroUser.getAccount(),
+        redisUtil.del(CacheConstant.BEAM_KICKOUT_KEY_PREFIX + shiroUser.getAccount(),
                 CacheConstant.BEAM_CACHE_KEY_PREFIX + CacheConstant.BEAM_USER_MENU + shiroUser.getId());
         LogManager.me().executeLog(LogTaskFactory.exitLog(shiroUser.getId(), getIp()));
         ShiroUtils.logout();
@@ -92,7 +92,7 @@ public class LoginController {
     @GetMapping(value = "/clearCache")
     @ResponseBody
     public R clearCache() {
-        redisManager.clearCache();
+        redisUtil.clearCache();
         return R.ok("清除成功");
     }
 }

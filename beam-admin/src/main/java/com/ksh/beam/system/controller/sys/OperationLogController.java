@@ -1,6 +1,5 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.ksh.beam.common.base.BaseController;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.OperationLog;
 import com.ksh.beam.system.service.OperationLogService;
@@ -16,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 操作日志
  */
-@Api(value = "OperationLogController", tags = {"OperationLog接口"})
+@Api(value = "OperationLogController", tags = {"操作日志"})
 @RequestMapping("/sys/operationlog")
 @RestController
-public class OperationLogController extends BaseController {
+public class OperationLogController {
 
     @Autowired
     private OperationLogService operationLogService;

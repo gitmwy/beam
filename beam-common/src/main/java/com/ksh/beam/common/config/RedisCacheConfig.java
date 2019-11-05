@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ksh.beam.common.constant.CacheConstant;
-import com.ksh.beam.common.utils.RedisManager;
+import com.ksh.beam.common.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -62,7 +62,7 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
     private Map<String, RedisCacheConfiguration> getRedisCacheConfigurationMap() {
         Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new HashMap<>();
         //SsoCache和BasicDataCache进行过期时间配置
-        redisCacheConfigurationMap.put(CacheConstant.BEAM_CACHE_KEY_PREFIX, this.getRedisCacheConfigurationWithTtl(RedisManager.DEFAULT_EXPIRE));
+        redisCacheConfigurationMap.put(CacheConstant.BEAM_CACHE_KEY_PREFIX, this.getRedisCacheConfigurationWithTtl(RedisUtil.DEFAULT_EXPIRE));
         return redisCacheConfigurationMap;
     }
 

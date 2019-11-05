@@ -22,7 +22,7 @@ import javax.validation.Valid;
 /**
  * 医院区域管理
  */
-@Api(value = "HospitalAreaController", tags = {"医院区域管理"})
+@Api(value = "HospitalAreaController", tags = {"医院区域"})
 @RequestMapping("/hospital/area")
 @RestController
 public class HospitalAreaController {

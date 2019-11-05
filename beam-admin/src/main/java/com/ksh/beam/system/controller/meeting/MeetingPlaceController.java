@@ -20,7 +20,7 @@ import javax.validation.Valid;
 /**
  * 会议场所
  */
-@Api(value = "MeetingPlaceController", tags = {"MeetingPlace接口"})
+@Api(value = "MeetingPlaceController", tags = {"会议场所"})
 @RestController
 @RequestMapping("/meeting/place")
 public class MeetingPlaceController {

@@ -6,7 +6,7 @@ import com.ksh.beam.common.enumeration.RetEnum;
 import com.ksh.beam.common.exception.BeamException;
 import com.ksh.beam.common.sign.security.DataSecurityAction;
 import com.ksh.beam.common.utils.MD5Util;
-import com.ksh.beam.common.utils.ReflectionUtils;
+import com.ksh.beam.common.utils.ReflectionUtil;
 import com.ksh.beam.config.properties.BeamRestProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +54,7 @@ public class WithSignMessageConverter extends FastJsonHttpMessageConverter {
 
         //如果是泛型则将其解析为  获得 Class 定义中声明的父类的泛型参数类型
         if(type.toString().equals("Entity")){
-            return JSON.parseObject(json, ReflectionUtils.getSuperGenericType(contextClass));
+            return JSON.parseObject(json, ReflectionUtil.getSuperGenericType(contextClass));
         } else {
             //校验签名后再转化成应该的对象
             return JSON.parseObject(json, type);

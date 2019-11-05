@@ -20,7 +20,7 @@ import javax.validation.Valid;
 /**
  * 角色
  */
-@Api(value = "RoleController", tags = {"Role接口"})
+@Api(value = "RoleController", tags = {"角色"})
 @RestController
 @RequestMapping("/sys/role")
 public class RoleController {

@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.RedisManager;
+import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.RoleMapper;
 import com.ksh.beam.system.entity.sys.Role;
@@ -24,7 +24,7 @@ import java.util.Arrays;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Autowired
-    private RedisManager redisManager;
+    private RedisUtil redisUtil;
 
     @Override
     public R selectPageList(Role role) {
@@ -71,7 +71,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         baseMapper.delMenuPermByRoleId(role.getId());
         //清除缓存
-        redisManager.clearCache();
+        redisUtil.clearCache();
 
         if(role.getMenuIds().length<=0){
             return R.ok();

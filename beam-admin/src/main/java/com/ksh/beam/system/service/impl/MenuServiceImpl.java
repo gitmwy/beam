@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ksh.beam.common.constant.CacheConstant;
 import com.ksh.beam.common.constant.Constant;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.RedisManager;
+import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.MenuMapper;
 import com.ksh.beam.system.dao.UserMapper;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
     @Autowired
-    private RedisManager redisManager;
+    private RedisUtil redisUtil;
 
     @Autowired
     private UserMapper userMapper;
@@ -144,7 +144,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         }
         if (this.saveOrUpdate(menu)) {
             //清除缓存
-            redisManager.clearCache();
+            redisUtil.clearCache();
             return R.ok();
         } else {
             return R.fail();
@@ -175,7 +175,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             }
         }
         //清除缓存
-        redisManager.clearCache();
+        redisUtil.clearCache();
         this.removeByIds(Arrays.asList(menuIds));
         return R.ok();
     }

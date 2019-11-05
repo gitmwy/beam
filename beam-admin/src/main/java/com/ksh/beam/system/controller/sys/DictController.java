@@ -1,6 +1,5 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.ksh.beam.common.base.BaseController;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.Dict;
 import com.ksh.beam.system.service.DictService;
@@ -20,10 +19,10 @@ import javax.validation.Valid;
 /**
  * 字典表
  */
-@Api(value = "DictController", tags = {"Dict接口"})
+@Api(value = "DictController", tags = {"字典"})
 @RequestMapping("/sys/dict")
 @RestController
-public class DictController extends BaseController {
+public class DictController {
 
     @Autowired
     private DictService dictService;

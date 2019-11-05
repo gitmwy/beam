@@ -51,9 +51,7 @@ public class ImgQrTool {
     public static void encode(String content, int width, int height, String srcImagePath, String destImagePath) {
         try {
             ImageIO.write(genBarcode(content, width, height, srcImagePath), "jpg", new File(destImagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (WriterException e) {
+        } catch (IOException | WriterException e) {
             e.printStackTrace();
         }
     }
@@ -71,26 +69,21 @@ public class ImgQrTool {
     public static void encode(String content, int width, int height, String srcImagePath, OutputStream outputStream) {
         try {
             ImageIO.write(genBarcode(content, width, height, srcImagePath), "jpg", outputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (WriterException e) {
+        } catch (IOException | WriterException e) {
             e.printStackTrace();
         }
     }
 
     /**
      * 创建不带参数的二维码
-     *
-     * @author fengshuonan
-     * @since 2.3.0
      */
     public static void createSimpleQr(String content, int width, int height, String destImagePath) {
 
         FileOutputStream output = null;
 
         try {
-            String format = "jpg";// 图像类型
-            Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
+            String format = "jpg";
+            Map<EncodeHintType, Object> hints = new HashMap<>();
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
             BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints);// 生成矩阵
             File dest = new File(destImagePath);
@@ -100,7 +93,9 @@ public class ImgQrTool {
             log.error("生成二维码出错！ImgQrTool：createSimpleQr()", e);
         } finally {
             try {
-                output.close();
+                if (output != null) {
+                    output.close();
+                }
             } catch (IOException e) {
                 log.error("生成二维码出错！ImgQrTool：createSimpleQr()", e);
             }
@@ -118,7 +113,7 @@ public class ImgQrTool {
             }
         }
 
-        Map<EncodeHintType, Object> hint = new HashMap<EncodeHintType, Object>();
+        Map<EncodeHintType, Object> hint = new HashMap<>();
         hint.put(EncodeHintType.CHARACTER_SET, "utf-8");
         hint.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         hint.put(EncodeHintType.MARGIN, 1);// 二维码整体白框
@@ -171,7 +166,6 @@ public class ImgQrTool {
      * @param height       目标高度
      * @param width        目标宽度
      * @param hasFiller    比例不对时是否需要补白：true为补白; false为不补白;
-     * @throws IOException
      */
     private static BufferedImage scale(String srcImageFile, int height, int width, boolean hasFiller)
             throws IOException {
@@ -275,7 +269,7 @@ public class ImgQrTool {
         return strs;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         for (int i = 1; i <= 1; i++) {
             QrImage para = new QrImage.Builder()
                     .setFileOutputPath("D:\\二维码\\delay\\" + i + ".jpg")

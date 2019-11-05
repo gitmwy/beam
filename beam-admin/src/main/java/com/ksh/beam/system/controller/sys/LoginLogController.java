@@ -1,6 +1,5 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.ksh.beam.common.base.BaseController;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.entity.sys.LoginLog;
 import com.ksh.beam.system.service.LoginLogService;
@@ -16,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 登陆日志
  */
-@Api(value = "LoginLogController", tags = {"LoginLog接口"})
+@Api(value = "LoginLogController", tags = {"登陆日志"})
 @RequestMapping("/sys/loginlog")
 @RestController
-public class LoginLogController extends BaseController {
+public class LoginLogController {
 
     @Autowired
     private LoginLogService loginLogService;

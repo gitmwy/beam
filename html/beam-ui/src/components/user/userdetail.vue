@@ -73,7 +73,7 @@
                     v-loading="loading"
                     label="头像"
                     class="avatar-uploader el-dialog--center"
-                    action="/beam_admin/file/upload"
+                    action="/beam_admin/user/detail/upload"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">

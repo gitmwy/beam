@@ -3,7 +3,7 @@ package com.ksh.beam.common.file;
 /**
  * Excel实体
  */
-public class ExcelEntity {
+public class Excel {
 
     //类别
      private String category;

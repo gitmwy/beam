@@ -1,7 +1,7 @@
 package com.ksh.beam.common.shiro;
 
 import com.ksh.beam.common.constant.CacheConstant;
-import com.ksh.beam.common.utils.RedisManager;
+import com.ksh.beam.common.utils.RedisUtil;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class RedisShiroSessionDAO extends EnterpriseCacheSessionDAO {
 
     @Autowired
-    private RedisManager redisManager;
+    private RedisUtil redisUtil;
 
     private String getShiroSessionKey(String sessionId) {
         return CacheConstant.BEAM_SESSION_KEY_PREFIX + sessionId;
@@ -24,7 +24,7 @@ public class RedisShiroSessionDAO extends EnterpriseCacheSessionDAO {
     protected Serializable doCreate(Session session) {
         Serializable sessionId = super.doCreate(session);
         final String key = getShiroSessionKey(sessionId.toString());
-        redisManager.set(key, session, RedisManager.DEFAULT_EXPIRE);
+        redisUtil.set(key, session, RedisUtil.DEFAULT_EXPIRE);
         return sessionId;
     }
 
@@ -34,7 +34,7 @@ public class RedisShiroSessionDAO extends EnterpriseCacheSessionDAO {
         Session session = super.doReadSession(sessionId);
         if (session == null) {
             final String key = getShiroSessionKey(sessionId.toString());
-            session = (Session) redisManager.get(key);
+            session = (Session) redisUtil.get(key);
         }
         return session;
     }
@@ -44,7 +44,7 @@ public class RedisShiroSessionDAO extends EnterpriseCacheSessionDAO {
     protected void doUpdate(Session session) {
         super.doUpdate(session);
         final String key = getShiroSessionKey(session.getId().toString());
-        redisManager.set(key,  session, RedisManager.DEFAULT_EXPIRE);
+        redisUtil.set(key,  session, RedisUtil.DEFAULT_EXPIRE);
     }
 
     //删除session
@@ -52,6 +52,6 @@ public class RedisShiroSessionDAO extends EnterpriseCacheSessionDAO {
     protected void doDelete(Session session) {
         super.doDelete(session);
         final String key = getShiroSessionKey(session.getId().toString());
-        redisManager.del(key);
+        redisUtil.del(key);
     }
 }

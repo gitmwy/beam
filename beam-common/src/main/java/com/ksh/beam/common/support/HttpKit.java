@@ -60,8 +60,7 @@ public class HttpKit {
      * 获取 HttpServletRequest
      */
     public static HttpServletResponse getResponse() {
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        return response;
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
     }
 
     /**
@@ -81,14 +80,14 @@ public class HttpKit {
      * @return URL 所代表远程资源的响应结果
      */
     public static String sendGet(String url, Map<String, String> param) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         BufferedReader in = null;
         try {
-            StringBuffer query = new StringBuffer();
+            StringBuilder query = new StringBuilder();
 
             for (Map.Entry<String, String> kv : param.entrySet()) {
-                query.append(URLEncoder.encode(kv.getKey(), "UTF-8") + "=");
-                query.append(URLEncoder.encode(kv.getValue(), "UTF-8") + "&");
+                query.append(URLEncoder.encode(kv.getKey(), "UTF-8")).append("=");
+                query.append(URLEncoder.encode(kv.getValue(), "UTF-8")).append("&");
             }
             if (query.lastIndexOf("&") > 0) {
                 query.deleteCharAt(query.length() - 1);
@@ -114,14 +113,12 @@ public class HttpKit {
             in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
             while ((line = in.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
         } catch (Exception e) {
             System.out.println("发送GET请求出现异常！" + e);
             e.printStackTrace();
-        }
-        // 使用finally块来关闭输入流
-        finally {
+        } finally {
             try {
                 if (in != null) {
                     in.close();
@@ -130,7 +127,7 @@ public class HttpKit {
                 e2.printStackTrace();
             }
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -143,14 +140,14 @@ public class HttpKit {
     public static String sendPost(String url, Map<String, String> param) {
         PrintWriter out = null;
         BufferedReader in = null;
-        String result = "";
+        StringBuilder result = new StringBuilder();
         try {
-            String para = "";
+            StringBuilder para = new StringBuilder();
             for (String key : param.keySet()) {
-                para += (key + "=" + param.get(key) + "&");
+                para.append(key).append("=").append(param.get(key)).append("&");
             }
             if (para.lastIndexOf("&") > 0) {
-                para = para.substring(0, para.length() - 1);
+                para = new StringBuilder(para.substring(0, para.length() - 1));
             }
             String urlNameString = url + "?" + para;
             URL realUrl = new URL(urlNameString);
@@ -173,14 +170,12 @@ public class HttpKit {
             in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
             while ((line = in.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
         } catch (Exception e) {
             System.out.println("发送 POST 请求出现异常！" + e);
             e.printStackTrace();
-        }
-        // 使用finally块来关闭输出流、输入流
-        finally {
+        } finally {
             try {
                 if (out != null) {
                     out.close();
@@ -192,7 +187,6 @@ public class HttpKit {
                 ex.printStackTrace();
             }
         }
-        return result;
+        return result.toString();
     }
-
 }

@@ -1,15 +1,19 @@
 package com.ksh.beam.common.utils;
 
-import com.ksh.beam.common.support.StrKit;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * 高频方法集合类
@@ -22,7 +26,7 @@ public class ToolUtil {
     public static String getRandomString(int length) {
         String base = "abcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int number = random.nextInt(base.length());
             sb.append(base.charAt(number));
@@ -42,40 +46,14 @@ public class ToolUtil {
     }
 
     /**
-     * 获取异常的具体信息
-     */
-    public static String getExceptionMsg(Exception e) {
-        StringWriter sw = new StringWriter();
-        try {
-            e.printStackTrace(new PrintWriter(sw));
-        } finally {
-            try {
-                sw.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-        return sw.getBuffer().toString().replaceAll("\\$", "T");
-    }
-
-    /**
-     * 比较两个对象是否相等。<br>
-     * 相同的条件有两个，满足其一即可：<br>
-     * 1. obj1 == null && obj2 == null; 2. obj1.equals(obj2)
-     *
-     * @param obj1 对象1
-     * @param obj2 对象2
-     * @return 是否相等
+     * 比较两个对象是否相等
      */
     public static boolean equals(Object obj1, Object obj2) {
-        return (obj1 != null) ? (obj1.equals(obj2)) : (obj2 == null);
+        return Objects.equals(obj1, obj2);
     }
 
     /**
      * 计算对象长度，如果是字符串调用其length函数，集合类调用其size函数，数组调用其length属性，其他可遍历对象遍历计算长度
-     *
-     * @param obj 被计算长度的对象
-     * @return 长度
      */
     public static int length(Object obj) {
         if (obj == null) {
@@ -110,7 +88,7 @@ public class ToolUtil {
             }
             return count;
         }
-        if (obj.getClass().isArray() == true) {
+        if (obj.getClass().isArray()) {
             return Array.getLength(obj);
         }
         return -1;
@@ -118,10 +96,6 @@ public class ToolUtil {
 
     /**
      * 对象中是否包含元素
-     *
-     * @param obj     对象
-     * @param element 元素
-     * @return 是否包含
      */
     public static boolean contains(Object obj, Object element) {
         if (obj == null) {
@@ -160,7 +134,7 @@ public class ToolUtil {
             }
             return false;
         }
-        if (obj.getClass().isArray() == true) {
+        if (obj.getClass().isArray()) {
             int len = Array.getLength(obj);
             for (int i = 0; i < len; i++) {
                 Object o = Array.get(obj, i);
@@ -188,33 +162,19 @@ public class ToolUtil {
             return true;
         }
         if (o instanceof String) {
-            if (o.toString().trim().equals("")) {
-                return true;
-            }
+            return o.toString().trim().equals("");
         } else if (o instanceof List) {
-            if (((List) o).size() == 0) {
-                return true;
-            }
+            return ((List) o).size() == 0;
         } else if (o instanceof Map) {
-            if (((Map) o).size() == 0) {
-                return true;
-            }
+            return ((Map) o).size() == 0;
         } else if (o instanceof Set) {
-            if (((Set) o).size() == 0) {
-                return true;
-            }
+            return ((Set) o).size() == 0;
         } else if (o instanceof Object[]) {
-            if (((Object[]) o).length == 0) {
-                return true;
-            }
+            return ((Object[]) o).length == 0;
         } else if (o instanceof int[]) {
-            if (((int[]) o).length == 0) {
-                return true;
-            }
+            return ((int[]) o).length == 0;
         } else if (o instanceof long[]) {
-            if (((long[]) o).length == 0) {
-                return true;
-            }
+            return ((long[]) o).length == 0;
         }
         return false;
     }
@@ -266,31 +226,9 @@ public class ToolUtil {
     }
 
     /**
-     * 格式化文本
-     *
-     * @param template 文本模板，被替换的部分用 {} 表示
-     * @param values   参数值
-     * @return 格式化后的文本
-     */
-    public static String format(String template, Object... values) {
-        return StrKit.format(template, values);
-    }
-
-    /**
-     * 格式化文本
-     *
-     * @param template 文本模板，被替换的部分用 {key} 表示
-     * @param map      参数值对
-     * @return 格式化后的文本
-     */
-    public static String format(String template, Map<?, ?> map) {
-        return StrKit.format(template, map);
-    }
-
-    /**
      * 强转->string,并去掉多余空格
      */
-    public static String toStr(Object str, String defaultValue) {
+    public static String toStrTrim(Object str, String defaultValue) {
         if (null == str) {
             return defaultValue;
         }
@@ -299,9 +237,6 @@ public class ToolUtil {
 
     /**
      * map的key转为小写
-     *
-     * @param map
-     * @return Map<String , Object>
      */
     public static Map<String, Object> caseInsensitiveMap(Map<String, Object> map) {
         Map<String, Object> tempMap = new HashMap<>();
@@ -313,11 +248,6 @@ public class ToolUtil {
 
     /**
      * 获取map中第一个数据值
-     *
-     * @param <K> Key的类型
-     * @param <V> Value的类型
-     * @param map 数据源
-     * @return 返回的值
      */
     public static <K, V> V getFirstOrNull(Map<K, V> map) {
         V obj = null;
@@ -332,8 +262,6 @@ public class ToolUtil {
 
     /**
      * 创建StringBuilder对象
-     *
-     * @return StringBuilder对象
      */
     public static StringBuilder builder(String... strs) {
         final StringBuilder sb = new StringBuilder();
@@ -345,8 +273,6 @@ public class ToolUtil {
 
     /**
      * 创建StringBuilder对象
-     *
-     * @return StringBuilder对象
      */
     public static void builder(StringBuilder sb, String... strs) {
         for (String str : strs) {
@@ -373,36 +299,11 @@ public class ToolUtil {
     }
 
     /**
-     * 当前时间
-     */
-    public static String currentTime() {
-        return DateUtil.getTime();
-    }
-
-    /**
-     * 首字母大写
-     */
-    public static String firstLetterToUpper(String val) {
-        return StrKit.firstCharToUpperCase(val);
-    }
-
-    /**
-     * 首字母小写
-     */
-    public static String firstLetterToLower(String val) {
-        return StrKit.firstCharToLowerCase(val);
-    }
-
-    /**
      * 判断是否是windows操作系统
      */
     public static Boolean isWinOs() {
         String os = System.getProperty("os.name");
-        if (os.toLowerCase().startsWith("win")) {
-            return true;
-        } else {
-            return false;
-        }
+        return os.toLowerCase().startsWith("win");
     }
 
     /**
@@ -429,7 +330,7 @@ public class ToolUtil {
      */
     public static String getWebRootPath(String filePath) {
         try {
-            String path = ToolUtil.class.getClassLoader().getResource("").toURI().getPath();
+            String path = Objects.requireNonNull(ToolUtil.class.getClassLoader().getResource("")).toURI().getPath();
             path = path.replace("/WEB-INF/classes/", "");
             path = path.replace("/target/classes/", "");
             path = path.replace("file:/", "");

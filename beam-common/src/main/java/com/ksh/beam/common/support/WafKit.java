@@ -68,28 +68,24 @@ public class WafKit {
 					| Pattern.MULTILINE | Pattern.DOTALL);
 			rlt = scriptPattern.matcher(rlt).replaceAll("");
 		}
-		
 		return rlt;
 	}
 
 	/**
-	 * @Description 过滤SQL注入内容
+	 *  过滤SQL注入内容
 	 * @param value
 	 * 				待处理内容
-	 * @return
 	 */
 	public static String stripSqlInjection(String value) {
 		return (null == value) ? null : value.replaceAll("('.+--)|(--)|(%7C)", ""); //value.replaceAll("('.+--)|(--)|(\\|)|(%7C)", "");
 	}
 
 	/**
-	 * @Description 过滤SQL/XSS注入内容
+	 *  过滤SQL/XSS注入内容
 	 * @param value
 	 * 				待处理内容
-	 * @return
 	 */
 	public static String stripSqlXSS(String value) {
 		return stripXSS(stripSqlInjection(value));
 	}
-
 }

@@ -3,7 +3,7 @@ package com.ksh.beam.common.interceptor;
 import com.ksh.beam.common.annotion.IgnoreUTokenAuth;
 import com.ksh.beam.common.enumeration.RetEnum;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.common.utils.RedisManager;
+import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.common.utils.RenderUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class APIInterceptor implements HandlerInterceptor {
     private Logger logger = LoggerFactory.getLogger(APIInterceptor.class);
 
     @Autowired
-    private RedisManager redisManager;
+    private RedisUtil redisUtil;
 
     /**
      * 执行完控制器后调用，即离开时
@@ -68,7 +68,7 @@ public class APIInterceptor implements HandlerInterceptor {
             RenderUtil.renderJson(response, R.fail(RetEnum.TOKEN_ERROR.getRet(), RetEnum.TOKEN_ERROR.getMsg()));
             return false;
         }
-        String uid = String.valueOf(redisManager.get(utoken));
+        String uid = String.valueOf(redisUtil.get(utoken));
         if (uid == null){
             RenderUtil.renderJson(response, R.fail(RetEnum.TOKEN_EXPIRED.getRet(), RetEnum.TOKEN_EXPIRED.getMsg()));
             return false;

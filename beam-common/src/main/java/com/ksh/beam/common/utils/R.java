@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * 封装返回结果类
  **/
-public class R<T> extends HashMap<String, Object> {
+public class R extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 	
 	public R(int code, String msg) {
@@ -29,14 +29,14 @@ public class R<T> extends HashMap<String, Object> {
 		return new R(code,msg);
 	}
 
-	public static <T> R<T> fail(T data) {
+	public static <T> R fail(T data) {
 		R r = new R(RetEnum.ERROR.getRet(),RetEnum.ERROR.getMsg());
 		r.put("data",data);
 		return r;
 	}
 
 
-	public static <T> R<T> fail(int code,String msg,T data) {
+	public static <T> R fail(int code, String msg, T data) {
 		R r = new R(code,msg);
 		r.put("data",data);
 		return r;
@@ -61,14 +61,14 @@ public class R<T> extends HashMap<String, Object> {
 		return r;
 	}
 
-	public static <T> R<T> ok(T data) {
+	public static <T> R ok(T data) {
 		R r = new R(RetEnum.SUCCESS.getRet(),RetEnum.SUCCESS.getMsg());
 		r.put("data",data);
 		r.put("error",false);
 		return r;
 	}
 
-	public static <T> R<T> ok(int code,String msg,T data) {
+	public static <T> R ok(int code, String msg, T data) {
 		R r = new R(code,msg);
 		r.put("data",data);
 		r.put("error",false);

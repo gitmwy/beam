@@ -3,7 +3,7 @@ package com.ksh.beam.system.entity.sys;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.ksh.beam.common.base.entity.DataEntity;
+import com.ksh.beam.common.base.entity.RestEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @TableName("sys_menu")
-public class Menu extends DataEntity<Long> {
+public class Menu extends RestEntity<Long> {
 
 	private static final long serialVersionUID = 1L;
 

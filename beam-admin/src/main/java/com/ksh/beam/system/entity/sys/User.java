@@ -3,7 +3,7 @@ package com.ksh.beam.system.entity.sys;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.ksh.beam.common.base.entity.DataEntity;
+import com.ksh.beam.common.base.entity.RestEntity;
 import com.ksh.beam.common.constant.RegexConstant;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @TableName("sys_user")
-public class User extends DataEntity<Long> {
+public class User extends RestEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	/**

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 会议列表
  */
-@Api(value = "MeetingDetailController", tags = {"MeetingDetail接口"})
+@Api(value = "MeetingDetailController", tags = {"会议列表"})
 @RequestMapping("/meeting/detail")
 @RestController
 public class MeetingDetailController {

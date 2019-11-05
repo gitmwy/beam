@@ -15,10 +15,45 @@ import java.util.Locale;
 public class DateUtil {
 
     /**
-     * 获取YYYY格式
+     * 获取当前时间YYYY格式
      */
     public static String getYear() {
         return formatDate(new Date(), "yyyy");
+    }
+
+    /**
+     * 获取当前时间YYYY-MM-DD格式
+     */
+    public static String getDay() {
+        return formatDate(new Date(), "yyyy-MM-dd");
+    }
+
+    /**
+     * 获取当前时间YYYYMMDD格式
+     */
+    public static String getDays() {
+        return formatDate(new Date(), "yyyyMMdd");
+    }
+
+    /**
+     * 获取当前时间YYYY-MM-DD HH:mm:ss格式
+     */
+    public static String getTime() {
+        return formatDate(new Date(), "yyyy-MM-dd HH:mm:ss");
+    }
+
+    /**
+     * 获取当前时间YYYY-MM-DD HH:mm:ss.SSS格式
+     */
+    public static String getMsTime() {
+        return formatDate(new Date(), "yyyy-MM-dd HH:mm:ss.SSS");
+    }
+
+    /**
+     * 获取当前时间YYYYMMDDHHmmss格式
+     */
+    public static String getAllTime() {
+        return formatDate(new Date(), "yyyyMMddHHmmss");
     }
 
     /**
@@ -31,13 +66,6 @@ public class DateUtil {
     /**
      * 获取YYYY-MM-DD格式
      */
-    public static String getDay() {
-        return formatDate(new Date(), "yyyy-MM-dd");
-    }
-
-    /**
-     * 获取YYYY-MM-DD格式
-     */
     public static String getDay(Date date) {
         return formatDate(date, "yyyy-MM-dd");
     }
@@ -45,36 +73,8 @@ public class DateUtil {
     /**
      * 获取YYYYMMDD格式
      */
-    public static String getDays() {
-        return formatDate(new Date(), "yyyyMMdd");
-    }
-
-    /**
-     * 获取YYYYMMDD格式
-     */
     public static String getDays(Date date) {
         return formatDate(date, "yyyyMMdd");
-    }
-
-    /**
-     * 获取YYYY-MM-DD HH:mm:ss格式
-     */
-    public static String getTime() {
-        return formatDate(new Date(), "yyyy-MM-dd HH:mm:ss");
-    }
-
-    /**
-     * 获取YYYY-MM-DD HH:mm:ss.SSS格式
-     */
-    public static String getMsTime() {
-        return formatDate(new Date(), "yyyy-MM-dd HH:mm:ss.SSS");
-    }
-
-    /**
-     * 获取YYYYMMDDHHmmss格式
-     */
-    public static String getAllTime() {
-        return formatDate(new Date(), "yyyyMMddHHmmss");
     }
 
     /**
@@ -190,21 +190,18 @@ public class DateUtil {
     }
 
     /**
-     * <li>功能描述：时间相减得到天数
+     * 时间相减得到天数
      */
-    public static long getDaySub(String beginDateStr, String endDateStr) {
-        long day;
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date beginDate = null;
-        Date endDate = null;
+    public static Long getDaySub(String beginDateStr, String endDateStr) {
+        Long day = null;
         try {
-            beginDate = format.parse(beginDateStr);
-            endDate = format.parse(endDateStr);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date beginDate = format.parse(beginDateStr);
+            Date endDate = format.parse(endDateStr);
+            day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
-
         return day;
     }
 
@@ -213,10 +210,9 @@ public class DateUtil {
      */
     public static String getAfterDayDate(String days) {
         int daysInt = Integer.parseInt(days);
-
-        Calendar canlendar = Calendar.getInstance();
-        canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
-        Date date = canlendar.getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
+        Date date = calendar.getTime();
         return getTime(date);
     }
 
@@ -225,10 +221,9 @@ public class DateUtil {
      */
     public static String getBeforeDayDate(String days) {
         int daysInt = Integer.parseInt(days);
-
-        Calendar canlendar = Calendar.getInstance();
-        canlendar.add(Calendar.DATE, -daysInt); // 日期减 如果不够减会将月变动
-        Date date = canlendar.getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -daysInt); // 日期减 如果不够减会将月变动
+        Date date = calendar.getTime();
         return getTime(date);
     }
 
@@ -237,7 +232,6 @@ public class DateUtil {
      */
     public static String getBeforeMinDate(Date nowDate, String min) {
         int minInt = Integer.parseInt(min);
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(nowDate);
         calendar.add(Calendar.MINUTE, -minInt);
@@ -250,7 +244,6 @@ public class DateUtil {
      */
     public static String getAfterMinDate(Date nowDate, String min) {
         int minInt = Integer.parseInt(min);
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(nowDate);
         calendar.add(Calendar.MINUTE, minInt);
@@ -263,12 +256,10 @@ public class DateUtil {
      */
     public static String getAfterDayWeek(String days) {
         int daysInt = Integer.parseInt(days);
-
-        Calendar canlendar = Calendar.getInstance();
-        canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
-        Date date = canlendar.getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
+        Date date = calendar.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("E");
         return sdf.format(date);
     }
-
 }

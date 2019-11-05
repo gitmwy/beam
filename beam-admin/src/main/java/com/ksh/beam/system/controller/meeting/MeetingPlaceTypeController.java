@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 会议场所类型
  */
-@Api(value = "MeetingPlaceTypeController", tags = {"MeetingPlaceType接口"})
+@Api(value = "MeetingPlaceTypeController", tags = {"会议场所类型"})
 @RestController
 @RequestMapping("/meeting/placeType")
 public class MeetingPlaceTypeController {

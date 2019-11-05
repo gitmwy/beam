@@ -1,7 +1,9 @@
 package com.ksh.beam.system.controller.sys;
 
-import com.ksh.beam.common.base.BaseController;
+import com.ksh.beam.common.constant.Constant;
+import com.ksh.beam.common.util.OSSFactory;
 import com.ksh.beam.common.utils.R;
+import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dto.ChangePassowdForm;
 import com.ksh.beam.system.entity.sys.User;
 import com.ksh.beam.system.service.UserService;
@@ -16,17 +18,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
- * 管理员表
+ * 系统管理用户
  */
-@Api(value = "UserController", tags = {"User接口"})
+@Api(value = "UserController", tags = {"系统管理用户"})
 @RequestMapping("/sys/user")
 @RestController
-public class UserController extends BaseController {
+public class UserController {
 
     @Autowired
     private UserService userService;
@@ -84,5 +90,19 @@ public class UserController extends BaseController {
             return R.fail("两次密码不一致");
         }
         return userService.changePassword(changePassowdForm);
+    }
+
+    @ApiOperation(value = "后台系统用户头像上传")
+    @PostMapping("/upload")
+    public Object upload(@RequestPart("file") MultipartFile file) {
+        Assert.notNull(file, "请选择要上传的文件");
+        String fileName = Constant.SYS_AVATAR + UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
+        try {
+            String url = Objects.requireNonNull(OSSFactory.buildCloud()).upload(file.getBytes(), fileName);
+            return R.ok(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.fail("上传图片失败");
+        }
     }
 }
