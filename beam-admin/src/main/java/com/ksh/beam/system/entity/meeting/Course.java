@@ -32,7 +32,6 @@ public class Course extends RestEntity<Long> {
     @TableField(value = "times")
     private Integer times;
 
-
     @Override
     protected Serializable pkVal() {
         return this.id;

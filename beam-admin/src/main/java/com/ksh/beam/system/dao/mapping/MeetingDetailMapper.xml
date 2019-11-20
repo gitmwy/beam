@@ -6,13 +6,12 @@
     <resultMap type="java.util.HashMap" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="code" column="code"/>
-        <result property="meetingTime" column="meeting_time"/>
+        <result property="meetingTime" column="meeting_time" jdbcType="DATE"/>
         <result property="meetingType" column="meeting_type"/>
         <result property="hospitalId" column="hospital_id"/>
-        <result property="courseId" column="course_id"/>
-        <result property="questionId" column="question_id"/>
         <result property="speakersId" column="speakers_id"/>
         <result property="applicantId" column="applicant_id"/>
+        <result property="questionId" column="question_id"/>
         <result property="auditorId" column="auditor_id"/>
         <result property="preCost" column="pre_cost"/>
         <result property="laborCost" column="labor_cost"/>
@@ -20,23 +19,39 @@
         <result property="prePersons" column="pre_persons"/>
         <result property="realPersons" column="real_persons"/>
         <result property="applicantTime" column="applicant_time"/>
+        <result property="applicantName" column="applicant_name"/>
         <result property="address" column="address"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
         <result property="source" column="source"/>
-        <result property="status" column="status"/>
+        <result property="meetingStatus" column="meeting_status"/>
+        <result property="topicId" column="topic_id"/>
+        <result property="auditorTime" column="auditor_time"/>
+        <result property="auditorText" column="auditor_text"/>
+        <result property="auditorChannel" column="auditor_channel"/>
+        <result property="conclusion" column="conclusion"/>
+        <result property="delFlag" column="del_flag"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
 
-        <result property="courseName" column="course_name"/>
-        <result property="questionName" column="question_name"/>
+        <result property="hospitalName" column="hospital_name"/>
+        <result property="hospitalCode" column="hospital_code"/>
+        <result property="hospitalLevel" column="hospital_level"/>
+        <result property="hospitalArea" column="hospital_area"/>
+        <result property="phone" column="phone"/>
+        <result property="hospitalAddress" column="hospital_address"/>
+        <result property="speakersName" column="speakers_name"/>
+        <result property="auditorName" column="auditor_name"/>
+        <result property="topicName" column="topic_name"/>
     </resultMap>
 
     <!--    查询条件-->
     <sql id="Where_List">
-        <if test="meeting.code != null">
-            and m.code = #{meeting.code}
+        <if test="meeting.code != null and meeting.code != ''">
+            and m.code like concat("%",#{meeting.code},"%")
         </if>
         <if test="meeting.hospitalName != null and meeting.hospitalName != ''">
-            and m.hospitalName like concat("%",#{meeting.hospitalName},"%")
+            and m.hospital_name like concat("%",#{meeting.hospitalName},"%")
         </if>
         <if test="meeting.startTime != null and meeting.startTime != ''">
             <![CDATA[ and date_format(m.meeting_time,'%Y-%m-%d') >= date_format(#{meeting.startTime},'%Y-%m-%d') ]]>
@@ -44,38 +59,42 @@
         <if test="meeting.endTime != null and meeting.endTime != ''">
             <![CDATA[ and date_format(m.meeting_time,'%Y-%m-%d') <= date_format(#{meeting.endTime},'%Y-%m-%d') ]]>
         </if>
-        <if test="meeting.status != null and meeting.status != ''">
-            and m.status = #{meeting.status}
+        <if test="meeting.meetingStatus != null and meeting.meetingStatus != ''">
+            and m.meeting_status = #{meeting.meetingStatus}
         </if>
     </sql>
 
     <!--    分页-->
     <select id="selectPageList" resultType="com.ksh.beam.system.entity.meeting.Detail">
         select * from
-        (select md.*,hde.name hospital_name, hde.address hospital_address,mc.course_name, hdc.name speakers_name
+        (select md.*,hde.name hospital_name, hde.address hospital_address,
+        hdc.name speakers_name, mc.name topic_name,
+        case md.auditor_channel when 'beam' then su.name when 'heart' then ud.username else '' end auditor_name
         from meeting_detail md
         left join hospital_detail hde on md.hospital_id = hde.id
-        left join meeting_course mc on md.course_id = mc.id
-        left join hospital_doctor hdc on md.speakers_id = hdc.id) m
-        <where>
-            1 = 1
-            <include refid="Where_List"/>
-        </where>
+        left join hospital_doctor hdc on md.speakers_id = hdc.id
+        left join sys_user su on md.auditor_id = su.id
+        left join user_detail ud on md.auditor_id = ud.id
+        left join meeting_course mc on md.topic_id = mc.id
+        ) m where m.del_flag = 1
+        <include refid="Where_List"/>
         order by m.meeting_time desc
     </select>
 
     <!--    会议详细信息-->
     <select id="getInfo" resultMap="BaseResultMap">
-        select * from
-        (select md.*,hde.name hospitalName,hde.code hospitalCode, hde.address hospitalAddress,hde.level hospitalLevel,
-        mc.course_name, mq.question_name, hdc.name speakersName,
-        ud.username applicantName, ud.phone
+         select * from
+        (select md.*,hde.name hospital_name, hde.address hospital_address, hde.code hospital_code, hde.level hospital_level,hde.area_name hospital_area,
+        hdc.name speakers_name, ud1.username applicant_name, ud1.phone, mc.name topic_name,
+        case md.auditor_channel when 'beam' then su.name when 'heart' then ud2.username else '' end auditor_name
         from meeting_detail md
-        left join hospital_detail hde on md.hospital_id = hde.id
-        left join meeting_course mc on md.course_id = mc.id
-        left join meeting_question mq on md.question_id = mq.id
+        left join (select d.*,a.area_name from hospital_detail d left join hospital_area a on d.area_id = a.id) hde on md.hospital_id = hde.id
         left join hospital_doctor hdc on md.speakers_id = hdc.id
-        left join user_detail ud on md.applicant_id = ud.id) m
-        where m.id = #{meetingId}
+        left join sys_user su on md.auditor_id = su.id
+        left join user_detail ud1 on md.applicant_id = ud1.id
+        left join user_detail ud2 on md.auditor_id = ud2.id
+        left join meeting_course mc on md.topic_id = mc.id
+        ) m
+        where m.del_flag = 1 and m.id = #{meetingId}
     </select>
 </mapper>

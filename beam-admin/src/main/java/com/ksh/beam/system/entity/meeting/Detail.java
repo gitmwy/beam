@@ -26,7 +26,7 @@ public class Detail extends AbstractEntity<Long> {
     private String code;
 
     @TableField(value = "meeting_time")
-    private Date meetingTime;
+    private String meetingTime;
 
     @TableField(value = "meeting_type")
     private Integer meetingType;
@@ -34,17 +34,14 @@ public class Detail extends AbstractEntity<Long> {
     @TableField(value = "hospital_id")
     private Long hospitalId;
 
-    @TableField(value = "course_id")
-    private Long courseId;
-
-    @TableField(value = "question_id")
-    private Long questionId;
-
     @TableField(value = "speakers_id")
     private Long speakersId;
 
     @TableField(value = "applicant_id")
     private Long applicantId;
+
+    @TableField(value = "applicant_time")
+    private Date applicantTime;
 
     @TableField(value = "auditor_id")
     private Long auditorId;
@@ -64,29 +61,41 @@ public class Detail extends AbstractEntity<Long> {
     @TableField(value = "real_persons")
     private Integer realPersons;
 
-    @TableField(value = "applicant_time")
-    private Date applicantTime;
-
     @TableField(value = "source")
     private String source;
 
-    @TableField(value="status")
-    private String status;
+    @TableField(value="meeting_status")
+    private String meetingStatus;
 
     @TableField(value="address")
     private String address;
 
-    @TableField(value="topic")
-    private String topic;
+    @TableField(value="topic_id")
+    private Long topicId;
+
+    @TableField(value = "auditor_time")
+    private Date auditorTime;
+
+    @TableField(value = "auditor_text")
+    private String auditorText;
+
+    @TableField(value = "auditor_channel")
+    private String auditorChannel;
+
+    @TableField(value = "del_flag")
+    private Integer delFlag;
+
+    @TableField(value = "conclusion")
+    private String conclusion;
+
+    @TableField(exist = false)
+    private String auditorName;
 
     @TableField(exist = false)
     private String hospitalName;
 
     @TableField(exist = false)
     private String hospitalAddress;
-
-    @TableField(exist = false)
-    private String courseName;
 
     @TableField(exist = false)
     private String speakersName;

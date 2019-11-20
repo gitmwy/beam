@@ -6,6 +6,6 @@ import com.ksh.beam.system.entity.meeting.Cloud;
 /**
  * 会议文件
  */
-public interface MeetingSceneService extends IService<Cloud> {
+public interface MeetingCloudService extends IService<Cloud> {
 
 }

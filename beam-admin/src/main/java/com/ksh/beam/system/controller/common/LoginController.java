@@ -1,5 +1,6 @@
 package com.ksh.beam.system.controller.common;
 
+import com.alibaba.fastjson.JSON;
 import com.ksh.beam.common.constant.CacheConstant;
 import com.ksh.beam.common.log.LogManager;
 import com.ksh.beam.common.log.factory.LogTaskFactory;
@@ -55,8 +56,8 @@ public class LoginController {
         try {
             Subject subject = ShiroUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(loginForm.getUsername(), loginForm.getPassword());
-//            token.setRememberMe(true);
             subject.login(token);
+            redisUtil.set(ShiroUtils.getShiroSessionKey(ShiroUtils.getSessionId()), JSON.toJSONString(ShiroUtils.getUserEntity()), RedisUtil.DEFAULT_EXPIRE);
             LogManager.me().executeLog(LogTaskFactory.loginSuccessLog(ShiroUtils.getUserId(), getIp()));
         } catch (UnknownAccountException e) {
             return R.fail("该账号名不存在");
@@ -77,11 +78,12 @@ public class LoginController {
     @GetMapping(value = "/logout")
     @ResponseBody
     public Object logout() {
+        ShiroUtils.logout();
         ShiroUser shiroUser = ShiroUtils.getUserEntity();
-        redisUtil.del(CacheConstant.BEAM_KICKOUT_KEY_PREFIX + shiroUser.getAccount(),
+        redisUtil.del(ShiroUtils.getShiroSessionKey(ShiroUtils.getSessionId()),
+                CacheConstant.BEAM_KICKOUT_KEY_PREFIX + shiroUser.getAccount(),
                 CacheConstant.BEAM_CACHE_KEY_PREFIX + CacheConstant.BEAM_USER_MENU + shiroUser.getId());
         LogManager.me().executeLog(LogTaskFactory.exitLog(shiroUser.getId(), getIp()));
-        ShiroUtils.logout();
         return R.ok("退出成功");
     }
 

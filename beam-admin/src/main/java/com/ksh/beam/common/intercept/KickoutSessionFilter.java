@@ -3,6 +3,7 @@ package com.ksh.beam.common.intercept;
 import com.ksh.beam.common.constant.CacheConstant;
 import com.ksh.beam.common.enumeration.RetEnum;
 import com.ksh.beam.common.shiro.ShiroUser;
+import com.ksh.beam.common.shiro.ShiroUtils;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.RedisUtil;
 import com.ksh.beam.common.utils.RenderUtil;
@@ -12,8 +13,6 @@ import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletRequest;
@@ -28,11 +27,9 @@ import java.util.LinkedList;
  */
 public class KickoutSessionFilter extends AccessControlFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(KickoutSessionFilter.class);
-
-    // 踢出之前登录的/之后登录的用户 默认false踢出之前登录的用户
+    // 是否踢出后来登录的，默认false，踢出之前登录的用户
     private boolean kickoutAfter = false;
-    // 同一个帐号最大会话数 默认1
+    // 同一个帐号最大会话数，默认1
     private int maxSession = 1;
 
     @Autowired
@@ -80,8 +77,14 @@ public class KickoutSessionFilter extends AccessControlFilter {
         String account = ((ShiroUser) subject.getPrincipal()).getAccount();
         Serializable sessionId = session.getId();
 
+        //redis是否过期
+        if(null == redisUtil.get(ShiroUtils.getShiroSessionKey(sessionId.toString()))){
+            RenderUtil.renderJson(httpServletResponse, R.fail(RetEnum.LOGIN_EXPIRED.getRet(),RetEnum.LOGIN_EXPIRED.getMsg()));
+            return false;
+        }
+
         // 初始化用户的队列放到缓存里
-        Deque<Serializable> deque = (Deque<Serializable>) redisUtil.get(getRedisKickoutKey(account));
+        Deque<Serializable> deque = (Deque<Serializable>) redisUtil.getObj(getRedisKickoutKey(account));
         if(deque == null || deque.size()==0) {
             deque = new LinkedList<>();
         }
@@ -111,7 +114,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
                 e.printStackTrace();
             }
         }
-        redisUtil.set(getRedisKickoutKey(account), deque, RedisUtil.DEFAULT_EXPIRE);
+        redisUtil.setObj(getRedisKickoutKey(account), deque, RedisUtil.DEFAULT_EXPIRE);
 
         //如果被踢出了，直接退出
         if (session.getAttribute("kickout") != null) {

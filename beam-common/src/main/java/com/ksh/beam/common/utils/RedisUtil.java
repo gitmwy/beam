@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -23,37 +24,65 @@ public class RedisUtil {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    /**  默认过期时长，单位：秒 */
-    public final static long DEFAULT_EXPIRE = 60 * 60;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    //shiro在session和redis中时效
+    public final static long DEFAULT_EXPIRE = 60 * 60 * 1000;
+
+    /* -------------------String相关操作------------------------- */
+
+    /**
+     * 删除
+     */
+    public void delete(String key) {
+        stringRedisTemplate.delete(key);
+    }
+
+    /**
+     * 设置指定 key 的值
+     * expire单位毫秒
+     */
+    public void set(String key, String value, long expire) {
+        if(expire > 0){
+            stringRedisTemplate.opsForValue().set(key, value, expire, TimeUnit.MILLISECONDS);
+        }else{
+            stringRedisTemplate.opsForValue().set(key, value);
+        }
+    }
+
+    /**
+     * 获取指定 key 的值
+     */
+    public String get(String key) {
+        return stringRedisTemplate.opsForValue().get(key);
+    }
+
+    /* -------------------RedisTemplate相关操作------------------------- */
 
     /**
      * 指定缓存失效时间
-     * @param key 键
-     * @param expire 时间(秒)
      */
-    public void expire(String key,long expire){
-        redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+    public void expire(String key, long expire) {
+        redisTemplate.expire(key, expire, TimeUnit.MILLISECONDS);
     }
 
     /**
      * 判断key是否存在
-     * @param key 键
-     * @return true 存在 false不存在
      */
-    public Boolean hasKey(String key){
+    public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
 
     /**
      * 删除缓存
-     * @param key 可以传一个值 或多个
      */
     @SuppressWarnings("unchecked")
-    public void del(String ... key){
-        if(key!=null&&key.length>0){
-            if(key.length==1){
+    public void del(String... key) {
+        if (key != null && key.length > 0) {
+            if (key.length == 1) {
                 redisTemplate.delete(key[0]);
-            }else{
+            } else {
                 redisTemplate.delete(CollectionUtils.arrayToList(key));
             }
         }
@@ -62,47 +91,33 @@ public class RedisUtil {
     /**
      * 模糊匹配删除
      */
-    public void batchDel(String pattern){
+    public void batchDel(String pattern) {
         Set<String> keys = redisTemplate.keys(pattern);
         redisTemplate.delete(keys);
     }
 
     /**
      * 普通缓存获取
-     * @param key 键
-     * @return 值
      */
-    public Object get(String key){
+    public Object getObj(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
     /**
-     * 普通缓存放入
-     * @param key 键
-     * @param value 值
-     */
-    public void set(String key,Object value) {
-        redisTemplate.opsForValue().set(key, value);
-    }
-
-    /**
      * 普通缓存放入并设置时间
-     * @param key 键
-     * @param value 值
-     * @param expire 时间(秒) expire要大于0 如果expire小于等于0 将设置无限期
      */
-    public void set(String key,Object value,long expire){
-        if(expire>0){
-            redisTemplate.opsForValue().set(key,value, expire, TimeUnit.SECONDS);
-        }else{
-            set(key, value);
+    public void setObj(String key, Object value, long expire) {
+        if (expire > 0) {
+            redisTemplate.opsForValue().set(key, value, expire, TimeUnit.MILLISECONDS);
+        } else {
+            redisTemplate.opsForValue().set(key, value);
         }
     }
 
     /**
      * 使用scan命令 查询某些前缀的key
      */
-    public Set<String> scan(String key){
+    public Set<String> scan(String key) {
         return this.redisTemplate.execute((RedisCallback<Set<String>>) connection -> {
             Set<String> binaryKeys = new HashSet<>();
             Cursor<byte[]> cursor = connection.scan(new ScanOptions.ScanOptionsBuilder().match(key).count(1000).build());
@@ -115,9 +130,8 @@ public class RedisUtil {
 
     /**
      * 使用scan命令 查询某些前缀的key 有多少个
-     * 用来获取当前session数量,也就是在线用户
      */
-    public Long scanSize(String key){
+    public Long scanSize(String key) {
         return this.redisTemplate.execute((RedisCallback<Long>) connection -> {
             long count = 0L;
             Cursor<byte[]> cursor = connection.scan(ScanOptions.scanOptions().match(key).count(1000).build());

@@ -4,7 +4,6 @@ import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,14 +34,10 @@ public class ToolUtil {
     }
 
     /**
-     * 判断一个对象是否是时间类型
+     * 转换对象为字符串
      */
-    public static String dateType(Object o) {
-        if (o instanceof Date) {
-            return DateUtil.getDay((Date) o);
-        } else {
-            return o.toString();
-        }
+    public static String valueOf(Object obj) {
+        return (obj == null) ? "" : obj.toString();
     }
 
     /**

@@ -18,18 +18,18 @@
                 <el-button  v-if="canExport" type="success" icon="el-icon-download" @click="exportData">导出数据</el-button>
             </div>
             <el-tabs v-model="initTab" @tab-click="handleClick">
-                <el-tab-pane label="全部" name="0" auditStatus=""/>
-                <el-tab-pane label="待审核" name="1" auditStatus="01"/>
-                <el-tab-pane label="待修改" name="2" auditStatus="02"/>
-                <el-tab-pane label="待开展" name="3" auditStatus="03"/>
-                <el-tab-pane label="开展中" name="4" auditStatus="04"/>
-                <el-tab-pane label="已结束" name="5" auditStatus="05"/>
+                <el-tab-pane label="全部" name="0" meetingStatus=""/>
+                <el-tab-pane label="待审核" name="1" meetingStatus="01"/>
+                <el-tab-pane label="待修改" name="2" meetingStatus="02"/>
+                <el-tab-pane label="待开展" name="3" meetingStatus="03"/>
+                <el-tab-pane label="开展中" name="4" meetingStatus="04"/>
+                <el-tab-pane label="已结束" name="5" meetingStatus="05"/>
             </el-tabs>
             <el-table :data="tableData" v-loading="loading" border class="table">
-                <el-table-column label="编号" align="center" prop="code" width="60"/>
+                <el-table-column label="编号" align="center" prop="code" width="200"/>
                 <el-table-column label="医院名称" align="center" prop="hospitalName" width="200"/>
                 <el-table-column label="所在省市" align="center" prop="hospitalAddress" width="200"/>
-                <el-table-column label="课件" align="center" prop="courseName" width="300"/>
+                <el-table-column label="课件" align="center" prop="topicName" width="300"/>
                 <el-table-column label="讲者" align="center" prop="speakersName" width="120"/>
                 <el-table-column label="会议日期" align="center" prop="meetingTime" width="200"/>
                 <el-table-column label="申请日期" align="center" prop="applicantTime" width="160"/>
@@ -144,7 +144,7 @@
             },
             // 切换标签页
             handleClick(tab){
-                this.req.auditStatus = tab.$attrs.auditStatus;
+                this.req.meetingStatus = tab.$attrs.meetingStatus;
                 this.getData();
             },
             //导出数据

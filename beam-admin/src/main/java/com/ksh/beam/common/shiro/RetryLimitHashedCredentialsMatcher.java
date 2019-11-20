@@ -38,7 +38,7 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
         //获取用户名
         String account = (String) token.getPrincipal();
         //获取用户登录次数
-        AtomicInteger retryCount = (AtomicInteger) redisUtil.get(getRedisRetryLimitKey(account));
+        AtomicInteger retryCount = (AtomicInteger) redisUtil.getObj(getRedisRetryLimitKey(account));
         if (null == retryCount) {
             //如果用户没有登陆过,登陆次数加1 并放入缓存
             retryCount = new AtomicInteger(0);
@@ -59,7 +59,7 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
             //如果正确,从缓存中将用户登录计数 清除
             redisUtil.del(getRedisRetryLimitKey(account));
         }else {
-            redisUtil.set(getRedisRetryLimitKey(account), retryCount, RedisUtil.DEFAULT_EXPIRE);
+            redisUtil.setObj(getRedisRetryLimitKey(account), retryCount, RedisUtil.DEFAULT_EXPIRE);
         }
         return matches;
     }

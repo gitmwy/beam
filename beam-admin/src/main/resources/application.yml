@@ -2,8 +2,6 @@ beam:
   admin:
     swagger-open: true  #是否开启swagger
     captcha-open: true #是否开启登陆验证码
-    redis-open: true  # 是否开启redis缓存
-    shiro-redis: true # 是否开启shiro session存到redis里
 server:
    port: 8080
    servlet:
@@ -21,7 +19,7 @@ spring:
 spring:
   profiles: local
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/beam?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/beam?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -48,7 +46,7 @@ log:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/beam?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/beam?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: 123456
   redis:
@@ -65,7 +63,7 @@ log:
 spring:
   profiles: pro
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/beam?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/beam?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: 123456
   redis:

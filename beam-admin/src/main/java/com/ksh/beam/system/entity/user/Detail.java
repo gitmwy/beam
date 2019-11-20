@@ -25,8 +25,8 @@ public class Detail extends RestEntity<Long> {
     @TableId
     private Long id;
 
-    @TableField(value = "job_code")
-    private String jobCode;
+    @TableField(value = "openid")
+    private String openid;
 
     @TableField(value = "avatar")
     private String avatar;
@@ -44,6 +44,12 @@ public class Detail extends RestEntity<Long> {
     @TableField(value = "phone")
     private String phone;
 
+    @TableField(value = "password")
+    private String password;
+
+    @TableField(value = "salt")
+    private String salt;
+
     @TableField(value = "area_id")
     private Long areaId;
 
@@ -55,16 +61,6 @@ public class Detail extends RestEntity<Long> {
 
     @TableField(value = "bound_time")
     private Date boundTime;
-
-    @NotBlank(message = "账号名不能为空")
-    @TableField(value = "account")
-    private String account;
-
-    @TableField(value = "password")
-    private String password;
-
-    @TableField(value = "salt")
-    private String salt;
 
     @TableField(exist = false)
     private String areaName;

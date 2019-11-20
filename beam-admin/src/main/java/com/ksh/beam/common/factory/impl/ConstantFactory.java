@@ -7,7 +7,7 @@ import com.ksh.beam.common.utils.SpringContextHolder;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.DeptMapper;
 import com.ksh.beam.system.dao.DictMapper;
-import com.ksh.beam.system.dao.MeetingSceneMapper;
+import com.ksh.beam.system.dao.MeetingCloudMapper;
 import com.ksh.beam.system.dao.MenuMapper;
 import com.ksh.beam.system.dao.RoleMapper;
 import com.ksh.beam.system.dao.SequenceMapper;
@@ -39,7 +39,7 @@ public class ConstantFactory implements IConstantFactory {
     private UserMapper userMapper = SpringContextHolder.getBean(UserMapper.class);
     private MenuMapper menuMapper = SpringContextHolder.getBean(MenuMapper.class);
     private DictMapper dictMapper = SpringContextHolder.getBean(DictMapper.class);
-    private MeetingSceneMapper meetingSceneMapper = SpringContextHolder.getBean(MeetingSceneMapper.class);
+    private MeetingCloudMapper meetingCloudMapper = SpringContextHolder.getBean(MeetingCloudMapper.class);
 
     public static IConstantFactory me() {
         return SpringContextHolder.getBean("constantFactory");
@@ -56,7 +56,7 @@ public class ConstantFactory implements IConstantFactory {
     @Override
     public String getSingleRoleName(Long roleId) {
         if (0 == roleId) {
-            return "--";
+            return "";
         }
         Role roleObj = roleMapper.selectById(roleId);
         if (ToolUtil.isNotEmpty(roleObj) && ToolUtil.isNotEmpty(roleObj.getRoleName())) {
@@ -137,8 +137,8 @@ public class ConstantFactory implements IConstantFactory {
     public List<Cloud> getScene(Long meetingId, String fileType) {
         QueryWrapper<Cloud> qw = new QueryWrapper<>();
         qw.eq("meeting_id", meetingId);
-        qw.eq("file_type", fileType);
-        return meetingSceneMapper.selectList(qw);
+        qw.eq("type", fileType);
+        return meetingCloudMapper.selectList(qw);
     }
 
     /**

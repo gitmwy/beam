@@ -54,8 +54,6 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail>
         }
         //定义存放英文字段名和中文字段名的Map
         LinkedHashMap<String, String> fieldMap = new LinkedHashMap<>();
-        fieldMap.put("jobCode", "工号");
-        fieldMap.put("account", "账号名");
         fieldMap.put("nickname", "昵称");
         fieldMap.put("username", "姓名");
         fieldMap.put("phone", "手机号");
@@ -93,7 +91,7 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail>
             this.updateById(detail);
             return R.ok();
         }else{
-            Detail tempUser = this.getOne(new QueryWrapper<Detail>().eq("account", detail.getAccount()));
+            Detail tempUser = this.getOne(new QueryWrapper<Detail>().eq("phone", detail.getPhone()));
             if(null != tempUser){
                 return R.fail("该账号名已存在");
             }

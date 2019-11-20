@@ -1,5 +1,6 @@
 package com.ksh.beam.common.shiro;
 
+import com.ksh.beam.common.constant.CacheConstant;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.session.Session;
@@ -9,14 +10,14 @@ public class ShiroUtils {
 
     //名称分隔符
     private static final String NAMES_DELIMETER = ",";
-    /**
-     * 加密算法
-     */
+    //加密算法
     public final static String hashAlgorithmName = "SHA-256";
-    /**
-     * 循环次数
-     */
+    //循环次数
     public final static int hashIterations = 16;
+
+    public static String getShiroSessionKey(String sessionId) {
+        return CacheConstant.BEAM_SESSION_KEY_PREFIX + sessionId;
+    }
 
     /**
      * 加密
@@ -25,9 +26,18 @@ public class ShiroUtils {
         return new SimpleHash(hashAlgorithmName, password, salt, hashIterations).toString();
     }
 
-    //从shiro获取session
+    /**
+     * 获取session
+     */
     public static Session getSession() {
         return getSubject().getSession();
+    }
+
+    /**
+     * 获取sessionId
+     */
+    public static String getSessionId() {
+        return String.valueOf(getSubject().getSession().getId());
     }
 
     /**
@@ -35,8 +45,9 @@ public class ShiroUtils {
      */
     private static void removeSessionAttr(String key) {
         Session session = getSession();
-        if (session != null)
+        if (session != null){
             session.removeAttribute(key);
+        }
     }
 
     /**
@@ -189,7 +200,6 @@ public class ShiroUtils {
 
     /**
      * 输出当前用户信息，通常为登录帐号信息。
-     * @return 当前用户信息
      */
     public static String principal() {
         if (getSubject() != null) {

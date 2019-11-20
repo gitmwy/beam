@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
  * 会议文件
  */
 @Repository
-public interface MeetingSceneMapper extends BaseMapper<Cloud> {
+public interface MeetingCloudMapper extends BaseMapper<Cloud> {
 
 }
