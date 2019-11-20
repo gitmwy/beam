@@ -78,7 +78,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
         Serializable sessionId = session.getId();
 
         //redis是否过期
-        if(null == redisUtil.get(ShiroUtils.getShiroSessionKey(sessionId.toString()))){
+        if(null == redisUtil.getObj(ShiroUtils.getShiroSessionKey(sessionId.toString()))){
             RenderUtil.renderJson(httpServletResponse, R.fail(RetEnum.LOGIN_EXPIRED.getRet(),RetEnum.LOGIN_EXPIRED.getMsg()));
             return false;
         }

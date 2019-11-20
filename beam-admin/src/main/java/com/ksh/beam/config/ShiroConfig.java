@@ -1,6 +1,7 @@
 package com.ksh.beam.config;
 
 import com.ksh.beam.common.intercept.KickoutSessionFilter;
+import com.ksh.beam.common.shiro.RedisShiroSessionDAO;
 import com.ksh.beam.common.shiro.RetryLimitHashedCredentialsMatcher;
 import com.ksh.beam.common.shiro.ShiroRealm;
 import com.ksh.beam.common.shiro.ShiroUtils;
@@ -13,6 +14,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,6 +28,9 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
+
+    @Autowired
+    private RedisShiroSessionDAO redisShiroSessionDAO;
 
     //配置会话管理器，设定会话超时及保存
     @Bean
@@ -41,6 +46,8 @@ public class ShiroConfig {
         sessionManager.setSessionValidationInterval(15 * 60 * 1000);
         //取消url 后面的 JSESSIONID
         sessionManager.setSessionIdUrlRewritingEnabled(false);
+        //开启redis缓存
+        sessionManager.setSessionDAO(redisShiroSessionDAO);
 
         return sessionManager;
     }

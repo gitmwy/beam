@@ -89,6 +89,9 @@ public class Detail extends AbstractEntity<Long> {
     private String conclusion;
 
     @TableField(exist = false)
+    private String topicName;
+
+    @TableField(exist = false)
     private String auditorName;
 
     @TableField(exist = false)
