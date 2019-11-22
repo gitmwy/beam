@@ -2,7 +2,7 @@ package com.ksh.beam.system.controller.hospital;
 
 import com.ksh.beam.common.annotion.SysLog;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.hospital.Detail;
+import com.ksh.beam.system.entity.hospital.Hospital;
 import com.ksh.beam.system.service.HospitalDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +32,7 @@ public class HospitalDetailController {
     @ApiOperation("医院列表")
     @GetMapping(value = "/page/list")
     @RequiresPermissions("hospital:detail:list")
-    public R pageList(Detail hospital) {
+    public R pageList(Hospital hospital) {
         return hospitalDetailService.selectPageList(hospital);
     }
 
@@ -40,7 +40,7 @@ public class HospitalDetailController {
     @ApiOperation(value = "医院列表导出")
     @RequiresPermissions("hospital:detail:export")
     @GetMapping("/export")
-    public void export(Detail hospital, HttpServletResponse response) {
+    public void export(Hospital hospital, HttpServletResponse response) {
         hospitalDetailService.exportData(hospital, response);
     }
 
@@ -57,7 +57,7 @@ public class HospitalDetailController {
     @ApiOperation("医院新增")
     @PostMapping(value = "/add")
     @RequiresPermissions("hospital:detail:add")
-    public R add(@RequestBody @Valid Detail detail) {
-        return hospitalDetailService.saveHospitalDetail(detail);
+    public R add(@RequestBody @Valid Hospital hospital) {
+        return hospitalDetailService.saveHospitalDetail(hospital);
     }
 }

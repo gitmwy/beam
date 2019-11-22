@@ -2,22 +2,22 @@ package com.ksh.beam.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ksh.beam.common.utils.R;
-import com.ksh.beam.system.entity.hospital.Detail;
+import com.ksh.beam.system.entity.hospital.Hospital;
 
 import javax.servlet.http.HttpServletResponse;
 
 /**
  * 医院列表
  */
-public interface HospitalDetailService extends IService<Detail> {
+public interface HospitalDetailService extends IService<Hospital> {
 
     //分页
-    R selectPageList(Detail hospital);
+    R selectPageList(Hospital hospital);
 
     //导出
-    void exportData(Detail hospital, HttpServletResponse response);
+    void exportData(Hospital hospital, HttpServletResponse response);
 
     R deleteBatch(Long[] ids);
 
-    R saveHospitalDetail(Detail detail);
+    R saveHospitalDetail(Hospital hospital);
 }

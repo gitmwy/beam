@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @TableName("meeting_detail")
-public class Detail extends AbstractEntity<Long> {
+public class Meeting extends AbstractEntity<Long> {
 
     @TableId
     private Long id;

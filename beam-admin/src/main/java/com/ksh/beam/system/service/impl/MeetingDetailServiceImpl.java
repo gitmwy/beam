@@ -14,7 +14,7 @@ import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.MeetingAuditorMapper;
 import com.ksh.beam.system.dao.MeetingDetailMapper;
 import com.ksh.beam.system.entity.meeting.Auditor;
-import com.ksh.beam.system.entity.meeting.Detail;
+import com.ksh.beam.system.entity.meeting.Meeting;
 import com.ksh.beam.system.service.MeetingDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ import java.util.Map;
  * 会议列表
  */
 @Service
-public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, Detail> implements MeetingDetailService {
+public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, Meeting> implements MeetingDetailService {
 
     @Autowired
     private MeetingAuditorMapper meetingAuditorMapper;
@@ -40,8 +40,8 @@ public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, D
      * 分页
      */
     @Override
-    public R selectPageList(Detail meeting) {
-        IPage<Detail> page = baseMapper.selectPageList(new Page(meeting.getCurrentPage(), meeting.getPageSize()),meeting);
+    public R selectPageList(Meeting meeting) {
+        IPage<Meeting> page = baseMapper.selectPageList(new Page(meeting.getCurrentPage(), meeting.getPageSize()),meeting);
         return R.ok(page);
     }
 
@@ -49,12 +49,12 @@ public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, D
      * 导出
      */
     @Override
-    public void exportData(Detail meeting, HttpServletResponse response) {
-        List<Detail> details = baseMapper.selectPageList(meeting);
-        Assert.notEmpty(details, "无法导出空数据");
+    public void exportData(Meeting meeting, HttpServletResponse response) {
+        List<Meeting> meetings = baseMapper.selectPageList(meeting);
+        Assert.notEmpty(meetings, "无法导出空数据");
 
         List<Map<String, Object>> list = new ArrayList<>();
-        for (Detail detail : details){
+        for (Meeting detail : meetings){
             Map<String, Object> map = BaseWrapper.beanToMap(detail);
             map.put("meetingStatus", ConstantFactory.me().getDictsByCode("meeting_status",map.get("meetingStatus")+""));
             map.put("meetingTime", DateUtil.greenwichTime(map.get("meetingTime")+""));
@@ -102,15 +102,15 @@ public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, D
      *审核会议
      */
     public R saveAuditor(Auditor auditor){
-        Detail detail = baseMapper.selectOne(new QueryWrapper<Detail>().eq("id", auditor.getMeetingId()).eq("del_flag", 1));
-        Assert.notNull(detail, "该会议已被删除");
+        Meeting meeting = baseMapper.selectOne(new QueryWrapper<Meeting>().eq("id", auditor.getMeetingId()).eq("del_flag", 1));
+        Assert.notNull(meeting, "该会议已被删除");
 
-        detail.setAuditorId(ShiroUtils.getUserId());
-        detail.setAuditorTime(new Date());
-        detail.setMeetingStatus(auditor.getAuditorStatus());
-        detail.setAuditorText(auditor.getAuditorText());
-        detail.setAuditorChannel("beam");
-        baseMapper.updateById(detail);
+        meeting.setAuditorId(ShiroUtils.getUserId());
+        meeting.setAuditorTime(new Date());
+        meeting.setMeetingStatus(auditor.getAuditorStatus());
+        meeting.setAuditorText(auditor.getAuditorText());
+        meeting.setAuditorChannel("beam");
+        baseMapper.updateById(meeting);
 
         //审核记录
         auditor.setAuditorTime(new Date());

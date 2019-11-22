@@ -8,7 +8,7 @@ import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.UserDetailMapper;
 import com.ksh.beam.system.dao.UserRoleMapper;
-import com.ksh.beam.system.entity.user.Detail;
+import com.ksh.beam.system.entity.user.User;
 import com.ksh.beam.system.entity.user.Role;
 import com.ksh.beam.system.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +56,8 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, Role> imple
      */
     @Override
     public R deleteBatch(Long[] ids) {
-        List<Detail> details = userDetailMapper.selectList(new QueryWrapper<Detail>().in("role_id", Arrays.asList(ids)));
-        if(ToolUtil.isNotEmpty(details)){
+        List<User> users = userDetailMapper.selectList(new QueryWrapper<User>().in("role_id", Arrays.asList(ids)));
+        if(ToolUtil.isNotEmpty(users)){
             return R.fail("当前删除角色，还有用户关联，请先取消其关联");
         }
         this.removeByIds(Arrays.asList(ids));

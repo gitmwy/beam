@@ -8,7 +8,7 @@ import com.ksh.beam.common.factory.impl.ConstantFactory;
 import com.ksh.beam.common.file.ExcelUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.system.dao.HospitalDetailMapper;
-import com.ksh.beam.system.entity.hospital.Detail;
+import com.ksh.beam.system.entity.hospital.Hospital;
 import com.ksh.beam.system.service.HospitalDetailService;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +23,14 @@ import java.util.Map;
  * 医院列表
  */
 @Service
-public class HospitalDetailServiceImpl extends ServiceImpl<HospitalDetailMapper, Detail> implements HospitalDetailService {
+public class HospitalDetailServiceImpl extends ServiceImpl<HospitalDetailMapper, Hospital> implements HospitalDetailService {
 
     /**
      * 分页
      */
     @Override
-    public R selectPageList(Detail hospital) {
-        IPage<Detail> page = baseMapper.selectPageList(new Page(hospital.getCurrentPage(), hospital.getPageSize()),hospital);
+    public R selectPageList(Hospital hospital) {
+        IPage<Hospital> page = baseMapper.selectPageList(new Page(hospital.getCurrentPage(), hospital.getPageSize()),hospital);
         return R.ok(page);
     }
 
@@ -38,10 +38,10 @@ public class HospitalDetailServiceImpl extends ServiceImpl<HospitalDetailMapper,
      * 导出
      */
     @Override
-    public void exportData(Detail hospital, HttpServletResponse response) {
-        List<Detail> details = baseMapper.selectPageList(hospital);
+    public void exportData(Hospital hospital, HttpServletResponse response) {
+        List<Hospital> hospitals = baseMapper.selectPageList(hospital);
         List<Map<String, Object>> list = new ArrayList<>();
-        for (Detail detail : details){
+        for (Hospital detail : hospitals){
             Map<String, Object> map = BaseWrapper.beanToMap(detail);
             list.add(map);
         }
@@ -68,10 +68,10 @@ public class HospitalDetailServiceImpl extends ServiceImpl<HospitalDetailMapper,
      * 保存医院
      */
     @Override
-    public R saveHospitalDetail(Detail detail) {
-        detail.setCode(ConstantFactory.me().getSequence("H"));
-        detail.setAddress(detail.getProvinceName() + detail.getCityName() + detail.getCountyName());
-        this.saveOrUpdate(detail);
+    public R saveHospitalDetail(Hospital hospital) {
+        hospital.setCode(ConstantFactory.me().getSequence("H"));
+        hospital.setAddress(hospital.getProvinceName() + hospital.getCityName() + hospital.getCountyName());
+        this.saveOrUpdate(hospital);
         return R.ok();
     }
 }

@@ -11,23 +11,39 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 29/09/2019 15:32:25
+ Date: 22/11/2019 14:16:17
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for hospital_dept
+-- Table structure for hospital_area
 -- ----------------------------
-DROP TABLE IF EXISTS `hospital_dept`;
-CREATE TABLE `hospital_dept`  (
+DROP TABLE IF EXISTS `hospital_area`;
+CREATE TABLE `hospital_area`  (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '医院科室名称',
+  `parent_id` bigint(32) NULL DEFAULT NULL COMMENT '父ID',
+  `area_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '区域名称',
+  `level` int(4) NULL DEFAULT NULL COMMENT '级别',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `level_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '级别名称',
+  `option_areas` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '关联区域',
+  `option_status` int(4) NULL DEFAULT NULL COMMENT '关联区域标识（0：该区域的最顶级无关联，属于游离，1：有关联，在使用）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of hospital_area
+-- ----------------------------
+INSERT INTO `hospital_area` VALUES (38, 0, '美国', 1, '2019-08-14 09:44:48', '2019-08-14 09:44:48', '一级', NULL, 1);
+INSERT INTO `hospital_area` VALUES (41, NULL, '大兴区', 3, '2019-08-16 09:01:30', '2019-08-16 18:17:20', '三级', '无关联区域', 0);
+INSERT INTO `hospital_area` VALUES (42, 38, '华盛顿', 2, '2019-08-16 10:25:46', '2019-08-16 10:25:46', '二级', '美国', 1);
+INSERT INTO `hospital_area` VALUES (45, 41, '兴涛社区', 4, '2019-08-16 15:03:54', '2019-08-16 18:17:20', '四级', '大兴区', 0);
+INSERT INTO `hospital_area` VALUES (59, 0, '全国', 1, '2019-08-16 18:33:24', '2019-08-16 18:33:24', '一级', NULL, 1);
+INSERT INTO `hospital_area` VALUES (60, 59, '北京', 2, '2019-08-21 17:44:28', '2019-08-21 17:44:28', '二级', '全国', 1);
+INSERT INTO `hospital_area` VALUES (61, 60, '朝阳区', 3, '2019-08-21 17:44:46', '2019-08-21 17:44:46', '三级', '全国/北京', 1);
 
 -- ----------------------------
 -- Table structure for hospital_detail
@@ -39,7 +55,7 @@ CREATE TABLE `hospital_detail`  (
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '医院名称',
   `province_name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所在省',
   `city_name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所在市',
-  `managers_id` bigint(32) NOT NULL COMMENT '负责代表-员工id',
+  `managers_id` bigint(32) NOT NULL COMMENT '负责人',
   `county_name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所在区/县',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
@@ -48,13 +64,15 @@ CREATE TABLE `hospital_detail`  (
   `county_code` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所在区/县行政编号',
   `address` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所在地址',
   `level` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '医院级别',
+  `area_id` bigint(32) NULL DEFAULT NULL COMMENT '区域ID',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of hospital_detail
 -- ----------------------------
-INSERT INTO `hospital_detail` VALUES (1, '2019', '协和', '北京', '市辖区', 1, NULL, '2019-09-25 10:47:08', '2019-09-25 10:47:11', '110000', '110100', NULL, '北京市辖区', '三甲');
+INSERT INTO `hospital_detail` VALUES (1, 'H201910290001', '协和', '北京', '市辖区', 1, NULL, '2019-09-25 10:47:08', '2019-09-25 10:47:11', '110000', '110100', NULL, '北京市辖区', '三甲', 59);
+INSERT INTO `hospital_detail` VALUES (2, 'H201910290002', '华佗在世', '北京', '市辖区', 2, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '110000', '110100', NULL, '北京市辖区', '二甲', 59);
 
 -- ----------------------------
 -- Table structure for hospital_doctor
@@ -62,48 +80,25 @@ INSERT INTO `hospital_detail` VALUES (1, '2019', '协和', '北京', '市辖区'
 DROP TABLE IF EXISTS `hospital_doctor`;
 CREATE TABLE `hospital_doctor`  (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '医生姓名',
-  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '手机号',
-  `nickname` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '微信昵称',
-  `hospital_id` bigint(32) NOT NULL COMMENT '医院id',
-  `hospital_dept_id` bigint(32) NOT NULL COMMENT '科室id',
-  `hospital_position_id` bigint(32) NOT NULL COMMENT '职位id',
-  `hospital_title_id` bigint(32) NOT NULL COMMENT '职称id',
-  `reg_time` datetime(0) NULL DEFAULT NULL COMMENT '注册日期',
-  `flag` int(4) NOT NULL DEFAULT 1 COMMENT '讲者标志（1：是，0：否）',
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '医生姓名',
+  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
+  `hospital_id` bigint(32) NULL DEFAULT NULL COMMENT '医院ID',
+  `department` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '科室',
+  `position` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '职位',
+  `title` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '职称',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建日期',
+  `flag` int(4) NULL DEFAULT 1 COMMENT '讲者标志（1：是，0：否）',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `sex` int(2) NULL DEFAULT NULL COMMENT '性别（1：男 2：女）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of hospital_doctor
 -- ----------------------------
-INSERT INTO `hospital_doctor` VALUES (1, '李时珍', '13412341234', '神医', 1, 1, 1, 1, '2019-09-25 10:48:15', 1, '2019-09-25 10:48:21');
-INSERT INTO `hospital_doctor` VALUES (2, '华佗', '13412341234', '仙医', 1, 1, 1, 1, '2019-09-25 10:48:15', 1, '2019-09-25 10:48:21');
-
--- ----------------------------
--- Table structure for hospital_position
--- ----------------------------
-DROP TABLE IF EXISTS `hospital_position`;
-CREATE TABLE `hospital_position`  (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '医生职位名称',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for hospital_title
--- ----------------------------
-DROP TABLE IF EXISTS `hospital_title`;
-CREATE TABLE `hospital_title`  (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '医生职称名称',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+INSERT INTO `hospital_doctor` VALUES (1, '李时珍', '13412341234', 2, '妇产科', '科长', '主治', '2019-09-25 10:48:15', 1, '2019-09-25 10:48:21', 1);
+INSERT INTO `hospital_doctor` VALUES (2, '华佗', '13412341234', 1, '脑科', '科长', '主治', '2019-09-25 10:48:15', 1, '2019-09-25 10:48:21', 1);
+INSERT INTO `hospital_doctor` VALUES (3, '扁鹊', '13412341234', 1, '牙科', '副科长', '主治', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 1);
 
 -- ----------------------------
 -- Table structure for m_area
@@ -116,7 +111,7 @@ CREATE TABLE `m_area`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `class` int(1) NULL DEFAULT NULL COMMENT '1省2市3县',
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3524 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3523 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of m_area
@@ -3646,27 +3641,68 @@ INSERT INTO `m_area` VALUES (3522, 0, '810000', '香港特别行政区', 0);
 INSERT INTO `m_area` VALUES (3523, 0, '820000', '澳门特别行政区', 0);
 
 -- ----------------------------
+-- Table structure for meeting_auditor
+-- ----------------------------
+DROP TABLE IF EXISTS `meeting_auditor`;
+CREATE TABLE `meeting_auditor`  (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT,
+  `meeting_id` bigint(32) NOT NULL COMMENT '会议ID',
+  `auditor_name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核人姓名',
+  `auditor_time` datetime(0) NULL DEFAULT NULL COMMENT '审核时间',
+  `auditor_text` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核内容',
+  `auditor_status` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核状态',
+  `auditor_channel` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核渠道',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for meeting_cloud
+-- ----------------------------
+DROP TABLE IF EXISTS `meeting_cloud`;
+CREATE TABLE `meeting_cloud`  (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT,
+  `meeting_id` bigint(32) NULL DEFAULT NULL COMMENT '会议表id',
+  `type` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文件类型 01视频 02会议照片 03劳务报销单 04费用发票',
+  `upload_time` datetime(0) NULL DEFAULT NULL COMMENT '上传时间',
+  `user_id` bigint(32) NOT NULL COMMENT '上传者用户ID',
+  `url` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件url\r\n',
+  `name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件名',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `meeting_code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '会议编号',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of meeting_cloud
+-- ----------------------------
+INSERT INTO `meeting_cloud` VALUES (12, 25, '01', '2019-10-29 03:09:01', 1, 'http://img.jcscdata.com/M201910290002/5efd31bc-6285-4db9-a3fc-93202933d69f.jpg', '空洞骑士 (2).jpg', '2019-10-29 03:09:01', '2019-11-15 18:02:10', 'M201911140001');
+INSERT INTO `meeting_cloud` VALUES (13, NULL, '02', '2019-10-30 09:54:08', 1, 'http://img.jcscdata.com/M201910290001/93a4538b-4c6e-4281-a44d-a5a0edd74bfc.jpg', 'w (1).jpg', '2019-10-30 09:54:08', '2019-10-30 09:54:08', '');
+INSERT INTO `meeting_cloud` VALUES (14, NULL, '02', '2019-10-30 09:54:10', 1, 'http://img.jcscdata.com/M201910290001/eebbd8a2-0185-4389-b548-d1bc53baea72.png', 'w (1).png', '2019-10-30 09:54:10', '2019-10-30 09:54:10', '');
+INSERT INTO `meeting_cloud` VALUES (16, NULL, '02', '2019-11-13 10:27:02', 1, 'http://img.jcscdata.com/M201910290001/05db49dc-5e8f-4145-ac80-dda00c3c2e94.jpg', 'w (2).jpg', '2019-11-13 10:27:02', '2019-11-13 10:27:02', '');
+INSERT INTO `meeting_cloud` VALUES (17, 25, '02', '2019-11-13 10:28:34', 1, 'http://img.jcscdata.com/M201910290001/e2295e53-3976-43fc-b09e-17d95e847891.jpg', 'w (2).jpg', '2019-11-13 10:28:42', '2019-11-15 18:02:10', 'M201911140001');
+INSERT INTO `meeting_cloud` VALUES (18, 25, '02', '2019-11-13 10:30:16', 1, 'http://img.jcscdata.com/M201910290001/f8235c2b-9013-41ef-90c5-07fda800e4b6.jpg', 'w (2).jpg', '2019-11-13 10:30:16', '2019-11-15 18:02:10', 'M201911140001');
+INSERT INTO `meeting_cloud` VALUES (19, 25, '02', '2019-11-13 10:33:18', 1, 'http://img.jcscdata.com/M201910290001/188d0e62-120f-4853-ba0a-7d61b86188df.jpg', 'w (2).jpg', '2019-11-13 10:33:18', '2019-11-15 18:02:10', 'M201911140001');
+
+-- ----------------------------
 -- Table structure for meeting_course
 -- ----------------------------
 DROP TABLE IF EXISTS `meeting_course`;
 CREATE TABLE `meeting_course`  (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `course_name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '课件名',
-  `file_path` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'ftp路径',
-  `file_size` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '大小',
-  `download_times` int(32) NULL DEFAULT NULL COMMENT '课件下载次数',
+  `name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '课件名',
+  `url` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'url地址',
+  `size` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '大小',
+  `times` int(32) NULL DEFAULT NULL COMMENT '课件下载次数',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `file_name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'ftp文件名',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 90 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of meeting_course
 -- ----------------------------
-INSERT INTO `meeting_course` VALUES (87, 'w (1).jpg', 'course/', '1.34MB', 0, '2019-07-22 16:49:24', '2019-07-22 16:49:24', '50a6f630-4235-4c2d-80fa-92f5b590971e.jpg');
-INSERT INTO `meeting_course` VALUES (88, 'w (16).jpg', 'course/', '956.27KB', 0, '2019-07-22 17:02:54', '2019-07-22 17:02:54', '3903ba1f-092e-4a7e-889d-0905fb953049.jpg');
-INSERT INTO `meeting_course` VALUES (89, '科室汇管理后台需求文档_1.0.docx', 'course/', '802.77KB', 0, '2019-07-23 09:49:52', '2019-07-23 09:49:52', 'e5124314-5f74-479a-8d22-6a3c8706dcc0.docx');
+INSERT INTO `meeting_course` VALUES (90, '流弊的会议', 'http://img.jcscdata.com/course/75567189-077e-447b-87d7-2f9962cb9a26.jpg', '1.34MB', 1, '2019-10-31 09:59:45', '2019-10-31 10:01:49');
 
 -- ----------------------------
 -- Table structure for meeting_detail
@@ -3674,70 +3710,50 @@ INSERT INTO `meeting_course` VALUES (89, '科室汇管理后台需求文档_1.0.
 DROP TABLE IF EXISTS `meeting_detail`;
 CREATE TABLE `meeting_detail`  (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `meeting_type` int(4) NOT NULL DEFAULT 1 COMMENT '会议类型 1-科室会 2-学术会 3-推广会',
+  `meeting_type` int(4) NOT NULL DEFAULT 1 COMMENT '类型 1-科室会 2-学术会 3-推广会',
   `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '编号',
-  `meeting_time` datetime(0) NULL DEFAULT NULL COMMENT '会议日期',
-  `hospital_id` bigint(32) NOT NULL COMMENT '医院id',
-  `course_id` bigint(32) NULL DEFAULT NULL COMMENT '课件id',
+  `meeting_time` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '会议日期',
+  `hospital_id` bigint(32) NULL DEFAULT NULL COMMENT '医院id',
   `question_id` bigint(32) NULL DEFAULT NULL COMMENT '问卷id',
-  `speakers_id` bigint(32) NOT NULL COMMENT '讲者id',
-  `applicant_id` bigint(32) NOT NULL COMMENT '申请人-员工id',
-  `pre_cost` decimal(16, 2) NOT NULL COMMENT '预估费用',
-  `pre_persons` int(16) NOT NULL COMMENT '预估人数',
+  `speakers_id` bigint(32) NULL DEFAULT NULL COMMENT '讲者id',
+  `applicant_id` bigint(32) NULL DEFAULT NULL COMMENT '申请人-员工id',
+  `pre_persons` int(16) NULL DEFAULT NULL COMMENT '预估人数',
   `applicant_time` datetime(0) NULL DEFAULT NULL COMMENT '申请日期',
-  `source` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '来源',
-  `status` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '状态（01：待审核，02：待修改，03：待开展，04：待展中，05：已结束）',
-  `real_persons` int(16) NOT NULL COMMENT '实际人数',
-  `address` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '实时定位的地址',
+  `source` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '来源',
+  `meeting_status` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核状态（01待审核 02待修改 03待开展 04开展中 05已结束）',
+  `real_persons` int(16) NULL DEFAULT NULL COMMENT '实际人数',
+  `address` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '定位地址',
   `create_time` datetime(0) NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
   `labor_cost` decimal(16, 2) NULL DEFAULT NULL COMMENT '劳务费用',
   `activity_cost` decimal(16, 2) NULL DEFAULT NULL COMMENT '活动费用',
   `auditor_id` bigint(32) NULL DEFAULT NULL COMMENT '审核人',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  `topic_id` bigint(32) NULL DEFAULT NULL COMMENT '会议主题(即会议课件ID)',
+  `auditor_time` datetime(0) NULL DEFAULT NULL COMMENT '审核时间',
+  `auditor_text` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核原因',
+  `del_flag` int(2) NULL DEFAULT NULL COMMENT '1未删除 0已删除',
+  `auditor_channel` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核渠道(beam后台管理，heart小程序\n)\n',
+  `conclusion` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '会议总结',
+  `longitude` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '经度',
+  `latitude` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '纬度',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `IDX_CODE`(`code`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of meeting_detail
 -- ----------------------------
-INSERT INTO `meeting_detail` VALUES (1, 1, '2019', '2019-09-25 10:46:20', 1, 89, 1, 1, 1, 200.11, 200, '2019-09-25 10:50:46', '腾讯', '01', 100, '北京协和', '2019-09-25 10:51:47', '2019-09-25 10:51:50', 100.51, 400.00, NULL);
-INSERT INTO `meeting_detail` VALUES (2, 2, '2019', '2019-09-25 10:46:20', 1, 89, 1, 1, 1, 200.44, 200, '2019-09-25 10:50:46', '阿里', '02', 100, '同仁堂', '2019-09-25 10:51:47', '2019-09-25 10:51:50', 150.50, 600.00, NULL);
-
--- ----------------------------
--- Table structure for meeting_place
--- ----------------------------
-DROP TABLE IF EXISTS `meeting_place`;
-CREATE TABLE `meeting_place`  (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `type_id` bigint(32) NOT NULL COMMENT '会议场所类型id ',
-  `place` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '会议场所 ',
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of meeting_place
--- ----------------------------
-INSERT INTO `meeting_place` VALUES (1, 1, '北京什刹海海面', '2019-09-25 09:30:35', '2019-09-25 09:30:40');
-INSERT INTO `meeting_place` VALUES (2, 1, '北京北海海下', '2019-09-25 10:11:29', '2019-09-25 10:11:29');
-
--- ----------------------------
--- Table structure for meeting_place_type
--- ----------------------------
-DROP TABLE IF EXISTS `meeting_place_type`;
-CREATE TABLE `meeting_place_type`  (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `type_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '类型名称 ',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of meeting_place_type
--- ----------------------------
-INSERT INTO `meeting_place_type` VALUES (1, '医学会议', '2019-09-25 09:30:54', '2019-09-25 09:30:57');
+INSERT INTO `meeting_detail` VALUES (1, 1, 'M201910290001', '2019-11-18', 1, 1, 1, 1, 200, '2019-09-25 10:50:46', '小程序', '05', 100, '北京协和', '2019-09-25 10:51:47', '2019-11-13 17:59:58', 100.51, 400.00, 1, 90, '2019-11-13 14:54:54', '菜', 1, 'heart', NULL, NULL, NULL);
+INSERT INTO `meeting_detail` VALUES (2, 2, 'M201910290002', '2019-09-25', 1, 1, 1, 1, 200, '2019-09-25 10:50:46', '小程序', '05', 100, '同仁堂', '2019-09-25 10:51:47', '2019-11-13 17:59:58', 150.50, 600.00, 1, 90, NULL, NULL, 1, 'beam', NULL, NULL, NULL);
+INSERT INTO `meeting_detail` VALUES (20, 1, 'M201911090001', '2019-11-08', 1, NULL, 2, 1, 2, '2019-11-09 06:39:06', '小程序', '05', NULL, NULL, '2019-11-09 06:39:06', '2019-11-09 06:39:06', 150.50, 100.22, 1, 90, NULL, NULL, 1, 'heart', NULL, NULL, NULL);
+INSERT INTO `meeting_detail` VALUES (21, 1, 'M201911090002', '2019-11-08', 2, NULL, 2, 1, 33, '2019-11-09 08:10:04', '小程序', '05', NULL, NULL, '2019-11-09 08:10:04', '2019-11-09 08:10:04', 150.50, 100.22, 1, 90, NULL, NULL, 1, 'heart', NULL, NULL, NULL);
+INSERT INTO `meeting_detail` VALUES (22, 1, 'M201911090003', '2019-11-08', 2, NULL, 2, 1, 222, '2019-11-09 08:42:26', '小程序', '05', NULL, NULL, '2019-11-09 08:42:26', '2019-11-09 08:42:26', 150.50, 100.22, 1, 90, NULL, NULL, 1, 'heart', NULL, NULL, NULL);
+INSERT INTO `meeting_detail` VALUES (23, 1, 'M201911090004', '2019-11-08', 2, NULL, 2, 1, 22, '2019-11-09 08:52:44', '小程序', '05', NULL, NULL, '2019-11-09 08:52:44', '2019-11-09 08:52:44', 150.50, 100.22, 1, 90, NULL, NULL, 1, 'heart', NULL, NULL, NULL);
+INSERT INTO `meeting_detail` VALUES (24, 1, 'M201911090005', '2019-11-08', 1, NULL, 2, 1, 122, '2019-11-09 08:53:50', '小程序', '05', NULL, NULL, '2019-11-09 08:53:50', '2019-11-09 08:53:50', 150.50, 100.22, 1, 90, NULL, NULL, 1, 'heart', NULL, NULL, NULL);
+INSERT INTO `meeting_detail` VALUES (25, 1, 'M201911140001', '2019-11-14', 2, NULL, 1, 1, 22, '2019-11-14 16:26:11', '小程序', '01', 100, '北京市朝阳区那旮沓胡同', '2019-11-14 16:26:11', '2019-11-21 16:33:15', 100.01, 100.22, NULL, 90, NULL, NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `meeting_detail` VALUES (28, 1, 'M201911210003', '2019-11-21', 1, NULL, 1, 2, 20, '2019-11-21 17:00:37', '小程序', '01', NULL, NULL, '2019-11-21 17:00:45', '2019-11-21 17:00:45', 20.22, 100.22, NULL, 90, NULL, NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `meeting_detail` VALUES (29, 1, 'M201911210004', '2019-11-21', 1, NULL, 1, 1, 20, '2019-11-21 17:05:34', '小程序', '01', NULL, NULL, '2019-11-21 17:05:34', '2019-11-21 17:05:34', 20.22, 100.22, NULL, 90, NULL, NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `meeting_detail` VALUES (30, 1, 'M201911210005', '2019-11-21', 1, NULL, 1, 2, 20, '2019-11-21 17:06:20', '小程序', '01', NULL, NULL, '2019-11-21 17:06:20', '2019-11-21 17:06:20', 20.22, 100.22, NULL, 90, NULL, NULL, 1, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for meeting_question
@@ -3745,47 +3761,14 @@ INSERT INTO `meeting_place_type` VALUES (1, '医学会议', '2019-09-25 09:30:54
 DROP TABLE IF EXISTS `meeting_question`;
 CREATE TABLE `meeting_question`  (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `question_name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '问卷名称',
-  `file_path` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'ftp路径',
-  `download_times` int(32) NULL DEFAULT NULL COMMENT '问卷下载次数',
+  `name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '问卷名称',
+  `url` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'url地址',
+  `times` int(32) NULL DEFAULT NULL COMMENT '问卷下载次数',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `file_name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'ftp文件名',
+  `size` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件大小',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of meeting_question
--- ----------------------------
-INSERT INTO `meeting_question` VALUES (1, '空洞骑士 (1).jpg', 'question/', 0, '2019-08-12 15:12:16', '2019-08-12 15:12:16', 'a834c601-4fa6-4a23-b6b2-2b4d2f66fa15.jpg');
-
--- ----------------------------
--- Table structure for meeting_scene
--- ----------------------------
-DROP TABLE IF EXISTS `meeting_scene`;
-CREATE TABLE `meeting_scene`  (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `meeting_id` bigint(32) NOT NULL DEFAULT 1 COMMENT '会议表id',
-  `file_type` int(4) NOT NULL COMMENT '文件类型 1视频 2会议照片 3劳务报销单 4费用发票',
-  `upload_time` datetime(0) NULL DEFAULT NULL COMMENT '上传时间',
-  `uploader_id` bigint(32) NOT NULL COMMENT '上传者-员工id',
-  `file_path` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'ftp路径',
-  `file_name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'ftp文件名',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `real_name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '真实文件名',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of meeting_scene
--- ----------------------------
-INSERT INTO `meeting_scene` VALUES (1, 1, 1, '2019-09-27 10:55:40', 1, 'https://mwy-1259572200.cos.ap-beijing.myqcloud.com/2019-07-04%2009-25-04.mkv', '', '2019-09-27 10:56:44', '2019-09-27 10:56:45', '会议视频1');
-INSERT INTO `meeting_scene` VALUES (2, 1, 2, '2019-09-27 11:00:28', 1, 'https://mwy-1259572200.cos.ap-beijing.myqcloud.com/50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg', '50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg', '2019-09-27 11:00:43', '2019-09-27 11:00:44', '会议照片1');
-INSERT INTO `meeting_scene` VALUES (3, 1, 3, '2019-09-27 11:02:04', 1, 'https://mwy-1259572200.cos.ap-beijing.myqcloud.com/50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg', '50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg', '2019-09-27 11:02:11', '2019-09-27 11:02:13', '劳务报销');
-INSERT INTO `meeting_scene` VALUES (4, 1, 4, '2019-09-27 11:02:43', 1, 'https://mwy-1259572200.cos.ap-beijing.myqcloud.com/50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg', '50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg', '2019-09-27 11:02:33', '2019-09-27 11:02:32', '费用发票');
-INSERT INTO `meeting_scene` VALUES (5, 1, 1, '2019-09-27 10:55:40', 1, 'https://mwy-1259572200.cos.ap-beijing.myqcloud.com/2019-07-04%2009-25-04.mkv', '', '2019-09-27 10:56:44', '2019-09-27 10:56:45', '会议视频2');
-INSERT INTO `meeting_scene` VALUES (6, 1, 2, '2019-09-27 11:00:28', 1, 'https://mwy-1259572200.cos.ap-beijing.myqcloud.com/50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg', '50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg', '2019-09-27 11:00:43', '2019-09-27 11:00:44', '会议照片2');
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for qrtz_blob_triggers
@@ -3924,7 +3907,7 @@ CREATE TABLE `qrtz_scheduler_state`  (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('RenrenScheduler', 'DESKTOP-5N8RA0F1569741394522', 1569742344626, 15000);
+INSERT INTO `qrtz_scheduler_state` VALUES ('RenrenScheduler', 'DESKTOP-5N8RA0F1574241320884', 1574241672891, 15000);
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -4021,7 +4004,7 @@ CREATE TABLE `schedule_job`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1080345897063223298 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of schedule_job
@@ -4042,13 +4025,15 @@ CREATE TABLE `sys_config`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `param_key`(`param_key`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统配置信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统配置信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_config
 -- ----------------------------
-INSERT INTO `sys_config` VALUES (1, 'CLOUD_STORAGE_CONFIG_KEY', '{\"qcloudRegion\":\"ap-beijing\",\"qcloudAppId\":\"1259572200\",\"qcloudBucketName\":\"mwy-1259572200\",\"qcloudDomain\":\"https://mwy-1259572200.cos.ap-beijing.myqcloud.com\",\"qcloudPrefix\":\"mwy\",\"qcloudSecretId\":\"AKIDuZ1ylk521ztauyHTyEFCsLcnskYCnW4N\",\"qcloudSecretKey\":\"DYghbggfpu6sU5aAaq66HRJkuLeqrnKl\",\"type\":2}\r\n', 1, '云存储配置信息', '2019-07-03 11:05:29', '2019-07-03 11:05:32');
-INSERT INTO `sys_config` VALUES (2, 'FTP_CONFIG_KEY', '{\"ftpIp\":\"192.168.226.128\",\"ftpPort\":\"21\",\"ftpUsername\":\"uftp\",\"ftpPassword\":\"qweasdzxc\",\"imgPath\":\"img/\",\"videoPath\":\"video/\",\"coursePath\":\"course/\",\"questionPath\":\"question/\"}', 1, 'ftp配置信息', '2019-07-22 17:41:24', '2019-07-22 17:41:28');
+INSERT INTO `sys_config` VALUES (1, 'CLOUD_STORAGE_CONFIG_KEY', '{\"qiniuDomain\":\"img.jcscdata.com\",\"qiniuPrefix\":\"wehert\",\"qiniuAccessKey\":\"1hAtppUg5XlE8mRv5ZnFQzpu5j43KJoy4bLPdMLg\",\"qiniuSecretKey\":\"achVhae0ZYTDFBxq3U3Fa2dTsxhvNlyPyptPQ9wN\",\"qiniuBucketName\":\"care\",\"type\":3}\r\n\r\n    \r\n\r\n', 1, '云存储配置信息', '2019-07-03 11:05:29', '2019-07-03 11:05:32');
+INSERT INTO `sys_config` VALUES (2, 'FTP_CONFIG_KEY', '{\"ftpIp\":\"192.168.226.128\",\"ftpPort\":\"21\",\"ftpUsername\":\"uftp\",\"ftpPassword\":\"qweasdzxc\"}\r\n', 1, 'ftp配置信息', '2019-07-22 17:41:24', '2019-07-22 17:41:28');
+INSERT INTO `sys_config` VALUES (3, 'SMS_CONFIG_KEY', '{\"product\":\"Dysmsapi\",\"domain\":\"dysmsapi.aliyuncs.com\",\"accessKeyId\":\"LTAIpo5P6QxBUw5K\",\"accessKeySecret\":\"EwfCzU5dHZUZJPARIgshC4OvQ3Mso1\",\"signName\": \"蓝色县域项目组\", \"templateCode\": \"SMS_166720034\"}', 1, 'sms配置信息', '2019-11-10 13:24:07', '2019-11-10 13:24:12');
+INSERT INTO `sys_config` VALUES (4, 'WECHAT_CONFIG_KEY', '{\"appId\":\"wx721cde90734ebc81\",\"secret\":\"0ae93d6bafc5f00fa32292c883712ee8\",\"jsCode2Session\":\"https://api.weixin.qq.com/sns/jscode2session\",\"grant_type\": \"authorization_code\"}', 1, '微信配置', '2019-11-12 11:11:24', '2019-11-12 11:11:28');
 
 -- ----------------------------
 -- Table structure for sys_dept
@@ -4063,7 +4048,7 @@ CREATE TABLE `sys_dept`  (
   `create_time` datetime(0) NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dept
@@ -4095,7 +4080,7 @@ CREATE TABLE `sys_dict`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 44 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict
@@ -4119,10 +4104,14 @@ INSERT INTO `sys_dict` VALUES (16, 14, '学术会', NULL, '2', 2, '2019-09-26 16
 INSERT INTO `sys_dict` VALUES (17, 14, '推广会', NULL, '3', 3, '2019-09-26 16:12:52', '2019-09-26 16:12:52');
 INSERT INTO `sys_dict` VALUES (18, 0, '会议状态', NULL, 'meeting_status', 6, '2019-09-26 16:12:52', '2019-09-26 16:12:52');
 INSERT INTO `sys_dict` VALUES (19, 18, '待审核', NULL, '01', 1, '2019-09-26 16:12:52', '2019-09-26 16:12:52');
-INSERT INTO `sys_dict` VALUES (20, 18, '待开展', NULL, '02', 2, '2019-09-26 16:12:52', '2019-09-26 16:12:52');
-INSERT INTO `sys_dict` VALUES (21, 18, '待修改', NULL, '03', 3, '2019-09-26 16:12:52', '2019-09-26 16:12:52');
-INSERT INTO `sys_dict` VALUES (22, 18, '开展中', NULL, '04', 4, '2019-09-26 16:12:52', '2019-09-26 16:12:52');
-INSERT INTO `sys_dict` VALUES (23, 18, '已结束', NULL, '05', 5, '2019-09-26 16:12:52', '2019-09-26 16:12:52');
+INSERT INTO `sys_dict` VALUES (20, 18, '待修改', NULL, '02', 2, '2019-09-26 16:12:52', '2019-09-26 16:12:52');
+INSERT INTO `sys_dict` VALUES (21, 18, '待开展', NULL, '03', 3, '2019-09-26 16:12:52', '2019-09-26 16:12:52');
+INSERT INTO `sys_dict` VALUES (22, 18, '开展中', NULL, '04', 4, '2019-11-11 14:04:19', '2019-11-11 14:04:19');
+INSERT INTO `sys_dict` VALUES (23, 18, '已结束', NULL, '05', 5, '2019-11-11 14:04:19', '2019-11-11 14:04:19');
+INSERT INTO `sys_dict` VALUES (24, 0, '验证码限制次数', NULL, 'sms_code_limit', 7, '2019-11-11 14:04:19', '2019-11-11 14:04:19');
+INSERT INTO `sys_dict` VALUES (25, 24, '30', NULL, 'day', 1, '2019-11-11 14:04:19', '2019-11-11 14:04:19');
+INSERT INTO `sys_dict` VALUES (26, 24, '20', NULL, 'hours', 2, '2019-11-11 14:04:19', '2019-11-11 14:04:19');
+INSERT INTO `sys_dict` VALUES (27, 24, '10', NULL, 'halfHours', 3, '2019-11-11 14:04:19', '2019-11-11 14:04:19');
 
 -- ----------------------------
 -- Table structure for sys_login_log
@@ -4138,7 +4127,7 @@ CREATE TABLE `sys_login_log`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1150667819491475915 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '登陆日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1150667819491475971 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '登陆日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_login_log
@@ -4272,6 +4261,49 @@ INSERT INTO `sys_login_log` VALUES (1150667819491475925, '退出日志', 1, '成
 INSERT INTO `sys_login_log` VALUES (1150667819491475926, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-09-29 15:05:33', '2019-09-29 15:05:33');
 INSERT INTO `sys_login_log` VALUES (1150667819491475927, '退出日志', 1, '成功', NULL, '127.0.0.1', '2019-09-29 15:22:55', '2019-09-29 15:22:55');
 INSERT INTO `sys_login_log` VALUES (1150667819491475928, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-09-29 15:22:57', '2019-09-29 15:22:57');
+INSERT INTO `sys_login_log` VALUES (1150667819491475929, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-10-16 15:34:43', '2019-10-16 15:34:43');
+INSERT INTO `sys_login_log` VALUES (1150667819491475930, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-10-18 16:50:09', '2019-10-18 16:50:09');
+INSERT INTO `sys_login_log` VALUES (1150667819491475931, '登录日志', 1, '成功', NULL, '117.136.38.135', '2019-10-23 14:59:41', '2019-10-23 14:59:41');
+INSERT INTO `sys_login_log` VALUES (1150667819491475932, '退出日志', 1, '成功', NULL, '117.136.38.135', '2019-10-23 15:00:13', '2019-10-23 15:00:13');
+INSERT INTO `sys_login_log` VALUES (1150667819491475933, '登录日志', 1, '成功', NULL, '117.136.38.135', '2019-10-23 15:00:16', '2019-10-23 15:00:16');
+INSERT INTO `sys_login_log` VALUES (1150667819491475934, '登录日志', 1, '成功', NULL, '117.136.38.135', '2019-10-23 15:02:55', '2019-10-23 15:02:55');
+INSERT INTO `sys_login_log` VALUES (1150667819491475935, '退出日志', 1, '成功', NULL, '117.136.38.135', '2019-10-23 15:03:03', '2019-10-23 15:03:03');
+INSERT INTO `sys_login_log` VALUES (1150667819491475936, '登录日志', 1, '成功', NULL, '117.136.38.135', '2019-10-23 15:43:38', '2019-10-23 15:43:38');
+INSERT INTO `sys_login_log` VALUES (1150667819491475937, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-10-31 06:30:41', '2019-10-31 06:30:41');
+INSERT INTO `sys_login_log` VALUES (1150667819491475938, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-10-31 07:01:39', '2019-10-31 07:01:39');
+INSERT INTO `sys_login_log` VALUES (1150667819491475939, '退出日志', 1, '成功', NULL, '127.0.0.1', '2019-10-31 07:03:01', '2019-10-31 07:03:01');
+INSERT INTO `sys_login_log` VALUES (1150667819491475940, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-10-31 07:03:04', '2019-10-31 07:03:04');
+INSERT INTO `sys_login_log` VALUES (1150667819491475941, '退出日志', 1, '成功', NULL, '127.0.0.1', '2019-10-31 08:30:22', '2019-10-31 08:30:22');
+INSERT INTO `sys_login_log` VALUES (1150667819491475942, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-10-31 08:30:26', '2019-10-31 08:30:26');
+INSERT INTO `sys_login_log` VALUES (1150667819491475943, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-10-31 09:55:52', '2019-10-31 09:55:52');
+INSERT INTO `sys_login_log` VALUES (1150667819491475944, '登录日志', 1, '成功', NULL, '117.136.0.240', '2019-11-04 02:31:34', '2019-11-04 02:31:34');
+INSERT INTO `sys_login_log` VALUES (1150667819491475945, '退出日志', 1, '成功', NULL, '117.136.0.240', '2019-11-04 02:32:37', '2019-11-04 02:32:37');
+INSERT INTO `sys_login_log` VALUES (1150667819491475946, '登录日志', 1, '成功', NULL, '61.148.245.251', '2019-11-04 10:14:57', '2019-11-04 10:14:57');
+INSERT INTO `sys_login_log` VALUES (1150667819491475947, '退出日志', 1, '成功', NULL, '61.148.245.251', '2019-11-04 10:15:10', '2019-11-04 10:15:10');
+INSERT INTO `sys_login_log` VALUES (1150667819491475948, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-18 01:51:32', '2019-11-18 01:51:32');
+INSERT INTO `sys_login_log` VALUES (1150667819491475949, '退出日志', 1, '成功', NULL, '127.0.0.1', '2019-11-18 01:52:41', '2019-11-18 01:52:41');
+INSERT INTO `sys_login_log` VALUES (1150667819491475950, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-18 01:52:58', '2019-11-18 01:52:58');
+INSERT INTO `sys_login_log` VALUES (1150667819491475951, '退出日志', 1, '成功', NULL, '127.0.0.1', '2019-11-18 01:53:16', '2019-11-18 01:53:16');
+INSERT INTO `sys_login_log` VALUES (1150667819491475952, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-19 06:46:28', '2019-11-19 06:46:28');
+INSERT INTO `sys_login_log` VALUES (1150667819491475953, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-19 07:17:52', '2019-11-19 07:17:52');
+INSERT INTO `sys_login_log` VALUES (1150667819491475954, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-19 07:18:35', '2019-11-19 07:18:35');
+INSERT INTO `sys_login_log` VALUES (1150667819491475955, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-19 09:10:57', '2019-11-19 09:10:57');
+INSERT INTO `sys_login_log` VALUES (1150667819491475956, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-19 09:17:57', '2019-11-19 09:17:57');
+INSERT INTO `sys_login_log` VALUES (1150667819491475957, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-19 09:26:58', '2019-11-19 09:26:58');
+INSERT INTO `sys_login_log` VALUES (1150667819491475958, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-19 09:29:02', '2019-11-19 09:29:02');
+INSERT INTO `sys_login_log` VALUES (1150667819491475959, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-19 09:29:27', '2019-11-19 09:29:27');
+INSERT INTO `sys_login_log` VALUES (1150667819491475960, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-19 09:56:27', '2019-11-19 09:56:27');
+INSERT INTO `sys_login_log` VALUES (1150667819491475961, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 01:45:14', '2019-11-20 01:45:14');
+INSERT INTO `sys_login_log` VALUES (1150667819491475962, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 02:09:44', '2019-11-20 02:09:44');
+INSERT INTO `sys_login_log` VALUES (1150667819491475963, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 02:16:47', '2019-11-20 02:16:47');
+INSERT INTO `sys_login_log` VALUES (1150667819491475964, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 10:25:19', '2019-11-20 10:25:19');
+INSERT INTO `sys_login_log` VALUES (1150667819491475965, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 10:32:15', '2019-11-20 10:32:15');
+INSERT INTO `sys_login_log` VALUES (1150667819491475966, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 10:42:27', '2019-11-20 10:42:27');
+INSERT INTO `sys_login_log` VALUES (1150667819491475967, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 11:01:34', '2019-11-20 11:01:34');
+INSERT INTO `sys_login_log` VALUES (1150667819491475968, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 11:04:05', '2019-11-20 11:04:05');
+INSERT INTO `sys_login_log` VALUES (1150667819491475969, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 11:07:19', '2019-11-20 11:07:19');
+INSERT INTO `sys_login_log` VALUES (1150667819491475970, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 11:12:19', '2019-11-20 11:12:19');
+INSERT INTO `sys_login_log` VALUES (1150667819491475971, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-20 17:02:43', '2019-11-20 17:02:43');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -4292,7 +4324,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `del_flag` tinyint(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 79 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 90 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -4370,6 +4402,16 @@ INSERT INTO `sys_menu` VALUES (77, 44, '下载', 'meeting/question/download', 'm
 INSERT INTO `sys_menu` VALUES (78, 44, '删除', 'meeting/question/del', 'meeting:question:del', 2, NULL, 3, NULL, NULL, '2019-08-12 14:32:25', '2019-08-12 14:32:25', 0);
 INSERT INTO `sys_menu` VALUES (79, 51, '导出', 'hospital/doctor/export', 'hospital:doctor:export', 2, NULL, 1, NULL, NULL, '2019-09-29 15:21:52', '2019-09-29 15:22:45', 0);
 INSERT INTO `sys_menu` VALUES (80, 52, '导出', 'hospital/detail/export', 'hospital:detail:export', 2, NULL, 1, NULL, NULL, '2019-09-29 15:22:23', '2019-09-29 15:22:50', 0);
+INSERT INTO `sys_menu` VALUES (81, 50, '区域管理', 'hospital/area/list', 'hospital:area:list', 1, NULL, 43, NULL, NULL, '2019-10-31 06:55:12', '2019-10-31 06:55:12', 0);
+INSERT INTO `sys_menu` VALUES (82, 81, '新增', 'hospital/area/add', 'hospital:area:add', 2, NULL, 1, NULL, NULL, '2019-10-31 06:56:13', '2019-10-31 06:56:13', 0);
+INSERT INTO `sys_menu` VALUES (83, 81, '编辑', 'hospital/area/edit', 'hospital:area:edit', 2, NULL, 2, NULL, NULL, '2019-10-31 06:56:54', '2019-10-31 06:56:54', 0);
+INSERT INTO `sys_menu` VALUES (84, 81, '删除', 'hospital/area/del', 'hospital:area:del', 2, NULL, 3, NULL, NULL, '2019-10-31 06:57:22', '2019-10-31 06:57:22', 0);
+INSERT INTO `sys_menu` VALUES (85, 52, '新增', 'hospital/detail/add', 'hospital:detail:add', 2, NULL, 2, NULL, NULL, '2019-10-31 07:47:50', '2019-10-31 07:47:50', 0);
+INSERT INTO `sys_menu` VALUES (86, 52, '编辑', 'hospital/detail/edit', 'hospital:detail:edit', 2, NULL, 3, NULL, NULL, '2019-10-31 07:48:23', '2019-10-31 07:48:23', 0);
+INSERT INTO `sys_menu` VALUES (87, 52, '删除', 'hospital/detail/del', 'hospital:detail:del', 2, NULL, 4, NULL, NULL, '2019-10-31 07:49:44', '2019-10-31 07:49:44', 0);
+INSERT INTO `sys_menu` VALUES (88, 51, '新增', 'hospital/doctor/add', 'hospital:doctor:add', 2, NULL, 2, NULL, NULL, '2019-10-31 07:54:46', '2019-10-31 07:54:46', 0);
+INSERT INTO `sys_menu` VALUES (89, 51, '编辑', 'hospital/doctor/edit', 'hospital:doctor:edit', 2, NULL, 3, NULL, NULL, '2019-10-31 07:55:17', '2019-10-31 07:55:17', 0);
+INSERT INTO `sys_menu` VALUES (90, 51, '删除', 'hospital/doctor/del', 'hospital:doctor:del', 2, NULL, 4, NULL, NULL, '2019-10-31 07:55:59', '2019-10-31 07:55:59', 0);
 
 -- ----------------------------
 -- Table structure for sys_operation_log
@@ -4388,7 +4430,7 @@ CREATE TABLE `sys_operation_log`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `execute_time` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '执行时间(毫秒)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1150601874915967747 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1150601874915967778 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_operation_log
@@ -4521,6 +4563,22 @@ INSERT INTO `sys_operation_log` VALUES (1150601874915967759, '操作日志', '�
 INSERT INTO `sys_operation_log` VALUES (1150601874915967760, '操作日志', '用户列表导出', 1, 'com.ksh.beam.system.controller.user.UserDetailController', 'export', '成功', '{\"currentPage\":1,\"pageSize\":10}', '2019-09-29 10:45:44', '2019-09-29 10:45:44', '82');
 INSERT INTO `sys_operation_log` VALUES (1150601874915967761, '操作日志', '医生列表导出', 1, 'com.ksh.beam.system.controller.hospital.HospitalDoctorController', 'export', '成功', '{\"currentPage\":1,\"pageSize\":10}', '2019-09-29 15:23:28', '2019-09-29 15:23:28', '577');
 INSERT INTO `sys_operation_log` VALUES (1150601874915967762, '操作日志', '医院列表导出', 1, 'com.ksh.beam.system.controller.hospital.HospitalDetailController', 'export', '成功', '{\"currentPage\":1,\"pageSize\":10}', '2019-09-29 15:23:39', '2019-09-29 15:23:39', '32');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967763, '操作日志', '课件上传', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'upload', '成功', '{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (1).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.3827726034793911010.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (1).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.3827726034793911010.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"}},\"filename\":\"w (1).jpg\"}', '2019-10-31 09:59:45', '2019-10-31 09:59:45', '3623');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967764, '操作日志', '课件下载', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'download', '成功', '90', '2019-10-31 10:01:49', '2019-10-31 10:01:49', '1671');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967765, '异常日志', '', 1, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.builder.BuilderException: Error evaluating expression \'meeting.status != null and meeting.status != \'\'\'. Cause: org.apache.ibatis.ognl.NoSuchPropertyException: com.ksh.beam.system.entity.meeting.Detail.status', '2019-11-20 01:45:51', '2019-11-20 01:45:51', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967766, '异常日志', '', 1, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.builder.BuilderException: Error evaluating expression \'meeting.status != null and meeting.status != \'\'\'. Cause: org.apache.ibatis.ognl.NoSuchPropertyException: com.ksh.beam.system.entity.meeting.Detail.status', '2019-11-20 01:57:05', '2019-11-20 01:57:05', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967767, '异常日志', '', 1, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.builder.BuilderException: Error evaluating expression \'meeting.status != null and meeting.status != \'\'\'. Cause: org.apache.ibatis.ognl.NoSuchPropertyException: com.ksh.beam.system.entity.meeting.Detail.status', '2019-11-20 01:57:05', '2019-11-20 01:57:05', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967768, '异常日志', '', 1, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.builder.BuilderException: Error evaluating expression \'meeting.status != null and meeting.status != \'\'\'. Cause: org.apache.ibatis.ognl.NoSuchPropertyException: com.ksh.beam.system.entity.meeting.Detail.status', '2019-11-20 01:57:06', '2019-11-20 01:57:06', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967769, '异常日志', '', 1, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.builder.BuilderException: Error evaluating expression \'meeting.status != null and meeting.status != \'\'\'. Cause: org.apache.ibatis.ognl.NoSuchPropertyException: com.ksh.beam.system.entity.meeting.Detail.status', '2019-11-20 01:57:08', '2019-11-20 01:57:08', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967770, '异常日志', '', 1, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.builder.BuilderException: Error evaluating expression \'meeting.status != null and meeting.status != \'\'\'. Cause: org.apache.ibatis.ognl.NoSuchPropertyException: com.ksh.beam.system.entity.meeting.Detail.status', '2019-11-20 01:59:34', '2019-11-20 01:59:34', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967771, '异常日志', '', 1, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \r\n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\MeetingDetailMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-20 02:10:06', '2019-11-20 02:10:06', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967772, '异常日志', '', 1, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \r\n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\MeetingDetailMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-20 02:11:18', '2019-11-20 02:11:18', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967773, '异常日志', '', 1, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \r\n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\MeetingDetailMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-20 02:13:42', '2019-11-20 02:13:42', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967774, '异常日志', '', 1, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \r\n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\MeetingDetailMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-20 10:30:16', '2019-11-20 10:30:16', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967775, '异常日志', '', 1, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\r\n### The error may exist in com/ksh/beam/system/dao/MeetingSceneMapper.java (best guess)\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: SELECT  id,meeting_id AS meetingId,meeting_code AS meetingCode,type,upload_time AS uploadTime,user_id AS userId,url,name  FROM meeting_cloud  WHERE  meeting_id = ? AND file_type = ?\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'', '2019-11-20 10:36:10', '2019-11-20 10:36:10', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967776, '异常日志', '', 1, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\r\n### The error may exist in com/ksh/beam/system/dao/MeetingSceneMapper.java (best guess)\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: SELECT  id,meeting_id AS meetingId,meeting_code AS meetingCode,type,upload_time AS uploadTime,user_id AS userId,url,name  FROM meeting_cloud  WHERE  meeting_id = ? AND file_type = ?\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'', '2019-11-20 10:36:15', '2019-11-20 10:36:15', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967777, '异常日志', '', 1, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'hdc.name speakers_name, ud1.username applicant_name, ud1.phone, mc.name topic_na\' at line 3\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\MeetingDetailMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select * from         (select md.*,hde.name hospital_name, hde.address hospital_address, hde.code hospital_code, hde.level hospital_level,hde.area_name hospital_area         hdc.name speakers_name, ud1.username applicant_name, ud1.phone, mc.name topic_name,         case md.auditor_channel when \'beam\' then su.name when \'heart\' then ud2.username else \'\' end auditor_name         from meeting_detail md         left join (select * from hospital_detail d left join hospital_area a on d.area_id = a.id) hde on md.hospital_id = hde.id         left join hospital_doctor hdc on md.speakers_id = hdc.id         left join sys_user su on md.auditor_id = su.id         left join user_detail ud1 on md.applicant_id = ud1.id         left join user_detail ud2 on md.auditor_id = ud2.id         left join meeting_course mc on md.topic_id = mc.id         ) m         where m.del_flag = 1 and m.id = ?\r\n### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'hdc.name speakers_name, ud1.username applicant_name, ud1.phone, mc.name topic_na\' at line 3\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'hdc.name speakers_name, ud1.username applicant_name, ud1.phone, mc.name topic_na\' at line 3', '2019-11-20 11:01:53', '2019-11-20 11:01:53', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967778, '异常日志', '', 1, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Duplicate column name \'id\'\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\MeetingDetailMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select * from         (select md.*,hde.name hospital_name, hde.address hospital_address, hde.code hospital_code, hde.level hospital_level,hde.area_name hospital_area,         hdc.name speakers_name, ud1.username applicant_name, ud1.phone, mc.name topic_name,         case md.auditor_channel when \'beam\' then su.name when \'heart\' then ud2.username else \'\' end auditor_name         from meeting_detail md         left join (select * from hospital_detail d left join hospital_area a on d.area_id = a.id) hde on md.hospital_id = hde.id         left join hospital_doctor hdc on md.speakers_id = hdc.id         left join sys_user su on md.auditor_id = su.id         left join user_detail ud1 on md.applicant_id = ud1.id         left join user_detail ud2 on md.auditor_id = ud2.id         left join meeting_course mc on md.topic_id = mc.id         ) m         where m.del_flag = 1 and m.id = ?\r\n### Cause: java.sql.SQLSyntaxErrorException: Duplicate column name \'id\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Duplicate column name \'id\'', '2019-11-20 11:04:21', '2019-11-20 11:04:21', 'null');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -4533,7 +4591,7 @@ CREATE TABLE `sys_role`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -4550,130 +4608,192 @@ CREATE TABLE `sys_role_menu`  (
   `role_id` bigint(20) NULL DEFAULT NULL COMMENT '角色ID',
   `menu_id` bigint(20) NULL DEFAULT NULL COMMENT '菜单ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1993 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与菜单对应关系' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2251 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与菜单对应关系' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
-INSERT INTO `sys_role_menu` VALUES (1993, 1, 1);
-INSERT INTO `sys_role_menu` VALUES (1994, 1, 2);
-INSERT INTO `sys_role_menu` VALUES (1995, 1, 3);
-INSERT INTO `sys_role_menu` VALUES (1996, 1, 12);
-INSERT INTO `sys_role_menu` VALUES (1997, 1, 16);
-INSERT INTO `sys_role_menu` VALUES (1998, 1, 13);
-INSERT INTO `sys_role_menu` VALUES (1999, 1, 14);
-INSERT INTO `sys_role_menu` VALUES (2000, 1, 15);
-INSERT INTO `sys_role_menu` VALUES (2001, 1, 17);
-INSERT INTO `sys_role_menu` VALUES (2002, 1, 4);
-INSERT INTO `sys_role_menu` VALUES (2003, 1, 18);
-INSERT INTO `sys_role_menu` VALUES (2004, 1, 21);
-INSERT INTO `sys_role_menu` VALUES (2005, 1, 19);
-INSERT INTO `sys_role_menu` VALUES (2006, 1, 20);
-INSERT INTO `sys_role_menu` VALUES (2007, 1, 5);
-INSERT INTO `sys_role_menu` VALUES (2008, 1, 22);
-INSERT INTO `sys_role_menu` VALUES (2009, 1, 23);
-INSERT INTO `sys_role_menu` VALUES (2010, 1, 24);
-INSERT INTO `sys_role_menu` VALUES (2011, 1, 6);
-INSERT INTO `sys_role_menu` VALUES (2012, 1, 26);
-INSERT INTO `sys_role_menu` VALUES (2013, 1, 27);
-INSERT INTO `sys_role_menu` VALUES (2014, 1, 25);
-INSERT INTO `sys_role_menu` VALUES (2015, 1, 7);
-INSERT INTO `sys_role_menu` VALUES (2016, 1, 29);
-INSERT INTO `sys_role_menu` VALUES (2017, 1, 30);
-INSERT INTO `sys_role_menu` VALUES (2018, 1, 28);
-INSERT INTO `sys_role_menu` VALUES (2019, 1, 31);
-INSERT INTO `sys_role_menu` VALUES (2020, 1, 32);
-INSERT INTO `sys_role_menu` VALUES (2021, 1, 33);
-INSERT INTO `sys_role_menu` VALUES (2022, 1, 10);
-INSERT INTO `sys_role_menu` VALUES (2023, 1, 34);
-INSERT INTO `sys_role_menu` VALUES (2024, 1, 11);
-INSERT INTO `sys_role_menu` VALUES (2025, 1, 35);
-INSERT INTO `sys_role_menu` VALUES (2026, 1, 8);
-INSERT INTO `sys_role_menu` VALUES (2027, 1, 37);
-INSERT INTO `sys_role_menu` VALUES (2028, 1, 38);
-INSERT INTO `sys_role_menu` VALUES (2029, 1, 39);
-INSERT INTO `sys_role_menu` VALUES (2030, 1, 36);
-INSERT INTO `sys_role_menu` VALUES (2031, 1, 40);
-INSERT INTO `sys_role_menu` VALUES (2032, 1, 41);
-INSERT INTO `sys_role_menu` VALUES (2033, 1, 45);
-INSERT INTO `sys_role_menu` VALUES (2034, 1, 46);
-INSERT INTO `sys_role_menu` VALUES (2035, 1, 42);
-INSERT INTO `sys_role_menu` VALUES (2036, 1, 47);
-INSERT INTO `sys_role_menu` VALUES (2037, 1, 48);
-INSERT INTO `sys_role_menu` VALUES (2038, 1, 49);
-INSERT INTO `sys_role_menu` VALUES (2039, 1, 43);
-INSERT INTO `sys_role_menu` VALUES (2040, 1, 74);
-INSERT INTO `sys_role_menu` VALUES (2041, 1, 75);
-INSERT INTO `sys_role_menu` VALUES (2042, 1, 44);
-INSERT INTO `sys_role_menu` VALUES (2043, 1, 76);
-INSERT INTO `sys_role_menu` VALUES (2044, 1, 77);
-INSERT INTO `sys_role_menu` VALUES (2045, 1, 78);
-INSERT INTO `sys_role_menu` VALUES (2046, 1, 50);
-INSERT INTO `sys_role_menu` VALUES (2047, 1, 51);
-INSERT INTO `sys_role_menu` VALUES (2048, 1, 79);
-INSERT INTO `sys_role_menu` VALUES (2049, 1, 52);
-INSERT INTO `sys_role_menu` VALUES (2050, 1, 80);
-INSERT INTO `sys_role_menu` VALUES (2051, 1, 57);
-INSERT INTO `sys_role_menu` VALUES (2052, 1, 58);
-INSERT INTO `sys_role_menu` VALUES (2053, 1, 64);
-INSERT INTO `sys_role_menu` VALUES (2054, 1, 65);
-INSERT INTO `sys_role_menu` VALUES (2055, 1, 66);
-INSERT INTO `sys_role_menu` VALUES (2056, 1, 67);
-INSERT INTO `sys_role_menu` VALUES (2057, 1, 59);
-INSERT INTO `sys_role_menu` VALUES (2058, 1, 68);
-INSERT INTO `sys_role_menu` VALUES (2059, 1, 69);
-INSERT INTO `sys_role_menu` VALUES (2060, 1, 70);
-INSERT INTO `sys_role_menu` VALUES (2061, 1, 60);
-INSERT INTO `sys_role_menu` VALUES (2062, 1, 71);
-INSERT INTO `sys_role_menu` VALUES (2063, 1, 72);
-INSERT INTO `sys_role_menu` VALUES (2064, 1, 73);
-INSERT INTO `sys_role_menu` VALUES (2065, 1, 61);
-INSERT INTO `sys_role_menu` VALUES (2066, 2, 1);
-INSERT INTO `sys_role_menu` VALUES (2067, 2, 2);
-INSERT INTO `sys_role_menu` VALUES (2068, 2, 3);
-INSERT INTO `sys_role_menu` VALUES (2069, 2, 12);
-INSERT INTO `sys_role_menu` VALUES (2070, 2, 16);
-INSERT INTO `sys_role_menu` VALUES (2071, 2, 14);
-INSERT INTO `sys_role_menu` VALUES (2072, 2, 15);
-INSERT INTO `sys_role_menu` VALUES (2073, 2, 17);
-INSERT INTO `sys_role_menu` VALUES (2074, 2, 6);
-INSERT INTO `sys_role_menu` VALUES (2075, 2, 26);
-INSERT INTO `sys_role_menu` VALUES (2076, 2, 27);
-INSERT INTO `sys_role_menu` VALUES (2077, 2, 25);
-INSERT INTO `sys_role_menu` VALUES (2078, 2, 40);
-INSERT INTO `sys_role_menu` VALUES (2079, 2, 41);
-INSERT INTO `sys_role_menu` VALUES (2080, 2, 45);
-INSERT INTO `sys_role_menu` VALUES (2081, 2, 46);
-INSERT INTO `sys_role_menu` VALUES (2082, 2, 42);
-INSERT INTO `sys_role_menu` VALUES (2083, 2, 47);
-INSERT INTO `sys_role_menu` VALUES (2084, 2, 48);
-INSERT INTO `sys_role_menu` VALUES (2085, 2, 49);
-INSERT INTO `sys_role_menu` VALUES (2086, 2, 43);
-INSERT INTO `sys_role_menu` VALUES (2087, 2, 74);
-INSERT INTO `sys_role_menu` VALUES (2088, 2, 75);
-INSERT INTO `sys_role_menu` VALUES (2089, 2, 44);
-INSERT INTO `sys_role_menu` VALUES (2090, 2, 76);
-INSERT INTO `sys_role_menu` VALUES (2091, 2, 77);
-INSERT INTO `sys_role_menu` VALUES (2092, 2, 78);
-INSERT INTO `sys_role_menu` VALUES (2093, 2, 50);
-INSERT INTO `sys_role_menu` VALUES (2094, 2, 51);
-INSERT INTO `sys_role_menu` VALUES (2095, 2, 79);
-INSERT INTO `sys_role_menu` VALUES (2096, 2, 52);
-INSERT INTO `sys_role_menu` VALUES (2097, 2, 80);
-INSERT INTO `sys_role_menu` VALUES (2098, 2, 57);
-INSERT INTO `sys_role_menu` VALUES (2099, 2, 58);
-INSERT INTO `sys_role_menu` VALUES (2100, 2, 64);
-INSERT INTO `sys_role_menu` VALUES (2101, 2, 65);
-INSERT INTO `sys_role_menu` VALUES (2102, 2, 66);
-INSERT INTO `sys_role_menu` VALUES (2103, 2, 67);
-INSERT INTO `sys_role_menu` VALUES (2104, 2, 59);
-INSERT INTO `sys_role_menu` VALUES (2105, 2, 68);
-INSERT INTO `sys_role_menu` VALUES (2106, 2, 69);
-INSERT INTO `sys_role_menu` VALUES (2107, 2, 70);
-INSERT INTO `sys_role_menu` VALUES (2108, 2, 60);
-INSERT INTO `sys_role_menu` VALUES (2109, 2, 71);
-INSERT INTO `sys_role_menu` VALUES (2110, 2, 72);
-INSERT INTO `sys_role_menu` VALUES (2111, 2, 73);
+INSERT INTO `sys_role_menu` VALUES (2112, 1, 1);
+INSERT INTO `sys_role_menu` VALUES (2113, 1, 2);
+INSERT INTO `sys_role_menu` VALUES (2114, 1, 3);
+INSERT INTO `sys_role_menu` VALUES (2115, 1, 12);
+INSERT INTO `sys_role_menu` VALUES (2116, 1, 16);
+INSERT INTO `sys_role_menu` VALUES (2117, 1, 13);
+INSERT INTO `sys_role_menu` VALUES (2118, 1, 14);
+INSERT INTO `sys_role_menu` VALUES (2119, 1, 15);
+INSERT INTO `sys_role_menu` VALUES (2120, 1, 17);
+INSERT INTO `sys_role_menu` VALUES (2121, 1, 4);
+INSERT INTO `sys_role_menu` VALUES (2122, 1, 18);
+INSERT INTO `sys_role_menu` VALUES (2123, 1, 21);
+INSERT INTO `sys_role_menu` VALUES (2124, 1, 19);
+INSERT INTO `sys_role_menu` VALUES (2125, 1, 20);
+INSERT INTO `sys_role_menu` VALUES (2126, 1, 5);
+INSERT INTO `sys_role_menu` VALUES (2127, 1, 22);
+INSERT INTO `sys_role_menu` VALUES (2128, 1, 23);
+INSERT INTO `sys_role_menu` VALUES (2129, 1, 24);
+INSERT INTO `sys_role_menu` VALUES (2130, 1, 6);
+INSERT INTO `sys_role_menu` VALUES (2131, 1, 26);
+INSERT INTO `sys_role_menu` VALUES (2132, 1, 27);
+INSERT INTO `sys_role_menu` VALUES (2133, 1, 25);
+INSERT INTO `sys_role_menu` VALUES (2134, 1, 7);
+INSERT INTO `sys_role_menu` VALUES (2135, 1, 29);
+INSERT INTO `sys_role_menu` VALUES (2136, 1, 30);
+INSERT INTO `sys_role_menu` VALUES (2137, 1, 28);
+INSERT INTO `sys_role_menu` VALUES (2138, 1, 31);
+INSERT INTO `sys_role_menu` VALUES (2139, 1, 32);
+INSERT INTO `sys_role_menu` VALUES (2140, 1, 33);
+INSERT INTO `sys_role_menu` VALUES (2141, 1, 10);
+INSERT INTO `sys_role_menu` VALUES (2142, 1, 34);
+INSERT INTO `sys_role_menu` VALUES (2143, 1, 11);
+INSERT INTO `sys_role_menu` VALUES (2144, 1, 35);
+INSERT INTO `sys_role_menu` VALUES (2145, 1, 8);
+INSERT INTO `sys_role_menu` VALUES (2146, 1, 37);
+INSERT INTO `sys_role_menu` VALUES (2147, 1, 38);
+INSERT INTO `sys_role_menu` VALUES (2148, 1, 39);
+INSERT INTO `sys_role_menu` VALUES (2149, 1, 36);
+INSERT INTO `sys_role_menu` VALUES (2150, 1, 40);
+INSERT INTO `sys_role_menu` VALUES (2151, 1, 41);
+INSERT INTO `sys_role_menu` VALUES (2152, 1, 45);
+INSERT INTO `sys_role_menu` VALUES (2153, 1, 46);
+INSERT INTO `sys_role_menu` VALUES (2154, 1, 42);
+INSERT INTO `sys_role_menu` VALUES (2155, 1, 47);
+INSERT INTO `sys_role_menu` VALUES (2156, 1, 48);
+INSERT INTO `sys_role_menu` VALUES (2157, 1, 49);
+INSERT INTO `sys_role_menu` VALUES (2158, 1, 43);
+INSERT INTO `sys_role_menu` VALUES (2159, 1, 74);
+INSERT INTO `sys_role_menu` VALUES (2160, 1, 75);
+INSERT INTO `sys_role_menu` VALUES (2161, 1, 44);
+INSERT INTO `sys_role_menu` VALUES (2162, 1, 76);
+INSERT INTO `sys_role_menu` VALUES (2163, 1, 77);
+INSERT INTO `sys_role_menu` VALUES (2164, 1, 78);
+INSERT INTO `sys_role_menu` VALUES (2165, 1, 50);
+INSERT INTO `sys_role_menu` VALUES (2166, 1, 51);
+INSERT INTO `sys_role_menu` VALUES (2167, 1, 79);
+INSERT INTO `sys_role_menu` VALUES (2168, 1, 88);
+INSERT INTO `sys_role_menu` VALUES (2169, 1, 89);
+INSERT INTO `sys_role_menu` VALUES (2170, 1, 90);
+INSERT INTO `sys_role_menu` VALUES (2171, 1, 52);
+INSERT INTO `sys_role_menu` VALUES (2172, 1, 80);
+INSERT INTO `sys_role_menu` VALUES (2173, 1, 85);
+INSERT INTO `sys_role_menu` VALUES (2174, 1, 86);
+INSERT INTO `sys_role_menu` VALUES (2175, 1, 87);
+INSERT INTO `sys_role_menu` VALUES (2176, 1, 81);
+INSERT INTO `sys_role_menu` VALUES (2177, 1, 82);
+INSERT INTO `sys_role_menu` VALUES (2178, 1, 83);
+INSERT INTO `sys_role_menu` VALUES (2179, 1, 84);
+INSERT INTO `sys_role_menu` VALUES (2180, 1, 57);
+INSERT INTO `sys_role_menu` VALUES (2181, 1, 58);
+INSERT INTO `sys_role_menu` VALUES (2182, 1, 64);
+INSERT INTO `sys_role_menu` VALUES (2183, 1, 65);
+INSERT INTO `sys_role_menu` VALUES (2184, 1, 66);
+INSERT INTO `sys_role_menu` VALUES (2185, 1, 67);
+INSERT INTO `sys_role_menu` VALUES (2186, 1, 59);
+INSERT INTO `sys_role_menu` VALUES (2187, 1, 68);
+INSERT INTO `sys_role_menu` VALUES (2188, 1, 69);
+INSERT INTO `sys_role_menu` VALUES (2189, 1, 70);
+INSERT INTO `sys_role_menu` VALUES (2190, 1, 60);
+INSERT INTO `sys_role_menu` VALUES (2191, 1, 71);
+INSERT INTO `sys_role_menu` VALUES (2192, 1, 72);
+INSERT INTO `sys_role_menu` VALUES (2193, 1, 73);
+INSERT INTO `sys_role_menu` VALUES (2194, 1, 61);
+INSERT INTO `sys_role_menu` VALUES (2195, 2, 1);
+INSERT INTO `sys_role_menu` VALUES (2196, 2, 2);
+INSERT INTO `sys_role_menu` VALUES (2197, 2, 3);
+INSERT INTO `sys_role_menu` VALUES (2198, 2, 12);
+INSERT INTO `sys_role_menu` VALUES (2199, 2, 16);
+INSERT INTO `sys_role_menu` VALUES (2200, 2, 14);
+INSERT INTO `sys_role_menu` VALUES (2201, 2, 15);
+INSERT INTO `sys_role_menu` VALUES (2202, 2, 17);
+INSERT INTO `sys_role_menu` VALUES (2203, 2, 6);
+INSERT INTO `sys_role_menu` VALUES (2204, 2, 26);
+INSERT INTO `sys_role_menu` VALUES (2205, 2, 27);
+INSERT INTO `sys_role_menu` VALUES (2206, 2, 25);
+INSERT INTO `sys_role_menu` VALUES (2207, 2, 40);
+INSERT INTO `sys_role_menu` VALUES (2208, 2, 41);
+INSERT INTO `sys_role_menu` VALUES (2209, 2, 45);
+INSERT INTO `sys_role_menu` VALUES (2210, 2, 46);
+INSERT INTO `sys_role_menu` VALUES (2211, 2, 42);
+INSERT INTO `sys_role_menu` VALUES (2212, 2, 47);
+INSERT INTO `sys_role_menu` VALUES (2213, 2, 48);
+INSERT INTO `sys_role_menu` VALUES (2214, 2, 49);
+INSERT INTO `sys_role_menu` VALUES (2215, 2, 43);
+INSERT INTO `sys_role_menu` VALUES (2216, 2, 74);
+INSERT INTO `sys_role_menu` VALUES (2217, 2, 75);
+INSERT INTO `sys_role_menu` VALUES (2218, 2, 44);
+INSERT INTO `sys_role_menu` VALUES (2219, 2, 76);
+INSERT INTO `sys_role_menu` VALUES (2220, 2, 77);
+INSERT INTO `sys_role_menu` VALUES (2221, 2, 78);
+INSERT INTO `sys_role_menu` VALUES (2222, 2, 50);
+INSERT INTO `sys_role_menu` VALUES (2223, 2, 51);
+INSERT INTO `sys_role_menu` VALUES (2224, 2, 79);
+INSERT INTO `sys_role_menu` VALUES (2225, 2, 88);
+INSERT INTO `sys_role_menu` VALUES (2226, 2, 89);
+INSERT INTO `sys_role_menu` VALUES (2227, 2, 90);
+INSERT INTO `sys_role_menu` VALUES (2228, 2, 52);
+INSERT INTO `sys_role_menu` VALUES (2229, 2, 80);
+INSERT INTO `sys_role_menu` VALUES (2230, 2, 85);
+INSERT INTO `sys_role_menu` VALUES (2231, 2, 86);
+INSERT INTO `sys_role_menu` VALUES (2232, 2, 87);
+INSERT INTO `sys_role_menu` VALUES (2233, 2, 81);
+INSERT INTO `sys_role_menu` VALUES (2234, 2, 82);
+INSERT INTO `sys_role_menu` VALUES (2235, 2, 83);
+INSERT INTO `sys_role_menu` VALUES (2236, 2, 84);
+INSERT INTO `sys_role_menu` VALUES (2237, 2, 57);
+INSERT INTO `sys_role_menu` VALUES (2238, 2, 58);
+INSERT INTO `sys_role_menu` VALUES (2239, 2, 64);
+INSERT INTO `sys_role_menu` VALUES (2240, 2, 65);
+INSERT INTO `sys_role_menu` VALUES (2241, 2, 66);
+INSERT INTO `sys_role_menu` VALUES (2242, 2, 67);
+INSERT INTO `sys_role_menu` VALUES (2243, 2, 59);
+INSERT INTO `sys_role_menu` VALUES (2244, 2, 68);
+INSERT INTO `sys_role_menu` VALUES (2245, 2, 69);
+INSERT INTO `sys_role_menu` VALUES (2246, 2, 70);
+INSERT INTO `sys_role_menu` VALUES (2247, 2, 60);
+INSERT INTO `sys_role_menu` VALUES (2248, 2, 71);
+INSERT INTO `sys_role_menu` VALUES (2249, 2, 72);
+INSERT INTO `sys_role_menu` VALUES (2250, 2, 73);
+INSERT INTO `sys_role_menu` VALUES (2251, 2, 61);
+
+-- ----------------------------
+-- Table structure for sys_sequence
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_sequence`;
+CREATE TABLE `sys_sequence`  (
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '编号名',
+  `value` int(8) NULL DEFAULT NULL COMMENT '编号值',
+  `next` int(1) NULL DEFAULT NULL COMMENT '递增值',
+  PRIMARY KEY (`name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_sequence
+-- ----------------------------
+INSERT INTO `sys_sequence` VALUES ('hospital_no', 0, 1);
+INSERT INTO `sys_sequence` VALUES ('meeting_no', 5, 1);
+
+-- ----------------------------
+-- Table structure for sys_sms
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_sms`;
+CREATE TABLE `sys_sms`  (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT,
+  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '手机号',
+  `code` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '验证码',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `status` int(2) NULL DEFAULT NULL COMMENT '是否有效 0无效 1有效 ',
+  `ip` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'ip地址',
+  `text` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '短信内容',
+  `type` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '01登陆验证码',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_sms
+-- ----------------------------
+INSERT INTO `sys_sms` VALUES (12, '18247270927', '491273', '2019-11-11 17:29:59', '2019-11-11 17:30:52', 0, '0:0:0:0:0:0:0:1', '【蓝色县域项目组】验证码491273，您正在登录，若非本人操作，请勿泄露。', '01');
+INSERT INTO `sys_sms` VALUES (13, '18247270927', '470321', '2019-11-13 17:25:31', '2019-11-13 17:25:31', 1, '0:0:0:0:0:0:0:1', '【蓝色县域项目组】验证码470321，您正在登录，若非本人操作，请勿泄露。', '01');
+INSERT INTO `sys_sms` VALUES (14, '18247270927', '481051', '2019-11-13 18:02:22', '2019-11-13 18:02:22', 1, '0:0:0:0:0:0:0:1', '【蓝色县域项目组】验证码481051，您正在登录，若非本人操作，请勿泄露。', '01');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -4701,7 +4821,7 @@ CREATE TABLE `sys_user`  (
   `company_id` bigint(20) NULL DEFAULT NULL COMMENT '公司ID',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `account`(`account`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
@@ -4719,7 +4839,7 @@ CREATE TABLE `sys_user_role`  (
   `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户ID',
   `role_id` bigint(20) NULL DEFAULT NULL COMMENT '角色ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 76 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色对应关系' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 75 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色对应关系' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user_role
@@ -4743,7 +4863,7 @@ CREATE TABLE `user_area`  (
   `option_areas` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '关联区域',
   `option_status` int(4) NULL DEFAULT NULL COMMENT '关联区域标识（0：该区域的最顶级无关联，属于游离，1：有关联，在使用）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_area
@@ -4769,7 +4889,7 @@ CREATE TABLE `user_config`  (
   `create_time` datetime(0) NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_config
@@ -4791,24 +4911,326 @@ INSERT INTO `user_config` VALUES (10, 1004, '10', '十级', 1, '2019-08-07 14:53
 DROP TABLE IF EXISTS `user_detail`;
 CREATE TABLE `user_detail`  (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `job_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '工号',
   `avatar` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '头像',
   `nickname` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '昵称',
   `username` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '姓名',
-  `phone` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '电话号',
+  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '电话号',
   `area_id` bigint(32) NULL DEFAULT NULL COMMENT '区域ID',
   `role_id` bigint(32) NULL DEFAULT NULL COMMENT '角色ID',
   `status` int(1) NULL DEFAULT NULL COMMENT '状态（1：正常，0：锁定）',
   `bound_time` datetime(0) NULL DEFAULT NULL COMMENT '绑定时间',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `password` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+  `salt` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'md5密码盐',
+  `openid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '微信唯一标识',
+  `sex` int(2) NULL DEFAULT NULL COMMENT '性别（1：男 2：女）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_detail
 -- ----------------------------
-INSERT INTO `user_detail` VALUES (1, '20190805', 'https://mwy-1259572200.cos.ap-beijing.myqcloud.com/50099e79-d9b6-4eaf-82fe-f912dad845ba.jpg', '墨子', '王林', '18212341234', 59, 2, 1, '2019-08-05 15:02:45', '2019-08-05 15:02:49', '2019-09-29 09:00:04');
+INSERT INTO `user_detail` VALUES (1, 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKf5Mg2TUNIDCIWcewjlm14KRskwdpclnyfZ2H8W40hCfUIoTia622MefOsYqmjNFEqibMHmMcyZibvA/132', '余洋', '余洋', '18851006060', 59, 2, 1, '2019-08-05 15:02:45', '2019-08-05 15:02:49', '2019-11-12 17:30:13', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', 'o0ypL5IvtcNyQwPXB7j8_BL_6Wtc', 1);
+INSERT INTO `user_detail` VALUES (5, NULL, '', '余洋', '13327736325', 59, 1, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2);
+
+-- ----------------------------
+-- Table structure for user_login_log
+-- ----------------------------
+DROP TABLE IF EXISTS `user_login_log`;
+CREATE TABLE `user_login_log`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `log_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '日志名称',
+  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户ID',
+  `succeed` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '是否成功',
+  `message` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '消息',
+  `ip_address` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'ip',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1150667819491476079 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '登陆日志' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_login_log
+-- ----------------------------
+INSERT INTO `user_login_log` VALUES (1150667819491475930, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-23 16:45:08', '2019-10-23 16:45:08');
+INSERT INTO `user_login_log` VALUES (1150667819491475931, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-23 16:45:38', '2019-10-23 16:45:38');
+INSERT INTO `user_login_log` VALUES (1150667819491475932, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 08:48:48', '2019-10-24 08:48:48');
+INSERT INTO `user_login_log` VALUES (1150667819491475933, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 10:06:18', '2019-10-24 10:06:18');
+INSERT INTO `user_login_log` VALUES (1150667819491475934, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 10:10:49', '2019-10-24 10:10:49');
+INSERT INTO `user_login_log` VALUES (1150667819491475935, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 10:12:03', '2019-10-24 10:12:03');
+INSERT INTO `user_login_log` VALUES (1150667819491475936, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 10:12:38', '2019-10-24 10:12:38');
+INSERT INTO `user_login_log` VALUES (1150667819491475937, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 10:19:38', '2019-10-24 10:19:38');
+INSERT INTO `user_login_log` VALUES (1150667819491475938, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 11:05:36', '2019-10-24 11:05:36');
+INSERT INTO `user_login_log` VALUES (1150667819491475939, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 11:05:48', '2019-10-24 11:05:48');
+INSERT INTO `user_login_log` VALUES (1150667819491475940, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 11:06:22', '2019-10-24 11:06:22');
+INSERT INTO `user_login_log` VALUES (1150667819491475941, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 11:07:00', '2019-10-24 11:07:00');
+INSERT INTO `user_login_log` VALUES (1150667819491475942, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 11:07:08', '2019-10-24 11:07:08');
+INSERT INTO `user_login_log` VALUES (1150667819491475943, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 11:07:17', '2019-10-24 11:07:17');
+INSERT INTO `user_login_log` VALUES (1150667819491475944, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 11:08:48', '2019-10-24 11:08:48');
+INSERT INTO `user_login_log` VALUES (1150667819491475945, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 11:11:09', '2019-10-24 11:11:09');
+INSERT INTO `user_login_log` VALUES (1150667819491475946, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-24 11:37:34', '2019-10-24 11:37:34');
+INSERT INTO `user_login_log` VALUES (1150667819491475947, '登录日志', 1, '成功', NULL, '111.197.241.111', '2019-10-24 11:48:38', '2019-10-24 11:48:38');
+INSERT INTO `user_login_log` VALUES (1150667819491475948, '登录日志', 1, '成功', NULL, '111.197.241.111', '2019-10-24 12:03:46', '2019-10-24 12:03:46');
+INSERT INTO `user_login_log` VALUES (1150667819491475949, '登录日志', 1, '成功', NULL, '111.197.241.111', '2019-10-24 12:05:07', '2019-10-24 12:05:07');
+INSERT INTO `user_login_log` VALUES (1150667819491475950, '退出日志', 1, '成功', NULL, '111.197.241.111', '2019-10-24 12:05:21', '2019-10-24 12:05:21');
+INSERT INTO `user_login_log` VALUES (1150667819491475951, '登录日志', 1, '成功', NULL, '111.197.241.111', '2019-10-24 12:05:27', '2019-10-24 12:05:27');
+INSERT INTO `user_login_log` VALUES (1150667819491475952, '登录日志', 1, '成功', NULL, '111.197.241.111', '2019-10-24 12:06:22', '2019-10-24 12:06:22');
+INSERT INTO `user_login_log` VALUES (1150667819491475953, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 01:47:12', '2019-10-25 01:47:12');
+INSERT INTO `user_login_log` VALUES (1150667819491475954, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 01:47:37', '2019-10-25 01:47:37');
+INSERT INTO `user_login_log` VALUES (1150667819491475955, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 01:48:39', '2019-10-25 01:48:39');
+INSERT INTO `user_login_log` VALUES (1150667819491475956, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 01:49:02', '2019-10-25 01:49:02');
+INSERT INTO `user_login_log` VALUES (1150667819491475957, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 01:49:17', '2019-10-25 01:49:17');
+INSERT INTO `user_login_log` VALUES (1150667819491475958, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 01:49:30', '2019-10-25 01:49:30');
+INSERT INTO `user_login_log` VALUES (1150667819491475959, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 01:49:31', '2019-10-25 01:49:31');
+INSERT INTO `user_login_log` VALUES (1150667819491475960, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 01:50:23', '2019-10-25 01:50:23');
+INSERT INTO `user_login_log` VALUES (1150667819491475961, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 01:56:15', '2019-10-25 01:56:15');
+INSERT INTO `user_login_log` VALUES (1150667819491475962, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 01:59:07', '2019-10-25 01:59:07');
+INSERT INTO `user_login_log` VALUES (1150667819491475963, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:04:06', '2019-10-25 02:04:06');
+INSERT INTO `user_login_log` VALUES (1150667819491475964, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:19:14', '2019-10-25 02:19:14');
+INSERT INTO `user_login_log` VALUES (1150667819491475965, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:19:54', '2019-10-25 02:19:54');
+INSERT INTO `user_login_log` VALUES (1150667819491475966, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:28:32', '2019-10-25 02:28:32');
+INSERT INTO `user_login_log` VALUES (1150667819491475967, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:28:38', '2019-10-25 02:28:38');
+INSERT INTO `user_login_log` VALUES (1150667819491475968, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:29:35', '2019-10-25 02:29:35');
+INSERT INTO `user_login_log` VALUES (1150667819491475969, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:31:23', '2019-10-25 02:31:23');
+INSERT INTO `user_login_log` VALUES (1150667819491475970, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:34:17', '2019-10-25 02:34:17');
+INSERT INTO `user_login_log` VALUES (1150667819491475971, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:34:27', '2019-10-25 02:34:27');
+INSERT INTO `user_login_log` VALUES (1150667819491475972, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:35:12', '2019-10-25 02:35:12');
+INSERT INTO `user_login_log` VALUES (1150667819491475973, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:36:36', '2019-10-25 02:36:36');
+INSERT INTO `user_login_log` VALUES (1150667819491475974, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:38:03', '2019-10-25 02:38:03');
+INSERT INTO `user_login_log` VALUES (1150667819491475975, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:38:36', '2019-10-25 02:38:36');
+INSERT INTO `user_login_log` VALUES (1150667819491475976, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:38:59', '2019-10-25 02:38:59');
+INSERT INTO `user_login_log` VALUES (1150667819491475977, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:39:36', '2019-10-25 02:39:36');
+INSERT INTO `user_login_log` VALUES (1150667819491475978, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:40:34', '2019-10-25 02:40:34');
+INSERT INTO `user_login_log` VALUES (1150667819491475979, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:40:46', '2019-10-25 02:40:46');
+INSERT INTO `user_login_log` VALUES (1150667819491475980, '退出日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:45:54', '2019-10-25 02:45:54');
+INSERT INTO `user_login_log` VALUES (1150667819491475981, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:57:30', '2019-10-25 02:57:30');
+INSERT INTO `user_login_log` VALUES (1150667819491475982, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 02:58:02', '2019-10-25 02:58:02');
+INSERT INTO `user_login_log` VALUES (1150667819491475983, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:01:27', '2019-10-25 03:01:27');
+INSERT INTO `user_login_log` VALUES (1150667819491475984, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:01:32', '2019-10-25 03:01:32');
+INSERT INTO `user_login_log` VALUES (1150667819491475985, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:02:37', '2019-10-25 03:02:37');
+INSERT INTO `user_login_log` VALUES (1150667819491475986, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:08:44', '2019-10-25 03:08:44');
+INSERT INTO `user_login_log` VALUES (1150667819491475987, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:16:13', '2019-10-25 03:16:13');
+INSERT INTO `user_login_log` VALUES (1150667819491475988, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:16:32', '2019-10-25 03:16:32');
+INSERT INTO `user_login_log` VALUES (1150667819491475989, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:16:45', '2019-10-25 03:16:45');
+INSERT INTO `user_login_log` VALUES (1150667819491475990, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:17:49', '2019-10-25 03:17:49');
+INSERT INTO `user_login_log` VALUES (1150667819491475991, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:18:19', '2019-10-25 03:18:19');
+INSERT INTO `user_login_log` VALUES (1150667819491475992, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:19:52', '2019-10-25 03:19:52');
+INSERT INTO `user_login_log` VALUES (1150667819491475993, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:20:44', '2019-10-25 03:20:44');
+INSERT INTO `user_login_log` VALUES (1150667819491475994, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:38:49', '2019-10-25 03:38:49');
+INSERT INTO `user_login_log` VALUES (1150667819491475995, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:39:04', '2019-10-25 03:39:04');
+INSERT INTO `user_login_log` VALUES (1150667819491475996, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:39:11', '2019-10-25 03:39:11');
+INSERT INTO `user_login_log` VALUES (1150667819491475997, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:43:22', '2019-10-25 03:43:22');
+INSERT INTO `user_login_log` VALUES (1150667819491475998, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:43:49', '2019-10-25 03:43:49');
+INSERT INTO `user_login_log` VALUES (1150667819491475999, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:44:15', '2019-10-25 03:44:15');
+INSERT INTO `user_login_log` VALUES (1150667819491476000, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:45:00', '2019-10-25 03:45:00');
+INSERT INTO `user_login_log` VALUES (1150667819491476001, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:45:43', '2019-10-25 03:45:43');
+INSERT INTO `user_login_log` VALUES (1150667819491476002, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:46:17', '2019-10-25 03:46:17');
+INSERT INTO `user_login_log` VALUES (1150667819491476003, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:47:12', '2019-10-25 03:47:12');
+INSERT INTO `user_login_log` VALUES (1150667819491476004, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:47:21', '2019-10-25 03:47:21');
+INSERT INTO `user_login_log` VALUES (1150667819491476005, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:47:55', '2019-10-25 03:47:55');
+INSERT INTO `user_login_log` VALUES (1150667819491476006, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 03:48:10', '2019-10-25 03:48:10');
+INSERT INTO `user_login_log` VALUES (1150667819491476007, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 05:49:26', '2019-10-25 05:49:26');
+INSERT INTO `user_login_log` VALUES (1150667819491476008, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 05:49:44', '2019-10-25 05:49:44');
+INSERT INTO `user_login_log` VALUES (1150667819491476009, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 05:50:26', '2019-10-25 05:50:26');
+INSERT INTO `user_login_log` VALUES (1150667819491476010, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:01:23', '2019-10-25 06:01:23');
+INSERT INTO `user_login_log` VALUES (1150667819491476011, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:01:34', '2019-10-25 06:01:34');
+INSERT INTO `user_login_log` VALUES (1150667819491476012, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:03:20', '2019-10-25 06:03:20');
+INSERT INTO `user_login_log` VALUES (1150667819491476013, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:03:35', '2019-10-25 06:03:35');
+INSERT INTO `user_login_log` VALUES (1150667819491476014, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:03:37', '2019-10-25 06:03:37');
+INSERT INTO `user_login_log` VALUES (1150667819491476015, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:05:13', '2019-10-25 06:05:13');
+INSERT INTO `user_login_log` VALUES (1150667819491476016, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:13:32', '2019-10-25 06:13:32');
+INSERT INTO `user_login_log` VALUES (1150667819491476017, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:14:09', '2019-10-25 06:14:09');
+INSERT INTO `user_login_log` VALUES (1150667819491476018, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:14:52', '2019-10-25 06:14:52');
+INSERT INTO `user_login_log` VALUES (1150667819491476019, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:15:22', '2019-10-25 06:15:22');
+INSERT INTO `user_login_log` VALUES (1150667819491476020, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-25 06:15:47', '2019-10-25 06:15:47');
+INSERT INTO `user_login_log` VALUES (1150667819491476021, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 06:38:46', '2019-10-28 06:38:46');
+INSERT INTO `user_login_log` VALUES (1150667819491476022, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 06:40:26', '2019-10-28 06:40:26');
+INSERT INTO `user_login_log` VALUES (1150667819491476023, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 06:40:51', '2019-10-28 06:40:51');
+INSERT INTO `user_login_log` VALUES (1150667819491476024, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 06:50:52', '2019-10-28 06:50:52');
+INSERT INTO `user_login_log` VALUES (1150667819491476025, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 06:51:26', '2019-10-28 06:51:26');
+INSERT INTO `user_login_log` VALUES (1150667819491476026, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 07:25:23', '2019-10-28 07:25:23');
+INSERT INTO `user_login_log` VALUES (1150667819491476027, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 07:25:55', '2019-10-28 07:25:55');
+INSERT INTO `user_login_log` VALUES (1150667819491476028, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 07:59:46', '2019-10-28 07:59:46');
+INSERT INTO `user_login_log` VALUES (1150667819491476029, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:02:15', '2019-10-28 08:02:15');
+INSERT INTO `user_login_log` VALUES (1150667819491476030, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:05:52', '2019-10-28 08:05:52');
+INSERT INTO `user_login_log` VALUES (1150667819491476031, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:07:29', '2019-10-28 08:07:29');
+INSERT INTO `user_login_log` VALUES (1150667819491476032, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:17:02', '2019-10-28 08:17:02');
+INSERT INTO `user_login_log` VALUES (1150667819491476033, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:18:51', '2019-10-28 08:18:51');
+INSERT INTO `user_login_log` VALUES (1150667819491476034, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:24:44', '2019-10-28 08:24:44');
+INSERT INTO `user_login_log` VALUES (1150667819491476035, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:26:03', '2019-10-28 08:26:03');
+INSERT INTO `user_login_log` VALUES (1150667819491476036, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:26:39', '2019-10-28 08:26:39');
+INSERT INTO `user_login_log` VALUES (1150667819491476037, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:38:39', '2019-10-28 08:38:39');
+INSERT INTO `user_login_log` VALUES (1150667819491476038, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:40:55', '2019-10-28 08:40:55');
+INSERT INTO `user_login_log` VALUES (1150667819491476039, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:42:32', '2019-10-28 08:42:32');
+INSERT INTO `user_login_log` VALUES (1150667819491476040, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:43:38', '2019-10-28 08:43:38');
+INSERT INTO `user_login_log` VALUES (1150667819491476041, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:49:20', '2019-10-28 08:49:20');
+INSERT INTO `user_login_log` VALUES (1150667819491476042, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:52:29', '2019-10-28 08:52:29');
+INSERT INTO `user_login_log` VALUES (1150667819491476043, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:52:49', '2019-10-28 08:52:49');
+INSERT INTO `user_login_log` VALUES (1150667819491476044, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:55:04', '2019-10-28 08:55:04');
+INSERT INTO `user_login_log` VALUES (1150667819491476045, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:56:10', '2019-10-28 08:56:10');
+INSERT INTO `user_login_log` VALUES (1150667819491476046, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:57:34', '2019-10-28 08:57:34');
+INSERT INTO `user_login_log` VALUES (1150667819491476047, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 08:57:42', '2019-10-28 08:57:42');
+INSERT INTO `user_login_log` VALUES (1150667819491476048, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 09:02:51', '2019-10-28 09:02:51');
+INSERT INTO `user_login_log` VALUES (1150667819491476049, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-10-28 09:28:20', '2019-10-28 09:28:20');
+INSERT INTO `user_login_log` VALUES (1150667819491476050, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-10-31 02:25:55', '2019-10-31 02:25:55');
+INSERT INTO `user_login_log` VALUES (1150667819491476051, '退出日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-10-31 02:26:21', '2019-10-31 02:26:21');
+INSERT INTO `user_login_log` VALUES (1150667819491476052, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-10-31 02:27:35', '2019-10-31 02:27:35');
+INSERT INTO `user_login_log` VALUES (1150667819491476053, '退出日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-10-31 02:27:56', '2019-10-31 02:27:56');
+INSERT INTO `user_login_log` VALUES (1150667819491476054, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-11-06 07:41:20', '2019-11-06 07:41:20');
+INSERT INTO `user_login_log` VALUES (1150667819491476055, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-11-06 07:43:45', '2019-11-06 07:43:45');
+INSERT INTO `user_login_log` VALUES (1150667819491476056, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-11-06 07:47:15', '2019-11-06 07:47:15');
+INSERT INTO `user_login_log` VALUES (1150667819491476057, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-11-06 07:51:50', '2019-11-06 07:51:50');
+INSERT INTO `user_login_log` VALUES (1150667819491476058, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-11-06 08:00:38', '2019-11-06 08:00:38');
+INSERT INTO `user_login_log` VALUES (1150667819491476059, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-11-06 08:10:05', '2019-11-06 08:10:05');
+INSERT INTO `user_login_log` VALUES (1150667819491476060, '登录日志', 1, '成功', NULL, '221.226.22.218', '2019-11-06 08:10:19', '2019-11-06 08:10:19');
+INSERT INTO `user_login_log` VALUES (1150667819491476061, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-10 06:03:28', '2019-11-10 06:03:28');
+INSERT INTO `user_login_log` VALUES (1150667819491476062, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-10 06:13:28', '2019-11-10 06:13:28');
+INSERT INTO `user_login_log` VALUES (1150667819491476063, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-10 06:33:07', '2019-11-10 06:33:07');
+INSERT INTO `user_login_log` VALUES (1150667819491476064, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-10 06:45:53', '2019-11-10 06:45:53');
+INSERT INTO `user_login_log` VALUES (1150667819491476065, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-10 10:19:32', '2019-11-10 10:19:32');
+INSERT INTO `user_login_log` VALUES (1150667819491476066, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-10 11:39:36', '2019-11-10 11:39:36');
+INSERT INTO `user_login_log` VALUES (1150667819491476067, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-11 17:30:55', '2019-11-11 17:30:55');
+INSERT INTO `user_login_log` VALUES (1150667819491476068, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-12 09:26:21', '2019-11-12 09:26:21');
+INSERT INTO `user_login_log` VALUES (1150667819491476069, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-12 09:26:56', '2019-11-12 09:26:56');
+INSERT INTO `user_login_log` VALUES (1150667819491476070, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-12 09:33:25', '2019-11-12 09:33:25');
+INSERT INTO `user_login_log` VALUES (1150667819491476071, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-12 09:37:02', '2019-11-12 09:37:02');
+INSERT INTO `user_login_log` VALUES (1150667819491476072, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-12 14:02:11', '2019-11-12 14:02:11');
+INSERT INTO `user_login_log` VALUES (1150667819491476073, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-12 17:09:55', '2019-11-12 17:09:55');
+INSERT INTO `user_login_log` VALUES (1150667819491476074, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-12 17:13:52', '2019-11-12 17:13:52');
+INSERT INTO `user_login_log` VALUES (1150667819491476075, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-12 17:22:55', '2019-11-12 17:22:55');
+INSERT INTO `user_login_log` VALUES (1150667819491476076, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-12 17:30:15', '2019-11-12 17:30:15');
+INSERT INTO `user_login_log` VALUES (1150667819491476077, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-12 17:55:33', '2019-11-12 17:55:33');
+INSERT INTO `user_login_log` VALUES (1150667819491476078, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-13 09:12:06', '2019-11-13 09:12:06');
+INSERT INTO `user_login_log` VALUES (1150667819491476079, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-13 15:51:48', '2019-11-13 15:51:48');
+INSERT INTO `user_login_log` VALUES (1150667819491476080, '登录日志', 1, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-22 11:05:44', '2019-11-22 11:05:44');
+INSERT INTO `user_login_log` VALUES (1150667819491476081, '登录日志', 5, '成功', NULL, '0:0:0:0:0:0:0:1', '2019-11-22 11:07:42', '2019-11-22 11:07:42');
+
+-- ----------------------------
+-- Table structure for user_operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `user_operation_log`;
+CREATE TABLE `user_operation_log`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `log_type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '日志类型',
+  `log_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '日志名称',
+  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户ID',
+  `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '类名称',
+  `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '方法名称',
+  `succeed` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '是否成功',
+  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '备注',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `execute_time` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '执行时间(毫秒)',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1150601874915967931 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_operation_log
+-- ----------------------------
+INSERT INTO `user_operation_log` VALUES (1150601874915967835, '操作日志', '下载会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'download', '成功', '\"http://img.jcscdata.com/M201910290002/bd75cd75-dbe2-4f51-bff0-dd27aca2fd31.jpg\"', '2019-10-30 05:44:57', '2019-10-30 05:44:57', '451');
+INSERT INTO `user_operation_log` VALUES (1150601874915967836, '操作日志', '下载会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'download', '成功', '\"M201910290002\"', '2019-10-30 09:33:33', '2019-10-30 09:33:33', '1877');
+INSERT INTO `user_operation_log` VALUES (1150601874915967837, '操作日志', '下载会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'download', '成功', '\"M201910290002\"', '2019-10-30 09:38:20', '2019-10-30 09:38:20', '1767');
+INSERT INTO `user_operation_log` VALUES (1150601874915967838, '异常日志', '', NULL, NULL, NULL, '失败', 'Current request is not a multipart request', '2019-10-30 09:48:45', '2019-10-30 09:48:45', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967839, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (1).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.4985438838678968605.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (1).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.4985438838678968605.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (1).jpg\"},{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/png\",\"isFormField\":false,\"fileName\":\"w (1).png\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.4985438838678968605.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (1).png\\\"\"],\"content-type\":[\"image/png\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.4985438838678968605.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (1).png\"}]', '2019-10-30 09:54:11', '2019-10-30 09:54:11', '21425');
+INSERT INTO `user_operation_log` VALUES (1150601874915967840, '异常日志', '', NULL, NULL, NULL, '失败', NULL, '2019-10-31 02:45:26', '2019-10-31 02:45:26', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967841, '异常日志', '', NULL, NULL, NULL, '失败', NULL, '2019-10-31 02:48:53', '2019-10-31 02:48:53', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967842, '异常日志', '', NULL, NULL, NULL, '失败', 'invalid comment', '2019-10-31 02:50:45', '2019-10-31 02:50:45', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967843, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \r\n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\r\n### The error may exist in file [D:\\Development\\Workspaces\\wehert\\wehert-api\\target\\classes\\com\\ksh\\wehert\\system\\dao\\mapping\\MeetingDetailMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-10-31 02:50:59', '2019-10-31 02:50:59', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967844, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \r\n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\r\n### The error may exist in file [D:\\Development\\Workspaces\\wehert\\wehert-api\\target\\classes\\com\\ksh\\wehert\\system\\dao\\mapping\\MeetingDetailMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-10-31 02:52:06', '2019-10-31 02:52:06', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967845, '异常日志', '', NULL, NULL, NULL, '失败', '\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n### The error may exist in com/ksh/wehert/system/dao/MeetingCloudMapper.java (best guess)\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### SQL: SELECT  id,meeting_id AS meetingId,meeting_code AS meetingCode,type,upload_time AS uploadTime,user_id AS userId,url,name,create_time AS createTime,update_time AS updateTime  FROM meeting_cloud  WHERE  meeting_id = ? AND file_type = ?\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'', '2019-11-09 05:26:35', '2019-11-09 05:26:35', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967846, '异常日志', '', NULL, NULL, NULL, '失败', '\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n### The error may exist in com/ksh/wehert/system/dao/MeetingCloudMapper.java (best guess)\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### SQL: SELECT  id,meeting_id AS meetingId,meeting_code AS meetingCode,type,upload_time AS uploadTime,user_id AS userId,url,name,create_time AS createTime,update_time AS updateTime  FROM meeting_cloud  WHERE  meeting_id = ? AND file_type = ?\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'', '2019-11-09 05:28:59', '2019-11-09 05:28:59', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967847, '异常日志', '', NULL, NULL, NULL, '失败', NULL, '2019-11-09 05:29:40', '2019-11-09 05:29:40', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967848, '异常日志', '', NULL, NULL, NULL, '失败', NULL, '2019-11-09 05:30:25', '2019-11-09 05:30:25', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967849, '异常日志', '', NULL, NULL, NULL, '失败', NULL, '2019-11-09 05:30:31', '2019-11-09 05:30:31', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967850, '异常日志', '', NULL, NULL, NULL, '失败', '\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n### The error may exist in com/ksh/wehert/system/dao/MeetingCloudMapper.java (best guess)\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### SQL: SELECT  id,meeting_id AS meetingId,meeting_code AS meetingCode,type,upload_time AS uploadTime,user_id AS userId,url,name,create_time AS createTime,update_time AS updateTime  FROM meeting_cloud  WHERE  meeting_id = ? AND file_type = ?\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'', '2019-11-09 06:08:57', '2019-11-09 06:08:57', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967851, '异常日志', '', NULL, NULL, NULL, '失败', '\n### Error updating database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'\n### The error may involve com.ksh.wehert.system.dao.MeetingDetailMapper.insert-Inline\n### The error occurred while setting parameters\n### SQL: INSERT INTO meeting_detail   ( code,meeting_time,meeting_type,hospital_id,speakers_id,applicant_id,applicant_time,pre_cost,activity_cost,pre_persons,source,status,topic_id,create_time,update_time )  VALUES   ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'', '2019-11-09 06:22:05', '2019-11-09 06:22:05', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967852, '异常日志', '', NULL, NULL, NULL, '失败', NULL, '2019-11-09 06:22:32', '2019-11-09 06:22:32', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967853, '异常日志', '', NULL, NULL, NULL, '失败', '\n### Error updating database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'\n### The error may involve com.ksh.wehert.system.dao.MeetingDetailMapper.insert-Inline\n### The error occurred while setting parameters\n### SQL: INSERT INTO meeting_detail   ( code,meeting_time,meeting_type,hospital_id,speakers_id,applicant_id,applicant_time,pre_cost,activity_cost,pre_persons,source,status,topic_id,create_time,update_time )  VALUES   ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'', '2019-11-09 06:22:47', '2019-11-09 06:22:47', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967854, '异常日志', '', NULL, NULL, NULL, '失败', '\n### Error updating database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'\n### The error may involve com.ksh.wehert.system.dao.MeetingDetailMapper.insert-Inline\n### The error occurred while setting parameters\n### SQL: INSERT INTO meeting_detail   ( code,meeting_time,meeting_type,hospital_id,speakers_id,applicant_id,applicant_time,pre_cost,pre_persons,source,status,topic_id,create_time,update_time )  VALUES   ( ?,?,?,?,?,?,?,?,?,?,?,?,?,? )\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'', '2019-11-09 06:24:47', '2019-11-09 06:24:47', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967855, '异常日志', '', NULL, NULL, NULL, '失败', '\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n### The error may exist in com/ksh/wehert/system/dao/MeetingCloudMapper.java (best guess)\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### SQL: SELECT  id,meeting_id AS meetingId,meeting_code AS meetingCode,type,upload_time AS uploadTime,user_id AS userId,url,name,create_time AS createTime,update_time AS updateTime  FROM meeting_cloud  WHERE  meeting_id = ? AND file_type = ?\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'', '2019-11-09 06:31:56', '2019-11-09 06:31:56', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967856, '异常日志', '', NULL, NULL, NULL, '失败', '\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n### The error may exist in com/ksh/wehert/system/dao/MeetingCloudMapper.java (best guess)\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### SQL: SELECT  id,meeting_id AS meetingId,meeting_code AS meetingCode,type,upload_time AS uploadTime,user_id AS userId,url,name,create_time AS createTime,update_time AS updateTime  FROM meeting_cloud  WHERE  meeting_id = ? AND file_type = ?\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'file_type\' in \'where clause\'', '2019-11-09 06:34:19', '2019-11-09 06:34:19', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967857, '异常日志', '', NULL, NULL, NULL, '失败', 'syntax error, pos 9, json : {object: \"eyJtZWV0aW5nVHlwZSI6MSwiaG9zcGl0YWxJZCI6IjEiLCJ0b3BpY0lkIjo5MCwic3BlYWtlcnNJZCI6IjIiLCJtZWV0aW5nVGltZSI6IjIwMTktMTEtMDkiLCJwcmVQZXJzb25zIjoiMiIsInByZUNvc3QiOiIzIn0=\",\nsign: \"1c6235f1076bf038222a3766eca73030\"\n}', '2019-11-09 06:37:11', '2019-11-09 06:37:11', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967858, '异常日志', '', NULL, NULL, NULL, '失败', '\n### Error updating database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'\n### The error may involve com.ksh.wehert.system.dao.MeetingDetailMapper.insert-Inline\n### The error occurred while setting parameters\n### SQL: INSERT INTO meeting_detail   ( code,meeting_time,meeting_type,hospital_id,speakers_id,applicant_id,applicant_time,pre_cost,pre_persons,source,status,topic_id,create_time,update_time )  VALUES   ( ?,?,?,?,?,?,?,?,?,?,?,?,?,? )\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'applicant_id\' in \'field list\'', '2019-11-09 06:37:52', '2019-11-09 06:37:52', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967859, '操作日志', '新增会议', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":20,\"code\":\"M201911090001\",\"meetingTime\":\"Nov 9, 2019 12:00:00 AM\",\"meetingType\":1,\"hospitalId\":1,\"speakersId\":2,\"applicantId\":1,\"applicantTime\":\"Nov 9, 2019 2:39:05 PM\",\"preCost\":3,\"prePersons\":2,\"source\":\"小程序\",\"status\":\"01\",\"topicId\":90,\"createTime\":\"Nov 9, 2019 2:39:05 PM\",\"updateTime\":\"Nov 9, 2019 2:39:05 PM\",\"currentPage\":1,\"pageSize\":10}', '2019-11-09 06:39:06', '2019-11-09 06:39:06', '9');
+INSERT INTO `user_operation_log` VALUES (1150601874915967860, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\n### The error may exist in URL [jar:file:/home/appadmin/wehert/wehert-api-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/com/ksh/wehert/system/dao/mapping/MeetingDetailMapper.xml]\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-09 08:02:54', '2019-11-09 08:02:54', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967861, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\n### The error may exist in URL [jar:file:/home/appadmin/wehert/wehert-api-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/com/ksh/wehert/system/dao/mapping/MeetingDetailMapper.xml]\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-09 08:03:42', '2019-11-09 08:03:42', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967862, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\n### The error may exist in URL [jar:file:/home/appadmin/wehert/wehert-api-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/com/ksh/wehert/system/dao/mapping/MeetingDetailMapper.xml]\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-09 08:08:06', '2019-11-09 08:08:06', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967863, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\n### The error may exist in URL [jar:file:/home/appadmin/wehert/wehert-api-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/com/ksh/wehert/system/dao/mapping/MeetingDetailMapper.xml]\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-09 08:08:59', '2019-11-09 08:08:59', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967864, '异常日志', '', NULL, NULL, NULL, '失败', '\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'md.auditor_id\' in \'on clause\'\n### The error may exist in URL [jar:file:/home/appadmin/wehert/wehert-api-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/com/ksh/wehert/system/dao/mapping/MeetingDetailMapper.xml]\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### SQL: select * from         (select md.*,hde.name hospital_name, hde.address hospital_address, hdc.name speakers_name,         su.name auditor_name, ud.username applicant_name, mc.name topic_name         from meeting_detail md         left join hospital_detail hde on md.hospital_id = hde.id         left join hospital_doctor hdc on md.speakers_id = hdc.id         left join sys_user su on md.auditor_id = su.id         left join user_detail ud on md.user_id = ud.id         left join meeting_course mc on md.topic_id = mc.id         ) m         where m.id = ?\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'md.auditor_id\' in \'on clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'md.auditor_id\' in \'on clause\'', '2019-11-09 08:09:29', '2019-11-09 08:09:29', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967865, '操作日志', '新增会议', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":21,\"code\":\"M201911090002\",\"meetingTime\":\"Nov 9, 2019 12:00:00 AM\",\"meetingType\":1,\"hospitalId\":2,\"speakersId\":2,\"applicantId\":1,\"applicantTime\":\"Nov 9, 2019 4:10:04 PM\",\"preCost\":222,\"prePersons\":33,\"source\":\"小程序\",\"status\":\"01\",\"topicId\":90,\"createTime\":\"Nov 9, 2019 4:10:04 PM\",\"updateTime\":\"Nov 9, 2019 4:10:04 PM\",\"currentPage\":1,\"pageSize\":10}', '2019-11-09 08:10:04', '2019-11-09 08:10:04', '21');
+INSERT INTO `user_operation_log` VALUES (1150601874915967866, '操作日志', '新增会议', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":22,\"code\":\"M201911090003\",\"meetingTime\":\"Nov 9, 2019 12:00:00 AM\",\"meetingType\":1,\"hospitalId\":2,\"speakersId\":2,\"applicantId\":1,\"applicantTime\":\"Nov 9, 2019 4:42:26 PM\",\"preCost\":3333,\"prePersons\":222,\"source\":\"小程序\",\"status\":\"01\",\"topicId\":90,\"createTime\":\"Nov 9, 2019 4:42:26 PM\",\"updateTime\":\"Nov 9, 2019 4:42:26 PM\",\"currentPage\":1,\"pageSize\":10}', '2019-11-09 08:42:26', '2019-11-09 08:42:26', '12');
+INSERT INTO `user_operation_log` VALUES (1150601874915967867, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\n### The error may exist in URL [jar:file:/home/appadmin/wehert/wehert-api-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/com/ksh/wehert/system/dao/mapping/MeetingDetailMapper.xml]\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-09 08:51:45', '2019-11-09 08:51:45', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967868, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\n### The error may exist in URL [jar:file:/home/appadmin/wehert/wehert-api-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/com/ksh/wehert/system/dao/mapping/MeetingDetailMapper.xml]\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-09 08:52:07', '2019-11-09 08:52:07', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967869, '操作日志', '新增会议', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":23,\"code\":\"M201911090004\",\"meetingTime\":\"Nov 9, 2019 12:00:00 AM\",\"meetingType\":1,\"hospitalId\":2,\"speakersId\":2,\"applicantId\":1,\"applicantTime\":\"Nov 9, 2019 4:52:44 PM\",\"preCost\":333,\"prePersons\":22,\"source\":\"小程序\",\"status\":\"01\",\"topicId\":90,\"createTime\":\"Nov 9, 2019 4:52:44 PM\",\"updateTime\":\"Nov 9, 2019 4:52:44 PM\",\"currentPage\":1,\"pageSize\":10}', '2019-11-09 08:52:45', '2019-11-09 08:52:45', '8');
+INSERT INTO `user_operation_log` VALUES (1150601874915967870, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\n### The error may exist in URL [jar:file:/home/appadmin/wehert/wehert-api-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/com/ksh/wehert/system/dao/mapping/MeetingDetailMapper.xml]\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-09 08:53:21', '2019-11-09 08:53:21', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967871, '操作日志', '新增会议', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":24,\"code\":\"M201911090005\",\"meetingTime\":\"Nov 9, 2019 12:00:00 AM\",\"meetingType\":1,\"hospitalId\":1,\"speakersId\":2,\"applicantId\":1,\"applicantTime\":\"Nov 9, 2019 4:53:49 PM\",\"preCost\":333,\"prePersons\":122,\"source\":\"小程序\",\"status\":\"01\",\"topicId\":90,\"createTime\":\"Nov 9, 2019 4:53:49 PM\",\"updateTime\":\"Nov 9, 2019 4:53:49 PM\",\"currentPage\":1,\"pageSize\":10}', '2019-11-09 08:53:50', '2019-11-09 08:53:50', '8');
+INSERT INTO `user_operation_log` VALUES (1150601874915967872, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.exceptions.PersistenceException: \n### Error querying database.  Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.\n### The error may exist in URL [jar:file:/home/appadmin/wehert/wehert-api-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/com/ksh/wehert/system/dao/mapping/MeetingDetailMapper.xml]\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### Cause: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: Error: Method queryTotal execution error.', '2019-11-09 13:27:54', '2019-11-09 13:27:54', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967873, '异常日志', '', NULL, NULL, NULL, '失败', 'Error in execution; nested exception is io.lettuce.core.RedisCommandExecutionException: NOAUTH Authentication required.', '2019-11-10 05:48:40', '2019-11-10 05:48:40', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967874, '异常日志', '', NULL, NULL, NULL, '失败', 'Error in execution; nested exception is io.lettuce.core.RedisCommandExecutionException: NOAUTH Authentication required.', '2019-11-10 05:50:15', '2019-11-10 05:50:15', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967875, '异常日志', '', NULL, NULL, NULL, '失败', 'Error in execution; nested exception is io.lettuce.core.RedisCommandExecutionException: NOAUTH Authentication required.', '2019-11-10 05:51:32', '2019-11-10 05:51:32', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967876, '异常日志', '', NULL, NULL, NULL, '失败', 'Error in execution; nested exception is io.lettuce.core.RedisCommandExecutionException: NOAUTH Authentication required.', '2019-11-10 05:52:04', '2019-11-10 05:52:04', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967877, '异常日志', '', NULL, NULL, NULL, '失败', 'Error in execution; nested exception is io.lettuce.core.RedisCommandExecutionException: NOAUTH Authentication required.', '2019-11-10 05:58:00', '2019-11-10 05:58:00', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967878, '异常日志', '', NULL, NULL, NULL, '失败', 'Error in execution; nested exception is io.lettuce.core.RedisCommandExecutionException: NOAUTH Authentication required.', '2019-11-10 05:58:36', '2019-11-10 05:58:36', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967879, '异常日志', '', NULL, NULL, NULL, '失败', 'Error in execution; nested exception is io.lettuce.core.RedisCommandExecutionException: NOAUTH Authentication required.', '2019-11-10 05:59:13', '2019-11-10 05:59:13', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967880, '异常日志', '', NULL, NULL, NULL, '失败', 'Error in execution; nested exception is io.lettuce.core.RedisCommandExecutionException: NOAUTH Authentication required.', '2019-11-10 06:01:33', '2019-11-10 06:01:33', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967881, '异常日志', '', NULL, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'hdc.i\' in \'on clause\'\r\n### The error may exist in file [D:\\Development\\Projects\\wehert\\wehert-api\\target\\classes\\com\\ksh\\wehert\\system\\dao\\mapping\\MeetingDetailMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select * from         (select md.*,hde.name hospital_name, hde.address hospital_address, hdc.name speakers_name,         su.name auditor_name, ud.username applicant_name, mc.name topic_name         from meeting_detail md         left join hospital_detail hde on md.hospital_id = hde.id         left join hospital_doctor hdc on md.speakers_id = hdc.i         left join sys_user su on md.auditor_id = su.id         left join user_detail ud on md.applicant_id = ud.id         left join meeting_course mc on md.topic_id = mc.id         ) m         where m.id = ?\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'hdc.i\' in \'on clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'hdc.i\' in \'on clause\'', '2019-11-10 10:21:02', '2019-11-10 10:21:02', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967882, '异常日志', '', NULL, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'WHERE 1 = 1 \n		\n			and phone =  \'15210203952\'\n		\n		\n			and type =  \'01\'\' at line 3\r\n### The error may exist in file [D:\\Development\\Workspaces\\wehert\\wehert-api\\target\\classes\\com\\ksh\\wehert\\system\\dao\\mapping\\UserSmsMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select count(*) from sys_sms   where create_time > DATE_SUB(NOW(), INTERVAL 1 DAY)    WHERE 1 = 1        and phone =  ?          and type =  ?\r\n### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'WHERE 1 = 1 \n		\n			and phone =  \'15210203952\'\n		\n		\n			and type =  \'01\'\' at line 3\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'WHERE 1 = 1 \n		\n			and phone =  \'15210203952\'\n		\n		\n			and type =  \'01\'\' at line 3', '2019-11-11 06:38:42', '2019-11-11 06:38:42', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967883, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.binding.BindingException: Parameter \'phone\' not found. Available parameters are [arg1, arg0, param1, param2]', '2019-11-11 06:45:52', '2019-11-11 06:45:52', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967884, '异常日志', '', NULL, NULL, NULL, '失败', 'nested exception is org.apache.ibatis.binding.BindingException: Parameter \'phone\' not found. Available parameters are [arg1, arg0, param1, param2]', '2019-11-11 06:48:13', '2019-11-11 06:48:13', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967885, '异常日志', '', NULL, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'WHERE 1 = 1 \n		\n			and ss.phone =  \'15210203952\'\n		\n		\n			and ss.type =  \'01\'\' at line 3\r\n### The error may exist in file [D:\\Development\\Workspaces\\wehert\\wehert-api\\target\\classes\\com\\ksh\\wehert\\system\\dao\\mapping\\SysSmsMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select count(*) from sys_sms ss   where ss.create_time > DATE_SUB(NOW(), INTERVAL 1 DAY)    WHERE 1 = 1        and ss.phone =  ?          and ss.type =  ?\r\n### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'WHERE 1 = 1 \n		\n			and ss.phone =  \'15210203952\'\n		\n		\n			and ss.type =  \'01\'\' at line 3\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'WHERE 1 = 1 \n		\n			and ss.phone =  \'15210203952\'\n		\n		\n			and ss.type =  \'01\'\' at line 3', '2019-11-11 07:00:09', '2019-11-11 07:00:09', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967886, '异常日志', '', NULL, NULL, NULL, '失败', 'Index: 0, Size: 0', '2019-11-11 17:11:15', '2019-11-11 17:11:15', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967887, '异常日志', '', NULL, NULL, NULL, '失败', 'Index: 0, Size: 0', '2019-11-11 17:18:01', '2019-11-11 17:18:01', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967888, '异常日志', '', NULL, NULL, NULL, '失败', 'Index: 0, Size: 0', '2019-11-11 17:19:35', '2019-11-11 17:19:35', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967889, '异常日志', '', NULL, NULL, NULL, '失败', 'Index: 0, Size: 0', '2019-11-11 17:23:12', '2019-11-11 17:23:12', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967890, '异常日志', '', NULL, NULL, NULL, '失败', 'Index: 0, Size: 0', '2019-11-11 17:25:36', '2019-11-11 17:25:36', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967891, '异常日志', '', NULL, NULL, NULL, '失败', 'JWT expired at 2019-11-12T09:24:29Z. Current time: 2019-11-12T09:24:31Z, a difference of 2941 milliseconds.  Allowed clock skew: 0 milliseconds.', '2019-11-12 09:24:32', '2019-11-12 09:24:32', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967892, '异常日志', '', NULL, NULL, NULL, '失败', 'Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadException: the request was rejected because no multipart boundary was found', '2019-11-12 15:13:06', '2019-11-12 15:13:06', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967893, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (2).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.1550202799080507923.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (2).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.1550202799080507923.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (2).jpg\"}]', '2019-11-12 15:16:56', '2019-11-12 15:16:56', '2476');
+INSERT INTO `user_operation_log` VALUES (1150601874915967894, '异常日志', '', NULL, NULL, NULL, '失败', 'Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadException: the request was rejected because no multipart boundary was found', '2019-11-12 15:37:53', '2019-11-12 15:37:53', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967895, '异常日志', '', NULL, NULL, NULL, '失败', 'Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadException: the request was rejected because no multipart boundary was found', '2019-11-12 15:43:16', '2019-11-12 15:43:16', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967896, '异常日志', '', NULL, NULL, NULL, '失败', 'Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadException: the request was rejected because no multipart boundary was found', '2019-11-12 15:48:24', '2019-11-12 15:48:24', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967897, '异常日志', '', NULL, NULL, NULL, '失败', 'Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadException: the request was rejected because no multipart boundary was found', '2019-11-12 15:49:06', '2019-11-12 15:49:06', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967898, '异常日志', '', NULL, NULL, NULL, '失败', 'Current request is not a multipart request', '2019-11-12 15:50:25', '2019-11-12 15:50:25', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967899, '异常日志', '', NULL, NULL, NULL, '失败', 'Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadException: the request was rejected because no multipart boundary was found', '2019-11-12 15:50:59', '2019-11-12 15:50:59', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967900, '异常日志', '', NULL, NULL, NULL, '失败', 'Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadException: the request was rejected because no multipart boundary was found', '2019-11-12 15:59:13', '2019-11-12 15:59:13', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967901, '异常日志', '', NULL, NULL, NULL, '失败', 'Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadException: the request was rejected because no multipart boundary was found', '2019-11-12 15:59:53', '2019-11-12 15:59:53', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967902, '异常日志', '', NULL, NULL, NULL, '失败', 'Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadException: the request was rejected because no multipart boundary was found', '2019-11-12 16:00:28', '2019-11-12 16:00:28', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967903, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (2).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.1209718498967812137.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (2).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.1209718498967812137.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (2).jpg\"}]', '2019-11-12 16:04:40', '2019-11-12 16:04:40', '8990');
+INSERT INTO `user_operation_log` VALUES (1150601874915967904, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (2).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.5675769926562323167.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (2).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.5675769926562323167.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (2).jpg\"}]', '2019-11-12 18:00:21', '2019-11-12 18:00:21', '5295');
+INSERT INTO `user_operation_log` VALUES (1150601874915967905, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (2).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.5675769926562323167.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (2).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.5675769926562323167.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (2).jpg\"}]', '2019-11-12 18:01:36', '2019-11-12 18:01:36', '44037');
+INSERT INTO `user_operation_log` VALUES (1150601874915967906, '异常日志', '', NULL, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'\r\n### The error may exist in file [D:\\Development\\Workspaces\\wehert\\wehert-api\\target\\classes\\com\\ksh\\wehert\\system\\dao\\mapping\\HospitalDeptMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select d.* from hospital_dept d order by d.createTime desc\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'', '2019-11-13 09:15:05', '2019-11-13 09:15:05', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967907, '异常日志', '', NULL, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'\r\n### The error may exist in file [D:\\Development\\Workspaces\\wehert\\wehert-api\\target\\classes\\com\\ksh\\wehert\\system\\dao\\mapping\\HospitalDeptMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select d.* from hospital_dept d order by d.createTime desc\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'', '2019-11-13 09:18:50', '2019-11-13 09:18:50', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967908, '异常日志', '', NULL, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'\r\n### The error may exist in file [D:\\Development\\Workspaces\\wehert\\wehert-api\\target\\classes\\com\\ksh\\wehert\\system\\dao\\mapping\\HospitalDeptMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select d.* from hospital_dept d order by d.createTime desc\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'', '2019-11-13 09:21:16', '2019-11-13 09:21:16', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967909, '异常日志', '', NULL, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'\r\n### The error may exist in file [D:\\Development\\Workspaces\\wehert\\wehert-api\\target\\classes\\com\\ksh\\wehert\\system\\dao\\mapping\\HospitalDeptMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select d.* from hospital_dept d order by d.createTime desc\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'d.createTime\' in \'order clause\'', '2019-11-13 09:24:38', '2019-11-13 09:24:38', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967910, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (2).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.940397526716209590.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (2).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.940397526716209590.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (2).jpg\"}]', '2019-11-13 10:27:02', '2019-11-13 10:27:02', '4500');
+INSERT INTO `user_operation_log` VALUES (1150601874915967911, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (2).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.940397526716209590.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (2).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.940397526716209590.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (2).jpg\"}]', '2019-11-13 10:28:47', '2019-11-13 10:28:47', '31111');
+INSERT INTO `user_operation_log` VALUES (1150601874915967912, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (2).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.940397526716209590.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (2).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.940397526716209590.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (2).jpg\"}]', '2019-11-13 10:30:16', '2019-11-13 10:30:16', '2379');
+INSERT INTO `user_operation_log` VALUES (1150601874915967913, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (2).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.2553549461867290333.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (2).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.2553549461867290333.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (2).jpg\"}]', '2019-11-13 10:33:18', '2019-11-13 10:33:18', '4920');
+INSERT INTO `user_operation_log` VALUES (1150601874915967914, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (2).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8907101351510611927.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (2).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8907101351510611927.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (2).jpg\"}]', '2019-11-13 10:34:08', '2019-11-13 10:34:08', '3753');
+INSERT INTO `user_operation_log` VALUES (1150601874915967915, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (14).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8907101351510611927.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (14).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8907101351510611927.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (14).jpg\"}]', '2019-11-13 10:37:22', '2019-11-13 10:37:22', '3655');
+INSERT INTO `user_operation_log` VALUES (1150601874915967916, '操作日志', '上传会议文件', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingCloudController', 'upload', '成功', '[{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"image/jpeg\",\"isFormField\":false,\"fileName\":\"w (14).jpg\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8907101351510611927.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"w (14).jpg\\\"\"],\"content-type\":[\"image/jpeg\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8907101351510611927.8081\\\\work\\\\Tomcat\\\\localhost\\\\wehert_api\"}},\"filename\":\"w (14).jpg\"}]', '2019-11-13 10:39:16', '2019-11-13 10:39:16', '3196');
+INSERT INTO `user_operation_log` VALUES (1150601874915967917, '操作日志', '删除会议', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingDetailController', 'del', '成功', '[1,2]', '2019-11-13 14:52:50', '2019-11-13 14:52:50', '262');
+INSERT INTO `user_operation_log` VALUES (1150601874915967918, '操作日志', '审核 会议', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingDetailController', 'auditor', '成功', '1', '2019-11-13 14:54:54', '2019-11-13 14:54:54', '103');
+INSERT INTO `user_operation_log` VALUES (1150601874915967919, '操作日志', '更新会议', NULL, 'com.ksh.wehert.system.controller.meeting.MeetingDetailController', 'update', '成功', '{\"id\":1,\"fileIds\":[18,19,20],\"currentPage\":1,\"pageSize\":10,\"updateTime\":\"Nov 13, 2019 3:02:05 PM\"}', '2019-11-13 15:02:05', '2019-11-13 15:02:05', '10240');
+INSERT INTO `user_operation_log` VALUES (1150601874915967920, '异常日志', '', NULL, NULL, NULL, '失败', 'exepct \'[\', but {, pos 1, json : {\n \"ids\": [1,2]\n}', '2019-11-13 17:55:41', '2019-11-13 17:55:41', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967921, '异常日志', '', NULL, NULL, NULL, '失败', 'exepct \'[\', but {, pos 1, json : {\n \"ids\": [1,2]\n}', '2019-11-13 17:56:10', '2019-11-13 17:56:10', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967922, '异常日志', '', NULL, NULL, NULL, '失败', 'exepct \'[\', but {, pos 1, json : {\n \"ids\": [1,2]\n}', '2019-11-13 17:56:15', '2019-11-13 17:56:15', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967923, '异常日志', '', NULL, NULL, NULL, '失败', 'exepct \'[\', but {, pos 1, json : {\n \"ids\": [1,2]\n}', '2019-11-13 17:58:18', '2019-11-13 17:58:18', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967924, '异常日志', '', NULL, NULL, NULL, '失败', 'exepct \'[\', but {, pos 1, json : {\n \"ids\": [1,2]\n}', '2019-11-13 17:58:20', '2019-11-13 17:58:20', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967925, '操作日志', '删除会议', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'del', '成功', '[1,2]', '2019-11-13 17:59:58', '2019-11-13 17:59:58', '21994');
+INSERT INTO `user_operation_log` VALUES (1150601874915967926, '异常日志', '', NULL, NULL, NULL, '失败', NULL, '2019-11-14 15:43:50', '2019-11-14 15:43:50', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967927, '操作日志', '新增会议', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":25,\"code\":\"M201911140001\",\"meetingTime\":\"Nov 14, 2019 12:00:00 AM\",\"meetingType\":1,\"hospitalId\":2,\"speakersId\":1,\"applicantId\":1,\"applicantTime\":\"Nov 14, 2019 4:26:11 PM\",\"preCost\":33,\"prePersons\":22,\"source\":\"小程序\",\"auditorStatus\":\"01\",\"topicId\":90,\"delFlag\":1,\"currentPage\":1,\"pageSize\":10,\"createTime\":\"Nov 14, 2019 4:26:11 PM\",\"updateTime\":\"Nov 14, 2019 4:26:11 PM\"}', '2019-11-14 16:26:12', '2019-11-14 16:26:12', '514');
+INSERT INTO `user_operation_log` VALUES (1150601874915967928, '异常日志', '', NULL, NULL, NULL, '失败', 'com.alibaba.fastjson.JSONArray cannot be cast to [Ljava.lang.Long;', '2019-11-14 16:32:22', '2019-11-14 16:32:22', 'null');
+INSERT INTO `user_operation_log` VALUES (1150601874915967929, '操作日志', '更新会议现场', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'updateScene', '成功', '{\"id\":25,\"realPersons\":100,\"address\":\"北京市朝阳区那旮沓胡同\",\"videoId\":15,\"sceneIds\":[20,21,22],\"currentPage\":1,\"pageSize\":10,\"updateTime\":\"Nov 15, 2019 5:45:06 PM\"}', '2019-11-15 17:45:06', '2019-11-15 17:45:06', '194677');
+INSERT INTO `user_operation_log` VALUES (1150601874915967930, '操作日志', '更新会议现场', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'updateScene', '成功', '{\"id\":25,\"realPersons\":100,\"address\":\"北京市朝阳区那旮沓胡同\",\"videoId\":11,\"sceneIds\":[17,18,19],\"currentPage\":1,\"pageSize\":10,\"updateTime\":\"Nov 15, 2019 5:59:11 PM\"}', '2019-11-15 17:59:11', '2019-11-15 17:59:11', '273');
+INSERT INTO `user_operation_log` VALUES (1150601874915967931, '操作日志', '更新会议现场', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'updateScene', '成功', '{\"id\":25,\"realPersons\":100,\"address\":\"北京市朝阳区那旮沓胡同\",\"videoId\":12,\"sceneIds\":[17,18,19],\"currentPage\":1,\"pageSize\":10,\"updateTime\":\"Nov 15, 2019 6:02:10 PM\"}', '2019-11-15 18:02:10', '2019-11-15 18:02:10', '7012');
+INSERT INTO `user_operation_log` VALUES (1150601874915967932, '操作日志', '更新会议信息', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'updateInfo', '成功', '{\"id\":25,\"laborCost\":100.01,\"activityCost\":100.22,\"meetingStatus\":\"01\",\"currentPage\":1,\"pageSize\":10,\"updateTime\":\"Nov 21, 2019 4:33:15 PM\"}', '2019-11-21 16:33:15', '2019-11-21 16:33:15', '606');
+INSERT INTO `user_operation_log` VALUES (1150601874915967933, '操作日志', '新增会议', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":26,\"code\":\"M201911210001\",\"meetingTime\":\"2019-11-21\",\"meetingType\":1,\"hospitalId\":1,\"speakersId\":1,\"applicantId\":2,\"applicantTime\":\"Nov 21, 2019 4:58:27 PM\",\"laborCost\":20.22,\"activityCost\":100.22,\"prePersons\":20,\"source\":\"小程序\",\"meetingStatus\":\"01\",\"topicId\":90,\"delFlag\":1,\"currentPage\":1,\"pageSize\":10,\"createTime\":\"Nov 21, 2019 4:58:45 PM\",\"updateTime\":\"Nov 21, 2019 4:58:45 PM\"}', '2019-11-21 16:58:45', '2019-11-21 16:58:45', '21358');
+INSERT INTO `user_operation_log` VALUES (1150601874915967934, '操作日志', '新增会议', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":27,\"code\":\"M201911210002\",\"meetingTime\":\"2019-11-21\",\"meetingType\":1,\"hospitalId\":1,\"speakersId\":1,\"applicantId\":2,\"applicantTime\":\"Nov 21, 2019 4:59:34 PM\",\"laborCost\":20.22,\"activityCost\":100.22,\"prePersons\":20,\"source\":\"小程序\",\"meetingStatus\":\"01\",\"topicId\":90,\"delFlag\":1,\"currentPage\":1,\"pageSize\":10,\"createTime\":\"Nov 21, 2019 5:00:06 PM\",\"updateTime\":\"Nov 21, 2019 5:00:06 PM\"}', '2019-11-21 17:00:07', '2019-11-21 17:00:07', '34988');
+INSERT INTO `user_operation_log` VALUES (1150601874915967935, '操作日志', '新增会议', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":28,\"code\":\"M201911210003\",\"meetingTime\":\"2019-11-21\",\"meetingType\":1,\"hospitalId\":1,\"speakersId\":1,\"applicantId\":2,\"applicantTime\":\"Nov 21, 2019 5:00:36 PM\",\"laborCost\":20.22,\"activityCost\":100.22,\"prePersons\":20,\"source\":\"小程序\",\"meetingStatus\":\"01\",\"topicId\":90,\"delFlag\":1,\"currentPage\":1,\"pageSize\":10,\"createTime\":\"Nov 21, 2019 5:00:44 PM\",\"updateTime\":\"Nov 21, 2019 5:00:44 PM\"}', '2019-11-21 17:00:45', '2019-11-21 17:00:45', '10823');
+INSERT INTO `user_operation_log` VALUES (1150601874915967936, '操作日志', '新增会议', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":29,\"code\":\"M201911210004\",\"meetingTime\":\"2019-11-21\",\"meetingType\":1,\"hospitalId\":1,\"speakersId\":1,\"applicantId\":1,\"applicantTime\":\"Nov 21, 2019 5:05:33 PM\",\"laborCost\":20.22,\"activityCost\":100.22,\"prePersons\":20,\"source\":\"小程序\",\"meetingStatus\":\"01\",\"topicId\":90,\"delFlag\":1,\"currentPage\":1,\"pageSize\":10,\"createTime\":\"Nov 21, 2019 5:05:33 PM\",\"updateTime\":\"Nov 21, 2019 5:05:33 PM\"}', '2019-11-21 17:05:34', '2019-11-21 17:05:34', '154');
+INSERT INTO `user_operation_log` VALUES (1150601874915967937, '操作日志', '新增会议', NULL, 'com.ksh.heart.system.controller.meeting.MeetingDetailController', 'add', '成功', '{\"id\":30,\"code\":\"M201911210005\",\"meetingTime\":\"2019-11-21\",\"meetingType\":1,\"hospitalId\":1,\"speakersId\":1,\"applicantId\":2,\"applicantTime\":\"Nov 21, 2019 5:06:19 PM\",\"laborCost\":20.22,\"activityCost\":100.22,\"prePersons\":20,\"source\":\"小程序\",\"meetingStatus\":\"01\",\"topicId\":90,\"delFlag\":1,\"currentPage\":1,\"pageSize\":10,\"createTime\":\"Nov 21, 2019 5:06:19 PM\",\"updateTime\":\"Nov 21, 2019 5:06:19 PM\"}', '2019-11-21 17:06:20', '2019-11-21 17:06:20', '91');
 
 -- ----------------------------
 -- Table structure for user_role
@@ -4822,12 +5244,97 @@ CREATE TABLE `user_role`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `level_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '级别名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
 INSERT INTO `user_role` VALUES (1, '管理者', 1, '2019-08-05 14:58:58', '2019-08-05 14:59:02', '一级');
 INSERT INTO `user_role` VALUES (2, '大区经理', 2, '2019-08-05 14:59:25', '2019-08-05 14:59:27', '二级');
+
+-- ----------------------------
+-- Function structure for get_hospital_num
+-- ----------------------------
+DROP FUNCTION IF EXISTS `get_hospital_num`;
+delimiter ;;
+CREATE FUNCTION `get_hospital_num`()
+ RETURNS varchar(16) CHARSET utf8mb4
+  READS SQL DATA 
+BEGIN
+	DECLARE getval VARCHAR(16);
+	SET getval = (SELECT CONCAT('H',DATE_FORMAT(NOW(),'%Y%m%d'),LPAD((SELECT next_sequence_num('hospital_no')),4,'0')));
+RETURN getval;
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Function structure for get_meeting_num
+-- ----------------------------
+DROP FUNCTION IF EXISTS `get_meeting_num`;
+delimiter ;;
+CREATE FUNCTION `get_meeting_num`()
+ RETURNS varchar(16) CHARSET utf8mb4
+  READS SQL DATA 
+BEGIN
+	DECLARE getval VARCHAR(16);
+	SET getval = (SELECT CONCAT('M',DATE_FORMAT(NOW(),'%Y%m%d'),LPAD((SELECT next_sequence_num('meeting_no')),4,'0')));
+RETURN getval;
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Function structure for next_sequence_num
+-- ----------------------------
+DROP FUNCTION IF EXISTS `next_sequence_num`;
+delimiter ;;
+CREATE FUNCTION `next_sequence_num`(`seq_name` varchar(32))
+ RETURNS int(8)
+  READS SQL DATA 
+BEGIN
+ UPDATE sys_sequence SET value=last_insert_id(value+next) WHERE name=seq_name;
+ RETURN last_insert_id();
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Event structure for hospital_no
+-- ----------------------------
+DROP EVENT IF EXISTS `hospital_no`;
+delimiter ;;
+CREATE EVENT `hospital_no`
+ON SCHEDULE
+EVERY '1' DAY STARTS '2019-10-30 00:00:00'
+DO UPDATE sys_sequence SET value=0 WHERE name='hospital_no'
+;;
+delimiter ;
+
+-- ----------------------------
+-- Event structure for meeting_no
+-- ----------------------------
+DROP EVENT IF EXISTS `meeting_no`;
+delimiter ;;
+CREATE EVENT `meeting_no`
+ON SCHEDULE
+EVERY '1' DAY STARTS '2019-10-30 00:00:00'
+DO UPDATE sys_sequence SET value=0 WHERE name='meeting_no'
+;;
+delimiter ;
+
+-- ----------------------------
+-- Event structure for meeting_status
+-- ----------------------------
+DROP EVENT IF EXISTS `meeting_status`;
+delimiter ;;
+CREATE EVENT `meeting_status`
+ON SCHEDULE
+EVERY '1' DAY STARTS '2019-11-15 00:00:00'
+DO update meeting_detail set meeting_status =
+case when STR_TO_DATE(meeting_time,'%Y-%m-%d') = CURDATE() then '04' 
+when STR_TO_DATE(meeting_time,'%Y-%m-%d') < CURDATE() then '05' end
+;;
+delimiter ;
 
 SET FOREIGN_KEY_CHECKS = 1;

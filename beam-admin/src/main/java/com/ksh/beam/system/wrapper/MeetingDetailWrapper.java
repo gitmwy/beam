@@ -3,13 +3,13 @@ package com.ksh.beam.system.wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ksh.beam.common.base.BaseWrapper;
 import com.ksh.beam.common.factory.impl.ConstantFactory;
-import com.ksh.beam.system.entity.meeting.Detail;
+import com.ksh.beam.system.entity.meeting.Meeting;
 
 import java.util.Map;
 
 public class MeetingDetailWrapper extends BaseWrapper {
 
-    public MeetingDetailWrapper(IPage<Detail> page) {
+    public MeetingDetailWrapper(IPage<Meeting> page) {
         super(page);
     }
 

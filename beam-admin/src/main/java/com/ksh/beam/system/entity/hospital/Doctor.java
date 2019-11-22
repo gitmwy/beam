@@ -8,10 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
- * 医院医生列表
+ * 医生列表
  */
 @Data
 @NoArgsConstructor
@@ -27,23 +26,20 @@ public class Doctor extends RestEntity<Long> {
     @TableField(value = "phone")
     private String phone;
 
-    @TableField(value = "nickname")
-    private String nickname;
-
     @TableField(value = "hospital_id")
     private Long hospitalId;
 
-    @TableField(value = "hospital_dept_id")
-    private Long hospitalDeptId;
+    @TableField(value = "department")
+    private String department;
 
-    @TableField(value = "hospital_position_id")
-    private Long hospitalPositionId;
+    @TableField(value = "position")
+    private String position;
 
-    @TableField(value = "hospital_title_id")
-    private Long hospitalTitleId;
+    @TableField(value = "title")
+    private String title;
 
-    @TableField(value = "reg_time")
-    private Date regTime;
+    @TableField(value = "sex")
+    private Integer sex;
 
     @TableField(value = "flag")
     private Integer flag;

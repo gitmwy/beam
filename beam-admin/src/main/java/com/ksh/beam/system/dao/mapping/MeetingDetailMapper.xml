@@ -65,7 +65,7 @@
     </sql>
 
     <!--    分页-->
-    <select id="selectPageList" resultType="com.ksh.beam.system.entity.meeting.Detail">
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.meeting.Meeting">
         select * from
         (select md.*,hde.name hospital_name, hde.address hospital_address,
         hdc.name speakers_name, mc.name topic_name,

@@ -3,7 +3,7 @@
 <mapper namespace="com.ksh.beam.system.dao.UserDetailMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.ksh.beam.system.entity.user.Detail" id="BaseResultMap">
+    <resultMap type="com.ksh.beam.system.entity.user.User" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="jobCode" column="job_code"/>
         <result property="avatar" column="avatar"/>
@@ -32,7 +32,7 @@
     </sql>
 
     <!--    分页-->
-    <select id="selectPageList" resultType="com.ksh.beam.system.entity.user.Detail">
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.user.User">
         select u.*,a.area_name, r.role_name
         from user_detail u
         left join user_area a on a.id = u.area_id

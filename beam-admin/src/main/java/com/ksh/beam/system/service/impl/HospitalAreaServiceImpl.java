@@ -7,7 +7,7 @@ import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.HospitalAreaMapper;
 import com.ksh.beam.system.dao.HospitalDetailMapper;
 import com.ksh.beam.system.entity.hospital.Area;
-import com.ksh.beam.system.entity.hospital.Detail;
+import com.ksh.beam.system.entity.hospital.Hospital;
 import com.ksh.beam.system.service.HospitalAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,8 +117,8 @@ public class HospitalAreaServiceImpl extends ServiceImpl<HospitalAreaMapper, Are
      */
     @Override
     public R deleteBatch(Long[] ids) {
-        List<Detail> details = hospitalDetailMapper.selectList(new QueryWrapper<Detail>().in("area_id", Arrays.asList(ids)));
-        if (ToolUtil.isNotEmpty(details)) {
+        List<Hospital> hospitals = hospitalDetailMapper.selectList(new QueryWrapper<Hospital>().in("area_id", Arrays.asList(ids)));
+        if (ToolUtil.isNotEmpty(hospitals)) {
             return R.fail("当前删除区域，还有用户关联，请先取消其关联");
         }
         List<Area> areas = baseMapper.selectBatchIds(Arrays.asList(ids));

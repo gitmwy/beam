@@ -3,7 +3,7 @@
 <mapper namespace="com.ksh.beam.system.dao.HospitalDetailMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.ksh.beam.system.entity.hospital.Detail" id="BaseResultMap">
+    <resultMap type="com.ksh.beam.system.entity.hospital.Hospital" id="BaseResultMap">
         <result property="id" column="id"/>
         <result property="code" column="code"/>
         <result property="name" column="name"/>
@@ -31,7 +31,7 @@
     </sql>
 
     <!--    分页-->
-    <select id="selectPageList" resultType="com.ksh.beam.system.entity.hospital.Detail">
+    <select id="selectPageList" resultType="com.ksh.beam.system.entity.hospital.Hospital">
         select h.*, ha.area_name from hospital_detail h
         left join hospital_area ha on h.area_id = ha.id
         <where>

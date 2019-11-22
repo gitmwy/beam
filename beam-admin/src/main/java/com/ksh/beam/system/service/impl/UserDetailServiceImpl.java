@@ -12,7 +12,7 @@ import com.ksh.beam.common.utils.DateUtil;
 import com.ksh.beam.common.utils.R;
 import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.UserDetailMapper;
-import com.ksh.beam.system.entity.user.Detail;
+import com.ksh.beam.system.entity.user.User;
 import com.ksh.beam.system.service.UserDetailService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.stereotype.Service;
@@ -29,22 +29,22 @@ import java.util.Map;
  * 用户列表
  */
 @Service
-public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail> implements UserDetailService {
+public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, User> implements UserDetailService {
 
     /**
      * 分页
      */
     @Override
-    public R selectPageList(Detail user) {
+    public R selectPageList(User user) {
         IPage page = baseMapper.selectPageList(new Page(user.getCurrentPage(), user.getPageSize()), user);
         return R.ok(page);
     }
 
     @Override
-    public void exportData(Detail user, HttpServletResponse response) {
-        List<Detail> details = baseMapper.selectPageList(user);
+    public void exportData(User user, HttpServletResponse response) {
+        List<User> users = baseMapper.selectPageList(user);
         List<Map<String, Object>> list = new ArrayList<>();
-        for (Detail detail : details){
+        for (User detail : users){
             Map<String, Object> map = BaseWrapper.beanToMap(detail);
             map.put("status", ConstantFactory.me().getDictsByCode("status",map.get("status")+""));
             map.put("boundTime", DateUtil.greenwichTime(map.get("boundTime")+""));
@@ -80,35 +80,35 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, Detail>
      * 保存用户
      */
     @Override
-    public R saveUserDetail(Detail detail) {
-        if(ToolUtil.isNotEmpty(detail.getAreaLevel()) && ToolUtil.isNotEmpty(detail.getRoleLevel())
-                && !detail.getAreaLevel().equals(detail.getRoleLevel())){
+    public R saveUserDetail(User user) {
+        if(ToolUtil.isNotEmpty(user.getAreaLevel()) && ToolUtil.isNotEmpty(user.getRoleLevel())
+                && !user.getAreaLevel().equals(user.getRoleLevel())){
             return R.fail("区域等级和角色等级不一致");
         }
-        if (ToolUtil.isNotEmpty(detail.getId())) {
-            Detail oldUser = this.getById(detail.getId());
+        if (ToolUtil.isNotEmpty(user.getId())) {
+            User oldUser = this.getById(user.getId());
             Assert.notNull(oldUser, "找不到该用户");
-            this.updateById(detail);
+            this.updateById(user);
             return R.ok();
         }else{
-            Detail tempUser = this.getOne(new QueryWrapper<Detail>().eq("phone", detail.getPhone()));
+            User tempUser = this.getOne(new QueryWrapper<User>().eq("phone", user.getPhone()));
             if(null != tempUser){
                 return R.fail("该账号名已存在");
             }
             String salt = RandomStringUtils.randomAlphanumeric(20);
-            detail.setSalt(salt);
-            detail.setPassword(ShiroUtils.sha256("123456", salt));
-            this.save(detail);
+            user.setSalt(salt);
+            user.setPassword(ShiroUtils.sha256("123456", salt));
+            this.save(user);
             return R.ok();
         }
     }
 
     @Override
     public R changeStatus(Long userId, Integer flag) {
-        Detail detail = this.getById(userId);
-        Assert.notNull(detail, "找不到用户");
-        detail.setStatus(flag);
-        if(this.updateById(detail)){
+        User user = this.getById(userId);
+        Assert.notNull(user, "找不到用户");
+        user.setStatus(flag);
+        if(this.updateById(user)){
             return R.ok();
         }
         return R.fail();

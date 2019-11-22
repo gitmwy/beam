@@ -7,7 +7,7 @@ import com.ksh.beam.common.utils.ToolUtil;
 import com.ksh.beam.system.dao.UserAreaMapper;
 import com.ksh.beam.system.dao.UserDetailMapper;
 import com.ksh.beam.system.entity.user.Area;
-import com.ksh.beam.system.entity.user.Detail;
+import com.ksh.beam.system.entity.user.User;
 import com.ksh.beam.system.service.UserAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,8 +117,8 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, Area> imple
      */
     @Override
     public R deleteBatch(Long[] ids) {
-        List<Detail> details = userDetailMapper.selectList(new QueryWrapper<Detail>().in("area_id", Arrays.asList(ids)));
-        if (ToolUtil.isNotEmpty(details)) {
+        List<User> users = userDetailMapper.selectList(new QueryWrapper<User>().in("area_id", Arrays.asList(ids)));
+        if (ToolUtil.isNotEmpty(users)) {
             return R.fail("当前删除区域，还有用户关联，请先取消其关联");
         }
         List<Area> areas = baseMapper.selectBatchIds(Arrays.asList(ids));

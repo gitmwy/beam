@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @TableName("hospital_detail")
-public class Detail extends RestEntity<Long> {
+public class Hospital extends RestEntity<Long> {
 
     @TableId
     private Long id;
@@ -54,7 +54,7 @@ public class Detail extends RestEntity<Long> {
     private String countyCode;
 
     @TableField(value = "managers_id")
-    private String managersId;
+    private Long managersId;
 
     @TableField(value = "area_id")
     private String areaId;
