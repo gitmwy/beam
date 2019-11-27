@@ -80,7 +80,6 @@
                                 </el-col>
                             </el-row>
                         </div>
-                        <div>活动费用：{{records.activityCost}}</div>
                         <div>费用发票：<br>
                             <el-row :gutter="20">
                                 <el-col :span="7" v-for="item in records.invoiceImg" :key="item.id">

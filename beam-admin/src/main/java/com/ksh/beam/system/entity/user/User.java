@@ -25,6 +25,9 @@ public class User extends RestEntity<Long> {
     @TableId
     private Long id;
 
+    @TableField(value = "job_code")
+    private String jobCode;
+
     @TableField(value = "openid")
     private String openid;
 

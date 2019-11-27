@@ -138,7 +138,6 @@
                 this.$api.HospitalDetailApi.getData(this.req).then((res) => {
                     this.loading = false;
                     if (res.error === false) {
-                        console.log(res);
                         this.tableData = res.data.records ? res.data.records : [];
                         this.page.pageNo = parseInt(res.data.current);
                         this.page.totalRows = parseInt(res.data.total);

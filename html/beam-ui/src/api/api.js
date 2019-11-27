@@ -17,7 +17,6 @@ import SysUserApi from './sys/sysuser'
 import MeetingCourseApi from './meeting/meetingcourse'
 import MeetingDetailApi from './meeting/meetingdetail'
 import MeetingInfoApi from './meeting/meetinginfo'
-import MeetingPlaceApi from './meeting/meetingplace'
 import MeetingQuestionApi from './meeting/meetingquestion'
 //======================用户管理===============
 import UserRoleApi from './user/userrole'
@@ -47,7 +46,6 @@ export default {
     MeetingCourseApi,
     MeetingDetailApi,
     MeetingInfoApi,
-    MeetingPlaceApi,
     MeetingQuestionApi,
     //用户管理
     UserRoleApi,

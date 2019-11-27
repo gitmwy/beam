@@ -34,7 +34,6 @@
                             <el-table-column prop="companyName" align="center" label="公司名称" :show-overflow-tooltip="true"></el-table-column>
                             <el-table-column prop="email" align="center" label="邮箱" width="200"></el-table-column>
                             <el-table-column prop="phone" align="center" label="手机号" width="150"></el-table-column>
-                            <el-table-column prop="sex" align="center" label="性别"></el-table-column>
                             <el-table-column prop="birthday" align="center" label="出生日期" width="150"></el-table-column>
                             <el-table-column width="160" label="是否可用" align="center">
                                 <template slot-scope="scope">

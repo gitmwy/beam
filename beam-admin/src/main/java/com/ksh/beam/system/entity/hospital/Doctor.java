@@ -44,6 +44,9 @@ public class Doctor extends RestEntity<Long> {
     @TableField(value = "flag")
     private Integer flag;
 
+    @TableField(exist = false)
+    private String sexName;
+
     @Override
     protected Serializable pkVal() {
         return this.id;

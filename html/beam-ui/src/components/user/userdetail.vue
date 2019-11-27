@@ -32,7 +32,7 @@
                         <img :src="scope.row.avatar" style="width: 100px;height: 100px"/>
                     </template>
                 </el-table-column>
-                <el-table-column label="账号名" align="center" prop="account"/>
+                <el-table-column label="工号" align="center" prop="jobCode" width="100"/>
                 <el-table-column label="昵称" align="center" prop="nickname"/>
                 <el-table-column label="姓名" align="center" prop="username"/>
                 <el-table-column label="手机号" align="center" prop="phone" width="120"/>
@@ -80,11 +80,8 @@
                     <img v-if="user.avatar" :src="user.avatar" class="avatar"/>
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
-                <el-form-item label="昵称">
-                    <el-input v-model.trim="user.nickname" placeholder="请输入昵称"></el-input>
-                </el-form-item>
-                <el-form-item label="账号名" prop="account">
-                    <el-input v-model.trim="user.account" placeholder="请输入账号名"></el-input>
+                <el-form-item label="工号">
+                    <el-input v-model.trim="user.jobCode" placeholder="请输入工号"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名" prop="username">
                     <el-input v-model.trim="user.username" placeholder="请输入姓名"></el-input>
@@ -147,9 +144,6 @@
                     emitPath: false
                 },
                 rules: {
-                    account: [
-                        {required: true, message: '请输入账号名', trigger: 'blur'},
-                    ],
                     username: [
                         {required: true, message: '请输入姓名', trigger: 'blur'},
                     ],

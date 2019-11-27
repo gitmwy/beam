@@ -15,7 +15,7 @@
                 <el-button type="primary" icon="el-icon-refresh" @click="refresh">重置</el-button>
                 <el-button v-if="canAdd" type="primary" icon="add" @click="handleAdd">新增区域</el-button>
             </div>
-            <el-table row-key="id" :data="treeData" v-loading="loading" border class="table" indent="32">
+            <el-table row-key="id" :data="treeData" v-loading="loading" border class="table">
                 <el-table-column label="区域名称" align="center" prop="areaName" width="300"/>
                 <el-table-column label="等级" align="center" prop="levelName" width="100"/>
                 <el-table-column label="关联" align="center" prop="optionAreas"/>

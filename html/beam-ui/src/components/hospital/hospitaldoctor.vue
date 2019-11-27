@@ -15,10 +15,13 @@
                 <el-button  v-if="canExport" type="success" icon="el-icon-download" @click="exportData">导出数据</el-button>
             </div>
             <el-table :data="tableData" v-loading="loading" border class="table">
-                <el-table-column label="医生姓名" align="center" prop="name" width="200"/>
+                <el-table-column label="医生姓名" align="center" prop="name" width="100"/>
                 <el-table-column label="手机号" align="center" prop="phone" width="200"/>
-                <el-table-column label="微信昵称" align="center" prop="nickname" width="200"/>
-                <el-table-column label="注册日期" align="center" prop="regTime"/>
+                <el-table-column label="科室" align="center" prop="department" width="200"/>
+                <el-table-column label="职位" align="center" prop="position" width="200"/>
+                <el-table-column label="职称" align="center" prop="title" width="200"/>
+                <el-table-column label="性别" align="center" prop="sexName" width="100"/>
+                <el-table-column label="创建日期" align="center" prop="createTime"/>
             </el-table>
             <!--            分页-->
             <div class="pagination">

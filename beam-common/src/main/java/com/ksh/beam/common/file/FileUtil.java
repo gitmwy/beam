@@ -17,7 +17,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 
 /**
@@ -122,28 +121,28 @@ public class FileUtil {
      * 根据URL路径下载
      */
     public static void urlDownload(String downloadUrl, String fileName, HttpServletResponse response) {
-        fileName = new String (fileName.getBytes(StandardCharsets.UTF_8),StandardCharsets.ISO_8859_1);
-        //响应头的设置
-        response.reset();
-        response.setContentType("application/force-download");
-        response.addHeader("Content-Disposition","attachment;fileName=" + fileName);
-        response.setContentType("application/octet-stream;charset=utf-8");
         BufferedInputStream bis = null;
         OutputStream os = null;
         try {
-                URL url = new URL(downloadUrl);
-                URLConnection conn = url.openConnection();
-                conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-                InputStream is = conn.getInputStream();
-                int length = conn.getContentLength();
-                response.setHeader("Content-Length", ""+length);
-                bis = new BufferedInputStream(is);
-                os = response.getOutputStream();
-                byte[] buff = new byte[1024*10];
-                int len;
-                while ((len=bis.read(buff))>-1) {
-                    os.write(buff,0,len);
-                }
+            //响应头的设置
+            response.reset();
+            response.setContentType("application/x-download;charset=utf-8");
+            response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            response.setHeader("Pragma", "No-cache");
+
+            URL url = new URL(downloadUrl);
+            URLConnection conn = url.openConnection();
+            conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+            InputStream is = conn.getInputStream();
+            int length = conn.getContentLength();
+            response.setHeader("Content-Length", ""+length);
+            bis = new BufferedInputStream(is);
+            os = response.getOutputStream();
+            byte[] buff = new byte[1024*10];
+            int len;
+            while ((len=bis.read(buff))>-1) {
+                os.write(buff,0,len);
+            }
         } catch (Exception e) {
             logger.error("下载文件关闭流失败", e);
             throw new BeamException("下载文件失败");

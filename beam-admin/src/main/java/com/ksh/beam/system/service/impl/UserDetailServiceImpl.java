@@ -93,7 +93,7 @@ public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, User> i
         }else{
             User tempUser = this.getOne(new QueryWrapper<User>().eq("phone", user.getPhone()));
             if(null != tempUser){
-                return R.fail("该账号名已存在");
+                return R.fail("该手机号已存在");
             }
             String salt = RandomStringUtils.randomAlphanumeric(20);
             user.setSalt(salt);

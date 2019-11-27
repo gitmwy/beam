@@ -76,11 +76,11 @@ public class LoginController {
     @GetMapping(value = "/logout")
     @ResponseBody
     public Object logout() {
-        ShiroUtils.logout();
         ShiroUser shiroUser = ShiroUtils.getUserEntity();
         redisUtil.del(CacheConstant.BEAM_KICKOUT_KEY_PREFIX + shiroUser.getAccount(),
                 CacheConstant.BEAM_CACHE_KEY_PREFIX + CacheConstant.BEAM_USER_MENU + shiroUser.getId());
         LogManager.me().executeLog(LogTaskFactory.exitLog(shiroUser.getId(), getIp()));
+        ShiroUtils.logout();
         return R.ok("退出成功");
     }
 
@@ -92,6 +92,8 @@ public class LoginController {
     @ResponseBody
     public R clearCache() {
         redisUtil.clearCache();
+        ShiroUser shiroUser = ShiroUtils.getUserEntity();
+        redisUtil.del(CacheConstant.BEAM_CACHE_KEY_PREFIX + CacheConstant.BEAM_USER_MENU + shiroUser.getId());
         return R.ok("清除成功");
     }
 }

@@ -88,11 +88,6 @@ export default new Router({
                     meta: { title: '会议课件',permission: true, perms: "meeting:course:list"}
                 },
                 {
-                    path: '/meetingplace',
-                    component: resolve => require(['../components/meeting/meetingplace.vue'], resolve),
-                    meta: { title: '会议场所',permission: true, perms: "meeting:place:list"}
-                },
-                {
                     path: '/meetingquestion',
                     component: resolve => require(['../components/meeting/meetingquestion.vue'], resolve),
                     meta: { title: '会议问卷',permission: true, perms: "meeting:question:list"}

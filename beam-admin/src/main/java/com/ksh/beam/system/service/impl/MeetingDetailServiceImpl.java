@@ -72,7 +72,7 @@ public class MeetingDetailServiceImpl extends ServiceImpl<MeetingDetailMapper, M
         fieldMap.put("speakersName", "讲者");
         fieldMap.put("applicantTime", "申请时间");
         fieldMap.put("source", "来源");
-        fieldMap.put("status", "状态");
+        fieldMap.put("meetingStatus", "会议状态");
         //导出文件
         ExcelUtil.exportExcel(list, fieldMap, "会议数据", null, response);
     }
