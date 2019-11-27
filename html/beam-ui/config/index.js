@@ -6,6 +6,7 @@ module.exports = {
     dev: {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
+        // assetsPublicPath: './',
         proxyTable: {
             '/beam_admin': {
                 target: 'http://localhost:8080',
@@ -14,7 +15,6 @@ module.exports = {
             }
         },
         host: 'localhost',
-        // host: 'www.wehuiyi.com',
         port: 8084,
         autoOpenBrowser: false,
         errorOverlay: true,
