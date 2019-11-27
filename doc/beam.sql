@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 27/11/2019 11:21:33
+ Date: 27/11/2019 16:29:34
 */
 
 SET NAMES utf8mb4;
@@ -3703,6 +3703,11 @@ CREATE TABLE `meeting_course`  (
 -- Records of meeting_course
 -- ----------------------------
 INSERT INTO `meeting_course` VALUES (90, '流弊的会议', 'http://img.jcscdata.com/course/75567189-077e-447b-87d7-2f9962cb9a26.jpg', '1.34MB', 1, '2019-10-31 09:59:45', '2019-10-31 10:01:49');
+INSERT INTO `meeting_course` VALUES (91, '肝硬化基础知识.ppt', 'http://img.jcscdata.com/course/2f708ead-2475-4447-99d7-3c1a236b7074.ppt', '1.57MB', 0, '2019-11-27 14:35:13', '2019-11-27 14:35:13');
+INSERT INTO `meeting_course` VALUES (92, '肝硬化治疗药物对比分析.ppt', 'http://img.jcscdata.com/course/7c235185-a2e1-4b07-a125-039ddb73e543.ppt', '5.52MB', 0, '2019-11-27 14:35:48', '2019-11-27 14:35:48');
+INSERT INTO `meeting_course` VALUES (93, '患者用药阶段解答.ppt', 'http://img.jcscdata.com/course/6f8b90d5-6a7e-4f23-a423-8697229cbcec.ppt', '4.46MB', 0, '2019-11-27 14:36:02', '2019-11-27 14:36:02');
+INSERT INTO `meeting_course` VALUES (94, '临床反应总结.ppt', 'http://img.jcscdata.com/course/b2c61373-d3cb-4dec-a384-bd1db55988c8.ppt', '2.87MB', 1, '2019-11-27 14:36:14', '2019-11-27 14:36:33');
+INSERT INTO `meeting_course` VALUES (95, '中国肝病发展图谱.ppt', 'http://img.jcscdata.com/course/c196cfb9-7b30-4dc9-8c3b-e521cb3a7a05.ppt', '617.50KB', 3, '2019-11-27 14:36:20', '2019-11-27 14:42:44');
 
 -- ----------------------------
 -- Table structure for meeting_detail
@@ -3769,6 +3774,11 @@ CREATE TABLE `meeting_question`  (
   `size` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件大小',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of meeting_question
+-- ----------------------------
+INSERT INTO `meeting_question` VALUES (1, '患者用药阶段解答.ppt', 'http://img.jcscdata.com/question/fb941bf0-df20-4f77-b127-065d46973265.ppt', 0, '2019-11-27 14:57:06', '2019-11-27 14:57:06', '4.46MB');
 
 -- ----------------------------
 -- Table structure for qrtz_blob_triggers
@@ -3907,7 +3917,7 @@ CREATE TABLE `qrtz_scheduler_state`  (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('RenrenScheduler', 'DESKTOP-5N8RA0F1574241320884', 1574241672891, 15000);
+INSERT INTO `qrtz_scheduler_state` VALUES ('RenrenScheduler', 'DESKTOP-5N8RA0F1574842483244', 1574843205115, 15000);
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -4130,6 +4140,28 @@ CREATE TABLE `sys_login_log`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1150667819491475971 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '登陆日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of sys_login_log
+-- ----------------------------
+INSERT INTO `sys_login_log` VALUES (1150667819491475972, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 14:28:00', '2019-11-27 14:28:00');
+INSERT INTO `sys_login_log` VALUES (1150667819491475973, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 14:46:19', '2019-11-27 14:46:19');
+INSERT INTO `sys_login_log` VALUES (1150667819491475974, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 14:46:44', '2019-11-27 14:46:44');
+INSERT INTO `sys_login_log` VALUES (1150667819491475975, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 14:49:22', '2019-11-27 14:49:22');
+INSERT INTO `sys_login_log` VALUES (1150667819491475976, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 14:49:42', '2019-11-27 14:49:42');
+INSERT INTO `sys_login_log` VALUES (1150667819491475977, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 14:55:40', '2019-11-27 14:55:40');
+INSERT INTO `sys_login_log` VALUES (1150667819491475978, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 15:24:19', '2019-11-27 15:24:19');
+INSERT INTO `sys_login_log` VALUES (1150667819491475979, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 15:29:13', '2019-11-27 15:29:13');
+INSERT INTO `sys_login_log` VALUES (1150667819491475980, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 15:34:51', '2019-11-27 15:34:51');
+INSERT INTO `sys_login_log` VALUES (1150667819491475981, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 15:45:38', '2019-11-27 15:45:38');
+INSERT INTO `sys_login_log` VALUES (1150667819491475982, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 15:53:36', '2019-11-27 15:53:36');
+INSERT INTO `sys_login_log` VALUES (1150667819491475983, '退出日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 15:54:53', '2019-11-27 15:54:53');
+INSERT INTO `sys_login_log` VALUES (1150667819491475984, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 15:54:56', '2019-11-27 15:54:56');
+INSERT INTO `sys_login_log` VALUES (1150667819491475985, '退出日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 16:15:16', '2019-11-27 16:15:16');
+INSERT INTO `sys_login_log` VALUES (1150667819491475986, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 16:15:26', '2019-11-27 16:15:26');
+INSERT INTO `sys_login_log` VALUES (1150667819491475987, '退出日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 16:15:29', '2019-11-27 16:15:29');
+INSERT INTO `sys_login_log` VALUES (1150667819491475988, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 16:20:04', '2019-11-27 16:20:04');
+INSERT INTO `sys_login_log` VALUES (1150667819491475989, '退出日志', 1, '成功', NULL, '127.0.0.1', '2019-11-27 16:26:51', '2019-11-27 16:26:51');
+
+-- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
@@ -4194,7 +4226,6 @@ INSERT INTO `sys_menu` VALUES (39, 8, '编辑', 'sys/dict/edit', 'sys:dict:edit'
 INSERT INTO `sys_menu` VALUES (40, 0, '会议管理', 'meeting', '', 0, 'el-icon-notebook-1', 30, NULL, NULL, '2019-06-17 14:07:41', '2019-07-17 13:39:53', 0);
 INSERT INTO `sys_menu` VALUES (41, 40, '会议列表', 'meetingdetail', 'meeting:detail:list', 1, NULL, 31, NULL, NULL, '2019-06-19 16:21:49', '2019-06-19 16:22:13', 0);
 INSERT INTO `sys_menu` VALUES (42, 40, '会议课件', 'meetingcourse', 'meeting:course:list', 1, NULL, 32, NULL, NULL, '2019-06-28 16:52:43', '2019-06-28 16:58:29', 0);
-INSERT INTO `sys_menu` VALUES (43, 40, '会议场所', 'meetingplace', 'meeting:place:list', 1, NULL, 33, NULL, NULL, '2019-06-28 16:56:22', '2019-06-28 16:56:22', 0);
 INSERT INTO `sys_menu` VALUES (44, 40, '会议问卷', 'meetingquestion', 'meeting:question:list', 1, NULL, 34, NULL, NULL, '2019-06-28 16:58:06', '2019-06-28 16:58:06', 0);
 INSERT INTO `sys_menu` VALUES (45, 41, '导出', 'meeting/detail/export', 'meeting:detail:export', 2, NULL, 1, NULL, NULL, '2019-06-27 15:46:49', '2019-07-11 11:00:23', 0);
 INSERT INTO `sys_menu` VALUES (46, 41, '查看', 'meeting/detail/info', 'meeting:detail:info', 2, NULL, 2, NULL, NULL, '2019-06-27 15:59:08', '2019-07-11 11:00:28', 0);
@@ -4219,14 +4250,12 @@ INSERT INTO `sys_menu` VALUES (70, 59, '删除', 'user/area/del', 'user:area:del
 INSERT INTO `sys_menu` VALUES (71, 60, '新增', 'user/role/dd', 'user:role:add', 2, NULL, 1, NULL, NULL, '2019-08-06 10:08:25', '2019-08-06 10:08:25', 0);
 INSERT INTO `sys_menu` VALUES (72, 60, '编辑', 'user/role/edit', 'user:role:edit', 2, NULL, 2, NULL, NULL, '2019-08-06 10:08:50', '2019-08-06 10:08:50', 0);
 INSERT INTO `sys_menu` VALUES (73, 60, '删除', 'user/role/del', 'user:role:del', 2, NULL, 3, NULL, NULL, '2019-08-06 10:09:12', '2019-08-06 10:09:12', 0);
-INSERT INTO `sys_menu` VALUES (74, 43, '新增', 'meeting/place/add', 'meeting:place:add', 2, NULL, 1, NULL, NULL, '2019-08-12 13:38:26', '2019-08-12 13:38:26', 0);
-INSERT INTO `sys_menu` VALUES (75, 43, '删除', 'meeting/place/del', 'meeting:place:del', 2, NULL, 2, NULL, NULL, '2019-08-12 13:39:04', '2019-08-12 13:39:04', 0);
 INSERT INTO `sys_menu` VALUES (76, 44, '上传', 'meeting/question/upload', 'meeting:question:upload', 2, NULL, 1, NULL, NULL, '2019-08-12 14:31:31', '2019-08-12 14:31:31', 0);
 INSERT INTO `sys_menu` VALUES (77, 44, '下载', 'meeting/question/download', 'meeting:question:download', 2, NULL, 2, NULL, NULL, '2019-08-12 14:32:00', '2019-08-12 14:32:00', 0);
 INSERT INTO `sys_menu` VALUES (78, 44, '删除', 'meeting/question/del', 'meeting:question:del', 2, NULL, 3, NULL, NULL, '2019-08-12 14:32:25', '2019-08-12 14:32:25', 0);
 INSERT INTO `sys_menu` VALUES (79, 51, '导出', 'hospital/doctor/export', 'hospital:doctor:export', 2, NULL, 1, NULL, NULL, '2019-09-29 15:21:52', '2019-09-29 15:22:45', 0);
 INSERT INTO `sys_menu` VALUES (80, 52, '导出', 'hospital/detail/export', 'hospital:detail:export', 2, NULL, 1, NULL, NULL, '2019-09-29 15:22:23', '2019-09-29 15:22:50', 0);
-INSERT INTO `sys_menu` VALUES (81, 50, '区域管理', 'hospital/area/list', 'hospital:area:list', 1, NULL, 43, NULL, NULL, '2019-10-31 06:55:12', '2019-10-31 06:55:12', 0);
+INSERT INTO `sys_menu` VALUES (81, 50, '区域管理', 'hospitalarea', 'hospital:area:list', 1, NULL, 43, NULL, NULL, '2019-10-31 06:55:12', '2019-10-31 06:55:12', 0);
 INSERT INTO `sys_menu` VALUES (82, 81, '新增', 'hospital/area/add', 'hospital:area:add', 2, NULL, 1, NULL, NULL, '2019-10-31 06:56:13', '2019-10-31 06:56:13', 0);
 INSERT INTO `sys_menu` VALUES (83, 81, '编辑', 'hospital/area/edit', 'hospital:area:edit', 2, NULL, 2, NULL, NULL, '2019-10-31 06:56:54', '2019-10-31 06:56:54', 0);
 INSERT INTO `sys_menu` VALUES (84, 81, '删除', 'hospital/area/del', 'hospital:area:del', 2, NULL, 3, NULL, NULL, '2019-10-31 06:57:22', '2019-10-31 06:57:22', 0);
@@ -4255,6 +4284,26 @@ CREATE TABLE `sys_operation_log`  (
   `execute_time` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '执行时间(毫秒)',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1150601874915967778 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_operation_log
+-- ----------------------------
+INSERT INTO `sys_operation_log` VALUES (1150601874915967779, '操作日志', '课件上传', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'upload', '成功', '{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"application/octet-stream\",\"isFormField\":false,\"fileName\":\"肝硬化基础知识.ppt\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"肝硬化基础知识.ppt\\\"\"],\"content-type\":[\"application/octet-stream\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"}},\"filename\":\"肝硬化基础知识.ppt\"}', '2019-11-27 14:35:13', '2019-11-27 14:35:13', '5715');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967780, '操作日志', '课件上传', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'upload', '成功', '{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"application/octet-stream\",\"isFormField\":false,\"fileName\":\"肝硬化治疗药物对比分析.ppt\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"肝硬化治疗药物对比分析.ppt\\\"\"],\"content-type\":[\"application/octet-stream\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"}},\"filename\":\"肝硬化治疗药物对比分析.ppt\"}', '2019-11-27 14:35:48', '2019-11-27 14:35:48', '9277');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967781, '操作日志', '课件上传', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'upload', '成功', '{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"application/octet-stream\",\"isFormField\":false,\"fileName\":\"患者用药阶段解答.ppt\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"患者用药阶段解答.ppt\\\"\"],\"content-type\":[\"application/octet-stream\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"}},\"filename\":\"患者用药阶段解答.ppt\"}', '2019-11-27 14:36:02', '2019-11-27 14:36:02', '7653');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967782, '操作日志', '课件上传', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'upload', '成功', '{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"application/octet-stream\",\"isFormField\":false,\"fileName\":\"临床反应总结.ppt\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"临床反应总结.ppt\\\"\"],\"content-type\":[\"application/octet-stream\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"}},\"filename\":\"临床反应总结.ppt\"}', '2019-11-27 14:36:14', '2019-11-27 14:36:14', '6678');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967783, '操作日志', '课件上传', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'upload', '成功', '{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"application/octet-stream\",\"isFormField\":false,\"fileName\":\"中国肝病发展图谱.ppt\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"中国肝病发展图谱.ppt\\\"\"],\"content-type\":[\"application/octet-stream\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"}},\"filename\":\"中国肝病发展图谱.ppt\"}', '2019-11-27 14:36:20', '2019-11-27 14:36:20', '2048');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967784, '操作日志', '课件下载', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'download', '成功', '95', '2019-11-27 14:36:25', '2019-11-27 14:36:25', '981');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967785, '操作日志', '课件下载', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'download', '成功', '94', '2019-11-27 14:36:33', '2019-11-27 14:36:33', '1302');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967786, '操作日志', '课件下载', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'download', '成功', '95', '2019-11-27 14:40:24', '2019-11-27 14:40:24', '30274');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967787, '操作日志', '课件下载', 1, 'com.ksh.beam.system.controller.meeting.MeetingCourseController', 'download', '成功', '95', '2019-11-27 14:42:44', '2019-11-27 14:42:44', '806');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967788, '操作日志', '问卷上传', 1, 'com.ksh.beam.system.controller.meeting.MeetingQuestionController', 'upload', '成功', '{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"application/octet-stream\",\"isFormField\":false,\"fileName\":\"患者用药阶段解答.ppt\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"患者用药阶段解答.ppt\\\"\"],\"content-type\":[\"application/octet-stream\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\Dell\\\\AppData\\\\Local\\\\Temp\\\\tomcat.8479528900670595911.8080\\\\work\\\\Tomcat\\\\localhost\\\\beam_admin\"}},\"filename\":\"患者用药阶段解答.ppt\"}', '2019-11-27 14:57:06', '2019-11-27 14:57:06', '9186');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967789, '异常日志', '', 1, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\HospitalDoctorMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select d.* from hospital_doctor d          WHERE 1 = 1          order by d.reg_time desc LIMIT 0,10\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'', '2019-11-27 14:57:12', '2019-11-27 14:57:12', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967790, '异常日志', '', 1, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\HospitalDoctorMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select d.* from hospital_doctor d          WHERE 1 = 1          order by d.reg_time desc LIMIT 0,10\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'', '2019-11-27 14:59:03', '2019-11-27 14:59:03', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967791, '异常日志', '', 1, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\HospitalDoctorMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select d.* from hospital_doctor d          WHERE 1 = 1          order by d.reg_time desc LIMIT 0,10\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'', '2019-11-27 14:59:03', '2019-11-27 14:59:03', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967792, '异常日志', '', 1, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\HospitalDoctorMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select d.* from hospital_doctor d          WHERE 1 = 1          order by d.reg_time desc LIMIT 0,10\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'', '2019-11-27 14:59:12', '2019-11-27 14:59:12', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967793, '异常日志', '', 1, NULL, NULL, '失败', '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'\r\n### The error may exist in file [D:\\Development\\Workspaces\\beam\\beam-admin\\target\\classes\\com\\ksh\\beam\\system\\dao\\mapping\\HospitalDoctorMapper.xml]\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: select d.* from hospital_doctor d          WHERE 1 = 1          order by d.reg_time desc LIMIT 0,10\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: Unknown column \'d.reg_time\' in \'order clause\'', '2019-11-27 15:12:09', '2019-11-27 15:12:09', 'null');
+INSERT INTO `sys_operation_log` VALUES (1150601874915967794, '操作日志', '医生列表导出', 1, 'com.ksh.beam.system.controller.hospital.HospitalDoctorController', 'export', '成功', '{\"currentPage\":1,\"pageSize\":10}', '2019-11-27 15:16:21', '2019-11-27 15:16:21', '987');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -4608,8 +4657,8 @@ CREATE TABLE `user_detail`  (
 -- ----------------------------
 -- Records of user_detail
 -- ----------------------------
-INSERT INTO `user_detail` VALUES (1, 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKf5Mg2TUNIDCIWcewjlm14KRskwdpclnyfZ2H8W40hCfUIoTia622MefOsYqmjNFEqibMHmMcyZibvA/132', '余洋', '余洋', '18851006060', 59, 2, 1, '2019-08-05 15:02:45', '2019-08-05 15:02:49', '2019-11-12 17:30:13', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', 'o0ypL5IvtcNyQwPXB7j8_BL_6Wtc', 1, NULL);
-INSERT INTO `user_detail` VALUES (5, NULL, '', '余洋', '13327736325', 59, 1, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, NULL);
+INSERT INTO `user_detail` VALUES (1, 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKf5Mg2TUNIDCIWcewjlm14KRskwdpclnyfZ2H8W40hCfUIoTia622MefOsYqmjNFEqibMHmMcyZibvA/132', '余洋', '余洋', '18851006060', 59, 2, 1, '2019-08-05 15:02:45', '2019-08-05 15:02:49', '2019-11-12 17:30:13', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', 'o0ypL5IvtcNyQwPXB7j8_BL_6Wtc', 1, '20191127');
+INSERT INTO `user_detail` VALUES (5, NULL, '', '余洋', '13327736325', 59, 1, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, '20191111');
 
 -- ----------------------------
 -- Table structure for user_login_log
