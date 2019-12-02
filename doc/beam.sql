@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : root
+ Source Server         : 59.110.226.231
  Source Server Type    : MySQL
- Source Server Version : 80016
- Source Host           : localhost:3306
+ Source Server Version : 80018
+ Source Host           : 59.110.226.231:3306
  Source Schema         : beam
 
  Target Server Type    : MySQL
- Target Server Version : 80016
+ Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 27/11/2019 16:29:34
+ Date: 29/11/2019 10:26:51
 */
 
 SET NAMES utf8mb4;
@@ -37,13 +37,12 @@ CREATE TABLE `hospital_area`  (
 -- ----------------------------
 -- Records of hospital_area
 -- ----------------------------
-INSERT INTO `hospital_area` VALUES (38, 0, '美国', 1, '2019-08-14 09:44:48', '2019-08-14 09:44:48', '一级', NULL, 1);
-INSERT INTO `hospital_area` VALUES (41, NULL, '大兴区', 3, '2019-08-16 09:01:30', '2019-08-16 18:17:20', '三级', '无关联区域', 0);
-INSERT INTO `hospital_area` VALUES (42, 38, '华盛顿', 2, '2019-08-16 10:25:46', '2019-08-16 10:25:46', '二级', '美国', 1);
-INSERT INTO `hospital_area` VALUES (45, 41, '兴涛社区', 4, '2019-08-16 15:03:54', '2019-08-16 18:17:20', '四级', '大兴区', 0);
-INSERT INTO `hospital_area` VALUES (59, 0, '全国', 1, '2019-08-16 18:33:24', '2019-08-16 18:33:24', '一级', NULL, 1);
-INSERT INTO `hospital_area` VALUES (60, 59, '北京', 2, '2019-08-21 17:44:28', '2019-08-21 17:44:28', '二级', '全国', 1);
-INSERT INTO `hospital_area` VALUES (61, 60, '朝阳区', 3, '2019-08-21 17:44:46', '2019-08-21 17:44:46', '三级', '全国/北京', 1);
+INSERT INTO `hospital_area` VALUES (1, 0, '全国', 1, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '一级', '全国', 1);
+INSERT INTO `hospital_area` VALUES (2, 1, '华北大区', 2, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '二级', '全国', 1);
+INSERT INTO `hospital_area` VALUES (3, 1, '华中大区', 2, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '二级', '全国', 1);
+INSERT INTO `hospital_area` VALUES (4, 1, '东南大区', 2, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '二级', '全国', 1);
+INSERT INTO `hospital_area` VALUES (5, 1, '东北大区', 2, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '二级', '全国', 1);
+INSERT INTO `hospital_area` VALUES (6, 1, '西南大区', 2, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '二级', '全国', 1);
 
 -- ----------------------------
 -- Table structure for hospital_detail
@@ -66,13 +65,26 @@ CREATE TABLE `hospital_detail`  (
   `level` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '医院级别',
   `area_id` bigint(32) NULL DEFAULT NULL COMMENT '区域ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of hospital_detail
 -- ----------------------------
-INSERT INTO `hospital_detail` VALUES (1, 'H201910290001', '协和', '北京', '市辖区', 1, NULL, '2019-09-25 10:47:08', '2019-09-25 10:47:11', '110000', '110100', NULL, '北京市辖区', '三甲', 59);
-INSERT INTO `hospital_detail` VALUES (2, 'H201910290002', '华佗在世', '北京', '市辖区', 5, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '110000', '110100', NULL, '北京市辖区', '二甲', 59);
+INSERT INTO `hospital_detail` VALUES (1, 'H201910290001', '北京市朝阳第二医院', '北京市', '市辖区', 2, NULL, '2019-09-25 10:47:08', '2019-09-25 10:47:11', '', '', NULL, '北京市辖区', '三级甲等', 2);
+INSERT INTO `hospital_detail` VALUES (2, 'H201910290002', '石家庄市人民医院', '河北省', '石家庄市', 3, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '河北省石家庄市', '三级甲等', 2);
+INSERT INTO `hospital_detail` VALUES (3, 'H201910290005', '湖北省人民医院', '湖北省', '武汉市', 6, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '湖北省武汉市', '三级甲等', 3);
+INSERT INTO `hospital_detail` VALUES (4, 'H201910290006', '湖南省人民医院', '	湖南省', '长沙市', 7, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '湖南省长沙市', '三级甲等', 3);
+INSERT INTO `hospital_detail` VALUES (5, 'H201910290007', '福建省人民医院', '福建省', '福州市', 8, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '福建省福州市', '三级甲等', 4);
+INSERT INTO `hospital_detail` VALUES (6, 'H201910290008', '浙江省人民医院', '浙江省', '杭州市', 9, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '浙江省杭州市', '三级甲等', 4);
+INSERT INTO `hospital_detail` VALUES (7, 'H201910290009', '上海市人民医院', '上海市', '上海市', 10, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '上海市市辖区', '三级甲等', 4);
+INSERT INTO `hospital_detail` VALUES (8, 'H201910290010', '哈尔滨市人民医院', '黑龙江省', '哈尔滨市', 11, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '黑龙江省哈尔滨市', '三级甲等', 5);
+INSERT INTO `hospital_detail` VALUES (9, 'H201910290011', '大连市人民医院', '辽宁省', '大连市', 12, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '辽宁省大连市', '三级甲等', 5);
+INSERT INTO `hospital_detail` VALUES (10, 'H201910290012', '长春市人民医院', '吉林省', '长春市', 13, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '吉林省长春市', '三级甲等', 5);
+INSERT INTO `hospital_detail` VALUES (11, 'H201910290013', '大理市人民医院', '云南省', '大理市', 14, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '云南省大理市', '二级甲等', 6);
+INSERT INTO `hospital_detail` VALUES (12, 'H201910290014', '南充市人民医院', '四川省', '南充市', 15, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '四川省南充市', '二级甲等', 6);
+INSERT INTO `hospital_detail` VALUES (13, 'H201910290015', '贵阳市人民医院', '贵州省', '贵阳市', 16, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '贵州省贵阳市', '二级甲等', 6);
+INSERT INTO `hospital_detail` VALUES (14, 'H201910290003', '唐山市人民医院', '河北省', '唐山市', 4, NULL, '2019-09-25 10:47:08', '2019-09-25 10:47:11', '', '', NULL, '河北省唐山市', '三级甲等', 2);
+INSERT INTO `hospital_detail` VALUES (15, 'H201910290004', '河南省人民医院', '河南省', '郑州市', 5, NULL, '2019-10-29 10:33:12', '2019-10-29 10:33:15', '', '', NULL, '河南省郑州市', '三级甲等', 3);
 
 -- ----------------------------
 -- Table structure for hospital_doctor
@@ -91,14 +103,26 @@ CREATE TABLE `hospital_doctor`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `sex` int(2) NULL DEFAULT NULL COMMENT '性别（1：男 2：女）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of hospital_doctor
 -- ----------------------------
-INSERT INTO `hospital_doctor` VALUES (1, '李时珍', '13412341234', 2, '妇产科', '科长', '主治', '2019-09-25 10:48:15', 1, '2019-09-25 10:48:21', 1);
-INSERT INTO `hospital_doctor` VALUES (2, '华佗', '13412341234', 1, '脑科', '科长', '主治', '2019-09-25 10:48:15', 1, '2019-09-25 10:48:21', 1);
-INSERT INTO `hospital_doctor` VALUES (3, '扁鹊', '13412341234', 1, '牙科', '副科长', '主治', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 1);
+INSERT INTO `hospital_doctor` VALUES (1, '李凡', '13412341234', 1, '内分泌科', '科室主任', '主任医师', '2019-09-25 10:48:15', 1, '2019-09-25 10:48:21', 1);
+INSERT INTO `hospital_doctor` VALUES (2, '刘如志', '13412341234', 2, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 1);
+INSERT INTO `hospital_doctor` VALUES (3, '赵重', '13412341234', 14, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 1);
+INSERT INTO `hospital_doctor` VALUES (4, '佟莉', '13412341234', 15, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 2);
+INSERT INTO `hospital_doctor` VALUES (5, '李如师', '13412341234', 4, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 1);
+INSERT INTO `hospital_doctor` VALUES (6, '范瑶', '13412341234', 5, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 2);
+INSERT INTO `hospital_doctor` VALUES (7, '张彬', '13412341234', 6, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 2);
+INSERT INTO `hospital_doctor` VALUES (8, '张洛洛', '13412341234', 7, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 1);
+INSERT INTO `hospital_doctor` VALUES (9, '钱芷', '13412341234', 8, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 1);
+INSERT INTO `hospital_doctor` VALUES (10, '罗凤霞', '13412341234', 9, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 2);
+INSERT INTO `hospital_doctor` VALUES (11, '孙晓霞', '13412341234', 10, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 2);
+INSERT INTO `hospital_doctor` VALUES (12, '周一维', '13412341234', 11, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 1);
+INSERT INTO `hospital_doctor` VALUES (13, '吴函', '13412341234', 12, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 1);
+INSERT INTO `hospital_doctor` VALUES (14, '郑峥', '13412341234', 13, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 1);
+INSERT INTO `hospital_doctor` VALUES (15, '王茹', '13412341234', 14, '内分泌科', '科室主任', '主任医师', '2019-11-22 09:33:35', 1, '2019-11-22 09:33:35', 2);
 
 -- ----------------------------
 -- Table structure for m_area
@@ -111,7 +135,7 @@ CREATE TABLE `m_area`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `class` int(1) NULL DEFAULT NULL COMMENT '1省2市3县',
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3523 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3524 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of m_area
@@ -3653,7 +3677,7 @@ CREATE TABLE `meeting_auditor`  (
   `auditor_status` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核状态',
   `auditor_channel` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核渠道',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for meeting_cloud
@@ -3671,18 +3695,7 @@ CREATE TABLE `meeting_cloud`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `meeting_code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '会议编号',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of meeting_cloud
--- ----------------------------
-INSERT INTO `meeting_cloud` VALUES (12, 25, '01', '2019-10-29 03:09:01', 1, 'http://img.jcscdata.com/M201910290002/5efd31bc-6285-4db9-a3fc-93202933d69f.jpg', '空洞骑士 (2).jpg', '2019-10-29 03:09:01', '2019-11-15 18:02:10', 'M201911140001');
-INSERT INTO `meeting_cloud` VALUES (13, NULL, '02', '2019-10-30 09:54:08', 1, 'http://img.jcscdata.com/M201910290001/93a4538b-4c6e-4281-a44d-a5a0edd74bfc.jpg', 'w (1).jpg', '2019-10-30 09:54:08', '2019-10-30 09:54:08', '');
-INSERT INTO `meeting_cloud` VALUES (14, NULL, '02', '2019-10-30 09:54:10', 1, 'http://img.jcscdata.com/M201910290001/eebbd8a2-0185-4389-b548-d1bc53baea72.png', 'w (1).png', '2019-10-30 09:54:10', '2019-10-30 09:54:10', '');
-INSERT INTO `meeting_cloud` VALUES (16, NULL, '02', '2019-11-13 10:27:02', 1, 'http://img.jcscdata.com/M201910290001/05db49dc-5e8f-4145-ac80-dda00c3c2e94.jpg', 'w (2).jpg', '2019-11-13 10:27:02', '2019-11-13 10:27:02', '');
-INSERT INTO `meeting_cloud` VALUES (17, 25, '02', '2019-11-13 10:28:34', 1, 'http://img.jcscdata.com/M201910290001/e2295e53-3976-43fc-b09e-17d95e847891.jpg', 'w (2).jpg', '2019-11-13 10:28:42', '2019-11-15 18:02:10', 'M201911140001');
-INSERT INTO `meeting_cloud` VALUES (18, 25, '02', '2019-11-13 10:30:16', 1, 'http://img.jcscdata.com/M201910290001/f8235c2b-9013-41ef-90c5-07fda800e4b6.jpg', 'w (2).jpg', '2019-11-13 10:30:16', '2019-11-15 18:02:10', 'M201911140001');
-INSERT INTO `meeting_cloud` VALUES (19, 25, '02', '2019-11-13 10:33:18', 1, 'http://img.jcscdata.com/M201910290001/188d0e62-120f-4853-ba0a-7d61b86188df.jpg', 'w (2).jpg', '2019-11-13 10:33:18', '2019-11-15 18:02:10', 'M201911140001');
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for meeting_course
@@ -3697,12 +3710,11 @@ CREATE TABLE `meeting_course`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 90 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 96 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of meeting_course
 -- ----------------------------
-INSERT INTO `meeting_course` VALUES (90, '流弊的会议', 'http://img.jcscdata.com/course/75567189-077e-447b-87d7-2f9962cb9a26.jpg', '1.34MB', 1, '2019-10-31 09:59:45', '2019-10-31 10:01:49');
 INSERT INTO `meeting_course` VALUES (91, '肝硬化基础知识.ppt', 'http://img.jcscdata.com/course/2f708ead-2475-4447-99d7-3c1a236b7074.ppt', '1.57MB', 0, '2019-11-27 14:35:13', '2019-11-27 14:35:13');
 INSERT INTO `meeting_course` VALUES (92, '肝硬化治疗药物对比分析.ppt', 'http://img.jcscdata.com/course/7c235185-a2e1-4b07-a125-039ddb73e543.ppt', '5.52MB', 0, '2019-11-27 14:35:48', '2019-11-27 14:35:48');
 INSERT INTO `meeting_course` VALUES (93, '患者用药阶段解答.ppt', 'http://img.jcscdata.com/course/6f8b90d5-6a7e-4f23-a423-8697229cbcec.ppt', '4.46MB', 0, '2019-11-27 14:36:02', '2019-11-27 14:36:02');
@@ -3746,21 +3758,6 @@ CREATE TABLE `meeting_detail`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of meeting_detail
--- ----------------------------
-INSERT INTO `meeting_detail` VALUES (1, 1, 'M201910290001', '2019-11-18', 1, 1, 1, 1, 200, '2019-09-25 10:50:46', '小程序', '05', 100, '北京协和', '2019-09-25 10:51:47', '2019-11-13 17:59:58', 100.51, 400.00, 1, 90, '2019-11-13 14:54:54', '菜', 1, 'heart', NULL, NULL, NULL);
-INSERT INTO `meeting_detail` VALUES (2, 2, 'M201910290002', '2019-09-25', 1, 1, 1, 1, 200, '2019-09-25 10:50:46', '小程序', '05', 100, '同仁堂', '2019-09-25 10:51:47', '2019-11-13 17:59:58', 150.50, 600.00, 1, 90, NULL, NULL, 1, 'beam', NULL, NULL, NULL);
-INSERT INTO `meeting_detail` VALUES (20, 1, 'M201911090001', '2019-11-08', 1, NULL, 2, 1, 2, '2019-11-09 06:39:06', '小程序', '05', NULL, NULL, '2019-11-09 06:39:06', '2019-11-09 06:39:06', 150.50, 100.22, 1, 90, NULL, NULL, 1, 'heart', NULL, NULL, NULL);
-INSERT INTO `meeting_detail` VALUES (21, 1, 'M201911090002', '2019-11-08', 2, NULL, 2, 1, 33, '2019-11-09 08:10:04', '小程序', '05', NULL, NULL, '2019-11-09 08:10:04', '2019-11-09 08:10:04', 150.50, 100.22, 1, 90, NULL, NULL, 1, 'heart', NULL, NULL, NULL);
-INSERT INTO `meeting_detail` VALUES (22, 1, 'M201911090003', '2019-11-08', 2, NULL, 2, 1, 222, '2019-11-09 08:42:26', '小程序', '05', NULL, NULL, '2019-11-09 08:42:26', '2019-11-09 08:42:26', 150.50, 100.22, 1, 90, NULL, NULL, 1, 'heart', NULL, NULL, NULL);
-INSERT INTO `meeting_detail` VALUES (23, 1, 'M201911090004', '2019-11-08', 2, NULL, 2, 1, 22, '2019-11-09 08:52:44', '小程序', '05', NULL, NULL, '2019-11-09 08:52:44', '2019-11-09 08:52:44', 150.50, 100.22, 1, 90, NULL, NULL, 1, 'heart', NULL, NULL, NULL);
-INSERT INTO `meeting_detail` VALUES (24, 1, 'M201911090005', '2019-11-08', 1, NULL, 2, 1, 122, '2019-11-09 08:53:50', '小程序', '05', NULL, NULL, '2019-11-09 08:53:50', '2019-11-09 08:53:50', 150.50, 100.22, 1, 90, NULL, NULL, 1, 'heart', NULL, NULL, NULL);
-INSERT INTO `meeting_detail` VALUES (25, 1, 'M201911140001', '2019-11-14', 2, NULL, 1, 1, 22, '2019-11-14 16:26:11', '小程序', '05', 100, '北京市朝阳区那旮沓胡同', '2019-11-14 16:26:11', '2019-11-21 16:33:15', 100.01, 100.22, NULL, 90, NULL, NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `meeting_detail` VALUES (28, 1, 'M201911210003', '2019-11-21', 1, NULL, 1, 5, 20, '2019-11-21 17:00:37', '小程序', '05', NULL, NULL, '2019-11-21 17:00:45', '2019-11-21 17:00:45', 20.22, 100.22, NULL, 90, NULL, NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `meeting_detail` VALUES (29, 1, 'M201911210004', '2019-11-21', 1, NULL, 1, 1, 20, '2019-11-21 17:05:34', '小程序', '05', NULL, NULL, '2019-11-21 17:05:34', '2019-11-21 17:05:34', 20.22, 100.22, NULL, 90, NULL, NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `meeting_detail` VALUES (30, 1, 'M201911210005', '2019-11-21', 1, NULL, 1, 5, 20, '2019-11-21 17:06:20', '小程序', '05', NULL, NULL, '2019-11-21 17:06:20', '2019-11-21 17:06:20', 20.22, 100.22, NULL, 90, NULL, NULL, 1, NULL, NULL, NULL, NULL);
-
--- ----------------------------
 -- Table structure for meeting_question
 -- ----------------------------
 DROP TABLE IF EXISTS `meeting_question`;
@@ -3773,7 +3770,7 @@ CREATE TABLE `meeting_question`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `size` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件大小',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of meeting_question
@@ -3917,7 +3914,7 @@ CREATE TABLE `qrtz_scheduler_state`  (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('RenrenScheduler', 'DESKTOP-5N8RA0F1574842483244', 1574843205115, 15000);
+INSERT INTO `qrtz_scheduler_state` VALUES ('RenrenScheduler', 'weheart1574844192589', 1574994412255, 15000);
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -4014,7 +4011,7 @@ CREATE TABLE `schedule_job`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1080345897063223298 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of schedule_job
@@ -4035,7 +4032,7 @@ CREATE TABLE `sys_config`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `param_key`(`param_key`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统配置信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统配置信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_config
@@ -4058,7 +4055,7 @@ CREATE TABLE `sys_dept`  (
   `create_time` datetime(0) NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dept
@@ -4137,7 +4134,7 @@ CREATE TABLE `sys_login_log`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1150667819491475971 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '登陆日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1150667819491475990 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '登陆日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_login_log
@@ -4180,7 +4177,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `del_flag` tinyint(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 90 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 91 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -4283,7 +4280,7 @@ CREATE TABLE `sys_operation_log`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `execute_time` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '执行时间(毫秒)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1150601874915967778 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1150601874915967795 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_operation_log
@@ -4316,7 +4313,7 @@ CREATE TABLE `sys_role`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -4333,7 +4330,7 @@ CREATE TABLE `sys_role_menu`  (
   `role_id` bigint(20) NULL DEFAULT NULL COMMENT '角色ID',
   `menu_id` bigint(20) NULL DEFAULT NULL COMMENT '菜单ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2251 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与菜单对应关系' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2252 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与菜单对应关系' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -4511,11 +4508,12 @@ CREATE TABLE `sys_sms`  (
   `text` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '短信内容',
   `type` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '01登陆验证码',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_sms
 -- ----------------------------
+INSERT INTO `sys_sms` VALUES (1, '18851006060', '213534', '2019-11-28 13:57:06', '2019-11-28 13:58:35', 0, '49.94.106.11', '【蓝色县域项目组】验证码213534，您正在登录，若非本人操作，请勿泄露。', '01');
 INSERT INTO `sys_sms` VALUES (12, '18247270927', '491273', '2019-11-11 17:29:59', '2019-11-11 17:30:52', 0, '0:0:0:0:0:0:0:1', '【蓝色县域项目组】验证码491273，您正在登录，若非本人操作，请勿泄露。', '01');
 INSERT INTO `sys_sms` VALUES (13, '18247270927', '470321', '2019-11-13 17:25:31', '2019-11-13 17:25:31', 1, '0:0:0:0:0:0:0:1', '【蓝色县域项目组】验证码470321，您正在登录，若非本人操作，请勿泄露。', '01');
 INSERT INTO `sys_sms` VALUES (14, '18247270927', '481051', '2019-11-13 18:02:22', '2019-11-13 18:02:22', 1, '0:0:0:0:0:0:0:1', '【蓝色县域项目组】验证码481051，您正在登录，若非本人操作，请勿泄露。', '01');
@@ -4546,7 +4544,7 @@ CREATE TABLE `sys_user`  (
   `company_id` bigint(20) NULL DEFAULT NULL COMMENT '公司ID',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `account`(`account`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
@@ -4564,7 +4562,7 @@ CREATE TABLE `sys_user_role`  (
   `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户ID',
   `role_id` bigint(20) NULL DEFAULT NULL COMMENT '角色ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 75 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色对应关系' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 76 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色对应关系' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user_role
@@ -4588,18 +4586,17 @@ CREATE TABLE `user_area`  (
   `option_areas` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '关联区域',
   `option_status` int(4) NULL DEFAULT NULL COMMENT '关联区域标识（0：该区域的最顶级无关联，属于游离，1：有关联，在使用）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_area
 -- ----------------------------
-INSERT INTO `user_area` VALUES (38, 0, '美国', 1, '2019-08-14 09:44:48', '2019-08-14 09:44:48', '一级', NULL, 1);
-INSERT INTO `user_area` VALUES (41, NULL, '大兴区', 3, '2019-08-16 09:01:30', '2019-08-16 18:17:20', '三级', '无关联区域', 0);
-INSERT INTO `user_area` VALUES (42, 38, '华盛顿', 2, '2019-08-16 10:25:46', '2019-08-16 10:25:46', '二级', '美国', 1);
-INSERT INTO `user_area` VALUES (45, 41, '兴涛社区', 4, '2019-08-16 15:03:54', '2019-08-16 18:17:20', '四级', '大兴区', 0);
-INSERT INTO `user_area` VALUES (59, 0, '全国', 1, '2019-08-16 18:33:24', '2019-08-16 18:33:24', '一级', NULL, 1);
-INSERT INTO `user_area` VALUES (60, 59, '北京', 2, '2019-08-21 17:44:28', '2019-08-21 17:44:28', '二级', '全国', 1);
-INSERT INTO `user_area` VALUES (61, 60, '朝阳区', 3, '2019-08-21 17:44:46', '2019-08-21 17:44:46', '三级', '全国/北京', 1);
+INSERT INTO `user_area` VALUES (1, 0, '全国', 1, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '一级', '全国', 1);
+INSERT INTO `user_area` VALUES (2, 1, '华北大区', 2, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '二级', '全国', 1);
+INSERT INTO `user_area` VALUES (3, 1, '华中大区', 2, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '二级', '全国', 1);
+INSERT INTO `user_area` VALUES (4, 1, '东南大区', 2, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '二级', '全国', 1);
+INSERT INTO `user_area` VALUES (5, 1, '东北大区', 2, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '二级', '全国', 1);
+INSERT INTO `user_area` VALUES (6, 1, '西南大区', 2, '2019-11-29 09:57:51', '2019-11-29 09:57:51', '二级', '全国', 1);
 
 -- ----------------------------
 -- Table structure for user_config
@@ -4614,7 +4611,7 @@ CREATE TABLE `user_config`  (
   `create_time` datetime(0) NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_config
@@ -4652,13 +4649,27 @@ CREATE TABLE `user_detail`  (
   `sex` int(2) NULL DEFAULT NULL COMMENT '性别（1：男 2：女）',
   `job_code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '工号',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_detail
 -- ----------------------------
-INSERT INTO `user_detail` VALUES (1, 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKf5Mg2TUNIDCIWcewjlm14KRskwdpclnyfZ2H8W40hCfUIoTia622MefOsYqmjNFEqibMHmMcyZibvA/132', '余洋', '余洋', '18851006060', 59, 2, 1, '2019-08-05 15:02:45', '2019-08-05 15:02:49', '2019-11-12 17:30:13', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', 'o0ypL5IvtcNyQwPXB7j8_BL_6Wtc', 1, '20191127');
-INSERT INTO `user_detail` VALUES (5, NULL, '', '余洋', '13327736325', 59, 1, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, '20191111');
+INSERT INTO `user_detail` VALUES (1, 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKgj24ldrnyEhNfEgIBn74cIzHgUYfLk3ccWn1hvY2yzFicEzgYE87v6pC0CibiaXa7ibY15OoiaicSNtYg/132', '余洋', '余洋', '18851006060', 1, 1, 1, '2019-11-28 13:58:36', '2019-08-05 15:02:49', '2019-11-28 13:58:36', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', 'o0ypL5OkHsjuBJubWHCDZ3Gg3XZA', 1, '');
+INSERT INTO `user_detail` VALUES (2, NULL, '', '赵一', '13511011234', 2, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, '58011');
+INSERT INTO `user_detail` VALUES (3, NULL, '', '李一', '13511011235', 2, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 1, '58012');
+INSERT INTO `user_detail` VALUES (4, NULL, '', '王一', '13511011236', 2, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, '58013');
+INSERT INTO `user_detail` VALUES (5, NULL, '', '孙一', '13511011237', 3, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 1, '58014');
+INSERT INTO `user_detail` VALUES (6, NULL, '', '钱一', '13511011238', 3, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, '58015');
+INSERT INTO `user_detail` VALUES (7, NULL, '', '周一', '13511011239', 3, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 1, '58016');
+INSERT INTO `user_detail` VALUES (8, NULL, '', '吴一', '13511011240', 4, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, '58017');
+INSERT INTO `user_detail` VALUES (9, NULL, '', '郑一', '13511011241', 4, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 1, '58018');
+INSERT INTO `user_detail` VALUES (10, NULL, '', '冯一', '13511011242', 4, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, '58019');
+INSERT INTO `user_detail` VALUES (11, NULL, '', '陈一', '13511011243', 5, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 1, '58020');
+INSERT INTO `user_detail` VALUES (12, NULL, '', '楚一', '13511011244', 5, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, '58021');
+INSERT INTO `user_detail` VALUES (13, NULL, '', '卫一', '13511011245', 5, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 1, '58022');
+INSERT INTO `user_detail` VALUES (14, NULL, '', '蒋一', '13511011246', 6, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, '58023');
+INSERT INTO `user_detail` VALUES (15, NULL, '', '沈一', '13511011247', 6, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 1, '58024');
+INSERT INTO `user_detail` VALUES (16, NULL, '', '韩一', '13511011248', 6, 2, 1, NULL, '2019-11-18 09:59:50', '2019-11-18 09:59:53', '66c1a54043ca91ebd33ca39c1ebdb414', 'd8b61e3e10124e17a2f1', NULL, 2, '58025');
 
 -- ----------------------------
 -- Table structure for user_login_log
@@ -4674,7 +4685,14 @@ CREATE TABLE `user_login_log`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1150667819491476087 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '登陆日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1150667819491476091 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '登陆日志' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_login_log
+-- ----------------------------
+INSERT INTO `user_login_log` VALUES (1150667819491476088, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-28 13:54:28', '2019-11-28 13:54:28');
+INSERT INTO `user_login_log` VALUES (1150667819491476089, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-28 13:56:18', '2019-11-28 13:56:18');
+INSERT INTO `user_login_log` VALUES (1150667819491476090, '登录日志', 1, '成功', NULL, '127.0.0.1', '2019-11-28 13:58:36', '2019-11-28 13:58:36');
 
 -- ----------------------------
 -- Table structure for user_operation_log
@@ -4693,7 +4711,7 @@ CREATE TABLE `user_operation_log`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `execute_time` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '执行时间(毫秒)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1150601874915967958 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1150601874915967959 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for user_role
@@ -4713,7 +4731,7 @@ CREATE TABLE `user_role`  (
 -- Records of user_role
 -- ----------------------------
 INSERT INTO `user_role` VALUES (1, '管理者', 1, '2019-08-05 14:58:58', '2019-08-05 14:59:02', '一级');
-INSERT INTO `user_role` VALUES (2, '大区经理', 2, '2019-08-05 14:59:25', '2019-08-05 14:59:27', '二级');
+INSERT INTO `user_role` VALUES (2, '代表', 2, '2019-08-05 14:59:25', '2019-08-05 14:59:27', '二级');
 
 -- ----------------------------
 -- Function structure for get_hospital_num
@@ -4783,6 +4801,7 @@ CREATE EVENT `meeting_no`
 ON SCHEDULE
 EVERY '1' DAY STARTS '2019-10-30 00:00:00'
 DO UPDATE sys_sequence SET value=0 WHERE name='meeting_no'
+;
 ;;
 delimiter ;
 
@@ -4797,6 +4816,7 @@ EVERY '1' DAY STARTS '2019-11-15 00:00:00'
 DO update meeting_detail set meeting_status =
 case when STR_TO_DATE(meeting_time,'%Y-%m-%d') = CURDATE() then '04' 
 when STR_TO_DATE(meeting_time,'%Y-%m-%d') < CURDATE() then '05' end
+;
 ;;
 delimiter ;
 
