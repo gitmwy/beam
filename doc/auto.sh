@@ -8,7 +8,7 @@ TPID=`ps -ef|grep heart-api|grep -v grep|awk '{print $2}'`
 TIME=`date +%Y%m%d%H%M%S`
 
 #停止服务
-if [ $TPID == "" ];then
+if [ '$TPID' == "" ];then
    echo "服务没有启动"
 else
    kill -9 $TPID
