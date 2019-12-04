@@ -331,9 +331,9 @@
 	<profiles>
 		<!--开发-->
 		<profile>
-			<id>local</id>
+			<id>dev</id>
 			<properties>
-				<spring.active>local</spring.active>
+				<spring.active>dev</spring.active>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -341,9 +341,9 @@
 		</profile>
 		<!--测试-->
 		<profile>
-			<id>dev</id>
+			<id>test</id>
 			<properties>
-				<spring.active>dev</spring.active>
+				<spring.active>test</spring.active>
 			</properties>
 			<activation>
 				<activeByDefault>false</activeByDefault>

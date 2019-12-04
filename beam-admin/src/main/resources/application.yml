@@ -17,7 +17,7 @@ spring:
 ---
 #开发环境
 spring:
-  profiles: local
+  profiles: dev
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/beam?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
     username: root
@@ -39,12 +39,12 @@ spring:
     password: 123456
     timeout: 6000 #超时时间（毫秒）
 log:
-  path: /home/beam/admin/local
+  path: /home/beam/dev
 
 ---
 #测试环境
 spring:
-  profiles: dev
+  profiles: test
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/beam?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=GMT%2B8
     username: root
@@ -56,7 +56,7 @@ spring:
     password:
     timeout: 6000
 log:
-  path: /home/beam/admin/dev
+  path: /home/beam/test
 
 ---
 #生产环境
@@ -73,4 +73,4 @@ spring:
     password:
     timeout: 6000
 log:
-  path: /home/beam/admin/pro
+  path: /home/beam/pro
