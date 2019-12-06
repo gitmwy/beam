@@ -1,0 +1,6 @@
+/.idea
+*.iml
+.gitignore
+**/target
+**/node_modules
+**/dist
