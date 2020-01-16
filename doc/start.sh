@@ -1,5 +1,5 @@
 #!/bin/sh
-RESOURCE_NAME=heart-api-0.0.1-SNAPSHOT.jar
+RESOURCE_NAME=beam-admin-0.0.1-SNAPSHOT.jar
  
 #使用说明，用来提示输入参数
 usage() {
