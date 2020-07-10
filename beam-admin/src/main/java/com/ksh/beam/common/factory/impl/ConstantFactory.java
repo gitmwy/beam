@@ -33,13 +33,13 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ConstantFactory implements IConstantFactory {
 
-    private SequenceMapper sequenceMapper = SpringContextHolder.getBean(SequenceMapper.class);
-    private RoleMapper roleMapper = SpringContextHolder.getBean(RoleMapper.class);
-    private DeptMapper deptMapper = SpringContextHolder.getBean(DeptMapper.class);
-    private UserMapper userMapper = SpringContextHolder.getBean(UserMapper.class);
-    private MenuMapper menuMapper = SpringContextHolder.getBean(MenuMapper.class);
-    private DictMapper dictMapper = SpringContextHolder.getBean(DictMapper.class);
-    private MeetingCloudMapper meetingCloudMapper = SpringContextHolder.getBean(MeetingCloudMapper.class);
+    private final SequenceMapper sequenceMapper = SpringContextHolder.getBean(SequenceMapper.class);
+    private final RoleMapper roleMapper = SpringContextHolder.getBean(RoleMapper.class);
+    private final DeptMapper deptMapper = SpringContextHolder.getBean(DeptMapper.class);
+    private final UserMapper userMapper = SpringContextHolder.getBean(UserMapper.class);
+    private final MenuMapper menuMapper = SpringContextHolder.getBean(MenuMapper.class);
+    private final DictMapper dictMapper = SpringContextHolder.getBean(DictMapper.class);
+    private final MeetingCloudMapper meetingCloudMapper = SpringContextHolder.getBean(MeetingCloudMapper.class);
 
     public static IConstantFactory me() {
         return SpringContextHolder.getBean("constantFactory");
