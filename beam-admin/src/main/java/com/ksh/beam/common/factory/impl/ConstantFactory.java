@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 常量的生产工厂
+ * 常量生产工厂
  */
 @Component
 @DependsOn("springContextHolder")
