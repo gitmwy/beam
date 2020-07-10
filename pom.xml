@@ -47,7 +47,7 @@
 		<ehcache.version>3.3.1</ehcache.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
 
-		<quartz.version>2.3.0</quartz.version>
+		<quartz.version>2.3.2</quartz.version>
 
 		<qiniu-java-sdk.version>7.2.27</qiniu-java-sdk.version>
 		<aliyun-sdk-oss.version>2.5.0</aliyun-sdk-oss.version>
