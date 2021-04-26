@@ -42,7 +42,7 @@
 		<mybatis-plus-boot-starter.version>3.0-RC1</mybatis-plus-boot-starter.version>
 
 		<commons-lang3.version>3.3.2</commons-lang3.version>
-		<commons-io.version>2.5</commons-io.version>
+		<commons-io.version>2.7</commons-io.version>
 		<shiro.version>1.4.0</shiro.version>
 		<ehcache.version>3.3.1</ehcache.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
